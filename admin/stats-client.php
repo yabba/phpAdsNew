@@ -1,4 +1,4 @@
-<?php // $Revision: 1.13 $
+<?php // $Revision: 1.14 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -107,7 +107,7 @@ $idresult = db_query (" SELECT
 					");
 
 
-if (@mysql_num_rows > 0)
+if (@mysql_num_rows($idresult) > 0)
 {
 	while ($row = mysql_fetch_array($idresult))
 	{
