@@ -1,4 +1,4 @@
-<?php // $Revision: 1.16 $
+<?php // $Revision: 1.17 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -193,7 +193,7 @@ $GLOBALS['strConfirmDeleteCampaign']		= "Desideri realmente cancellare questa ca
 
 
 // Campaign properties
-$GLOBALS['strDontExpire']					= "Non far scadere questa cmpagna in una data specifica";
+$GLOBALS['strDontExpire']					= "Non far scadere questa campagna in una data specifica";
 $GLOBALS['strActivateNow']					= "Attiva questa campagna immediatamente";
 $GLOBALS['strLow']							= "Bassa";
 $GLOBALS['strHigh']							= "Alta";
