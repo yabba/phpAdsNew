@@ -1,4 +1,4 @@
-<?php // $Revision: 1.35 $
+<?php // $Revision: 1.36 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -118,6 +118,36 @@ if (isset($submit))
 			WHERE
 				zoneid=".$zoneid."
 			") or phpAds_sqlDie();
+		
+		
+		// Reset append codes which called this zone
+		$res = phpAds_dbQuery("
+				SELECT
+					zoneid,
+					append
+				FROM
+					".$phpAds_config['tbl_zones']."
+				WHERE
+					appendtype = ".phpAds_ZoneAppendZone."
+			");
+		
+		while ($row = phpAds_dbFetchArray($res))
+		{
+			$append = phpAds_ZoneParseAppendCode($row['append']);
+
+			if ($append[0]['zoneid'] == $zoneid)
+			{
+				phpAds_dbQuery("
+						UPDATE
+							".$phpAds_config['tbl_zones']."
+						SET
+							appendtype = ".phpAds_ZoneAppendRaw.",
+							append = ''
+						WHERE
+							zoneid = '".$row['zoneid']."'
+					");
+			}
+		}
 		
 		header ("Location: zone-advanced.php?affiliateid=".$affiliateid."&zoneid=".$zoneid);
 		exit;
