@@ -55,7 +55,7 @@ phpAdsNew - Readme
        
          
   Summary:
-    phpAds is a banner management and tracking system written in PHP.
+    phpAdsNew is a banner management and tracking system written in PHP.
     Currently it can
     - manage multiple campaigns per client
     - manage multiple banners (any size) per campaign
