@@ -1,4 +1,4 @@
-<?php // $Revision: 1.7 $
+<?php // $Revision: 1.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -137,6 +137,11 @@ if (!isset($context)) 	$context = '';
 
 // Get the banner
 $output = view_raw ($what, $clientid, $target, $source, $withtext, $context);
+
+// Exit if no banner was fetched
+if (!$output['bannerid'])
+	exit;
+
 
 header("Content-type: application/x-javascript");
 
