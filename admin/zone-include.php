@@ -1,4 +1,4 @@
-<?php // $Revision: 1.33 $
+<?php // $Revision: 1.34 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -132,15 +132,18 @@ if (isset($zoneid) && $zoneid != '')
 			}
 		}
 		
-		$res = phpAds_dbQuery("
-			UPDATE
-				".$phpAds_config['tbl_zones']."
-			SET
-				what = '$what',
-				zonetype = $zonetype
-			WHERE
-				zoneid=$zoneid
+		if (isset($what) && isset($zonetype))
+		{
+			$res = phpAds_dbQuery("
+				UPDATE
+					".$phpAds_config['tbl_zones']."
+				SET
+					what = '$what',
+					zonetype = $zonetype
+				WHERE
+					zoneid=$zoneid
 			") or phpAds_sqlDie();
+		}
 		
 		// Rebuild Cache
 		phpAds_RebuildZoneCache ($zoneid);

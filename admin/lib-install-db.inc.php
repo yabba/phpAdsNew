@@ -1,4 +1,4 @@
-<?php // $Revision: 1.10 $
+<?php // $Revision: 1.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -102,6 +102,7 @@ function phpAds_createDatabase ($tabletype = '')
 {
 	// Get the database structure
 	$dbstructure = phpAds_prepareDatabaseStructure();
+	$availabletables = array();
 	
 	// Get table names
 	$res = phpAds_dbQuery("SHOW TABLES");
