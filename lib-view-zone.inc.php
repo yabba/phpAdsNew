@@ -1,4 +1,4 @@
-<?php // $Revision: 1.10 $
+<?php // $Revision: 1.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -176,7 +176,9 @@ function phpAds_fetchBannerZone($remaining, $clientid, $context = 0, $source = '
 					
 					// Blocked
 					if ($postconditionSucces == true &&
-						isset($HTTP_COOKIE_VARS['phpAds_blockAd'][$rows[$i]['bannerid']]))
+						$rows[$i]['block'] > 0 &&
+						isset($HTTP_COOKIE_VARS['phpAds_blockAd'][$rows[$i]['bannerid']]) &&
+						$HTTP_COOKIE_VARS['phpAds_blockAd'][$rows[$i]['bannerid']] > time())
 						$postconditionSucces = false;
 					
 					// Capped
