@@ -1,4 +1,4 @@
-<?php // $Revision: 1.12 $
+<?php // $Revision: 1.13 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -293,9 +293,6 @@ if (isset($affiliates) && is_array($affiliates) && count($affiliates) > 0)
 	}
 	
 	unset ($zones);
-	
-	$totalviews += $manual['views'];
-	$totalclicks += $manual['clicks'];
 }
 
 $totalviews += $manual['views'];
