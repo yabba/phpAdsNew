@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -44,6 +44,26 @@ function phpAds_registerGlobal ()
 	}
 }
 
+/*
+	This function will allow the source to be derived from server side parameters, such
+	as referer, current location, user agent, domain, etc.
+*/
+function phpAds_deriveSource ($source)
+{
+	global $HTTP_GET_VARS, $HTTP_SERVER_VARS, $phpAds_config;
+
+	if (!isset($source)) $source = '';
+	$source = urldecode($source);
+
+	/* This can be customised to include the following:
+	{referer}	- the referer page to the page which includes the ad.
+	{loc}		- the url of the page which includes the ad.
+	{domain}	- the domain of the client browser
+	{derive}	- custom code which derives the source
+	*/
+	
+	return $source;
+}
 
 /*********************************************************/
 /* Recursive add slashes to an array                     */
