@@ -4,9 +4,22 @@ CVS			+ Added P3P Privacy Policies support
 			  - Sending Policy location using P3P header  (Niels)
 			  - Sending Compact Policy using P3P header for cookie evaluation  (Niels)
 
-			+ Added expiration details to campaign index  (Niels)
-			+ Added URL prefix and scrolling=no  (Niels)
+			+ Mailed reports
+			  - Added starting and end date to the reports  (Niels)
+			  - Campaigns without stats now tell there are no stats available  (Niels)
+			  - Fixed bug which prevented reports for new clients from being sent  (Niels)
+			  - First report for new clients now includes all stats up to date  (Niels)
+			  - Fixed bug which prevented stats from the last day to be included
+			    and which caused problems with a one day interval  (Niels)
+			  - Changed mail headers as a workaround for Win32 SMTP extension bug  (Niels)
+			  - Added ability to force a report from being sent from the Admin interface  (Niels)
+
 			+ Added search capabilities  (Niels and Tobi Schulz)
+
+			+ Added client statistics  (Niels)
+
+			+ Added expiration details to campaign index  (Niels)
+			+ Added URL prefix and scrolling=no  to bannercode generator  (Niels)
 			+ Changed default names of tables, added prefix to 
 			  avoid conflicts with other products  (Niels)
 			+ Rearanged directory structure for the manual, to make room
