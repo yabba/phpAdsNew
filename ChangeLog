@@ -1,6 +1,10 @@
 phpAdsNew - ChangeLog
 
-CVS			+ Added P3P Privacy Policies support
+CVS			+ Added search capabilities  (Niels and Tobi Schulz)
+			+ Added expiration details to campaign index  (Niels)
+			+ Added the ablity to get the IP adress of users behind a proxy server  (Niels & Mesut Tunga)
+
+			+ Added P3P Privacy Policies support
 			  - Sending Policy location using P3P header  (Niels)
 			  - Sending Compact Policy using P3P header for cookie evaluation  (Niels)
 
@@ -22,23 +26,28 @@ CVS			+ Added P3P Privacy Policies support
 			  - Extra variables assigned to adclick.php are now passed through to target url  (Niels)
 			  - Added {random} support to HTML banners
 			  - Added ability to embed PHP scripts in HTML banners  (Niels)
+			
+			+ Invocationcode generator
+			  - Added URL prefix and scrolling=no  to bannercode generator  (Niels)
+			  - Added local path to phpadsnew.inc.php for local mode to bannercode generator  (Niels)
 
-			+ Added search capabilities  (Niels and Tobi Schulz)
-			+ Added client statistics  (Niels)
-			+ Added ability to reset stats for a complete client  (Niels)
-			+ Added ability to reset all stats  (Niels)
-			+ Added expiration details to campaign index  (Niels)
-			+ Added URL prefix and scrolling=no  to bannercode generator  (Niels)
-			+ Added local path to phpadsnew.inc.php for local mode to bannercode generator  (Niels)
-			+ Changed the way JavaScript is generated for remote invocation with JavaScript  (Niels)
-			+ Changed default names of tables, added prefix to 
-			  avoid conflicts with other products  (Niels)
-			+ Rearanged directory structure for the manual, to make room
-			  for the german translation provided by René Friedrich  (Niels)
-			+ Fixed quote problem with banner-text, alt and description fields  (Niels)
-			+ Fixed HTML layout problem with large description and/or alt-text  (Niels)
-			+ Changed all occurances of <? to <?php  (Niels)
-			+ Changed most " to ' in view.inc.php for minor speed improvement  (Niels)
+			+ Statistics
+			  - Added client statistics  (Niels)
+			  - Added ability to reset stats for a complete client  (Niels)
+			  - Added ability to reset all stats  (Niels)
+			
+			+ Misc changes
+			  - Changed all occurances of <? to <?php  (Niels)
+			  - Changed most " to ' in view.inc.php for minor speed improvement  (Niels)
+			  - Changed default names of tables, added prefix to avoid conflicts with other products  (Niels)
+			  - Changed the way JavaScript is generated for remote invocation with JavaScript  (Niels)
+			  - Rearanged directory structure for the manual, to make room
+			    for the german translation provided by René Friedrich  (Niels)
+
+			+ Misc bugfixes
+			  - Fixed quote problem with banner-text, alt and description fields  (Niels)
+			  - Fixed HTML layout problem with large description and/or alt-text  (Niels)
+
 
 
 v 2.0beta5		+ Added override setting for automatic GD detection  (Niels)
