@@ -1,4 +1,4 @@
-<?php // $Revision: 1.9 $
+<?php // $Revision: 1.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -349,6 +349,7 @@ $GLOBALS['strLowPriority']				= "Show banner in this campaign with low priority.
 										   aren't used by high priority campaigns.";
 $GLOBALS['strTargetLimitAdviews']		= "Limit the number of AdViews to";
 $GLOBALS['strTargetPerDay']				= "per day.";
+$GLOBALS['strRecalculatePriority']		= "Recalculate priority";
 
 
 ?>
