@@ -4,6 +4,8 @@ CVS			+ Added search capabilities  (Niels and Tobi Schulz)
 			+ Added expiration details to campaign index  (Niels)
 			+ Added the ablity to get the IP adress of users behind a proxy server  (Niels & Mesut Tunga)
 			+ Added ability to specify a browser-status text for each banner  (Niels)
+			+ Removed cURL and fopen-wrapper support for storing banners, added a 
+			  ftp emulation library provided by TOMO <groove@spencernetwork.org>  (Niels)
 
 			+ ACLs
 			  The ACL routines have been rewritten. This is a very big change and possibly
@@ -58,7 +60,13 @@ CVS			+ Added search capabilities  (Niels and Tobi Schulz)
 			+ Misc bugfixes
 			  - Fixed quote problem with banner-text, alt and description fields  (Niels)
 			  - Fixed HTML layout problem with large description and/or alt-text  (Niels)
-			  - Fixed error in client edit when client permissions were left empty (Thanks to Scott Delap)	
+			  - Fixed error in client edit when client permissions were left empty (Thanks to Scott Delap)
+			  - Fixed bug: if changing from MySQL stored banner to an empty HTML banner, 
+			    raw image data would be present in HTML banner field.
+
+			+ Security fixes
+			  - Fixed login exploit where users could login without authentification  (Niels)
+			  - Fixed upload exploit where users could download files from the server  (Niels)
 
 
 
