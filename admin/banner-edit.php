@@ -1,4 +1,4 @@
-<?php // $Revision: 1.29 $
+<?php // $Revision: 1.30 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -69,111 +69,166 @@ if (phpAds_isUser(phpAds_Client))
 
 if (isset($submit))
 {
+	// Delete uploaded var for security
+	if (isset($uploaded)) unset ($uploaded);
+	
+	// Get information about uploaded file
+	if (isset($HTTP_POST_FILES))
+	{
+		if (isset($HTTP_POST_FILES['upload']))
+		{
+			$uploaded = $HTTP_POST_FILES['upload'];
+		}
+	}
+	else
+	{
+		if (!empty($upload) && $upload != "none")
+		{
+			$uploaded = array (
+				'name'		=> $upload_name,
+				'type'		=> $upload_type,
+				'size'		=> $upload_size,
+				'tmp_name'	=> $upload
+			);
+		}
+	}
+	
+	// Check if uploaded file is really uploaded
+	if (isset($uploaded))
+	{
+		if (function_exists("is_uploaded_file"))
+		{
+			$upload_valid = is_uploaded_file($uploaded['tmp_name']);
+		}
+		else
+		{
+			if (!$tmp_file = get_cfg_var('upload_tmp_dir')) 
+			{
+				$tmp_file = tempnam('',''); 
+				@unlink($tmp_file); 
+				$tmp_file = dirname($tmp_file);
+			}
+			
+			$tmp_file .= '/' . basename($uploaded['tmp_name']);
+		    $upload_valid = (ereg_replace('/+', '/', $tmp_file) == $uploaded['tmp_name']);
+		}
+		
+		// Don't use file in case of exploit
+		if (!$upload_valid)
+			unset ($uploaded);
+	}
+	
 	// Clean up old webserver stored banner
 	if (isset($web_banner_cleanup) && $web_banner_cleanup != "")
 	{
-		if (($bannertype == "web" && !empty($web_banner) && $web_banner != "none") OR ($bannertype != "web"))
+		if (($bannertype == "web" && isset($uploaded)) OR ($bannertype != "web"))
 		{
 			phpAds_Cleanup($web_banner_cleanup);
 		}
 	}
 	
+	
+	
+	
 	switch($bannertype) 
 	{
-		case "mysql":
-			if (!empty($mysql_banner) && $mysql_banner != "none")
+		case 'mysql':
+			if (isset($uploaded))
 			{
-				$size = GetImageSize($mysql_banner);
-				$final["width"] = $size[0];
-				$final["height"] = $size[1];
-				$ext = substr($mysql_banner_name, strrpos($mysql_banner_name, ".")+1);
+				$size = @getimagesize($uploaded['tmp_name']);
+				$final['width'] = $size[0];
+				$final['height'] = $size[1];
+				$ext = substr($uploaded['name'], strrpos($uploaded['name'], ".")+1);
 				switch (strtoupper($ext)) 
 				{
-					case "JPEG":
-						$final["format"] = "jpeg";
+					case 'JPEG':
+						$final['format'] = 'jpeg';
 						break;
-					case "JPG":
-						$final["format"] = "jpeg";
+					case 'JPG':
+						$final['format'] = 'jpeg';
 						break;
-					case "HTML":
-						$final["format"] = "html";
+					case 'HTML':
+						$final['format'] = 'html';
 						break;
-					case "PNG":
-						$final["format"] = "png";
+					case 'PNG':
+						$final['format'] = 'png';
 						break;
-					case "GIF":
-						$final["format"] = "gif";
+					case 'GIF':
+						$final['format'] = 'gif';
 						break;
 				}
-				$final["banner"] = addslashes(fread(fopen($mysql_banner, "rb"), filesize($mysql_banner)));
+				$final['banner'] = addslashes(fread(fopen($uploaded['tmp_name'], "rb"), filesize($uploaded['tmp_name'])));
 			}
 			else
 			{
-				$final["width"] = $mysql_width;
-				$final["height"] = $mysql_height;
+				$final['width'] = $mysql_width;
+				$final['height'] = $mysql_height;
 			}
-			$final["alt"] = addslashes($mysql_alt);
-			$final["status"] = addslashes($mysql_status);
-			$final["bannertext"] = addslashes($mysql_bannertext);
-			$final["url"] = $mysql_url;
+			$final['alt'] = addslashes($mysql_alt);
+			$final['status'] = addslashes($mysql_status);
+			$final['bannertext'] = addslashes($mysql_bannertext);
+			$final['url'] = $mysql_url;
 			break;
-		case "web":
-			if (!empty($web_banner) && $web_banner != "none")
+		case 'web':
+			if (isset($uploaded))
 			{
-				$size = GetImageSize($web_banner);
-				$final["width"] = $size[0];
-				$final["height"] = $size[1];
+				$size = @getimagesize($uploaded['tmp_name']);
+				$final['width'] = $size[0];
+				$final['height'] = $size[1];
 				
 				// upload $web_banner file to location
 				// set banner to web location
-				$final["banner"] = phpAds_Store($web_banner, basename($web_banner_name));
+				$final['banner'] = phpAds_Store($uploaded['tmp_name'], basename($uploaded['name']));
+				
+				if ($final['banner'] == false)
+				{
+					phpAds_PageHeader("1");
+					php_die ('Error', 'An error occcured while uploading the banner to the ftp server');
+				}
 			}
 			else
 			{
-				$final["width"] = $web_width;
-				$final["height"] = $web_height;
+				$final['width'] = $web_width;
+				$final['height'] = $web_height;
 			}
-			$final["format"] = "web";
-			$final["alt"] = addslashes($web_alt);
-			$final["status"] = addslashes($web_status);
-			$final["bannertext"] = addslashes($web_bannertext);
-			$final["url"] = $web_url;
+			$final['format'] = "web";
+			$final['alt'] = addslashes($web_alt);
+			$final['status'] = addslashes($web_status);
+			$final['bannertext'] = addslashes($web_bannertext);
+			$final['url'] = $web_url;
 			break;
-		case "url":
-			$final["width"] = $url_width;
-			$final["height"] = $url_height;
-			$final["format"] = "url";
-			$final["banner"] = $url_banner;
-			$final["alt"] = addslashes($url_alt);
-			$final["status"] = addslashes($url_status);
-			$final["bannertext"] = addslashes($url_bannertext);
-			$final["url"] = $url_url;
+		case 'url':
+			$final['width'] = $url_width;
+			$final['height'] = $url_height;
+			$final['format'] = "url";
+			$final['banner'] = $url_banner;
+			$final['alt'] = addslashes($url_alt);
+			$final['status'] = addslashes($url_status);
+			$final['bannertext'] = addslashes($url_bannertext);
+			$final['url'] = $url_url;
 			break;
-		case "html";
-			$final["width"] = $html_width;
-			$final["height"] = $html_height;
-			$final["format"] = "html";
-			$final["banner"] = addslashes($html_banner);
-			$final["alt"] = "";
-			$final["bannertext"] = "";
-			$final["url"] = $html_url;
-			$final["autohtml"] = $html_auto;
+		case 'html';
+			$final['width'] = $html_width;
+			$final['height'] = $html_height;
+			$final['format'] = "html";
+			$final['banner'] = addslashes($html_banner);
+			$final['alt'] = "";
+			$final['bannertext'] = "";
+			$final['url'] = $html_url;
+			$final['autohtml'] = $html_auto;
 			break;
 	}
-	$final["clientID"] = $campaignID;
-	$final["bannerID"] = $bannerID;
+	$final['clientID'] = $campaignID;
+	$final['bannerID'] = $bannerID;
 	
 	if (phpAds_isUser(phpAds_Admin)) 
 	{
-		$final["active"] = "true";
-		$final["keyword"] = $keyword;
-		$final["description"] = addslashes($description);
-		$final["weight"] = $weight;
+		$final['active'] = "true";
+		$final['keyword'] = $keyword;
+		$final['description'] = addslashes($description);
+		$final['weight'] = $weight;
 	}
 	
-	// Don't add an empty banner
-	if (empty($final["banner"]) || $final["banner"] == "none")
-		unset($final["banner"]);
 	
 	$message = $bannerID=='' ? $strBannerAdded : $strBannerModified;
 	
@@ -225,6 +280,17 @@ if (isset($submit))
 			($values)";
 		$res = db_query($sql_query) or mysql_die();
 	}
+	
+	
+	
+	// Remove temporary file
+	if (isset($uploaded))
+	{
+		if (@file_exists($uploaded['tmp_name']))
+			@unlink ($uploaded['tmp_name']);
+	}
+	
+	
 	
 	
 	if (phpAds_isUser(phpAds_Client))
@@ -466,7 +532,7 @@ if (!isset($type))
 	<tr>
 		<td width='30'>&nbsp;</td>
 		<td width='200'><?php echo $strNewBannerFile;?></td>
-		<td><input size="26" type="file" name="mysql_banner" style="width:350px;"></td>
+		<td><input size="26" type="file" name="upload" style="width:350px;"></td>
 	</tr>
 	<tr>
 		<td><img src='images/spacer.gif' height='1' width='100%'></td>
@@ -542,7 +608,7 @@ if (!isset($type))
 	<tr>
 		<td width='30'>&nbsp;</td>
 		<td width='200'><?php echo $strNewBannerFile;?></td>
-		<td><input size="26" type="file" name="web_banner" style="width:350px;">
+		<td><input size="26" type="file" name="upload" style="width:350px;">
 			<input type="hidden" name="web_banner_cleanup" value="<?php if (isset($type) && $type == "web" && isset($row['banner'])) echo basename($row['banner']);?>"></td>
 	</tr>
 	<tr>
