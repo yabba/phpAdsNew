@@ -1,4 +1,4 @@
-<?php // $Revision: 1.6 $
+<?php // $Revision: 1.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -49,9 +49,14 @@ if ($command == 'top')
 	echo "<link rel='stylesheet' href='interface.css'>";
 	echo "</head>";
 	
-	echo "<body bgcolor='#000088'>";
+	echo "<body bgcolor='#000063'>";
 	echo "<table width='100%' height='100%' cellpadding='0' cellspacing='0' border='0'>";
-	echo "<tr><td><span class='phpAdsNew'>&nbsp;$phpAds_name</span></td></tr>";
+	
+	if ($phpAds_name != "")
+		echo "<tr><td valign='middle'><span class='phpAdsNew'>&nbsp;$phpAds_name</span></td></tr>";
+	else
+		echo "<tr><td valign='bottom'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src='images/logo.gif' width='163' height='34' vspace='2'></td></tr>";
+	
 	echo "</table>";
 	echo "</body></html>";
 }
@@ -92,7 +97,7 @@ if ($command == 'start')
 				  new compact format?
 				 ";
 			echo "<br><br>";
-			echo "<a href='stats-convert.php?command=overview'><img src='images/go_blue.gif' border='0'>&nbsp;Start</a>";
+			echo "<a href='stats-convert.php?command=overview'><img src='images/icon-update.gif' border='0' align='absmiddle'>&nbsp;Start</a>";
 		}
 		else
 		{
@@ -237,8 +242,6 @@ if ($command == 'convert')
 				$bannerID 	= $task['bannerID'];
 				$id		 	= $task['conversionID'];
 				
-				//echo "<br><br>ID:$id BANNERID:$bannerID > $begintime - $endtime <br>";
-				
 				$day = substr($begintime, 0, 4)."-".substr($begintime, 4, 2)."-".substr($begintime, 6, 2);
 				
 				$countresult = @db_query("SELECT count(*) as count FROM $phpAds_tbl_adviews WHERE bannerID='$bannerID' AND t_stamp >= $begintime AND t_stamp < $endtime");
@@ -253,8 +256,6 @@ if ($command == 'convert')
 					$clicks = $countrow['count'];
 				}
 				
-				//echo "CLICKS=$clicks VIEWS=$views <br>";
-				
 				if ($clicks > 0 || $views > 0)
 				{
 					$checkresult = @db_query("SELECT count(*) as count FROM $phpAds_tbl_adstats WHERE day='$day' AND bannerID='$bannerID'");
@@ -262,7 +263,6 @@ if ($command == 'convert')
 					
 					if (isset($checkrow['count']) && $checkrow['count'] > 0)
 					{
-						//echo "UPDATE $phpAds_tbl_adstats SET clicks=clicks+$clicks, views=views+$views WHERE day='$day' AND bannerID='$bannerID' <br>";
 						$updateresult = @db_query("UPDATE $phpAds_tbl_adstats SET clicks=clicks+$clicks, views=views+$views WHERE day='$day' AND bannerID='$bannerID'");
 						
 						if (@mysql_affected_rows() > 0)
@@ -275,7 +275,6 @@ if ($command == 'convert')
 					}
 					else
 					{
-						//echo "INSERT INTO $phpAds_tbl_adstats SET bannerID='$bannerID', day='$day', clicks=$clicks, views=$views <br>";
 						$updateresult = @db_query("INSERT INTO $phpAds_tbl_adstats SET bannerID='$bannerID', day='$day', clicks=$clicks, views=$views");
 						
 						if (@mysql_affected_rows() > 0)
@@ -308,8 +307,6 @@ if ($command == 'convert')
 		fpassthru ($image);
 		fclose ($image);
 	}
-	
-	//echo "$error <br>";
 }
 
 
@@ -373,8 +370,6 @@ if ($command == 'cleanup')
 		
 		$error = false;
 	}
-	
-//	echo $error;
 	
 	if ($error)
 	{
