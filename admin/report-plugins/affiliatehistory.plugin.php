@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -20,7 +20,7 @@ $plugin_info_function		= "Plugin_AffiliatehistoryInfo";
 // Public info function
 function Plugin_AffiliatehistoryInfo()
 {
-	global $strAffiliateHistory, $strAffiliate;
+	global $strAffiliateHistory, $strAffiliate, $strPluginAffiliate, $strDelimiter;
 	
 	$plugininfo = array (
 		"plugin-name"			=> $strAffiliateHistory,

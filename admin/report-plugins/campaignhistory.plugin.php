@@ -1,4 +1,4 @@
-<?php // $Revision: 1.8 $
+<?php // $Revision: 1.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -20,7 +20,7 @@ $plugin_info_function		= "Plugin_CampaignhistoryInfo";
 // Public info function
 function Plugin_CampaignhistoryInfo()
 {
-	global $strCampaignHistory, $strCampaign;
+	global $strCampaignHistory, $strCampaign, $strPluginCampaign, $strDelimiter;
 	
 	$plugininfo = array (
 		"plugin-name"			=> $strCampaignHistory,

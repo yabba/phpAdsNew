@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -20,7 +20,7 @@ $plugin_info_function		= "Plugin_ZonehistoryInfo";
 // Public info function
 function Plugin_ZonehistoryInfo()
 {
-	global $strZoneHistory, $strZone;
+	global $strZoneHistory, $strZone, $strPluginZone, $strDelimiter;
 	
 	$plugininfo = array (
 		"plugin-name"			=> $strZoneHistory,
