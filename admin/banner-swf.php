@@ -1,4 +1,4 @@
-<?php // $Revision: 1.17 $
+<?php // $Revision: 1.18 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -302,7 +302,7 @@ if ($result)
 	if (function_exists('gzcompress'))
 	{
 		echo "&nbsp;&nbsp;<input type='checkbox' name='compress' value='true'".($compressed ? ' checked' : '').($version >= 6 && $compressed ? ' disabled' : '').">";
-		echo "&nbsp;Compress SWF file for faster downloading (Flash 6 player required)";
+		echo "&nbsp;".$strCompressSWF;
 	}
 	
 	echo "</form>";
