@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -70,7 +70,6 @@ require ("lib-install-db.inc.php");
 require ("lib-permissions.inc.php");
 require ("lib-gui.inc.php");
 require ("lib-languages.inc.php");
-require ("lib-settings.inc.php");
 
 
 // Load settings/install language strings
