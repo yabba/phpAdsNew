@@ -1,4 +1,4 @@
-<?php // $Revision: 1.7 $
+<?php // $Revision: 1.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -31,7 +31,7 @@ require("lib-cache.inc.php");
 
 
 if (isset($clientID) && !isset($clientid))	$clientid = $clientID;
-if (isset($withtext) && !isset($withText))  $withtext = $withText;
+if (isset($withText) && !isset($withtext))  $withtext = $withText;
 
 if (!isset($what)) 		$what = '';
 if (!isset($clientid)) 	$clientid = 0;
