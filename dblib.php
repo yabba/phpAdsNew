@@ -1,4 +1,4 @@
-<?// $Id: dblib.php,v 1.2 2001/02/15 01:18:15 phord Exp $
+<?// $Id: dblib.php,v 1.3 2001/02/16 19:44:15 phord Exp $
 
 function db_connect()
 {
@@ -10,7 +10,7 @@ function db_connect()
 
 function db_close()
 {
-    mysql_close();
+//    mysql_close();
 }
 
 
