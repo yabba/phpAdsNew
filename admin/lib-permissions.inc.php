@@ -1,4 +1,4 @@
-<?php // $Revision: 1.6 $
+<?php // $Revision: 1.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -49,7 +49,7 @@ function phpAds_Start()
 	}
 	
 	// Overwrite certain preset preferences
-	if (isset($Session['language']) && $Session['language'] != $phpAds_language)
+	if (isset($Session['language']) && $Session['language'] != '' && $Session['language'] != $phpAds_language)
 	{
 		$phpAds_language = $Session['language'];
 	}
