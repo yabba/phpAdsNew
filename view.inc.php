@@ -1,4 +1,4 @@
-<?php // $Revision: 1.51 $
+<?php // $Revision: 1.52 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -19,7 +19,7 @@ require ("$phpAds_path/dblib.php");
 require ("$phpAds_path/lib-expire.inc.php");
 
 // Seed the random number generator
-mt_srand((double)microtime()*1000000);
+mt_srand((double) microtime() * 1000000);
 
 
 
@@ -27,40 +27,40 @@ mt_srand((double)microtime()*1000000);
 /* Get a banner						                     */
 /*********************************************************/
 
-function get_banner($what, $clientID, $context=0, $source="", $allowhtml=true)
+function get_banner($what, $clientID, $context=0, $source='', $allowhtml=true)
 {
 	global $phpAds_db, $REMOTE_HOST, $phpAds_tbl_banners, $REMOTE_ADDR, $HTTP_USER_AGENT, $phpAds_con_key;
 	global $phpAds_random_retrieve, $phpAds_mult_key, $phpAds_tbl_clients, $phpAds_tbl_zones;
 	
-	$where = "";
-	if($context == 0)
+	$where = '';
+	if ($context == 0)
 		$context = array();
     
-	for($i=0; $i<count($context); $i++)
+	for ($i=0; $i < count($context); $i++)
 	{
-		list($key, $value) = each($context[$i]);
+		list ($key, $value) = each($context[$i]);
 		{
-			switch($key)
+			switch ($key)
 			{
-				case "!=": $exclusive[] = "$phpAds_tbl_banners.bannerID <> $value"; break;
-				case "==": $inclusive[] = "$phpAds_tbl_banners.bannerID = $value"; break;
+				case '!=': $exclusive[] = $phpAds_tbl_banners.'.bannerID <> '.$value; break;
+				case '==': $inclusive[] = $phpAds_tbl_banners.'.bannerID = '.$value; break;
 			}
 		}
 	}
 	
-	$where_exclusive = !empty($exclusive) ? implode(" AND ", $exclusive): "";
-	$where_inclusive = !empty($inclusive) ? implode(" OR ", $inclusive): "";
+	$where_exclusive = !empty($exclusive) ? implode(' AND ', $exclusive): '';
+	$where_inclusive = !empty($inclusive) ? implode(' OR ', $inclusive): '';
 	
-	$where = sprintf("$where_inclusive %s $where_exclusive", (!empty($where_inclusive) && !empty($where_exclusive)) ? "AND": "");
+	$where = sprintf("$where_inclusive %s $where_exclusive", (!empty($where_inclusive) && !empty($where_exclusive)) ? 'AND' : '');
 	
 	$where = trim($where);
-	if(!empty($where))
-		$where .= " AND ";
+	if (!empty($where))
+		$where .= ' AND ';
 	
 	
 	
 	// Zones
-	if(substr($what,0,5)=="zone:")
+	if (substr($what,0,5) == 'zone:')
 	{
 		// Get zone
 		$zoneid  = substr($what,5);
@@ -80,10 +80,10 @@ function get_banner($what, $clientID, $context=0, $source="", $allowhtml=true)
 	
 	
 	// separate parts
-	$what_parts = explode ("|",$what);	
+	$what_parts = explode ('|', $what);	
 	
 	
-	for ($wpc=0;$wpc<sizeof($what_parts);$wpc++)	// build a query and execute for each part
+	for ($wpc=0; $wpc < sizeof($what_parts); $wpc++)	// build a query and execute for each part
 	{
 		$select = "
 			SELECT
@@ -99,6 +99,7 @@ function get_banner($what, $clientID, $context=0, $source="", $allowhtml=true)
 				$phpAds_tbl_banners.weight as weight,
 				$phpAds_tbl_banners.seq as seq,
 				$phpAds_tbl_banners.target as target,
+				$phpAds_tbl_banners.autohtml as autohtml,
 				$phpAds_tbl_clients.weight as clientweight
 			FROM
 				$phpAds_tbl_banners,
@@ -117,45 +118,45 @@ function get_banner($what, $clientID, $context=0, $source="", $allowhtml=true)
 		
 		
 		// Other
-		if ($what_parts[$wpc] != "")
+		if ($what_parts[$wpc] != '')
 		{
-			$conditions = "";
+			$conditions = '';
 			$onlykeywords = true;
 			
-			$what_array = explode(",",$what_parts[$wpc]);
+			$what_array = explode(',', $what_parts[$wpc]);
 			for ($k=0; $k < count($what_array); $k++)
 			{
 				// Process switches
-				if($phpAds_con_key == "1")
+				if ($phpAds_con_key == '1')
 				{
-					if(substr($what_array[$k],0,1)=="+" OR substr($what_array[$k],0,1)=="_")
+					if (substr($what_array[$k], 0, 1) == '+' || substr($what_array[$k], 0, 1) == '_')
 					{
-						$operator = "AND";
-						$what_array[$k]=substr($what_array[$k],1);
+						$operator = 'AND';
+						$what_array[$k] = substr($what_array[$k], 1);
 					}
-					elseif(substr($what_array[$k],0,1)=="-")
+					elseif (substr($what_array[$k], 0, 1) == '-')
 					{
-						$operator = "NOT";
-						$what_array[$k]=substr($what_array[$k],1);
+						$operator = 'NOT';
+						$what_array[$k] = substr($what_array[$k], 1);
 					}
 					else
-						$operator = "OR";
+						$operator = 'OR';
 				}
 				else
-					$operator = "OR";
+					$operator = 'OR';
 				
 				
 				//	Test statements
-				if($what_array[$k] != "" && $what_array[$k] != " ")
+				if($what_array[$k] != '' && $what_array[$k] != ' ')
 				{
 					// Banner dimensions
-					if(ereg("^[0-9]+x[0-9]+$", $what_array[$k]))
+					if(ereg('^[0-9]+x[0-9]+$', $what_array[$k]))
 					{
-						list($width, $height) = explode("x", $what_array[$k]);
+						list($width, $height) = explode('x', $what_array[$k]);
 							
-						if ($operator == "OR")
+						if ($operator == 'OR')
 							$conditions .= "OR ($phpAds_tbl_banners.width = $width AND $phpAds_tbl_banners.height = $height) ";
-						elseif ($operator == "AND")
+						elseif ($operator == 'AND')
 							$conditions .= "AND ($phpAds_tbl_banners.width = $width AND $phpAds_tbl_banners.height = $height) ";
 						else
 							$conditions .= "AND ($phpAds_tbl_banners.width != $width OR $phpAds_tbl_banners.height != $height) ";
@@ -164,14 +165,14 @@ function get_banner($what, $clientID, $context=0, $source="", $allowhtml=true)
 					}
 					
 					// Banner Width
-					elseif(substr($what_array[$k],0,6)=="width:")
+					elseif (substr($what_array[$k],0,6) == 'width:')
 					{
-						$what_array[$k]=substr($what_array[$k],6);
-						if($what_array[$k]!="" && $what_array[$k]!=" ")
+						$what_array[$k] = substr($what_array[$k], 6);
+						if($what_array[$k] != '' && $what_array[$k] != ' ')
 							
-						if ($operator == "OR")
+						if ($operator == 'OR')
 							$conditions .= "OR $phpAds_tbl_banners.width = '".trim($what_array[$k])."' ";
-						elseif ($operator == "AND")
+						elseif ($operator == 'AND')
 							$conditions .= "AND $phpAds_tbl_banners.width = '".trim($what_array[$k])."' ";
 						else
 							$conditions .= "AND $phpAds_tbl_banners.width != '".trim($what_array[$k])."' ";
@@ -180,16 +181,16 @@ function get_banner($what, $clientID, $context=0, $source="", $allowhtml=true)
 					}
 					
 					// Banner ID
-					elseif((substr($what_array[$k],0,9)=="bannerid:") or (ereg("^[0-9]+$", $what_array[$k])))
+					elseif ((substr($what_array[$k], 0, 9) == 'bannerid:') || (ereg('^[0-9]+$', $what_array[$k])))
 					{
-						if (substr($what_array[$k],0,9)=="bannerid:") 
-							$what_array[$k]=substr($what_array[$k],9);
+						if (substr($what_array[$k], 0, 9) == 'bannerid:')
+							$what_array[$k] = substr($what_array[$k], 9);
 							
-						if ($what_array[$k] != "" && $what_array[$k] != " ")
+						if ($what_array[$k] != '' && $what_array[$k] != ' ')
 						{
-							if ($operator == "OR")
+							if ($operator == 'OR')
 								$conditions .= "OR $phpAds_tbl_banners.bannerID='".trim($what_array[$k])."' ";
-							elseif ($operator == "AND")
+							elseif ($operator == 'AND')
 								$conditions .= "AND $phpAds_tbl_banners.bannerID='".trim($what_array[$k])."' ";
 							else
 								$conditions .= "AND $phpAds_tbl_banners.bannerID!='".trim($what_array[$k])."' ";
@@ -199,14 +200,14 @@ function get_banner($what, $clientID, $context=0, $source="", $allowhtml=true)
 					}
 					
 					// Client ID
-					elseif(substr($what_array[$k],0,9)=="clientid:")
+					elseif (substr($what_array[$k], 0, 9) == 'clientid:')
 					{
-						$what_array[$k]=substr($what_array[$k],9);
-						if($what_array[$k]!="" && $what_array[$k]!=" ")
+						$what_array[$k] = substr($what_array[$k], 9);
+						if ($what_array[$k] != '' && $what_array[$k] != ' ')
 						{
-							if ($operator == "OR")
+							if ($operator == 'OR')
 								$conditions .= "OR ($phpAds_tbl_clients.clientID='".trim($what_array[$k])."' OR $phpAds_tbl_clients.parent='".trim($what_array[$k])."') ";
-							elseif ($operator == "AND")
+							elseif ($operator == 'AND')
 								$conditions .= "AND ($phpAds_tbl_clients.clientID='".trim($what_array[$k])."' OR $phpAds_tbl_clients.parent='".trim($what_array[$k])."') ";
 							else
 								$conditions .= "AND ($phpAds_tbl_clients.clientID!='".trim($what_array[$k])."' AND $phpAds_tbl_clients.parent!='".trim($what_array[$k])."') ";
@@ -216,14 +217,14 @@ function get_banner($what, $clientID, $context=0, $source="", $allowhtml=true)
 					}
 					
 					// Format
-					elseif(substr($what_array[$k],0,7)=="format:")
+					elseif (substr($what_array[$k], 0, 7) == 'format:')
 					{
-						$what_array[$k]=substr($what_array[$k],7);
-						if($what_array[$k]!="" && $what_array[$k]!=" ")
+						$what_array[$k] = substr($what_array[$k], 7);
+						if($what_array[$k] != '' && $what_array[$k] != ' ')
 						{
-							if ($operator == "OR")
+							if ($operator == 'OR')
 								$conditions .= "OR $phpAds_tbl_banners.format='".trim($what_array[$k])."' ";
-							elseif ($operator == "AND")
+							elseif ($operator == 'AND')
 								$conditions .= "AND $phpAds_tbl_banners.format='".trim($what_array[$k])."' ";
 							else
 								$conditions .= "AND $phpAds_tbl_banners.format!='".trim($what_array[$k])."' ";
@@ -233,11 +234,11 @@ function get_banner($what, $clientID, $context=0, $source="", $allowhtml=true)
 					}
 					
 					// HTML
-					elseif($what_array[$k] == "html")
+					elseif($what_array[$k] == 'html')
 					{
-						if ($operator == "OR")
+						if ($operator == 'OR')
 							$conditions .= "OR $phpAds_tbl_banners.format='html' ";
-						elseif ($operator == "AND")
+						elseif ($operator == 'AND')
 							$conditions .= "AND $phpAds_tbl_banners.format='html' ";
 						else
 							$conditions .= "AND $phpAds_tbl_banners.format!='html' ";
@@ -248,17 +249,17 @@ function get_banner($what, $clientID, $context=0, $source="", $allowhtml=true)
 					// Keywords
 					else
 					{
-						if($phpAds_mult_key != "1")
-							if ($operator == "OR")
+						if($phpAds_mult_key != '1')
+							if ($operator == 'OR')
 								$conditions .= "OR $phpAds_tbl_banners.keyword = '".trim($what_array[$k])."' ";
-							elseif ($operator == "AND")
+							elseif ($operator == 'AND')
 								$conditions .= "AND $phpAds_tbl_banners.keyword = '".trim($what_array[$k])."' ";
 							else
 								$conditions .= "AND $phpAds_tbl_banners.keyword != '".trim($what_array[$k])."' ";
 						else
-							if ($operator == "OR")
+							if ($operator == 'OR')
 								$conditions .= "OR $phpAds_tbl_banners.keyword LIKE '%".trim($what_array[$k])."%' ";
-							elseif ($operator == "AND")
+							elseif ($operator == 'AND')
 								$conditions .= "AND $phpAds_tbl_banners.keyword LIKE '%".trim($what_array[$k])."%' ";
 							else
 								$conditions .= "AND $phpAds_tbl_banners.keyword NOT LIKE '%".trim($what_array[$k])."%' ";
@@ -267,7 +268,7 @@ function get_banner($what, $clientID, $context=0, $source="", $allowhtml=true)
 			}
 			
 			// Strip first AND or OR from $conditions
-			$conditions = strstr($conditions, " ");
+			$conditions = strstr($conditions, ' ');
 			
 			// Add global keyword
 			if (sizeof($what_parts) == 1 && $onlykeywords == true)
@@ -276,14 +277,12 @@ function get_banner($what, $clientID, $context=0, $source="", $allowhtml=true)
     	  	}
 			
 			// Add conditions to select
-			if ($conditions != "") $select .= 	" AND (" . $conditions . ") ";
+			if ($conditions != '') $select .= ' AND ('.$conditions.') ';
 		}
-		
-		//echo $select."<br>";
 		
 		if($phpAds_random_retrieve != 0)
 		{
-			$seq_select = $select . " AND $phpAds_tbl_banners.seq>0";
+			$seq_select = $select . " AND $phpAds_tbl_banners.seq > 0";
 			
 			// Full sequential retrieval
 			if ($phpAds_random_retrieve == 3)
@@ -343,9 +342,9 @@ function get_banner($what, $clientID, $context=0, $source="", $allowhtml=true)
 	while ($tmprow = @mysql_fetch_array($res))
 	{
         // weight of 0 disables the banner
-        if ($tmprow["weight"])
+        if ($tmprow['weight'])
         {
-            $weightsum += ($tmprow["weight"] * $tmprow["clientweight"]);
+            $weightsum += ($tmprow['weight'] * $tmprow['clientweight']);
 		    $rows[] = $tmprow; 
 	    }
     }
@@ -362,12 +361,12 @@ function get_banner($what, $clientID, $context=0, $source="", $allowhtml=true)
     {
         $low = 0;
         $high = 0;
-        $ranweight = ($weightsum>1)?mt_rand(0,$weightsum-1):0;
+        $ranweight = ($weightsum > 1) ? mt_rand(0, $weightsum - 1) : 0;
 		
         for ($i=0; $i<sizeof($rows); $i++)
         {
             $low = $high;
-            $high += ($rows[$i]["weight"] * $rows[$i]["clientweight"]);
+            $high += ($rows[$i]['weight'] * $rows[$i]['clientweight']);
             
 			if ($high > $ranweight && $low <= $ranweight)
             {
@@ -382,7 +381,7 @@ function get_banner($what, $clientID, $context=0, $source="", $allowhtml=true)
 	                    return false;
 					
 					// Delete this row and adjust $weightsum
-	                $weightsum -= ($rows[$i]["weight"] * $rows[$i]["clientweight"]);
+	                $weightsum -= ($rows[$i]['weight'] * $rows[$i]['clientweight']);
 					unset($rows[$i]);
 					
 					// Break out of the for loop to try again
@@ -428,8 +427,22 @@ function log_adview ($bannerID, $clientID)
 /* Java-encodes text									 */
 /*********************************************************/
 
-function enjavanate($str)
+function enjavanate ($str, $limit = 60)
 {
+    $str   = str_replace("\r", '', $str);
+	
+	while (strlen($str) > 0)
+	{
+		$line = substr ($str, 0, $limit);
+		$str  = substr ($str, $limit);
+		
+        $line = str_replace('\'', "\\'", $line);
+        $line = str_replace("\n", "\\n", $line);
+		
+        print "document.write('$line');\n";
+	}
+
+/*
 	$lines = explode("\n", $str);
 	
 	reset ($lines);
@@ -437,16 +450,14 @@ function enjavanate($str)
 	$i = 0;
     while (list(,$line) = each($lines))
 	{
-        $line = str_replace("\r", "", $line);
-        $line = str_replace("'", "\\'", $line);
         
     	if (!empty($line))
     	{
             if ($i++)
                 print "document.writeln('');\n";
-            print "document.write('$line');\n";
         }
 	}
+*/
 }
 
 
@@ -458,6 +469,11 @@ function enjavanate($str)
 function phpAds_parseHTMLBanner ($html, $bannerID, $url, $target)
 {
 	global $phpAds_url_prefix;
+	
+	
+	// Automatic replace all target='...' with the specified one
+	$html = eregi_replace ("target=['|\"]{0,1}[^'|\"|[:space:]]+['|\"]{0,1}", "target='".$target."'", $html);
+	
 	
 	// Check if a form is present in the HTML
 	if (eregi('<form', $html))
@@ -479,7 +495,7 @@ function phpAds_parseHTMLBanner ($html, $bannerID, $url, $target)
 		$prevhrefpos = '';
 		
 		$lowerbanner = strtolower($html);
-		$hrefpos	 = strpos($lowerbanner,"href=");
+		$hrefpos	 = strpos($lowerbanner, 'href=');
 		
 		while ($hrefpos > 0)
 		{
@@ -524,10 +540,10 @@ function phpAds_parseHTMLBanner ($html, $bannerID, $url, $target)
 				{
 					$newbanner = $newbanner . 
 							substr($html, $prevhrefpos, $hrefpos - $prevhrefpos) . 
-							$quotechar . "$phpAds_url_prefix/adclick.php?bannerID=" . 
-							$bannerID . "&dest=" . 
+							$quotechar . $phpAds_url_prefix . '/adclick.php?bannerID=' . 
+							$bannerID . '&dest=' . 
 							urlencode(substr($html, $quotepos+1, $endquotepos - $quotepos - 1)) .
-							"&ismap=";
+							'&ismap=';
 				}
 				else
 				{
@@ -540,8 +556,8 @@ function phpAds_parseHTMLBanner ($html, $bannerID, $url, $target)
 			}
 			else
 			{
-				$spacepos = strpos($lowerbanner, " ", $hrefpos+1);
-				$endtagpos = strpos($lowerbanner, ">", $hrefpos+1);
+				$spacepos = strpos($lowerbanner, ' ', $hrefpos+1);
+				$endtagpos = strpos($lowerbanner, '>', $hrefpos+1);
 				
 				if ($spacepos < $endtagpos)
 					$endpos = $spacepos;
@@ -552,22 +568,22 @@ function phpAds_parseHTMLBanner ($html, $bannerID, $url, $target)
 				{
 					$newbanner = $newbanner . 
 							substr($html, $prevhrefpos, $hrefpos - $prevhrefpos) . 
-							"\"" . "$phpAds_url_prefix/adclick.php?bannerID=" . 
-							$bannerID . "&dest=" . 
+							'"' . $phpAds_url_prefix . '/adclick.php?bannerID=' . 
+							$bannerID . '&dest=' . 
 							urlencode(substr($html, $hrefpos, $endpos - $hrefpos)) .
-							"&ismap=\"";
+							'&ismap="';
 				}
 				else
 				{
 					$newbanner = $newbanner . 
-							substr($html, $prevhrefpos, $hrefpos - $prevhrefpos) . "\"" . 
-							substr($html, $hrefpos, $endpos - $hrefpos) . "\"";
+							substr($html, $prevhrefpos, $hrefpos - $prevhrefpos) . '"' . 
+							substr($html, $hrefpos, $endpos - $hrefpos) . '"';
 				}
 				
 				$prevhrefpos = $hrefpos + ($endpos - $hrefpos);
 			}
 			
-			$hrefpos = strpos($lowerbanner, "href=", $hrefpos + 1);
+			$hrefpos = strpos($lowerbanner, 'href=', $hrefpos + 1);
 		}
 		
 		$html = $newbanner.substr($html, $prevhrefpos);
@@ -575,8 +591,18 @@ function phpAds_parseHTMLBanner ($html, $bannerID, $url, $target)
 	
 	if (!eregi('<form', $html) && !eregi('<a', $html) && $url != '')
 	{
+		if (strstr($target, '+'))
+		{
+			if ($row['target'] != '')
+				$target = $row['target'];
+			else
+				$target = substr($target, 1);
+		}
+		
+		$targettag = ' target="'.$target.'"';
+		
 		// No link or form
-		$html = "<a href='$phpAds_url_prefix/adclick.php?bannerID=".$bannerID."&ismap='".$target.">".$html."</a>";
+		$html = "<a href='$phpAds_url_prefix/adclick.php?bannerID=".$bannerID."&ismap='".$targettag.">".$html."</a>";
 	}
 	
 	return ($html);
@@ -588,13 +614,13 @@ function phpAds_parseHTMLBanner ($html, $bannerID, $url, $target)
 /* Create the HTML needed to display the banner			 */
 /*********************************************************/
 
-function view_raw($what, $clientID=0, $target="", $source="", $withtext=0, $context=0)
+function view_raw($what, $clientID=0, $target='', $source='', $withtext=0, $context=0)
 {
     global $phpAds_db, $REMOTE_HOST, $phpAds_url_prefix;
 	global $phpAds_default_banner_url, $phpAds_default_banner_target;
 	global $phpAds_type_html_auto;
 	
-	if(!ereg("^[0-9]+$", $clientID))
+	if(!ereg('^[0-9]+$', $clientID))
 	{
 		$target = $clientID;
 		$clientID = 0;
@@ -607,38 +633,41 @@ function view_raw($what, $clientID=0, $target="", $source="", $withtext=0, $cont
 	
 	if (is_array($row))
 	{
-		if(!empty($row["bannerID"])) 
+		if (!empty($row['bannerID'])) 
 		{
-			if(!empty($target))
+			if (!empty($target))
 			{
-				if(strstr($target,'+'))
+				if (strstr($target, '+'))
 				{
-					if($row["target"]!="")
-						$target=$row["target"];
+					if ($row['target'] != '')
+						$target = $row['target'];
 					else
-						$target=substr($target,1);
+						$target = substr($target, 1);
 				}
-				$target = " target=\"$target\"";
+				
+				$targettag = ' target="'.$target.'"';
 			}
+			else
+				$targettag = '';
 			
-			if($row['format'] == "html")
+			if($row['format'] == 'html')
 			{
 				// HTML banner
-				$html = stripslashes($row["banner"]);
+				$html = stripslashes($row['banner']);
 				
-				if ($phpAds_type_html_auto == true)
+				if ($phpAds_type_html_auto == true && $row['autohtml'] == 'true')
 					$html = phpAds_parseHTMLBanner ($html, $row['bannerID'], $row['url'], $target);
 				
 				// Replace standard variables
 				$html = str_replace ('{timestamp}',	time(), $html);
 				$html = str_replace ('{bannerid}', 	$row['bannerID'], $html);
-				$html = str_replace ("{targeturl}", $phpAds_url_prefix."/adclick.php?bannerID=".$row['bannerID']."&ismap=", $html);
+				$html = str_replace ('{targeturl}', $phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'&ismap=', $html);
 				
 				if (strpos ($html, "{targeturl:") > 0)
 				{
 					while (eregi("{targeturl:([^}]*)}", $html, $regs))
 					{
-						$html = str_replace ($regs[0], "$phpAds_url_prefix/adclick.php?bannerID=".$row['bannerID']."&dest=".urlencode($regs[1])."&ismap=", $html);
+						$html = str_replace ($regs[0], $phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'&dest='.urlencode($regs[1]).'&ismap=', $html);
 					}
 				}
 				
@@ -656,7 +685,7 @@ function view_raw($what, $clientID=0, $target="", $source="", $withtext=0, $cont
 					if ($lastdigits == $randomdigits)
 						$randomnumber = $lastrandom;
 					else
-						$randomnumber = sprintf ("%0".$randomdigits."d", mt_rand (0, pow (10, $randomdigits) - 1));
+						$randomnumber = sprintf ('%0'.$randomdigits.'d', mt_rand (0, pow (10, $randomdigits) - 1));
 					
 					$html = str_replace ($matches[0], $randomnumber, $html);
 					
@@ -667,7 +696,7 @@ function view_raw($what, $clientID=0, $target="", $source="", $withtext=0, $cont
 				
 				$outputbuffer = $html;
 			}
-			elseif ($row["format"] == "url")
+			elseif ($row['format'] == 'url')
 			{
 				// Banner refered through URL
 				
@@ -682,52 +711,52 @@ function view_raw($what, $clientID=0, $target="", $source="", $withtext=0, $cont
 					else
 						$randomdigits = $matches[2];
 					
-					$randomnumber = sprintf ("%0".$randomdigits."d", mt_rand (0, pow (10, $randomdigits) - 1));
+					$randomnumber = sprintf ('%0'.$randomdigits.'d', mt_rand (0, pow (10, $randomdigits) - 1));
 					$row['banner'] = str_replace ($matches[0], $randomnumber, $row['banner']);
 					
-					$randomstring = "&cb=$randomnumber";
+					$randomstring = '&cb='.$randomnumber;
 				}
 				else
 				{
 					$randomstring = "";
 				}
 				
-				if (empty($row["url"]))
-					$outputbuffer .= "<img src='".$row['banner']."' width='".$row['width']."' height='".$row['height']."' alt='".$row['alt']."' border='0'>";
+				if (empty($row['url']))
+					$outputbuffer .= '<img src=\''.$row['banner'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\'>';
 				else
-					$outputbuffer .= "<a href='$phpAds_url_prefix/adclick.php?bannerID=".$row['bannerID'].$randomstring."'".$target."><img src='".$row['banner']."' width='".$row['width']."' height='".$row['height']."' alt='".$row['alt']."' border='0'></a>";
+					$outputbuffer .= '<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].$randomstring.'\''.$targettag.'><img src=\''.$row['banner'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\'></a>';
 				
-				if($withtext && !empty($row["bannertext"]))
-					$outputbuffer .= "<br>\n<a href='$phpAds_url_prefix/adclick.php?bannerID=".$row['bannerID']."'".$target.">".$row['bannertext']."</a>";
+				if ($withtext && !empty($row['bannertext']))
+					$outputbuffer .= '<br>\n<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.'>'.$row['bannertext'].'</a>';
 			}
-			elseif ($row["format"] == "web")
+			elseif ($row['format'] == 'web')
 			{
 				// Banner stored on webserver
 				
-				if (empty($row["url"]))
-					$outputbuffer .= "<img src='".$row['banner']."' width='".$row['width']."' height='".$row['height']."' alt='".$row['alt']."' border='0'>";
+				if (empty($row['url']))
+					$outputbuffer .= '<img src=\''.$row['banner'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\'>';
 				else
-					$outputbuffer .= "<a href='$phpAds_url_prefix/adclick.php?bannerID=".$row['bannerID']."'".$target."><img src='".$row['banner']."' width='".$row['width']."' height='".$row['height']."' alt='".$row['alt']."' border='0'></a>";
+					$outputbuffer .= '<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.'><img src=\''.$row['banner'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\'></a>';
 				
-				if($withtext && !empty($row["bannertext"]))
-					$outputbuffer .= "<br>\n<a href='$phpAds_url_prefix/adclick.php?bannerID=".$row['bannerID']."'".$target.">".$row['bannertext']."</a>";
+				if ($withtext && !empty($row['bannertext']))
+					$outputbuffer .= '<br>\n<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.'>'.$row['bannertext'].'</a>';
 			}
 			else
 			{
 				// Banner stored in MySQL
 				
-				if (empty($row["url"]))
-					$outputbuffer .= "<img src='$phpAds_url_prefix/adview.php?bannerID=".$row['bannerID']."' width='".$row['width']."' height='".$row['height']."' alt='".$row['alt']."' border='0'>";
+				if (empty($row['url']))
+					$outputbuffer .= '<img src=\''.$phpAds_url_prefix.'/adview.php?bannerID='.$row['bannerID'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\'>';
 				else
-					$outputbuffer .= "<a href='$phpAds_url_prefix/adclick.php?bannerID=".$row['bannerID']."'".$target."><img src='$phpAds_url_prefix/adview.php?bannerID=".$row['bannerID']."' width='".$row['width']."' height='".$row['height']."' alt='".$row['alt']."' border='0'></a>";
+					$outputbuffer .= '<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.'><img src=\''.$phpAds_url_prefix.'/adview.php?bannerID='.$row['bannerID'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\'></a>';
 				
-				if($withtext && !empty($row["bannertext"]))
-					$outputbuffer .= "<br>\n<a href='$phpAds_url_prefix/adclick.php?bannerID=".$row['bannerID']."'".$target.">".$row['bannertext']."</a>";
+				if ($withtext && !empty($row['bannertext']))
+					$outputbuffer .= '<br>\n<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.'>'.$row['bannertext'].'</a>';
 			}
 			
 			// Log this AdView
-			if(!empty($row["bannerID"]))
-				log_adview($row["bannerID"],$row["clientID"]);
+			if (!empty($row['bannerID']))
+				log_adview($row['bannerID'], $row['clientID']);
 		}
 	}
 	else
@@ -735,32 +764,32 @@ function view_raw($what, $clientID=0, $target="", $source="", $withtext=0, $cont
 		// An error occured, or there are no banners to display at all
 		// Use the default banner if defined
 		
-		if ($phpAds_default_banner_target != "" && $phpAds_default_banner_url != "")
+		if ($phpAds_default_banner_target != '' && $phpAds_default_banner_url != '')
 		{
-			if(!empty($target))
+			if (!empty($target))
 			{
-				if(strstr($target,'+'))
+				if (strstr($target,'+'))
 				{
-					if($row["target"]!="")
-						$target=$row["target"];
+					if ($row['target'] != '')
+						$target = $row['target'];
 					else
-						$target=substr($target,1);
+						$target = substr($target, 1);
 				}
-				$target = " target=\"$target\"";
+				$target = ' target="'.$target.'"';
 			}
 			
-			$outputbuffer .= "<a href='$phpAds_default_banner_target'$target><img src='$phpAds_default_banner_url' border='0'></a>";
+			$outputbuffer .= '<a href=\''.$phpAds_default_banner_target.'\'$target><img src=\''.$phpAds_default_banner_url.'\' border=\'0\'></a>';
 			
-			return( array("html" => $outputbuffer, 
-						  "bannerID" => '')
+			return( array('html' => $outputbuffer, 
+						  'bannerID' => '')
 				  );
 		}
 	}
 	
 	db_close();
 	
-	return( array("html" => $outputbuffer, 
-				  "bannerID" => $row["bannerID"])
+	return( array('html' => $outputbuffer, 
+				  'bannerID' => $row['bannerID'])
 		  );
 }
 
@@ -770,11 +799,11 @@ function view_raw($what, $clientID=0, $target="", $source="", $withtext=0, $cont
 /* Display a banner										 */
 /*********************************************************/
 
-function view($what, $clientID=0, $target="", $source="", $withtext=0, $context=0)
+function view($what, $clientID=0, $target='', $source='', $withtext=0, $context=0)
 {
 	$output = view_raw($what, $clientID, "$target", "$source", $withtext, $context);
-	print($output["html"]);
-	return($output["bannerID"]);
+	print($output['html']);
+	return($output['bannerID']);
 }
 
 
@@ -783,17 +812,17 @@ function view($what, $clientID=0, $target="", $source="", $withtext=0, $context=
 /* Create the Javascript to display a banner			 */
 /*********************************************************/
 
-function view_js($what, $clientID=0, $target="", $source="", $withtext=0, $context=0)
+function view_js($what, $clientID=0, $target='', $source='', $withtext=0, $context=0)
 {
 	$output = view_raw($what, $clientID, "$target", "$source", $withtext, $context);
 	
-	enjavanate($output["html"]);
-	return($output["bannerID"]);
+	enjavanate($output['html']);
+	return($output['bannerID']);
 }
 
 
 
-function view_t($what, $target="")
+function view_t($what, $target='')
 {
 	view ($what, $target, 1);
 }

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.27 $
+<?php // $Revision: 1.28 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -154,6 +154,7 @@ if (isset($submit))
 			$final["alt"] = "";
 			$final["bannertext"] = "";
 			$final["url"] = $html_url;
+			$final["autohtml"] = $html_auto;
 			break;
 	}
 	$final["clientID"] = $campaignID;
@@ -660,6 +661,11 @@ if (!isset($type))
 		<td width='30'>&nbsp;</td>
 		<td width='200' valign='top'><?php echo $strHTML;?></td>
 		<td><textarea cols="35" rows="8" name="html_banner" style="width:350px;"><?php if (isset($type) && $type == "html") echo stripslashes($row["banner"]);?></textarea></td>
+	</tr>
+	<tr>
+		<td width='30'>&nbsp;</td>
+		<td width='200' valign='top'>&nbsp;</td>
+		<td><input type='checkbox' name='html_auto' value='true'<?php echo (!isset($row["autohtml"]) || $row["autohtml"] == 'true') ? ' checked' : ''; ?>> <?php echo $strAutoChangeHTML; ?></td>
 	</tr>
 	<tr>
 		<td><img src='images/spacer.gif' height='1' width='100%'></td>

@@ -5,7 +5,7 @@
 
 # --------------------------------------------------------
 #
-# Table structure for table 'adclicks'
+# Table structure for table 'phpads_adclicks'
 #
 
 CREATE TABLE phpads_adclicks (
@@ -18,7 +18,7 @@ CREATE TABLE phpads_adclicks (
 
 # --------------------------------------------------------
 #
-# Table structure for table 'adviews'
+# Table structure for table 'phpads_adviews'
 #
 
 CREATE TABLE phpads_adviews (
@@ -31,7 +31,7 @@ CREATE TABLE phpads_adviews (
 
 # --------------------------------------------------------
 #
-# Table structure for table 'banners'
+# Table structure for table 'phpads_banners'
 #
 
 CREATE TABLE phpads_banners (
@@ -50,6 +50,7 @@ CREATE TABLE phpads_banners (
    seq tinyint(4) default '0' NOT NULL,
    target varchar(8) default '' NOT NULL,
    description varchar(255) DEFAULT '' NOT NULL,
+   autohtml enum('true','false') DEFAULT 'true' NOT NULL,   
    PRIMARY KEY (bannerID)
 );
 
@@ -57,7 +58,7 @@ CREATE TABLE phpads_banners (
 
 # --------------------------------------------------------
 #
-# Table structure for table 'clients'
+# Table structure for table 'phpads_clients'
 #
 
 CREATE TABLE phpads_clients (
@@ -86,7 +87,7 @@ CREATE TABLE phpads_clients (
 
 # --------------------------------------------------------
 #
-# Table structure for table 'session'
+# Table structure for table 'phpads_session'
 #
 
 CREATE TABLE phpads_session (
@@ -98,7 +99,7 @@ CREATE TABLE phpads_session (
 
 # --------------------------------------------------------
 #
-# Table structure for table 'acls'
+# Table structure for table 'phpads_acls'
 #
 
 CREATE TABLE phpads_acls (
@@ -113,7 +114,7 @@ CREATE TABLE phpads_acls (
 
 # --------------------------------------------------------
 #
-# Table structure for table 'adstats'
+# Table structure for table 'phpads_adstats'
 #
 CREATE TABLE phpads_adstats (
   views int(11) DEFAULT '0' NOT NULL,
