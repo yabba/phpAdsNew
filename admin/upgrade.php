@@ -1,4 +1,4 @@
-<?php // $Revision: 1.19 $
+<?php // $Revision: 1.20 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -45,6 +45,9 @@ include ("../lib-dbconfig.inc.php");
 phpAds_ConfigFileUpdatePrepare();
 phpAds_ConfigFileUpdateExport();
 
+
+// Exclude loading of js-form.php
+define('phpAds_updating', 1);
 
 // Include needed libraries
 require ("lib-permissions.inc.php");
