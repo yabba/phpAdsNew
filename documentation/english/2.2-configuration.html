@@ -405,9 +405,9 @@
         this option to 0. If you want to store the banner on an external FTP server 
         set this option to 1. On certain web servers you may want to use the FTP 
         option even on the local web server.</p>
-      <p>If you want to use FTP to store banners, PHP must support at least one 
-        of three extensions, the FTP extension (best), the CURL extension or URL 
-        fopen wrappers.</p>
+      <p>This option doesn't need any special extensions, but phpAdsNew will try 
+        to use the FTP extension if it is available, otherwise phpAdsNew will 
+        use sockets to provide the same functionality.</p>
       <p><br>
         <span class="subtitle">$phpAds_type_web_dir</span><br>
         Specify the directory where phpAdsNew needs to copy the uploaded banners 
