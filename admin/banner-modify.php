@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -124,6 +124,12 @@ if (isset($bannerid) && $bannerid != '')
 					bannerid = '".$applyto."'
 			") or phpAds_sqlDie();
 		}
+		
+		// Rebuild cache
+		if (!defined('LIBVIEWCACHE_INCLUDED')) 
+			include (phpAds_path.'/libraries/deliverycache/cache-'.$phpAds_config['delivery_caching'].'.inc.php');
+		
+		phpAds_cacheDelete();
 		
 		Header ("Location: ".$returnurl."?clientid=".$clientid."&campaignid=".$campaignid."&bannerid=".$applyto);
 	}
