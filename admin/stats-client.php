@@ -1,4 +1,4 @@
-<?php // $Revision: 1.6 $
+<?php // $Revision: 1.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -379,8 +379,16 @@ if (phpAds_isUser(phpAds_Admin))
 	
 	echo "</td></tr>";
   	echo "<tr><td height='1' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
+	
+	
+	// Reset statistics
+	echo "<tr><td height='25'>";
+	echo "<a href='stats-reset.php?clientID=$clientID'>";
+	echo "<img src='images/icon-undo.gif' align='absmiddle' border='0'>&nbsp;$strResetStats</a>";
+	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+	echo "</td></tr>";
+	
 	echo "</table>";
-
 }
 
 

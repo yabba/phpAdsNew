@@ -15,8 +15,8 @@ CVS			+ Added P3P Privacy Policies support
 			  - Added ability to force a report from being sent from the Admin interface  (Niels)
 
 			+ Added search capabilities  (Niels and Tobi Schulz)
-
 			+ Added client statistics  (Niels)
+			+ Added ability to reset stats for a complete client  (Niels)
 
 			+ Added expiration details to campaign index  (Niels)
 			+ Added URL prefix and scrolling=no  to bannercode generator  (Niels)
