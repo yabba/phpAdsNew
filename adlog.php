@@ -1,4 +1,4 @@
-<?php // $Revision: 1.10 $
+<?php // $Revision: 1.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -76,6 +76,17 @@ if (isset($bannerid) && isset($clientid) && isset($zoneid))
 			$newcap = 1;
 		
 		phpAds_setCookie ("phpAds_capAd[".$bannerid."]", $newcap, time() + 31536000);
+	}
+	
+	
+	if ($phpAds_config['geotracking_type'] != 0 && $phpAds_config['geotracking_cookie'])
+	{
+		// Check if cookie is set
+		if (!isset($HTTP_COOKIE_VARS['phpAds_country']))
+		{
+			$country = $phpAds_CountryLookup ? $phpAds_CountryLookup : '';
+			phpAds_setCookie ("phpAds_country", $country, time() + 31536000);
+		}
 	}
 	
 	
