@@ -1,4 +1,4 @@
-<?php // $Revision: 1.7 $
+<?php // $Revision: 1.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -59,6 +59,7 @@ if (date('H') == 0)
 {
 	include ("maintenance-reports.php");
 	include ("maintenance-activation.php");
+	include ("maintenance-autotargeting.php");
 }
 
 include ("maintenance-priority.php");
