@@ -1,4 +1,4 @@
-<?php // $Revision: 1.16 $
+<?php // $Revision: 1.17 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -13,6 +13,9 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+
+
+
 
 
 // Set text direction and characterset
@@ -224,12 +227,8 @@ $GLOBALS['strActivationDate']				= "Data aktywacji";
 $GLOBALS['strViewsPurchased'] 				= "Pozosta³o Ods³on";
 $GLOBALS['strClicksPurchased'] 				= "Pozosta³o Klikniêæ";
 $GLOBALS['strCampaignWeight']				= "Campaign weight";
-$GLOBALS['strHighPriority']					= "Wy¶wietlaj bannery z tej kampanii z wysokim priorytetem.<br>
-											   Je¶li skorzystasz z tej opcji phpAdsNew spróbuje rozdzieliæ liczbê 
-											   Ods³on równomiernie w ci±gu dnia.";
-$GLOBALS['strLowPriority']					= "Wy¶wietlaj bannery z tej kampanii z niskim priorytetem.<br>
-											   Ta kampania wykorzysta liczbê Ods³on pozosta³± po 
-											   wy¶wietleniu kampanii o wysokich priorytetach.";
+$GLOBALS['strHighPriority']					= "Wy¶wietlaj bannery z tej kampanii z wysokim priorytetem.<br>Je¶li skorzystasz z tej opcji phpAdsNew spróbuje rozdzieliæ liczbê Ods³on równomiernie w ci±gu dnia.";
+$GLOBALS['strLowPriority']					= "Wy¶wietlaj bannery z tej kampanii z niskim priorytetem.<br>Ta kampania wykorzysta liczbê Ods³on pozosta³± po wy¶wietleniu kampanii o wysokich priorytetach.";
 $GLOBALS['strTargetLimitAdviews']			= "Organicz liczbê Ods³on do";
 $GLOBALS['strTargetPerDay']					= "dziennie.";
 $GLOBALS['strPriorityAutoTargeting']		= "Rozdziel pozosta³± liczbê Ods³on równomiernie przez pozosta³± liczbê dni. Docelowa liczba Ods³on bêdzie ustawiana odpowiednio ka¿dego dnia.";
@@ -289,15 +288,7 @@ $GLOBALS['strBannerWeight']					= "Waga bannera";
 // Banner (swf)
 $GLOBALS['strCheckSWF']						= "Sprawd¼ wpisanê w animacjê Flasha odno¶niki";
 $GLOBALS['strConvertSWFLinks']				= "Konweruj odno¶niki w amimacji Flasha";
-$GLOBALS['strConvertSWF']					= "<br>Animacja Flash, któr± w³a¶nie wys³a³e¶ zawiera wpisane odno¶niki. phpAdsNew nie bêdzie ".
-											  "móg³ ¶ledziæ liczby Klikniêæ dla tego bannera, chyba ¿e odno¶niki te zostan± ".
-											  "skonwertowane. Poni¿ej znajdziesz listê wszystkich odno¶ników z tej animacji. ".
-											  "Je¶li zechcesz który¶ z nich skonwertowaæ, kliknij <b>Konwertuje</b>, w przeciwnym ".
-											  "razie kliknij <b>Anuluj</b>.<br><br>".
-											  "Uwaga: Je¶li klikniesz <b>Konwertuj</b> plik animacji, ".
-									  		  "który w³a¶nie wys³a³e¶ zostanie fizycznie zmodyfikowany. <br>Powiniene¶ wykonaæ kopiê zapasow± ".
-											  "oryginalnej wersji. Niezale¿nie od tego, w jakiej wersji Flasha zosta³ wykonany banner, ".
-											  "plik wynikowy bêdzie wymaga³ Flasha w wersji 4 lub wy¿szej do poprawnego wy¶wietlenia.<br><br>";
+$GLOBALS['strConvertSWF']					= "<br>Animacja Flash, któr± w³a¶nie wys³a³e¶ zawiera wpisane odno¶niki. phpAdsNew nie bêdzie móg³ ¶ledziæ liczby Klikniêæ dla tego bannera, chyba ¿e odno¶niki te zostan± skonwertowane. Poni¿ej znajdziesz listê wszystkich odno¶ników z tej animacji. Je¶li zechcesz który¶ z nich skonwertowaæ, kliknij <b>Konwertuje</b>, w przeciwnym razie kliknij <b>Anuluj</b>.<br><br>Uwaga: Je¶li klikniesz <b>Konwertuj</b> plik animacji, który w³a¶nie wys³a³e¶ zostanie fizycznie zmodyfikowany. <br>Powiniene¶ wykonaæ kopiê zapasow± oryginalnej wersji. Niezale¿nie od tego, w jakiej wersji Flasha zosta³ wykonany banner, plik wynikowy bêdzie wymaga³ Flasha w wersji 4 lub wy¿szej do poprawnego wy¶wietlenia.<br><br>";
 $GLOBALS['strCompressSWF']					= "Kompresuj plik SWF dla szybszego ¶ci±gania (Wymagany Flash 6)";
 
 
