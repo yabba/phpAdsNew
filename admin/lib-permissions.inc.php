@@ -1,4 +1,4 @@
-<?php // $Revision: 1.36 $
+<?php // $Revision: 1.37 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -318,7 +318,7 @@ function phpAds_LoginScreen($message='', $SessionID=0)
 	global $phpAds_config, $phpAds_productname;
 	global $strUsername, $strPassword, $strLogin, $strWelcomeTo, $strEnterUsername, $strNoAdminInteface;
 	
-	phpAds_PageHeader(0);
+	phpAds_PageHeader(phpAds_Login);
 	
 	if ($phpAds_config['ui_enabled'] == true)
 	{
