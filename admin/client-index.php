@@ -1,4 +1,4 @@
-<?php // $Revision: 1.6 $
+<?php // $Revision: 1.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -414,6 +414,13 @@ echo "</table>";
       <td height='25'><?echo $strActiveCampaigns;?>: <b><?echo @mysql_result($res_active_campaigns, 0, "count");?></b></td>
       <td height='25'>&nbsp;</td></tr>
   <tr height='1'><td colspan='3' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>
+  <tr><td height='25' colspan='3'>
+	<img src='images/icon-generatecode.gif' border='0' align='absmiddle'>&nbsp;<a href='admin-generate.php'>Generate Bannercode</a>
+	<!-- Still working on this  --Niels
+		&nbsp;&nbsp;
+		<img src='images/icon-availability.gif' border='0' align='absmiddle'>&nbsp;<a href='admin-generate.php'>Show availability</a>
+	-->
+  </td></tr>
 
 </table>   
 

@@ -2,6 +2,7 @@ phpAdsNew - ChangeLog
 
 v 2.0beta5		+ Added override setting for automatic GD detection  (Niels)
 			+ Added support for passing ISMAP click location  (Niels)
+			+ Added banner invocation code generator  (Niels)
 			+ Clients can now deactivate their own banners if permitted  (Niels thanks to Shannon Johnston)
 			+ Clients can now activate their own banners if permitted  (Niels thanks to Shannon Johnston)
 			+ Added cookie check for Admin interface login  (Niels)

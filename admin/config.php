@@ -1,4 +1,4 @@
-<?php // $Revision: 1.9 $
+<?php // $Revision: 1.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -63,7 +63,8 @@ $phpAds_nav = array (
 		  "4.2"				=>  array("campaign-edit.php" => "$strCreateNewCampaign"),
 		  "4.3"				=>	array("campaign-edit.php" => "$strEditCampaign"),
 		  "4.4" 			=> 	array("client-edit.php" => "$strAddClient"),
-		  "4.5" 			=> 	array("client-edit.php" => "$strModifyClient")
+		  "4.5" 			=> 	array("client-edit.php" => "$strModifyClient"),
+		  "4.6" 			=> 	array("admin-generate.php" => "$strGenerateBannercode")
 	),
 
 	"client" => array (

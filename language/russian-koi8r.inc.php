@@ -1,4 +1,4 @@
-<?php // $Revision: 1.22 $
+<?php // $Revision: 1.23 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -246,5 +246,13 @@ $GLOBALS['strAverage']					= "В среднем";
 $GLOBALS['strDuplicateClientName']		= "Указанное имя пользователя уже существует, пожалуйста введите другое имя.";
 $GLOBALS['strAllowClientDisableBanner'] = "Разрешить этому пользователю деактивировать его баннеры";
 $GLOBALS['strAllowClientActivateBanner'] = "Разрешить этому пользователю активировать его баннеры";
+
+$GLOBALS['strGenerateBannercode']		= "Generate Bannercode";
+$GLOBALS['strChooseInvocationType']		= "Please choose the type of banner invocation";
+$GLOBALS['strGenerate']					= "Generate";
+$GLOBALS['strParameters']				= "Parameters";
+$GLOBALS['strUniqueidentifier']			= "Unique identifier";
+$GLOBALS['strFrameSize']				= "Frame size";
+$GLOBALS['strBannercode']				= "Bannercode";
 
 ?>
