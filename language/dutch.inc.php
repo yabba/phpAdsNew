@@ -1,4 +1,4 @@
-<?php // $Revision: 1.33 $
+<?php // $Revision: 1.34 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -301,5 +301,15 @@ $GLOBALS['strRawQueryString']			= "Ruwe gegevens";
 
 $GLOBALS['strBannerWeight']				= "Banner gewicht";
 $GLOBALS['strCampaignWeight']			= "Campagne gewicht";
+
+$GLOBALS['strZoneCacheOn']				= "Zone cache staat aan";
+$GLOBALS['strZoneCacheOff']				= "Zone cache staat uit";
+$GLOBALS['strCachedZones']				= "Gecachede zones";
+$GLOBALS['strSizeOfCache']				= "Cache grootte";
+$GLOBALS['strAverageAge']				= "Gemiddelde leeftijd";
+$GLOBALS['strRebuildZoneCache']			= "Zone cache opnieuw aanmaken";
+$GLOBALS['strKiloByte']					= "KB";
+$GLOBALS['strSeconds']					= "seconden";
+$GLOBALS['strExpired']					= "Vervallen";
 
 ?>
