@@ -11,6 +11,8 @@ CVS			+ Added P3P Privacy Policies support
 			  avoid conflicts with other products  (Niels)
 			+ Rearanged directory structure for the manual, to make room
 			  for the german translation provided by René Friedrich  (Niels)
+			+ Fixed quote problem with banner-text, alt and description fields  (Niels)
+			+ Fixed HTML layout problem with large description and/or alt-text  (Niels)
 
 
 v 2.0beta5		+ Added override setting for automatic GD detection  (Niels)

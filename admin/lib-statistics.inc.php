@@ -1,4 +1,4 @@
-<?php // $Revision: 1.9 $
+<?php // $Revision: 1.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -18,6 +18,18 @@
 $clientCache = array();
 $bannerCache = array();
 
+
+
+/*********************************************************/
+/* Limit a string to a number of characters              */
+/*********************************************************/
+
+function phpAds_breakString ($str, $maxLen, $append = "...")
+{
+	return strlen($str) > $maxLen 
+		? rtrim(substr($str, 0, $maxLen-strlen($append))).$append 
+		: $str;
+}
 
 
 /*********************************************************/
@@ -139,11 +151,9 @@ function phpAds_getParentName ($clientID)
 /* Build the banner name from ID, Description and Alt    */
 /*********************************************************/
 
-function phpAds_buildBannerName ($bannerID, $description, $alt)
+function phpAds_buildBannerName ($bannerID, $description, $alt, $limit = 30)
 {
 	global $strUntitled;
-	
-	$name = "[id$bannerID] ";
 	
 	if ($description != "")
 		$name .= $description;
@@ -151,6 +161,13 @@ function phpAds_buildBannerName ($bannerID, $description, $alt)
 		$name .= $alt;
 	else
 		$name .= $strUntitled;
+	
+	
+	if (strlen($name) > $limit)
+		$name = phpAds_breakString ($name, $limit);
+	
+	if ($bannerID != '')
+		$name = "[id$bannerID] ".$name;
 	
 	return ($name);
 }

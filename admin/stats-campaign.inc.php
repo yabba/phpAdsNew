@@ -1,4 +1,4 @@
-<?php // $Revision: 1.5 $
+<?php // $Revision: 1.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -453,9 +453,11 @@ if (count($tmp_order) > 0)
 			echo "&nbsp;";
 			echo "<a height='25' href='stats-details.php?campaignID=$campaignID&bannerID=".$row_banners['bannerID']."'>";
 			
-			if ($row_banners['description'] != '')	echo $row_banners['description'];
-			elseif ($row_banners['alt'] != '')		echo $row_banners['alt'];
-			else									echo $strUntitled;
+			if ($row_banners['description'] != '')	$name = $row_banners['description'];
+			elseif ($row_banners['alt'] != '')		$name = $row_banners['alt'];
+			else									$name = $strUntitled;
+			
+			echo phpAds_breakString ($name, '30');
 			
 			echo "</a>";
 			echo "</td>";

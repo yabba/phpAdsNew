@@ -1,4 +1,4 @@
-<?php // $Revision: 1.7 $
+<?php // $Revision: 1.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -294,6 +294,8 @@ if (isset($clients) && is_array($clients) && count($clients) > 0)
 							$name = $strUntitled;
 							if (isset($banners[$bkey]['alt']) && $banners[$bkey]['alt'] != '') $name = $banners[$bkey]['alt'];
 							if (isset($banners[$bkey]['description']) && $banners[$bkey]['description'] != '') $name = $banners[$bkey]['description'];
+							
+							$name = phpAds_breakString ($name, '30');
 							
 							// Divider
 							echo "<tr height='1'>";

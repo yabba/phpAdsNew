@@ -15,6 +15,7 @@
 
 // Include required files
 require ("config.php");
+require ("lib-statistics.inc.php");
 
 
 // Security check
@@ -185,6 +186,8 @@ phpAds_checkAccess(phpAds_Admin);
 					if (isset($row_b_expand['alt']) && $row_b_expand['alt'] != '') $name = $row_b_expand['alt'];
 					if (isset($row_b_expand['description']) && $row_b_expand['description'] != '') $name = $row_b_expand['description'];
 					
+					$name = phpAds_breakString ($name, '30');
+					
 					echo "<tr height='1'><td colspan='5' bgcolor='#888888'><img src='images/break-el.gif' height='1' width='100%'></td></tr>";
 					
 			    	echo "<tr height='25' ".($i%2==0?"bgcolor='#F6F6F6'":"").">";
@@ -272,6 +275,8 @@ phpAds_checkAccess(phpAds_Admin);
 				if (isset($row_b_expand['alt']) && $row_b_expand['alt'] != '') $name = $row_b_expand['alt'];
 				if (isset($row_b_expand['description']) && $row_b_expand['description'] != '') $name = $row_b_expand['description'];
 				
+				$name = phpAds_breakString ($name, '30');
+				
 				echo "<tr height='1'><td colspan='5' bgcolor='#888888'><img src='images/break-el.gif' height='1' width='100%'></td></tr>";
 				
 		    	echo "<tr height='25' ".($i%2==0?"bgcolor='#F6F6F6'":"").">";
@@ -325,6 +330,8 @@ phpAds_checkAccess(phpAds_Admin);
 			$name = $strUntitled;
 			if (isset($row_banners['alt']) && $row_banners['alt'] != '') $name = $row_banners['alt'];
 			if (isset($row_banners['description']) && $row_banners['description'] != '') $name = $row_banners['description'];
+			
+			$name = phpAds_breakString ($name, '30');
 			
 			if ($i > 0) echo "<tr height='1'><td colspan='5' bgcolor='#888888'><img src='images/break-l.gif' height='1' width='100%'></td></tr>";
 			
