@@ -1,5 +1,10 @@
 phpAdsNew - ChangeLog
 
+CVS			+ Added P3P Privacy Policies support
+			  - Sending Policy location using P3P header  (Niels)
+			  - Sending Compact Policy using P3P header for cookie evaluation  (Niels)
+
+
 v 2.0beta5		+ Added override setting for automatic GD detection  (Niels)
 			+ Added support for passing ISMAP click location  (Niels)
 			+ Added banner invocation code generator  (Niels)

@@ -66,6 +66,25 @@ $phpAds_company_name = "mysite.com";
 $phpAds_override_GD_imageformat = "";
 
 
+
+
+
+/*********************************************************/
+/* P3P Privacy Policies                                  */
+/*********************************************************/
+
+// Use P3P Polices
+$phpAds_p3p_policies = true;
+
+// Compact policy
+$phpAds_p3p_compact_policy = "CUR ADM OUR NOR STA NID";
+
+// Policy file location
+// For example:
+// $phpAds_p3p_policy_location = "http://www.your-url.com/w3c/p3p.xml";
+
+
+
 /*********************************************************/
 /* Statistics and logging                                */
 /*********************************************************/
