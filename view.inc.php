@@ -1,4 +1,4 @@
-<?php // $Revision: 1.81 $
+<?php // $Revision: 1.82 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -12,15 +12,6 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-
-
-// Include required files
-require (phpAds_path."/lib-db.inc.php");
-require (phpAds_path."/lib-expire.inc.php");
-require (phpAds_path."/lib-log.inc.php");
-
-if ($phpAds_acl == '1')
-	require (phpAds_path."/lib-acl.inc.php");
 
 
 // Seed the random number generator
