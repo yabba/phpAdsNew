@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -222,6 +222,9 @@ function showHideLayers(obj) {
 
 <?
 
+$totaladviews = 0;
+$totaladclicks = 0;
+
 if (count($tmp_order) > 0)
 {
 	echo "<table border='0' width='100%' cellpadding='0' cellspacing='0'>";
@@ -239,8 +242,6 @@ if (count($tmp_order) > 0)
 		echo "</tr>";
 	}
 	
-	$totaladviews = 0;
-	$totaladclicks = 0;
 	$where = "";
 	
 	
@@ -523,6 +524,7 @@ if (count($tmp_order) > 0)
 	echo "</table>";
 	echo "<br><br>";
 }
+
 
 
 
