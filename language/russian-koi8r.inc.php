@@ -1,4 +1,4 @@
-<?php // $Revision: 1.24 $
+<?php // $Revision: 1.25 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -254,5 +254,8 @@ $GLOBALS['strParameters']				= "Параметры";
 $GLOBALS['strUniqueidentifier']			= "Уникальный идентификатор";
 $GLOBALS['strFrameSize']				= "Размер фрэйма";
 $GLOBALS['strBannercode']				= "Баннерный код";
+
+$GLOBALS['strSearch']					= "Search";
+$GLOBALS['strNoMatchesFound']			= "No matches were found";
 
 ?>

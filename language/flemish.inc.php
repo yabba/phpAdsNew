@@ -1,4 +1,4 @@
-<?php // $Revision: 1.20 $
+<?php // $Revision: 1.21 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -249,5 +249,8 @@ $GLOBALS['strParameters']				= "Parameters";
 $GLOBALS['strUniqueidentifier']			= "Unieke identificatie";
 $GLOBALS['strFrameSize']				= "Frame grootte";
 $GLOBALS['strBannercode']				= "Bannercode";
+
+$GLOBALS['strSearch']					= "Zoeken";
+$GLOBALS['strNoMatchesFound']			= "Geen objecten gevonden";
 
 ?>
