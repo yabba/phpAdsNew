@@ -1,4 +1,4 @@
-<?php // $Revision: 1.2 $
+<?php // $Revision: 1.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -91,4 +91,3 @@ include ("lib-hourly.inc.php");
 phpAds_PageFooter();
 
 ?>
-
