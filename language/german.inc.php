@@ -1,4 +1,4 @@
-<?php // $Revision: 1.26 $
+<?php // $Revision: 1.27 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -10,7 +10,8 @@
 /* Translations by Repsak (kasper@manson-valley.de)						*/
 /*                 René Friedrich (rene.friedrich@web.de)				*/
 /*				   silicon (silicon@ins.at)								*/
-/*				                                                        */
+/*				   Tobias Bäthge (tobias@tbwd.de)                       */
+/*                                                                      */
 /* This program is free software. You can redistribute it and/or modify */
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
@@ -239,9 +240,9 @@ $GLOBALS['strSendDeactivationWarning']  = "Warnung senden, wenn eine Kampagne de
 $GLOBALS['strWarnClientTxt']			= "Die Zahl der verf&uuml;gbaren AdClicks oder AdView für Ihre Banner ist unter {limit} gesunken. ";
 $GLOBALS['strViewsClicksLow']			= "Verf&uuml;gbare AdViews oder AdClicks sehr niedrig";
 
-$GLOBALS['strDays']						= "Days";
-$GLOBALS['strHistory']					= "History";
-$GLOBALS['strAverage']					= "Average";
-$GLOBALS['strDuplicateClientName']		= "The username you provided already exists, please enter a different username.";
+$GLOBALS['strDays']						= "Tage";
+$GLOBALS['strHistory']					= "Verlauf";
+$GLOBALS['strAverage']					= "Durchschnitt";
+$GLOBALS['strDuplicateClientName']		= "Der von Ihnen eingegebene Benutzername existiert bereits. Bitte geben Sie einen anderen ein.";
 
 ?>
