@@ -1,4 +1,4 @@
-<?php // $Revision: 1.40 $
+<?php // $Revision: 1.41 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -213,7 +213,7 @@ if ($campaignid != "")
 		FROM
 			".$phpAds_config['tbl_clients']."
 		WHERE
-			parent != 0  
+			parent = ".$clientid." 
 	");
 	
 	while ($row = phpAds_dbFetchArray($res))

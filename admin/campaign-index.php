@@ -1,4 +1,4 @@
-<?php // $Revision: 1.25 $
+<?php // $Revision: 1.26 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -38,7 +38,7 @@ $res = phpAds_dbQuery("
 	FROM
 		".$phpAds_config['tbl_clients']."
 	WHERE
-		parent > 0
+		parent = ".$clientid." 
 ");
 
 while ($row = phpAds_dbFetchArray($res))
