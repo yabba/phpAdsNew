@@ -1,6 +1,11 @@
-<?php // $Id: settings.lang.php,v 1.7 2001/11/13 22:34:09 ciaccia Exp $
+<?php // $Revision: 1.8 $
 
 /************************************************************************/
+/* phpAdsNew 2                                                          */
+/* ===========                                                          */
+/*                                                                      */
+/* Copyright (c) 2001 by the phpAdsNew developers                       */
+/* http://sourceforge.net/projects/phpadsnew                            */
 /* phpPgAds                                                             */
 /* ========                                                             */
 /*                                                                      */
