@@ -68,7 +68,7 @@ French
 
 German
 	---------------------------------------------------------
-	Maintained by:	   Rayner Jankowski (infoi@Werbeplatzvermarktung.de)
+	Maintained by:	   Rayner Jankowski (info@Werbeplatzvermarktung.de)
 	Is up-to-date?	   Yes
 	Last update:	   3 April 2003
 	Translated files:  7
@@ -92,6 +92,16 @@ Hungarian
 	Is up-to-date?	   Working on it
 	Last update:	   -
 	Translated files:  -
+	---------------------------------------------------------
+
+
+
+Indonesian
+	---------------------------------------------------------
+	Maintained by:	   Rachim Tamsjadi (tamsjadi@icqmail.com)
+	Is up-to-date?	   Yes
+	Last update:	   11 April 2003
+	Translated files:  7
 	---------------------------------------------------------
 
 
