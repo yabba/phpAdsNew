@@ -1,4 +1,4 @@
-<?php // $Revision: 1.13 $
+<?php // $Revision: 1.14 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -75,7 +75,8 @@ function phpAds_ImageStore ($storagetype, $name, $buffer, $overwrite = false)
 				".$phpAds_config['tbl_images']."
 			SET
 				filename = '".$name."',
-				contents = '".addslashes($buffer)."'
+				contents = '".addslashes($buffer)."',
+				t_stamp = now()
 		");
 		
 		$stored_url = $name;
