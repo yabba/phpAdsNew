@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -146,6 +146,9 @@ function phpAds_upgradeData ()
 	
 	// Create target stats form userlog
 	phpAds_upgradeTargetStats();
+	
+	// Update the password to MD5 hashes
+	phpAds_upgradePasswordMD5();
 }
 
 
@@ -255,6 +258,7 @@ function phpAds_upgradeTable ($name, $structure)
 	// Get existing indexes
 	$res = phpAds_dbQuery("SHOW INDEX FROM ".$name);
 	while ($row = phpAds_dbFetchArray($res))
+	{
 		if ($row['Key_name'] != 'PRIMARY')
 		{
 			if ($row['Non_unique'] == 0)
@@ -264,6 +268,48 @@ function phpAds_upgradeTable ($name, $structure)
 		}
 		else
 			$availableprimary[] = $row['Column_name'];
+	}
+	
+	
+	// Delete not needed unique indexes
+	if (isset($availableunique) && is_array($availableunique))
+		for (reset($availableunique); $key = key($availableunique); next($availableunique))
+			if (!isset($unique[$key]) || !is_array($unique[$key]) || sizeof($unique[$key]) == 0)
+				phpAds_dbQuery("ALTER TABLE ".$name." DROP INDEX ".$key);
+	
+	// Delete not needed indexes
+	if (isset($availableindex) && is_array($availableindex))
+		for (reset($availableindex); $key = key($availableindex); next($availableindex))
+			if (!isset($index[$key]) || !is_array($index[$key]) || sizeof($index[$key]) == 0)
+				phpAds_dbQuery("ALTER TABLE ".$name." DROP INDEX ".$key);
+	
+	// Delete not needed primary key
+	if (isset($availableprimary) && is_array($availableprimary))
+		if (!isset($primary) || !is_array($primary) || sizeof($primary) == 0)
+			phpAds_dbQuery("ALTER TABLE ".$name." DROP PRIMARY KEY");
+	
+	
+	// Delete info about indexes
+	if (isset($availableunique))  unset($availableunique);
+	if (isset($availableindex))   unset($availableindex);
+	if (isset($availableprimary)) unset($availableprimary);
+	
+	
+	// Get existing indexes again
+	$res = phpAds_dbQuery("SHOW INDEX FROM ".$name);
+	while ($row = phpAds_dbFetchArray($res))
+	{
+		if ($row['Key_name'] != 'PRIMARY')
+		{
+			if ($row['Non_unique'] == 0)
+				$availableunique[$row['Key_name']][] = $row['Column_name'];
+			else
+				$availableindex[$row['Key_name']][] = $row['Column_name'];
+		}
+		else
+			$availableprimary[] = $row['Column_name'];
+	}
+	
 	
 	
 	// Check columns
@@ -317,22 +363,38 @@ function phpAds_upgradeTable ($name, $structure)
 	// Check Primary
 	if (isset($primary) && is_array($primary) && sizeof($primary) > 0)
 	{
-		// Check if this column is 'auto_increment'
-		if (sizeof($primary) == 1 && ereg('auto_increment', $availablecolumns[$primary[0]]['Extra']))
-		{
-			// Get name of column
-			$key = $primary[0];
-			
-			// Remove 'auto_increment' from column
-			$createdefinition = $key." ".str_replace('AUTO_INCREMENT', '', $columns[$key]);
-			phpAds_dbQuery("ALTER TABLE ".$name." MODIFY COLUMN ".$createdefinition);
-			
-			$incrementmodified = $key;
-		}
+		// Okay... there needs to be a primary key
 		
-		// Recreated primary keys
-		phpAds_dbQuery("ALTER TABLE ".$name." DROP PRIMARY KEY");
-		phpAds_dbQuery("ALTER TABLE ".$name." ADD PRIMARY KEY (".implode(",", $primary).")");
+		if (!isset($availableprimary) || !is_array($availableprimary))
+		{
+			// Primary key does not exist yet, so create it from scratch
+			phpAds_dbQuery("ALTER TABLE ".$name." ADD PRIMARY KEY (".implode(",", $primary).")");
+		}
+		else
+		{
+			// Primary key already exists, check if it is the same as we want it to be
+			if (implode(',', $availableprimary) != implode(',', $primary))
+			{
+				// An existing primary key needs to be modified
+				
+				// Check if this column is 'auto_increment'
+				if (sizeof($primary) == 1 && ereg('auto_increment', $availablecolumns[$primary[0]]['Extra']))
+				{
+					// Get name of column
+					$key = $primary[0];
+					
+					// Remove 'auto_increment' from column
+					$createdefinition = $key." ".str_replace('AUTO_INCREMENT', '', $columns[$key]);
+					phpAds_dbQuery("ALTER TABLE ".$name." MODIFY COLUMN ".$createdefinition);
+					
+					$incrementmodified = $key;
+				}
+				
+				// Recreated primary keys
+				phpAds_dbQuery("ALTER TABLE ".$name." DROP PRIMARY KEY");
+				phpAds_dbQuery("ALTER TABLE ".$name." ADD PRIMARY KEY (".implode(",", $primary).")");
+			}
+		}
 	}
 	
 	
@@ -921,21 +983,6 @@ function phpAds_upgradeDisplayLimitations()
 			");
 		}
 		
-		// Drop old unique key
-		phpAds_dbQuery("
-			ALTER TABLE 
-				".$phpAds_config['tbl_acls']."
-			DROP INDEX
-				bannerid_2
-		");
-		
-		// Create new unique key
-		phpAds_dbQuery("
-			ALTER TABLE 
-				".$phpAds_config['tbl_acls']."
-			ADD UNIQUE
-				bannerid_executionorder (bannerid,executionorder)
-		");
 		
 		// Delete old columns
 		phpAds_dbQuery("ALTER TABLE ".$phpAds_config['tbl_acls']." DROP COLUMN acl_con");
@@ -949,7 +996,7 @@ function phpAds_upgradeDisplayLimitations()
 function phpAds_upgradeTargetStats ()
 {
 	global $phpAds_config;
-
+	
 	if (!isset($phpAds_config['config_version']) ||	$phpAds_config['config_version'] < 200.130)
 	{
 		$res = phpAds_dbQuery("
@@ -963,7 +1010,7 @@ function phpAds_upgradeTargetStats ()
 			ORDER BY
 				timestamp
 			");
-
+		
 		while ($row = phpAds_dbFetchArray($res))
 		{
 			while (ereg('\[id([0-9]+)\]: ([0-9]+)', $row['details'], $match))
@@ -977,28 +1024,28 @@ function phpAds_upgradeTargetStats ()
 				$row['details'] = str_replace($match[0], '', $row['details']);
 			}
 		}
-
+		
 		if (!isset($start))
 			// No autotargeting logs, exit
 			return;
 		
 		$t_stamp = mktime(0, 0, 0, date('m', $start), date('d', $start), date('Y', $start));
 		$t_stamp_now = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
-
+		
 		while ($t_stamp < $t_stamp_now)
 		{
 			$day	= date('Ymd', $t_stamp);
 			$begin	= $day.'000000';
 			$end	= $day.'235959';
-
+			
 			$campaigns = array();
-
+			
 			if (isset($autotargets[$day]))
 			{
 				while (list($campaignid, ) = each($autotargets[$day]))
 				{
 					$campaigns[] = $campaignid;
-
+					
 					if ($phpAds_config['compact_stats'])
 					{
 						$res_views = phpAds_dbQuery("
@@ -1095,7 +1142,7 @@ function phpAds_upgradeTargetStats ()
 			
 			$views = phpAds_dbResult($res_views, 0, 0);
 			$autotargets[$day][0]['views'] = $views ? $views : 0;
-
+			
 			$t_stamp = phpAds_makeTimestamp($t_stamp, 60*60*24);
 		}
 		
@@ -1120,6 +1167,42 @@ function phpAds_upgradeTargetStats ()
 					");
 			}
 		}
+	}
+}
+
+function phpAds_upgradePasswordMD5 ()
+{
+	global $phpAds_config;
+	
+	if (!isset($phpAds_config['config_version']) ||	$phpAds_config['config_version'] < 200.152)
+	{
+		// Update the advertisers
+		$res = phpAds_dbQuery ("
+			UPDATE
+				".$phpAds_config['tbl_clients']."
+			SET
+				clientpassword = MD5(clientpassword)
+			WHERE
+				clientpassword != ''
+		");
+		
+		// Update the publisher
+		$res = phpAds_dbQuery ("
+			UPDATE
+				".$phpAds_config['tbl_affiliates']."
+			SET
+				password = MD5(password)
+			WHERE
+				password != ''
+		");
+		
+		// Update the administrator
+		$res = phpAds_dbQuery ("
+			UPDATE
+				".$phpAds_config['tbl_config']."
+			SET
+				admin_pw = MD5(admin_pw)
+		");
 	}
 }
 

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -70,22 +70,26 @@ function phpAds_getBannerTemplate($type)
 	}
 	elseif ($type == 'txt')
 	{
-		$buffer  = "<a href='{targeturl}' target='{target}' ";
-		$buffer .= "[status]onMouseOver=\"self.status='{status}'; return true;\" onMouseOut=\"self.status='';return true;\"[/status]>";
-		$buffer .= "{bannertext}";
-		$buffer .= "</a>";
+		$buffer  = "[targeturl]<a href='{targeturl}' target='{target}'";
+		$buffer .= "[status] onMouseOver=\"self.status='{status}'; return true;\" onMouseOut=\"self.status='';return true;\"[/status]>";
+		$buffer .= "[/targeturl]{bannertext}[targeturl]</a>[/targeturl]";
 	}
 	else
 	{
-		$buffer  = "<a href='{targeturl}' target='{target}' ";
-		$buffer .= "[status]onMouseOver=\"self.status='{status}'; return true;\" onMouseOut=\"self.status='';return true;\"[/status]>";
-		$buffer .= "<img src='{imageurl}' width='{width}' height='{height}' alt='{alt}' title='{alt}' border='0'>";
-		$buffer .= "</a>";
+		$buffer  = "[targeturl]<a href='{targeturl}' target='{target}'";
+		$buffer .= "[status] onMouseOver=\"self.status='{status}'; return true;\" onMouseOut=\"self.status='';return true;\"[/status]>";
+		$buffer .= "[/targeturl]<img src='{imageurl}' width='{width}' height='{height}' alt='{alt}' title='{alt}' border='0'";
+		$buffer .= "[nourl][status] onMouseOver=\"self.status='{status}'; return true;\" onMouseOut=\"self.status='';return true;\"";
+		$buffer .= "[/status][/nourl]>[targeturl]</a>[/targeturl]";
 	}
 	
 	// Text below banner
 	if ($type != 'txt')
-		$buffer .= "[bannertext]<br><a href='{targeturl}' target='{target}'>{bannertext}</a>[/bannertext]";
+	{
+		$buffer .= "[bannertext]<br>[targeturl]<a href='{targeturl}' target='{target}'";
+		$buffer .= "[status] onMouseOver=\"self.status='{status}'; return true;\" onMouseOut=\"self.status='';return true;\"[/status]>";
+		$buffer .= "[/targeturl]{bannertext}[targeturl]</a>[/targeturl][/bannertext]";
+	}
 	
 	return ($buffer);
 }
@@ -316,7 +320,7 @@ function phpAds_getBannerCache($banner)
 		$buffer = str_replace ('[/status]', '', $buffer);
 	}
 	else
-		$buffer = eregi_replace ("\[status\](.*)\[\/status\]", '', $buffer);
+		$buffer = preg_replace ("#\[status\](.*)\[\/status\]#iU", '', $buffer);
 	
 	
 	// Set bannertext
@@ -377,9 +381,23 @@ function phpAds_getBannerCache($banner)
 	
 	// Replace targeturl
 	if (isset($banner['url']) && $banner['url'] != '')
+	{
 		$buffer = str_replace ('{targeturl}', '{url_prefix}/adclick.php?bannerid={bannerid}&amp;zoneid={zoneid}&amp;source={source}&amp;dest='.urlencode($banner['url']), $buffer);
+		
+		$buffer = str_replace ('[targeturl]', '', $buffer);
+		$buffer = str_replace ('[/targeturl]', '', $buffer);
+		$buffer = preg_replace ("#\[nourl\](.*)\[\/nourl\]#iU", '', $buffer);
+	}
 	else
+	{
 		$buffer = str_replace ('{targeturl}', '', $buffer);
+		
+		$buffer = str_replace ('[nourl]', '', $buffer);
+		$buffer = str_replace ('[/nourl]', '', $buffer);
+		$buffer = preg_replace ("#\[targeturl\](.*)\[\/targeturl\]#iU", '', $buffer);
+	}
+	
+	
 	
 	
 	// Set Player version
@@ -397,6 +415,121 @@ function phpAds_getBannerCache($banner)
 	
 	return ($buffer);
 }
+
+function phpAds_compileLimitation ($bannerid = '')
+{
+	global $phpAds_config;
+	
+	if ($bannerid == '')
+	{
+		// Loop through all banners
+		$res = phpAds_dbQuery("
+			SELECT
+				bannerid
+			FROM
+				".$phpAds_config['tbl_banners']."
+		");
+		
+		while ($current = phpAds_dbFetchArray($res))
+			phpAds_compileLimitation ($current['bannerid']);
+	}
+	else
+	{
+		// Compile limitation
+		$res = phpAds_dbQuery("
+			SELECT
+				*
+			FROM
+				".$phpAds_config['tbl_acls']."
+			WHERE
+				bannerid = '".$bannerid."'
+			ORDER BY
+				executionorder
+		") or phpAds_sqlDie();
+		
+		while ($row = phpAds_dbFetchArray ($res))
+		{
+			$acl[$row['executionorder']]['logical'] 	= $row['logical'];
+			$acl[$row['executionorder']]['type'] 		= $row['type'];
+			$acl[$row['executionorder']]['comparison'] 	= $row['comparison'];
+			$acl[$row['executionorder']]['data'] 		= addslashes($row['data']);
+		}
+		
+		
+		$expression = '';
+		$i = 0;
+		
+		if (isset($acl) && count($acl))
+		{
+			reset($acl);
+			while (list ($key,) = each ($acl))
+			{
+				if ($i > 0)
+					$expression .= ' '.$acl[$key]['logical'].' ';
+				
+				switch ($acl[$key]['type'])
+				{
+					case 'clientip':
+						$expression .= "phpAds_aclCheckClientIP(\'".addslashes($acl[$key]['data'])."\', \'".$acl[$key]['comparison']."\')";
+						break;
+					case 'browser':
+						$expression .= "phpAds_aclCheckUseragent(\'".addslashes($acl[$key]['data'])."\', \'".$acl[$key]['comparison']."\')";
+						break;
+					case 'os':
+						$expression .= "phpAds_aclCheckUseragent(\'".addslashes($acl[$key]['data'])."\', \'".$acl[$key]['comparison']."\')";
+						break;
+					case 'useragent':
+						$expression .= "phpAds_aclCheckUseragent(\'".addslashes($acl[$key]['data'])."\', \'".$acl[$key]['comparison']."\')";
+						break;
+					case 'language':
+						$expression .= "phpAds_aclCheckLanguage(\'".addslashes($acl[$key]['data'])."\', \'".$acl[$key]['comparison']."\')";
+						break;
+					case 'country':
+						$expression .= "phpAds_aclCheckCountry(\'".addslashes($acl[$key]['data'])."\', \'".$acl[$key]['comparison']."\')";
+						break;
+					case 'continent':
+						$expression .= "phpAds_aclCheckContinent(\'".addslashes($acl[$key]['data'])."\', \'".$acl[$key]['comparison']."\')";
+						break;
+					case 'weekday':
+						$expression .= "phpAds_aclCheckWeekday(\'".addslashes($acl[$key]['data'])."\', \'".$acl[$key]['comparison']."\')";
+						break;
+					case 'domain':
+						$expression .= "phpAds_aclCheckDomain(\'".addslashes($acl[$key]['data'])."\', \'".$acl[$key]['comparison']."\')";
+						break;
+					case 'source':
+						$expression .= "phpAds_aclCheckSource(\'".addslashes($acl[$key]['data'])."\', \'".$acl[$key]['comparison']."\', $"."source)";
+						break;
+					case 'time':
+						$expression .= "phpAds_aclCheckTime(\'".addslashes($acl[$key]['data'])."\', \'".$acl[$key]['comparison']."\')";
+						break;
+					case 'date':
+						$expression .= "phpAds_aclCheckDate(\'".addslashes($acl[$key]['data'])."\', \'".$acl[$key]['comparison']."\')";
+						break;
+					default:
+						return(0);
+				}
+				
+				$i++;
+			}
+		}
+		
+		if ($expression == '')
+			$expression = 'true';
+		
+		$res = phpAds_dbQuery("
+			UPDATE
+				".$phpAds_config['tbl_banners']."
+			SET
+				compiledlimitation='".$expression."'
+			WHERE
+				bannerid='".$bannerid."'
+		") or phpAds_sqlDie();
+	}
+}
+
+
+
+
 
 
 function phpAds_AvailableNetworks()

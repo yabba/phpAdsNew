@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -181,7 +181,15 @@ if (phpAds_dbConnect())
 		
 		
 		// Redirect
-		header ("Location: $url");
+		if ($url != '')
+			header ("Location: ".$url);
+		else
+		{
+			// No URL found, redirect to the original page
+			if (isset($HTTP_SERVER_VARS['HTTP_REFERER']))
+				header ("Location: ".$HTTP_SERVER_VARS['HTTP_REFERER']);
+		}
+		
 		exit;
 	}
 }
@@ -190,5 +198,11 @@ if (phpAds_dbConnect())
 // Redirect
 if ($phpAds_config['default_banner_target'] != '')
 	header ("Location: ".$phpAds_config['default_banner_target']);
+else
+{
+	// No URL found, redirect to the original page
+	if (isset($HTTP_SERVER_VARS['HTTP_REFERER']))
+		header ("Location: ".$HTTP_SERVER_VARS['HTTP_REFERER']);
+}
 
 ?>

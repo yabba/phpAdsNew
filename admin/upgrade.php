@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -357,9 +357,11 @@ if (phpAds_isUser(phpAds_Admin))
 		echo "<span class='install'>".$strSystemRebuildingCache."</span>";
 		phpAds_PageFooter();
 		
-		// Update banner cache off all banners
+		// Update banner cache of all banners
 		phpAds_upgradeHTMLCache();
 		
+ 		// Update compiled limitation of all banners
+ 		phpAds_compileLimitation();
 		
 		// Rebuild cache
 		if (!defined('LIBVIEWCACHE_INCLUDED'))
