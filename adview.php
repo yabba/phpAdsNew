@@ -1,4 +1,4 @@
-<?php // $Revision: 2.12 $
+<?php // $Revision: 2.13 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -237,6 +237,7 @@ if ($found)
 			phpAds_setCookie ("phpAds_banner[".$n."]", serialize($cookie), 0);
 			phpAds_flushCookie ();
 			
+			if (($HTTP_SERVER_VARS['SERVER_PORT'] == 443) $row['imageurl'] = str_replace ('http://', 'https://', $row['imageurl']);
 			header 	  ("Location: ".$row['imageurl']);
 			break;
 		
