@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -73,9 +73,9 @@ if ($bannerID != "DEFAULT")
 	
 	
 	// Cache buster
-	if (eregi ("\{random(:([1-9])){0,1}\}", $url, $matches))
+	if (eregi ('\{random(:([1-9])){0,1}\}', $url, $matches))
 	{
-		if ($cb == "")
+		if (!isset($cb) || $cb == "")
 		{
 			// calculate random number
 			
