@@ -1,4 +1,4 @@
-<?php // $Revision: 1.26 $
+<?php // $Revision: 1.27 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -47,6 +47,7 @@ function phpAds_Start()
 {
 	global $phpAds_config;
 	global $Session;
+	global $phpAds_productname;
 	
 	phpAds_SessionDataFetch();
 	
