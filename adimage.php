@@ -1,4 +1,4 @@
-<?php // $Revision: 1.2 $
+<?php // $Revision: 1.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -20,7 +20,7 @@ require ("lib-db.inc.php");
 
 
 // Set header information
-include ("lib-cache.inc.php");
+//include ("lib-cache.inc.php");
 
 // Open a connection to the database
 phpAds_dbConnect();
