@@ -1,4 +1,4 @@
-<?php // $Revision: 1.13 $
+<?php // $Revision: 1.14 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -186,8 +186,6 @@ function phpAds_GenerateInvocationCode()
 /* Main code                                             */
 /*********************************************************/
 
-echo "<br><br>";
-echo "<br><br>";
 echo "<br><br>";
 echo "<form name='availability' action='admin-generate.php' method='POST'>\n";
 
