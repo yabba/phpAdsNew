@@ -1,4 +1,4 @@
-<?php // $Revision: 1.39 $
+<?php // $Revision: 1.40 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -248,8 +248,13 @@ if (isset($submit))
 	
 	if (phpAds_isUser(phpAds_Admin)) 
 	{
+		if (isset($keyword) && $keyword != '')
+		{
+			$keywordArray = split('[ ,]+', trim($keyword));
+			$final['keyword'] = implode(' ', $keywordArray);
+		}
+		
 		$final['active'] = "true";
-		$final['keyword'] = $keyword;
 		$final['description'] = addslashes($description);
 		$final['weight'] = $weight;
 	}
