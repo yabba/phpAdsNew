@@ -1,4 +1,4 @@
-<?php // $Revision: 1.40 $
+<?php // $Revision: 1.41 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -18,6 +18,11 @@
 require ("config.php");
 require ("lib-statistics.inc.php");
 require ("lib-zones.inc.php");
+
+
+// Register input variables
+phpAds_registerGlobal ('action', 'zonetype', 'what', 'submit',
+					   'showbanners', 'showcampaigns', 'hideinactive');
 
 
 // Security check

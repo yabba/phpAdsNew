@@ -1,4 +1,4 @@
-<?php // $Revision: 1.9 $
+<?php // $Revision: 1.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -18,6 +18,10 @@
 require ("config.php");
 require ("lib-statistics.inc.php");
 require ("lib-expiration.inc.php");
+
+
+// Register input variables
+phpAds_registerGlobal ('period', 'start', 'limit', 'source');
 
 
 // Security check
