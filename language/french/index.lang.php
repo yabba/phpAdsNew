@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -15,7 +15,7 @@
 
 
 // Meta information
-$translation_readable   = "Fran&ccedil;ois";
+$translation_readable   = "Fran&ccedil;ais";
 $translation_maintainer	= "Vincent Zanotti";
 $translation_contact	= "amidebx@users.sourceforge.net";
 

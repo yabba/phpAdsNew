@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -105,6 +105,11 @@ $GLOBALS['strLimited']				= "Limité";
 $GLOBALS['strLeftMargin']			= "Marge gauche";
 $GLOBALS['strRightMargin']			= "Marge droite";
 $GLOBALS['strTransparentBackground']		= "Arrière-plan transparent";
+
+$GLOBALS['strSmoothMovement']			= "Flou dans le mouvement";
+$GLOBALS['strHideNotMoving']			= "Cacher la bannière lorsque la souris ne bouge pas";
+$GLOBALS['strHideDelay']			= "Délai avant que la bannière ne soit cachée";
+$GLOBALS['strHideTransparancy']		= "Transparence de la bannière cachée";
 
 
 $GLOBALS['strAdLayerStyleName']	= array(
