@@ -1,4 +1,4 @@
-<?php // $Revision: 1.10 $
+<?php // $Revision: 1.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -371,6 +371,13 @@ $GLOBALS['phpAds_hlp_type_html_php'] = "
 $GLOBALS['phpAds_hlp_admin'] = "
 	U kunt hier de gebruikersnaam van de beheerder instellen. Met deze
 	gebruikersnaam krijgt u toegang tot de administratie interface.
+";
+		
+$GLOBALS['phpAds_hlp_admin_pw'] =
+$GLOBALS['phpAds_hlp_admin_pw2'] = "
+	Vul hier het wachtwoord at u wilt gebruiken om toegang te krijgen tot
+	de administratie interface. U dient het wachtwoord twee maal in te vullen
+	om typefouten te voorkomen.
 ";
 		
 $GLOBALS['phpAds_hlp_pwold'] = 

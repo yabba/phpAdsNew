@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -101,6 +101,20 @@ $GLOBALS['strSecurityUpdate']				= "
 	een aantal veiligheidsproblemen oplost.</b> De versie van ".$phpAds_productname." die u momenteel gebruikt
 	is mogelijk vatbaar voor aanvallen en is waarschijnlijk niet geheel veilig. Voor meer informatie over
 	het bijwerken van uw versie kunt het beste de documentatie lezen, welke bijgeleverd is bij de nieuwe versie.
+";
+
+$GLOBALS['strNotAbleToCheck']			= "
+	<b>Omdat de XML extentie niet aanwezig is op uw server, kan ".$phpAds_productname." niet controleren of
+	er een nieuwere versie beschikbaar is.</b>
+";
+
+$GLOBALS['strForUpdatesLookOnWebsite']	= "
+	U gebruikt momenteen ".$phpAds_productname." ".$phpAds_version_readable.". 
+	Indien u wilt weten of er een nieuwere versie beschikbaar is, kijk dan op onze website.
+";
+
+$GLOBALS['strClickToVisitWebsite']		= "
+	Klik hier om onze website te bezoeken
 ";
 
 
