@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -15,28 +15,27 @@
 /************************************************************************/
 
 
-
 /* PUBLIC FUNCTIONS */
 
-$phpAds_geoPluginID = 'geoip';
+$phpAds_geoPluginID = 'geoipregion';
 
-function phpAds_geoip_getInfo()
+function phpAds_geoipregion_getInfo()
 {
 	return (array (
-		'name'	    => 'MaxMind GeoIP Country Edition',
+		'name'	    => 'MaxMind GeoIP Region Edition',
 		'db'	    => true,
 		'country'   => true,
 		'continent' => true,
-		'region'    => false
+		'region'	=> true
 	));
 }
 
-function phpAds_geoip_getGeo($addr, $db)
+
+function phpAds_geoipregion_getGeo($addr, $db)
 {
 	if ($db == '')
 		return false;
 	
-	$countrybegin = 16776960;
 	$countrycodes = array(
 		false, 'AP', 'EU', 'AD', 'AE', 'AF', 'AG', 'AI', 'AL', 'AM', 'AN', 'AO', 'AQ',
 		'AR', 'AS', 'AT', 'AU', 'AW', 'AZ', 'BA', 'BB', 'BD', 'BE', 'BF', 'BG', 'BH',
@@ -61,10 +60,27 @@ function phpAds_geoip_getGeo($addr, $db)
 	
 	$ipnum = ip2long($addr);
 	
-	if ($fp = @fopen($db, 'rb'))
+	if ($fp = @fopen($db,"rb"))
 	{
-		$country = $countrycodes[phpAds_geoip_seekCountry($fp, 0, $ipnum, 31, $countrybegin)];
-		@fclose ($fp);
+		$reg = phpAds_geoipregion_seek_country($fp, $ipnum);
+		
+		if ($reg < 0)
+		{
+	  		$country = false;
+			$region = false;
+		}
+		elseif ($reg >= 1000)
+		{
+			$country = 'US';
+			$region = chr(($reg - 1000) / 26 + 65) . chr(($reg - 1000) % 26 + 65);
+		}
+		else
+		{
+			$country = $countrycodes[$reg];
+			$region = false;
+		}
+		
+		@fclose($fp);
 		
 		
 		// Get continent code
@@ -74,44 +90,103 @@ function phpAds_geoip_getGeo($addr, $db)
 		return (array (
 			'country' => $country,
 			'continent' => $continent,
-			'region' => false
+			'region' => $region
 		));
 	}
 	else
-		return (false);
+		return false;
 }
+
 
 
 
 /* PRIVATE FUNCTIONS */
 
-function phpAds_geoip_seekCountry($gi, $offset, $ipnum, $depth, $countrybegin)
+function phpAds_geoipregion_seek_country($fp, $ipnum)
 {
-	if ($depth < 0)
-		return (false);
+	// Default variables
+	$record_length = 3;
+	$structure_info_max_size = 20;
+	$geoip_country_edition = 106;
+	$geoip_region_edition = 112;
+	$geoip_city_edition = 111;
+	$geoip_state_begin = 16700000;
+	$geoip_country_begin = 16776960;
 	
-	if (@fseek($gi, 6 * $offset, SEEK_SET) != 0) return (false);
-	$buf = @fread($gi,6);
 	
-	$x = array(0,0);
-	for ($i = 0; $i < 2; ++$i)
-		for ($j = 0; $j < 3; ++$j)
-			$x[$i] += ord($buf[($i*3)+$j]) << ($j * 8);
+	// Setup segments
+	$filepos = @ftell($fp);
 	
-	if ($ipnum & (1 << $depth))
+	$type = $geoip_country_edition;
+	@fseek($fp, -3, SEEK_END);
+	
+	for ($i = 0; $i < $structure_info_max_size; $i++) 
 	{
-		if ($x[1] >= $countrybegin)
-			return $x[1] - $countrybegin;
-		
-		return phpAds_geoip_seekCountry($gi, $x[1], $ipnum, $depth - 1, $countrybegin);
+	    $delim = @fread($fp, 3);
+	    
+		if ($delim == (chr(255).chr(255).chr(255)))
+		{
+			$type = ord(@fread($fp, 1));
+			
+			if ($type == $geoip_region_edition)
+			{
+		        $seg = $geoip_state_begin;
+		    }
+			elseif ($type == $geoip_city_edition)
+			{
+		        $seg = 0;
+		        $buf = @fread($fp, $record_length);
+		        
+				for ($j = 0; $j < $record_length; $j++)
+		        	$seg += (ord($buf[$j]) << ($j * 8));
+		    }
+		    
+			break;
+		}
+		else
+			@fseek($fp, -4, SEEK_CUR);
 	}
-	else
+	
+	if ($type == $geoip_country_edition)
+		$seg = $geoip_country_begin;
+	
+	@fseek($fp, $filepos, SEEK_SET);
+	
+	
+	// Seek country
+	$offset = 0;
+	
+	for ($depth = 31; $depth >= 0; --$depth)
 	{
-		if ($x[0] >= $countrybegin)
-			return $x[0] - $countrybegin;
+		if (@fseek($fp, 6 * $offset, SEEK_SET) == 0)
+			$buf = @fread($fp, 6);
+		else
+			return (-1); // Error
 		
-		return phpAds_geoip_seekCountry($gi, $x[0], $ipnum, $depth - 1, $countrybegin);
+		$x = array(0,0);
+		
+		for ($i = 0; $i < 2; ++$i)
+			for ($j = 0; $j < 3; ++$j)
+        		$x[$i] += ord($buf[($i*3)+$j]) << ($j * 8);
+		
+    	if ($ipnum & (1 << $depth))
+		{
+			if ($x[1] >= $seg)
+				return $x[1] - $geoip_state_begin;
+			
+			$offset = $x[1];
+		}
+    	else
+		{
+			if ($x[0] >= $seg)
+				return $x[0] - $geoip_state_begin;
+      		
+			$offset = $x[0];
+		}
 	}
+	
+	return (-1); // Error
 }
+
 
 ?>

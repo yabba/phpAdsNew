@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -317,10 +317,12 @@ echo "&nbsp;&nbsp;<select name='chainzone' style='width: 200;' onchange='phpAds_
 	
 	$available = implode ($available, ' OR ');
 	
+	$allowothersizes = $zone['delivery'] == phpAds_ZoneInterstitial || $zone['delivery'] == phpAds_ZonePopup;
+	
 	// Get list of zones to link to
 	$res = phpAds_dbQuery("SELECT * FROM ".$phpAds_config['tbl_zones']." WHERE ".
-						  ($zone['width'] == -1 ? "" : "width = ".$zone['width']." AND ").
-						  ($zone['height'] == -1 ? "" : "height = ".$zone['height']." AND ").
+						  ($zone['width'] == -1 || $allowothersizes ? "" : "width = ".$zone['width']." AND ").
+						  ($zone['height'] == -1 || $allowothersizes ? "" : "height = ".$zone['height']." AND ").
 						  "delivery = ".$zone['delivery']." AND (".$available.") AND zoneid != ".$zoneid);
 	
 	while ($row = phpAds_dbFetchArray($res))
@@ -459,7 +461,7 @@ if ($zone['delivery'] == phpAds_ZoneBanner)
 		
 		while (list($k, $v) = each($available[phpAds_ZonePopup]))
 		{
-			if ($appendid == $row['zoneid'])
+			if ($appendid == $k)
 				echo "<option value='".$k."' selected>".$v."</option>";
 			else
 				echo "<option value='".$k."'>".$v."</option>";
@@ -487,7 +489,7 @@ if ($zone['delivery'] == phpAds_ZoneBanner)
 		
 		while (list($k, $v) = each($available[phpAds_ZoneInterstitial]))
 		{
-			if ($appendid == $row['zoneid'])
+			if ($appendid == $k)
 				echo "<option value='".$k."' selected>".$v."</option>";
 			else
 				echo "<option value='".$k."'>".$v."</option>";

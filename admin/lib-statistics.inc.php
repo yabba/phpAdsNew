@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -658,6 +658,9 @@ function phpAds_buildBannerCode ($bannerid, $fullpreview = false)
 		$buffer	   .= "onClick=\"return openWindow('banner-htmlpreview.php?bannerid=".$bannerid."', '', 'status=no,scrollbars=no,resizable=no,width=".$width.",height=".$height."');\">";
 		$buffer    .= "<img src='images/icon-zoom.gif' align='absmiddle' border='0'>&nbsp;".$strShowBanner."</a>&nbsp;&nbsp;";
 	}
+	
+	// Disable logging of adclicks
+	$buffer = str_replace ('adclick.php?', 'adclick.php?log=no&', $buffer);
 	
 	return ($buffer);
 }

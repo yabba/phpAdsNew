@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -123,7 +123,7 @@ function phpAds_PriorityPredictProfile($campaigns, $banners)
 	// Get the number of days running
 	if ($phpAds_config['compact_stats'])
 	{
-		$res = phpAds_dbQuery("SELECT UNIX_TIMESTAMP(MIN(day)) AS days_running FROM ".$phpAds_config['tbl_adstats']." WHERE day > 0 AND hour > 0");
+		$res = phpAds_dbQuery("SELECT UNIX_TIMESTAMP(MIN(day)) AS days_running FROM ".$phpAds_config['tbl_adstats']." WHERE day > 0 AND hour > 0 ORDER BY day LIMIT 1");
 		$days_running = phpAds_dbResult($res, 0, 'days_running');
 	}
 	else
@@ -644,6 +644,9 @@ function phpAds_PriorityStore($banners, $campaigns = '')
 {
 	global $phpAds_config;
 	
+	if (!is_array($campaigns))
+		$campaigns = array();
+
 	// Reset existing priorities
 	$query = "
 		UPDATE ".$phpAds_config['tbl_banners']."
@@ -1191,19 +1194,33 @@ function phpAds_PriorityTotalWeight($campaigns, $banners)
 		$tbw[$c] = 0;
 	}
 	
+	
+	if ($tcw == 0)
+		return 0;  // All campaigns are disabled or high priority
+	
+	
 	// Get total banner weight for each campaign
 	for (reset($banners);$b=key($banners);next($banners))
 		if ($campaigns[$banners[$b]['parent']]['active'] == 't')
 			$tbw[$banners[$b]['parent']] += $banners[$b]['weight'];
 	
-	// Determine probability
+	
+	// Determine probability or low priority campaigns
 	for (reset($banners);$b=key($banners);next($banners))
-		if ($campaigns[$banners[$b]['parent']]['active'] == 't')
+		if ($campaigns[$banners[$b]['parent']]['active'] == 't' && $campaigns[$banners[$b]['parent']]['weight'] > 0)
 			$pr[] = ($campaigns[$banners[$b]['parent']]['weight'] / $tcw / $tbw[$banners[$b]['parent']]) * $banners[$b]['weight'];
 	
+	// Return if probability array is empty
+	if (!count($pr))
+		return 0;
 	
 	// Determine minimum probability
 	$min = min($pr);
+	
+	
+	if ($min == 0)
+		return 0; // No active banners in low priority campaigns
+	
 	
 	// Determine total weight
 	reset($pr); $total = 0;

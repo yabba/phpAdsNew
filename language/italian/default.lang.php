@@ -1,4 +1,4 @@
-<?php // $Revision: 2.10 $
+<?php // $Revision: 2.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -503,12 +503,13 @@ $GLOBALS['strNoActionsLogged']				= "Nessuna azione registrata";
 
 
 // Code generation
-$GLOBALS['strGenerateBannercode']			= "Genera codice banner";
+$GLOBALS['strGenerateBannercode']			= "Selezione diretta";
 $GLOBALS['strChooseInvocationType']			= "Seleziona il tipo di invocazione banner";
 $GLOBALS['strGenerate']						= "Genera";
 $GLOBALS['strParameters']					= "Parametri";
 $GLOBALS['strFrameSize']					= "Grandezza frame";
 $GLOBALS['strBannercode']					= "Codice banner";
+$GLOBALS['strOptional']						= "opzionale";
 
 
 // Errors
@@ -535,6 +536,7 @@ $GLOBALS['strErrorDBNoDataSerious']			= "A causa di un grave problema con il dat
 $GLOBALS['strErrorDBCorrupt']				= "Probabilemente la tabella &egrave; corrotta ed &egrave; necessario ripararla. Per avere pi&ugrave; informazioni su come riparare le tabelle corrotte, leggere il capitolo <i>Troubleshooting</i> della <i>Administrator guide</i>.";
 $GLOBALS['strErrorDBContact']				= "Contatta l'amministratore di questo server ed informalo del problema.";
 $GLOBALS['strErrorDBSubmitBug']				= "Se questo problema &egrave; riproducibile, potrebbe essere causato da un bug di ".$phpAds_productname.". Per favore sottoponi le informazioni sottostanti ai creatori di ".$phpAds_productname.". Tenta inoltre di descrivere le azioni che hanno portato a questo errore il pi&ugrave; chiaramente possible.";
+$GLOBALS['strMaintenanceNotActive']			= "Lo script di manutenzione non è stato lanciato nelle ultime 24 ore. \\nAffinché ".$phpAds_productname." funzioni correttamente esso deve essere lanciato \\nogni ora. \\n\\nLa ggere la Administrator guide per maggiori informazioni \\nsu come configurare lo script di manutenzione.";
 
 
 // E-mail

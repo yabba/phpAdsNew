@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -269,7 +269,7 @@ if (isset($row['span']) && $row['span'] > 0)
 
 			while ($row = phpAds_dbFetchArray($result))
 			{
-				$stats[$row['date']]['sum_views'] = $row['sum_views'];
+				$stats[$row['date']]['sum_views'] += $row['sum_views'];
 				$totals['views'] += $row['sum_views'];
 			}
 		}
@@ -297,7 +297,7 @@ if (isset($row['span']) && $row['span'] > 0)
 			
 			while ($row = phpAds_dbFetchArray($result))
 			{
-				$stats[$row['date']]['sum_views'] = $row['sum_views'];
+				$stats[$row['date']]['sum_views'] += $row['sum_views'];
 				$totals['views'] += $row['sum_views'];
 			}
 		}

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -247,6 +247,7 @@ if ($period == 'w')
 
 
 // Build the graph
+define('LIB_GRAPH_SAME_SCALE', 1);
 include('lib-graph.inc.php');
 
 ?>

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -177,6 +177,22 @@ function phpAds_ConfigFileUpdatePrepare ()
 					
 					@eval ("$"."value ".$regs[2].";");
 					
+					
+					
+					// Update geotargeting type if needed
+					if ($regs[1] == 'geotracking_type' && is_numeric($value))
+					{
+						switch ($value)
+						{
+							case '1':	$value = 'ip2country'; break;
+							case '2':	$value = 'geoip'; break;
+							case '3':	$value = 'mod_geoip'; break;
+							default:	$value = ''; break;
+						}
+					}
+					
+					
+					// Force the type of the setting
 					if ($phpAds_settings_information[$regs[1]]['type'] == 'string')
 					{
 						// Add slashes because SettingsWriteFlush is designed to

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -53,6 +53,14 @@ if ($phpAds_config['language'] != 'english' && file_exists(phpAds_path.'/languag
 // Set maintenance usertype
 phpAds_userlogSetUser (phpAds_userMaintenance);
 
+
+// Update the timestamp
+$res = phpAds_dbQuery ("
+	UPDATE
+		".$phpAds_config['tbl_config']."
+	SET
+		maintenance_timestamp = '".time()."'
+");
 
 
 // Run different maintenance tasks

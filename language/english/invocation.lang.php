@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -63,6 +63,13 @@ $GLOBALS['strPopUpAfterSec']			= "After";
 $GLOBALS['strAutoCloseAfter']			= "Automatically close after";
 $GLOBALS['strPopUpTop']				= "Initial position (top)";
 $GLOBALS['strPopUpLeft']			= "Initial position (left)";
+$GLOBALS['strWindowOptions']		= "Window options";
+$GLOBALS['strShowToolbars']			= "Toolbars";
+$GLOBALS['strShowLocation']			= "Location";
+$GLOBALS['strShowMenubar']			= "Menubar";
+$GLOBALS['strShowStatus']			= "Status";
+$GLOBALS['strWindowResizable']		= "Resizable";
+$GLOBALS['strShowScrollbars']		= "Scrollbars";
 
 
 // XML-RPC

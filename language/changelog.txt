@@ -12,6 +12,22 @@
 
   ====================================================
 
+  03-18-2003 - invocation
+    [+] strWindowOptions
+    [+] strShowToolbars
+    [+] strShowLocation
+    [+] strShowMenubar
+    [+] strShowStatus
+    [+] strWindowResizable
+    [+] strShowScrollbars
+
+  02-19-2003 - default
+    [+] strOptional
+    [u] strGenerateBannercode
+
+  02-18-2003 - default
+    [+] strMaintenanceNotActive
+
   02-13-2003 - default
     [+] strWeightIsNull
     [u] strZoneAppendZoneSelection

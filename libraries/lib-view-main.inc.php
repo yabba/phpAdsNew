@@ -1,4 +1,4 @@
-<?php // $Revision: 2.7 $
+<?php // $Revision: 2.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -87,8 +87,10 @@ function view_raw($what, $clientid = 0, $target = '', $source = '', $withtext = 
 		if (isset($row['prepend']))
 			$outputbuffer .= $row['prepend'];
 		
+		
 		// Get HTML cache
 		$outputbuffer .= $row['htmlcache'];
+		
 		
 		// Append
 		if (isset($row['append']))
@@ -102,6 +104,10 @@ function view_raw($what, $clientid = 0, $target = '', $source = '', $withtext = 
 		}
 		else
 			$target = $row['target'];
+		
+		
+		// Determine source
+		$source = urlencode($source);
 		
 		
 		// Set basic variables
@@ -195,7 +201,7 @@ function view_raw($what, $clientid = 0, $target = '', $source = '', $withtext = 
 		
 		
 		// Add beacon image for logging
-		if (preg_match("#Mozilla/(1|2|3|4)#", $HTTP_SERVER_VARS['HTTP_USER_AGENT']) && !preg_match("#compatible#", $HTTP_SERVER_VARS['HTTP_USER_AGENT']))
+		if (isset($HTTP_SERVER_VARS['HTTP_USER_AGENT']) && preg_match("#Mozilla/(1|2|3|4)#", $HTTP_SERVER_VARS['HTTP_USER_AGENT']) && !preg_match("#compatible#", $HTTP_SERVER_VARS['HTTP_USER_AGENT']))
 		{
 			$outputbuffer .= '<layer id="beacon_'.$row['bannerid'].'" width="0" height="0" border="0" visibility="hide">';
 			$outputbuffer .= '<img src=\''.$phpAds_config['url_prefix'].'/adlog.php?bannerid='.$row['bannerid'].'&amp;clientid='.$row['clientid'].'&amp;zoneid='.$row['zoneid'].'&amp;source='.$source.'&amp;block='.$row['block'].'&amp;capping='.$row['capping'].'&amp;cb='.md5(uniqid('', 1)).'\' width=\'0\' height=\'0\' alt=\'\'>';
