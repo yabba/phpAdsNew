@@ -1,4 +1,4 @@
-<?php // $Revision: 1.87 $
+<?php // $Revision: 1.88 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -1046,7 +1046,9 @@ function view_raw($what, $clientid=0, $target='', $source='', $withtext=0, $cont
 	phpAds_dbClose();
 	
 	return( array('html' => $outputbuffer, 
-				  'bannerid' => $row['bannerid'])
+				  'bannerid' => $row['bannerid'],
+				  'width' => $row['width'],
+				  'height' => $row['height'])
 		  );
 }
 
