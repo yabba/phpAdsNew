@@ -1,4 +1,4 @@
-<?php // $Revision: 1.9 $
+<?php // $Revision: 1.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -42,7 +42,7 @@ if (phpAds_isUser(phpAds_Client))
 		FROM
 			".$phpAds_config['tbl_clients']."
 		WHERE
-			parent = ".$Session["clientid"]."
+			parent = ".phpAds_getUserID()."
 		") or phpAds_sqlDie();
 		
 		while ($row = phpAds_dbFetchArray($res))
