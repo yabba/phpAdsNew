@@ -1,4 +1,4 @@
-<?php // $Revision: 1.7 $
+<?php // $Revision: 1.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -12,6 +12,10 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+
+
+// Include required files
+include (phpAds_path."/view.inc.php");
 
 
 // Define zonetypes
