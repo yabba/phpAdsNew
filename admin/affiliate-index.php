@@ -1,4 +1,4 @@
-<?php // $Revision: 1.15 $
+<?php // $Revision: 1.16 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -248,7 +248,7 @@ else
 		
 		// Button 2
 		echo "<td height='25'>";
-		echo "<a href='zone-index.php?affiliateid=".$affiliate['affiliateid']."'><img src='images/icon-overview.gif' border='0' align='absmiddle' alt='$strOverview'>&nbsp;$strOverview</a>&nbsp;&nbsp;";
+		echo "<a href='affiliate-zones.php?affiliateid=".$affiliate['affiliateid']."'><img src='images/icon-overview.gif' border='0' align='absmiddle' alt='$strOverview'>&nbsp;$strOverview</a>&nbsp;&nbsp;";
 		echo "</td>";
 		
 		// Button 3

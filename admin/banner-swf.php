@@ -1,4 +1,4 @@
-<?php // $Revision: 1.12 $
+<?php // $Revision: 1.13 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -159,13 +159,13 @@ if (isset($cancel))
 
 if ($bannerid != '')
 {
-	if (isset($Session['prefs']['campaign-index.php'][$campaignid]['listorder']))
-		$navorder = $Session['prefs']['campaign-index.php'][$campaignid]['listorder'];
+	if (isset($Session['prefs']['campaign-banners.php'][$campaignid]['listorder']))
+		$navorder = $Session['prefs']['campaign-banners.php'][$campaignid]['listorder'];
 	else
 		$navorder = '';
 	
-	if (isset($Session['prefs']['campaign-index.php'][$campaignid]['orderdirection']))
-		$navdirection = $Session['prefs']['campaign-index.php'][$campaignid]['orderdirection'];
+	if (isset($Session['prefs']['campaign-banners.php'][$campaignid]['orderdirection']))
+		$navdirection = $Session['prefs']['campaign-banners.php'][$campaignid]['orderdirection'];
 	else
 		$navdirection = '';
 	

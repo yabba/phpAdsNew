@@ -1,4 +1,4 @@
-<?php // $Revision: 1.7 $
+<?php // $Revision: 1.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -63,7 +63,7 @@ if (isset($zoneid) && $zoneid != '')
 }
 
 if (!isset($returnurl) && $returnurl == '')
-	$returnurl = 'zone-index.php';
+	$returnurl = 'affiliate-zones.php';
 
 Header("Location: ".$returnurl."?affiliateid=$affiliateid");
 
