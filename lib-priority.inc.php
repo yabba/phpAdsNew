@@ -1,4 +1,4 @@
-<?php // $Revision: 1.22 $
+<?php // $Revision: 1.23 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -13,8 +13,12 @@
 /************************************************************************/
 
 
-define('phpAds_CurrentHour', date('H'));
+// Set define to prevent duplicate include
+define ('LIBPRIORITY_INCLUDED', true);
 
+
+// Defaults
+define('phpAds_CurrentHour', date('H'));
 $debuglog = '';
 
 
