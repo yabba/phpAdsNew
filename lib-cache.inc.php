@@ -1,4 +1,4 @@
-<?php // $Revision: 1.2 $
+<?php // $Revision: 1.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -18,6 +18,5 @@ $now = gmdate("D, d M Y H:i:s") . " GMT";
 header ("Pragma: no-cache");
 header ("Cache-Control: private, max-age=0, no-cache");
 header ("Date: $now");
-header ("Expires: 0");
 
 ?>
