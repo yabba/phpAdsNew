@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -231,7 +231,7 @@ array (
 			'name' 	  => 'block_adviews',
 			'text' 	  => $strBlockAdviews,
 			'size'    => 12,
-			'depends' => 'log_beacon==true && log_adviews==true',
+			'depends' => 'log_adviews==true',
 			'check'	  => 'number+',
 		),
 		array (
@@ -242,7 +242,7 @@ array (
 			'name' 	  => 'block_adclicks',
 			'text' 	  => $strBlockAdclicks,
 			'size'    => 12,
-			'depends' => 'log_beacon==true && log_adclicks==true',
+			'depends' => 'log_adclicks==true',
 			'check'	  => 'number+',
 		)
 	)
