@@ -1,4 +1,4 @@
-<?php // $Revision: 1.49 $
+<?php // $Revision: 1.50 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -30,7 +30,7 @@ mt_srand((double)microtime()*1000000);
 function get_banner($what, $clientID, $context=0, $source="", $allowhtml=true)
 {
 	global $phpAds_db, $REMOTE_HOST, $phpAds_tbl_banners, $REMOTE_ADDR, $HTTP_USER_AGENT, $phpAds_con_key;
-	global $phpAds_random_retrieve, $phpAds_mult_key, $phpAds_tbl_clients;
+	global $phpAds_random_retrieve, $phpAds_mult_key, $phpAds_tbl_clients, $phpAds_tbl_zones;
 	
 	$where = "";
 	if($context == 0)
@@ -57,6 +57,26 @@ function get_banner($what, $clientID, $context=0, $source="", $allowhtml=true)
 	if(!empty($where))
 		$where .= " AND ";
 	
+	
+	
+	// Zones
+	if(substr($what,0,5)=="zone:")
+	{
+		// Get zone
+		$zoneid  = substr($what,5);
+		$zoneres = @db_query("SELECT * FROM $phpAds_tbl_zones WHERE zoneid='$zoneid' ");
+		if (@mysql_num_rows($zoneres) > 0)
+		{
+			$zone = mysql_fetch_array($zoneres);
+			
+			// Set what parameter to zone settings
+			if (isset($zone['what']) && $zone['what'] != '')
+			{
+				$what 	  = $zone['what'];
+				$clientID = '';
+			}
+		}
+	}
 	
 	
 	// separate parts
@@ -96,16 +116,8 @@ function get_banner($what, $clientID, $context=0, $source="", $allowhtml=true)
 			$select .= " AND $phpAds_tbl_banners.format != 'html' ";
 		
 		
-		// Rule
-		if(substr($what_parts[$wpc],0,5)=="zone:")
-		{
-			// Not yet implemented
-			// working on it --Niels
-			$select .= " AND (FETCH FROM DATABASE) ";
-		}
-		
 		// Other
-		elseif ($what_parts[$wpc] != "")
+		if ($what_parts[$wpc] != "")
 		{
 			$conditions = "";
 			$onlykeywords = true;
@@ -152,9 +164,9 @@ function get_banner($what, $clientID, $context=0, $source="", $allowhtml=true)
 					}
 					
 					// Banner Width
-					elseif(substr($what_array[$k],0,9)=="width:")
+					elseif(substr($what_array[$k],0,6)=="width:")
 					{
-						$what_array[$k]=substr($what_array[$k],7);
+						$what_array[$k]=substr($what_array[$k],6);
 						if($what_array[$k]!="" && $what_array[$k]!=" ")
 							
 						if ($operator == "OR")
@@ -421,7 +433,7 @@ function enjavanate($str)
 	$lines = explode("\n", $str);
 	
 	reset ($lines);
-
+	
 	$i = 0;
     while (list(,$line) = each($lines))
 	{
@@ -440,6 +452,139 @@ function enjavanate($str)
 
 
 /*********************************************************/
+/* Parse the HTML entered in order to log clicks		 */
+/*********************************************************/
+
+function phpAds_parseHTMLBanner ($html, $bannerID, $url, $target)
+{
+	global $phpAds_url_prefix;
+	
+	// Check if a form is present in the HTML
+	if (eregi('<form', $html))
+	{
+		// Add hidden field to forms
+		$html = eregi_replace ("(<form([^>]*)action=['|\"]{0,1})([^'|\"|[:space:]]+)(['|\"]{0,1}([^>]*)>)", 
+							   "\\1".$phpAds_url_prefix."/adclick.php\\4".
+							   "<input type='hidden' name='dest' value='\\3'>".
+							   "<input type='hidden' name='bannerID' value='".$bannerID."'>", $html);
+	}
+	
+	
+	// Check if links are present in the HTML
+	if (eregi('<a', $html))
+	{
+		// Replace all links with adclick.php
+		
+		$newbanner	 = '';
+		$prevhrefpos = '';
+		
+		$lowerbanner = strtolower($html);
+		$hrefpos	 = strpos($lowerbanner,"href=");
+		
+		while ($hrefpos > 0)
+		{
+			$hrefpos = $hrefpos + 5;
+			$doublequotepos = strpos($lowerbanner, '"', $hrefpos);
+			$singlequotepos = strpos($lowerbanner, "'", $hrefpos);
+			
+			if ($doublequotepos > 0 && $singlequotepos > 0)
+			{
+				if ($doublequotepos < $singlequotepos)
+				{
+					$quotepos  = $doublequotepos;
+					$quotechar = '"';
+				}
+				else
+				{
+					$quotepos  = $singlequotepos;
+					$quotechar = "'";
+				}
+			}
+			else
+			{
+				if ($doublequotepos > 0)
+				{
+					$quotepos  = $doublequotepos;
+					$quotechar = '"';
+				}
+				elseif ($singlequotepos > 0)
+				{
+					$quotepos  = $singlequotepos;
+					$quotechar = "'";
+				}
+				else
+					$quotepos  = 0;
+			}
+			
+			if ($quotepos > 0)
+			{
+				$endquotepos = strpos($lowerbanner, $quotechar, $quotepos+1);
+				
+				if (substr ($html, $quotepos+1, 10) != '{targeturl')
+				{
+					$newbanner = $newbanner . 
+							substr($html, $prevhrefpos, $hrefpos - $prevhrefpos) . 
+							$quotechar . "$phpAds_url_prefix/adclick.php?bannerID=" . 
+							$bannerID . "&dest=" . 
+							urlencode(substr($html, $quotepos+1, $endquotepos - $quotepos - 1)) .
+							"&ismap=";
+				}
+				else
+				{
+					$newbanner = $newbanner . 
+							substr($html, $prevhrefpos, $hrefpos - $prevhrefpos) . $quotechar . 
+							substr($html, $quotepos+1, $endquotepos - $quotepos - 1);
+				}
+				
+				$prevhrefpos = $hrefpos + ($endquotepos - $quotepos);
+			}
+			else
+			{
+				$spacepos = strpos($lowerbanner, " ", $hrefpos+1);
+				$endtagpos = strpos($lowerbanner, ">", $hrefpos+1);
+				
+				if ($spacepos < $endtagpos)
+					$endpos = $spacepos;
+				else
+					$endpos = $endtagpos;
+		 		
+				if (substr($html, $hrefpos, 10) != '{targeturl')
+				{
+					$newbanner = $newbanner . 
+							substr($html, $prevhrefpos, $hrefpos - $prevhrefpos) . 
+							"\"" . "$phpAds_url_prefix/adclick.php?bannerID=" . 
+							$bannerID . "&dest=" . 
+							urlencode(substr($html, $hrefpos, $endpos - $hrefpos)) .
+							"&ismap=\"";
+				}
+				else
+				{
+					$newbanner = $newbanner . 
+							substr($html, $prevhrefpos, $hrefpos - $prevhrefpos) . "\"" . 
+							substr($html, $hrefpos, $endpos - $hrefpos) . "\"";
+				}
+				
+				$prevhrefpos = $hrefpos + ($endpos - $hrefpos);
+			}
+			
+			$hrefpos = strpos($lowerbanner, "href=", $hrefpos + 1);
+		}
+		
+		$html = $newbanner.substr($html, $prevhrefpos);
+	}
+	
+	if (!eregi('<form', $html) && !eregi('<a', $html) && $url != '')
+	{
+		// No link or form
+		$html = "<a href='$phpAds_url_prefix/adclick.php?bannerID=".$bannerID."&ismap='".$target.">".$html."</a>";
+	}
+	
+	return ($html);
+}
+
+
+
+/*********************************************************/
 /* Create the HTML needed to display the banner			 */
 /*********************************************************/
 
@@ -447,16 +592,17 @@ function view_raw($what, $clientID=0, $target="", $source="", $withtext=0, $cont
 {
     global $phpAds_db, $REMOTE_HOST, $phpAds_url_prefix;
 	global $phpAds_default_banner_url, $phpAds_default_banner_target;
-
+	global $phpAds_type_html_auto;
+	
 	if(!ereg("^[0-9]+$", $clientID))
 	{
 		$target = $clientID;
 		$clientID = 0;
 	}
-
+	
 	db_connect();
     $row = get_banner($what, $clientID, $context, $source);
-
+	
 	$outputbuffer = "";
 	
 	if (is_array($row))
@@ -475,12 +621,18 @@ function view_raw($what, $clientID=0, $target="", $source="", $withtext=0, $cont
 				$target = " target=\"$target\"";
 			}
 			
-			if($row["format"] == "html")
+			if($row['format'] == "html")
 			{
 				// HTML banner
 				$html = stripslashes($row["banner"]);
-				$html = str_replace ("{timestamp}",	time(), $html);
-				$html = str_replace ("{id}", 		$row['bannerID'], $html);
+				
+				if ($phpAds_type_html_auto == true)
+					$html = phpAds_parseHTMLBanner ($html, $row['bannerID'], $row['url'], $target);
+				
+				// Replace standard variables
+				$html = str_replace ('{timestamp}',	time(), $html);
+				$html = str_replace ('{id}', 		$row['bannerID'], $html);
+				$html = str_replace ("{targeturl}", $phpAds_url_prefix."/adclick.php?bannerID=".$row['bannerID']."&ismap=", $html);
 				
 				if (strpos ($html, "{targeturl:") > 0)
 				{
@@ -488,105 +640,9 @@ function view_raw($what, $clientID=0, $target="", $source="", $withtext=0, $cont
 					{
 						$html = str_replace ($regs[0], "$phpAds_url_prefix/adclick.php?bannerID=".$row['bannerID']."&dest=".urlencode($regs[1])."&ismap=", $html);
 					}
-					
-					$outputbuffer .= $html;
 				}
 				
-				elseif(!empty($row["url"])) 
-				{
-					if (strpos ($html, "{targeturl}") > 0)
-					{
-						$outputbuffer .= str_replace ("{targeturl}", "$phpAds_url_prefix/adclick.php?bannerID=".$row['bannerID']."&ismap=", $html);
-					}
-					else
-					{
-						$outputbuffer .= "<a href='$phpAds_url_prefix/adclick.php?bannerID=".$row['bannerID']."&ismap='".$target.">";
-		                $outputbuffer .= $html;
-					}
-				} 
-				else
-				{
-					$newbanner	 = '';
-					$prevhrefpos = '';
-					
-					$lowerbanner = strtolower($html);
-					$hrefpos	 = strpos($lowerbanner,"href=");
-					
-					while ($hrefpos > 0)
-					{
-						$hrefpos = $hrefpos + 5;
-						$doublequotepos = strpos($lowerbanner, '"', $hrefpos);
-						$singlequotepos = strpos($lowerbanner, "'", $hrefpos);
-						
-						if ($doublequotepos > 0 && $singlequotepos > 0)
-						{
-							if ($doublequotepos < $singlequotepos)
-							{
-								$quotepos  = $doublequotepos;
-								$quotechar = '"';
-							}
-							else
-							{
-								$quotepos  = $singlequotepos;
-								$quotechar = "'";
-							}
-						}
-						else
-						{
-							if ($doublequotepos > 0)
-							{
-								$quotepos  = $doublequotepos;
-								$quotechar = '"';
-							}
-							elseif ($singlequotepos > 0)
-							{
-								$quotepos  = $singlequotepos;
-								$quotechar = "'";
-							}
-							else
-								$quotepos  = 0;
-						}
-						
-						if ($quotepos > 0)
-						{
-							$endquotepos = strpos($lowerbanner, $quotechar, $quotepos+1);
-							$newbanner = $newbanner . 
-										 substr($html, $prevhrefpos, $hrefpos - $prevhrefpos) . 
-										 $quotechar . "$phpAds_url_prefix/adclick.php?bannerID=" . 
-										 $row['bannerID'] . "&dest=" . 
-										 urlencode(substr($html, $quotepos+1, $endquotepos - $quotepos - 1)) .
-										 "&ismap=";
-							
-							$prevhrefpos = $hrefpos + ($endquotepos - $quotepos);
-						} 
-						else
-						{
-							$spacepos = strpos($lowerbanner, " ", $hrefpos+1);
-							$endtagpos = strpos($lowerbanner, ">", $hrefpos+1);
-							
-							if ($spacepos < $endtagpos) 
-								$endpos = $spacepos; 
-							else 
-								$endpos = $endtagpos;
-	 						
-							$newbanner = $newbanner . 
-										 substr($html, $prevhrefpos, $hrefpos - $prevhrefpos) . 
-										 "\"" . "$phpAds_url_prefix/adclick.php?bannerID=" . 
-										 $row['bannerID'] . "&dest=" . 
-										 urlencode(substr($html, $hrefpos, $endpos - $hrefpos)) .
-										 "&ismap=\"";
-							
-							$prevhrefpos = $hrefpos + ($endpos - $hrefpos);
-						}
-						$hrefpos = strpos($lowerbanner, "href=", $hrefpos + 1);
-						
-					}
-					$newbanner = $newbanner.substr($html, $prevhrefpos);
-					$outputbuffer .= $newbanner;
-					
-				}
-				if (!empty($row["url"]) && strpos ($row['banner'], "{targeturl}") == 0) 
-					$outputbuffer .= "</a>";
+				$outputbuffer = $html;
 			}
 			elseif ($row["format"] == "url")
 			{
@@ -611,7 +667,7 @@ function view_raw($what, $clientID=0, $target="", $source="", $withtext=0, $cont
 				}
 				
 				if (empty($row["url"]))
-					$outputbuffer .= "<img src='$row[banner]' width='".$row['width']."' height='".$row['height']."' alt='".$row['alt']."' border='0'>";
+					$outputbuffer .= "<img src='".$row['banner']."' width='".$row['width']."' height='".$row['height']."' alt='".$row['alt']."' border='0'>";
 				else
 					$outputbuffer .= "<a href='$phpAds_url_prefix/adclick.php?bannerID=".$row['bannerID'].$randomstring."'".$target."><img src='".$row['banner']."' width='".$row['width']."' height='".$row['height']."' alt='".$row['alt']."' border='0'></a>";
 				
