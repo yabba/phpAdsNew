@@ -1,4 +1,4 @@
-<?php // $Revision: 1.21 $
+<?php // $Revision: 1.22 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -226,8 +226,6 @@ $GLOBALS['strTotalCampaigns'] 			= "Totaal campagnes";
 $GLOBALS['strActiveCampaigns'] 			= "Actieve campagnes";
 
 $GLOBALS['strLinkedTo']					= "gelinked naar";
-$GLOBALS['strNoViewLoggedInInterval']   = "Geen AdViews zijn gelogd in de laatste {interval} dagen";
-$GLOBALS['strNoClickLoggedInInterval']  = "Geen AdClicks zijn gelogd in de laatste {interval} dagen";
 $GLOBALS['strSendAdvertisingReport']	= "Stuur een advertentierapport per e-mail";
 $GLOBALS['strNoDaysBetweenReports']		= "Aantal dagen tussen rapporten";
 $GLOBALS['strSendDeactivationWarning']  = "Stuur een waarschuwing wanneer de campagne gedeactiveerd wordt";
@@ -252,5 +250,19 @@ $GLOBALS['strBannercode']				= "Bannercode";
 
 $GLOBALS['strSearch']					= "Zoeken";
 $GLOBALS['strNoMatchesFound']			= "Geen objecten gevonden";
+
+$GLOBALS['strNoViewLoggedInInterval']   = "Er zijn geen AdViews gelogd gedurende de dagen van dit rapport";
+$GLOBALS['strNoClickLoggedInInterval']  = "Er zijn geen AdClicks gelogd gedurende de dagen van dit rapport";
+$GLOBALS['strMailReportPeriod']			= "Dit rapport bevat de statistieken van {startdate} tot en met {enddate}.";
+$GLOBALS['strMailReportPeriodAll']		= "Dit rapport bevat alle statistieken tot en met {enddate}.";
+$GLOBALS['strNoStatsForCampaign'] 		= "Er zijn geen statistieken beschikbaar voor deze campagne";
+$GLOBALS['strFrom']						= "Van";
+$GLOBALS['strTo']						= "tot";
+$GLOBALS['strMaintenance']				= "Onderhoud";
+$GLOBALS['strCampaignStats']			= "Campagne statistieken";
+$GLOBALS['strClientStats']				= "Klant statistieken";
+$GLOBALS['strErrorOccurred']			= "Er is een fout opgetreden";
+$GLOBALS['strAdReportSent']				= "Advertentierapport verzonden";
+
 
 ?>

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.28 $
+<?php // $Revision: 1.29 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -231,8 +231,6 @@ $GLOBALS['strTotalCampaigns'] 			= "Campagne totali";
 $GLOBALS['strActiveCampaigns'] 			= "Campagne attive";
 
 $GLOBALS['strLinkedTo']					= "linkato a";
-$GLOBALS['strNoViewLoggedInInterval']   = "Nessunua visualizzazione registrata negli ultimi {interval} giorni";
-$GLOBALS['strNoClickLoggedInInterval']  = "Nessun click registrato negli ultimi {interval} giorni";
 $GLOBALS['strSendAdvertisingReport']	= "Invia un report via e-mail";
 $GLOBALS['strNoDaysBetweenReports']		= "Intervallo giorni fra i report";
 $GLOBALS['strSendDeactivationWarning']  = "Invia un avvertimento quando una campagna &egrave; terminata";
@@ -257,5 +255,18 @@ $GLOBALS['strBannercode']				= "Codice";
 
 $GLOBALS['strSearch']					= "Ricerca";
 $GLOBALS['strNoMatchesFound']			= "Nessun elemento trovato per la tua ricerca";
+
+$GLOBALS['strNoViewLoggedInInterval']   = "No views were logged during the span of this report";
+$GLOBALS['strNoClickLoggedInInterval']  = "No clicks were logged during the span of this report";
+$GLOBALS['strMailReportPeriod']			= "This report includes statistics from {startdate} up to {enddate}.";
+$GLOBALS['strMailReportPeriodAll']		= "This report includes all statistics up to {enddate}.";
+$GLOBALS['strNoStatsForCampaign'] 		= "There are no statistics available for this campaign";
+$GLOBALS['strFrom']						= "From";
+$GLOBALS['strTo']						= "to";
+$GLOBALS['strMaintenance']				= "Maintenance";
+$GLOBALS['strCampaignStats']			= "Campaign statistics";
+$GLOBALS['strClientStats']				= "Client statistics";
+$GLOBALS['strErrorOccurred']			= "An error occurred";
+$GLOBALS['strAdReportSent']				= "Advertising report sent";
 
 ?>
