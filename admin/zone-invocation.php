@@ -1,4 +1,4 @@
-<?php // $Revision: 1.6 $
+<?php // $Revision: 1.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -28,7 +28,7 @@ phpAds_checkAccess(phpAds_Admin);
 /* HTML framework                                        */
 /*********************************************************/
 
-phpAds_PageHeader("4.2.5", $extra);
+phpAds_PageHeader("4.2.5");
 phpAds_ShowSections(array("4.2.2", "4.2.3", "4.2.4", "4.2.5"));
 
 
