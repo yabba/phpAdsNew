@@ -1,4 +1,4 @@
-<?php // $Revision: 1.6 $
+<?php // $Revision: 1.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -141,9 +141,11 @@ function phpAds_dbFreeResult($res)
 /* Return the number of affected rows                    */
 /*********************************************************/
 
-function phpAds_dbAffectedRows($res)
+function phpAds_dbAffectedRows()
 {
-	return @mysql_affected_rows($res);
+	global $phpAds_db_link;
+	
+	return @mysql_affected_rows($phpAds_db_link);
 }
 
 

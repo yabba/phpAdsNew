@@ -1,4 +1,4 @@
-<?php // $Revision: 1.2 $
+<?php // $Revision: 1.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -84,7 +84,7 @@ function phpAds_SettingsWriteFlush()
 		$query = "UPDATE ".$phpAds_config['tbl_config']." SET ".join(", ", $sql);
 		$res = @phpAds_dbQuery($query);
 		
-		if (@phpAds_dbAffectedRows($res) < 1)
+		if (@phpAds_dbAffectedRows() < 1)
 		{
 			$query = "INSERT INTO ".$phpAds_config['tbl_config']." SET ".join(", ", $sql);
 			@phpAds_dbQuery($query);
