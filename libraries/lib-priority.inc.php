@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -1087,9 +1087,11 @@ function phpAds_PriorityCalculate()
 				$debuglog .= "- Assigned priority to banner $b: ".$banners[$b]['priority']." / $softener = ";
 				// END REPORTING
 
+				$roundto1 = $banners[$b]['priority'] > 0;
+
 				$banners[$b]['priority'] = round($banners[$b]['priority'] / $softener);
 
-				if (!$banners[$b]['priority'])
+				if ($roundto1 && !$banners[$b]['priority'])
 				{
 					$banners[$b]['priority'] = 1;
 
