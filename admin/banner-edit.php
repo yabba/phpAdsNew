@@ -1,4 +1,4 @@
-<?php // $Revision: 1.90 $
+<?php // $Revision: 1.91 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -558,6 +558,8 @@ if (isset($submit))
 			$keywordArray = split('[ ,]+', trim($keyword));
 			$final['keyword'] = implode(' ', $keywordArray);
 		}
+		else
+			$final['keyword'] = '';
 		
 		$final['active'] = "t";
 		$final['description'] = $description;
