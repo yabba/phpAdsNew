@@ -1,4 +1,4 @@
-<?php // $Revision: 1.29 $
+<?php // $Revision: 1.30 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -244,15 +244,15 @@ $GLOBALS['strDays']						= "Tage";
 $GLOBALS['strHistory']					= "Verlauf";
 $GLOBALS['strAverage']					= "Durchschnitt";
 $GLOBALS['strDuplicateClientName']		= "Der von Ihnen eingegebene Benutzername existiert bereits. Bitte geben Sie einen anderen ein.";
-$GLOBALS['strAllowClientDisableBanner'] = "Allow this user to de-activate his own banners";
-$GLOBALS['strAllowClientActivateBanner'] = "Allow this user to activate his own banners";
+$GLOBALS['strAllowClientDisableBanner'] = "Kunde darf eigene Banner deaktivieren";
+$GLOBALS['strAllowClientActivateBanner'] = "Kunde darf eigene Banner aktivieren";
 
-$GLOBALS['strGenerateBannercode']		= "Generate Bannercode";
-$GLOBALS['strChooseInvocationType']		= "Please choose the type of banner invocation";
-$GLOBALS['strGenerate']					= "Generate";
-$GLOBALS['strParameters']				= "Parameters";
-$GLOBALS['strUniqueidentifier']			= "Unique identifier";
-$GLOBALS['strFrameSize']				= "Frame size";
+$GLOBALS['strGenerateBannercode']		= "Bannercode generieren";
+$GLOBALS['strChooseInvocationType']		= "Bitte wählen Sie die Art der Bannereinbindung";
+$GLOBALS['strGenerate']					= "Generieren";
+$GLOBALS['strParameters']				= "Parameter";
+$GLOBALS['strUniqueidentifier']			= "Eindeutige Identifizierer";
+$GLOBALS['strFrameSize']				= "Framegr&ouml;&szlig;e";
 $GLOBALS['strBannercode']				= "Bannercode";
 
 ?>
