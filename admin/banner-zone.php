@@ -1,4 +1,4 @@
-<?php // $Revision: 1.20 $
+<?php // $Revision: 1.21 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -351,7 +351,7 @@ else
 
 echo "</table>";
 
-if (count($affiliates) > 0)
+if (isset($affiliates) && count($affiliates) > 0)
 {
 	echo "<br><br>";
 	echo "<input type='submit' name='submit' value='$strSaveChanges'>";
