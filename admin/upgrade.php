@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -177,7 +177,7 @@ if (phpAds_isUser(phpAds_Admin))
 				  $fatal[] = $strWarningFileUploads;
 			
 			// Check track_vars
-			if ($phpversion < 4030 &&
+			if ($phpversion < 4003 &&
 				ini_get ('track_vars') != true)
 				$fatal[] = $strWarningTrackVars;
 		}
