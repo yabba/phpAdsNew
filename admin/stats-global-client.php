@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -25,6 +25,10 @@ phpAds_registerGlobal ('expand', 'collapse', 'hideinactive', 'listorder', 'order
 
 // Security check
 phpAds_checkAccess(phpAds_Admin);
+
+
+// Set default values
+if (!isset($period)) $period = '';
 
 
 
