@@ -1,7 +1,14 @@
 phpAdsNew - ChangeLog
 
-CVS			+ Misc bugfixes for beta4
+v 2.0beta5		+ Added override setting for automatic GD detection (Niels)
+			+ Added support for passing ISMAP click location (Niels)
+
+			+ Misc bugfixes for beta4
 			  - Changed dhtml detection for Opera  (Niels)
+			  - Replaced variable references for PHP3 support (Niels)
+			  - Removed array_pop function for PHP 3 support (Niels)
+			  - Fixed clientweight / ACL bug (Niels)
+			  - HTML banner preview popup fixed if banner is disabled (Niels)
 
 
 v 2.0beta4		+ Updated GUI including a new logo  (Niels)

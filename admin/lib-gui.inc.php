@@ -1,4 +1,4 @@
-<?php // $Revision: 1.11 $
+<?php // $Revision: 1.12 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -179,7 +179,7 @@ function phpAds_PageHeader($ID, $extra="")
 	else
 	{
 		echo "<tr><td colspan='2' height='48' bgcolor='#000063' valign='bottom'>";
-		echo "&nbsp;&nbsp;&nbsp;&nbsp;<img src='images/logo.gif' width='163' height='34' alt='phpAdsNew 2 beta 4'>";
+		echo "&nbsp;&nbsp;&nbsp;&nbsp;<img src='images/logo.gif' width='163' height='34' alt='phpAdsNew 2 beta 5'>";
 	}
 ?>
 </td></tr>
