@@ -1,4 +1,4 @@
-<?php // $Revision: 1.33 $
+<?php // $Revision: 1.34 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -181,6 +181,8 @@ if (phpAds_dbNumRows($res))
 					   'delivery' => $zone['delivery'],
 					   'website' => $affiliate['website']
 		);
+		
+		$tabindex = 1;
 		
 		phpAds_placeInvocationForm($extra, true);
 	}
