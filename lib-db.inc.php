@@ -1,4 +1,4 @@
-<?php // $Revision: 1.5 $
+<?php // $Revision: 1.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -99,7 +99,7 @@ function phpAds_dbNumRows($res)
 
 function phpAds_dbFetchArray($res)
 {
-	return @mysql_fetch_array($res);
+	return @mysql_fetch_array($res, MYSQL_ASSOC);
 }
 
 
