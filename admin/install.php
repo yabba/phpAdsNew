@@ -1,4 +1,4 @@
-<?php // $Revision: 2.12 $
+<?php // $Revision: 2.13 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -272,7 +272,7 @@ if (phpAds_isUser(phpAds_Admin))
 				$phpAds_config['tbl_cache'] 	 = $installvars['tbl_cache'] 	  = $table_prefix.'cache';
 				$phpAds_config['tbl_targetstats'] = $installvars['tbl_targetstats'] = $table_prefix.'targetstats';
 				
-				if (phpAds_checkDatabase())
+				if (phpAds_checkDatabaseExists())
 				{
 					$errormessage[1][] = $strTableInUse;
 				}
