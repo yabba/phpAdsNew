@@ -1,4 +1,4 @@
-<?php // $Revision: 1.9 $
+<?php // $Revision: 1.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -265,7 +265,7 @@ function days_left($clientID)
 				{
 					$days_left = round($row_client["clicks"] / ($row_clicks["total_clicks"] / $row_clicks["days_since_start"]));
 					
-					if ($row_client["views"] > 0)
+					if ($row_client["clicks"] > 0)
 					{
 						$estimated_end = strftime ($date_format, mktime (0, 0, 0, date("m"), date("d") + $days_left, date("Y")));
 						$expiration[] = array (
