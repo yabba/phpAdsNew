@@ -1,4 +1,4 @@
-<?php // $Revision: 1.41 $
+<?php // $Revision: 1.42 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -339,6 +339,16 @@ $GLOBALS['strZoneType']						= "Zone type";
 $GLOBALS['strBannerButtonRectangle']		= "Banner, Button or Rectangle";
 $GLOBALS['strInterstitial']					= "Interstitial";
 $GLOBALS['strPopup']						= "Popup";
+
+
+// Advanced zone settings
+$GLOBALS['strAdvancedSettings']				= "Advanced settings";
+$GLOBALS['strChainSettings']				= "Chain settings";
+$GLOBALS['strZoneNoDelivery']				= "If no banners from this zone <br>can be delivered, try to...";
+$GLOBALS['strZoneStopDelivery']				= "Stop delivery and don't show a banner";
+$GLOBALS['strZoneOtherZone']				= "Display the selected zone instead";
+$GLOBALS['strZoneUseKeywords']				= "Select a banner using the keywords entered below";
+$GLOBALS['strZoneAppend']					= "Always append the following popup or interstitial invocation code to banners displayed by this zone";
 
 
 // Linked banners/campaigns
