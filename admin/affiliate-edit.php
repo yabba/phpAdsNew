@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -28,8 +28,7 @@ phpAds_registerGlobal ('move', 'name', 'website', 'contact', 'email', 'language'
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin+phpAds_Affiliate);
-
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency + phpAds_Affiliate);
 
 
 /*********************************************************/
@@ -40,7 +39,21 @@ if (phpAds_isUser(phpAds_Affiliate))
 {
 	if (phpAds_isAllowed(phpAds_ModifyInfo))
 	{
+		$query = "SELECT agencyid".
+			" FROM ".$phpAds_config['tbl_affiliates'].
+			" WHERE affiliateid=".phpAds_getUserID();
+		$res = phpAds_dbQuery($query)
+			or phpAds_sqlDie();
+		if ($row = phpAds_dbFetchArray($res))
+		{
+			$agencyid = $row['agencyid'];
 		$affiliateid = phpAds_getUserID();
+	}
+	else
+	{
+			phpAds_PageHeader("2");
+			phpAds_Die ($strAccessDenied, $strNotAdmin);
+		}
 	}
 	else
 	{
@@ -48,6 +61,30 @@ if (phpAds_isUser(phpAds_Affiliate))
 		phpAds_Die ($strAccessDenied, $strNotAdmin);
 	}
 }
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	$agencyid = phpAds_getUserID();
+
+	if (isset($affiliateid) && ($affiliateid != ''))
+	{
+		$query = "SELECT affiliateid".
+			" FROM ".$phpAds_config['tbl_affiliates'].
+			" WHERE affiliateid=".$affiliateid.
+			" AND agencyid=".$agencyid;
+			
+		$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+		if (phpAds_dbNumRows($res) == 0)
+		{
+			phpAds_PageHeader("2");
+			phpAds_Die ($strAccessDenied, $strNotAdmin);
+		}
+	}
+}
+else
+{
+	$agencyid = 0;
+}
+
 
 
 
@@ -79,7 +116,7 @@ if (isset($submit))
 	}
 	
 	// Name
-	if (phpAds_isUser(phpAds_Admin))
+	if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 		$affiliate['name'] = trim($name);
 	
 	// Website
@@ -89,6 +126,7 @@ if (isset($submit))
 		$affiliate['website'] = trim($website);
 	
 	// Default fields
+	$affiliate['agencyid']	= $agencyid;
 	$affiliate['contact']     = trim($contact);
 	$affiliate['email'] 	  = trim($email);
 	$affiliate['language']    = trim($language);
@@ -97,7 +135,7 @@ if (isset($submit))
 	$affiliate['publiczones'] = isset($publiczones) ? 't' : 'f';
 	
 	
-	if (phpAds_isUser(phpAds_Admin))
+	if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 	{
 		// Password
 		if (isset($password))
@@ -332,7 +370,7 @@ if (isset($submit))
 
 if ($affiliateid != "")
 {
-	if (phpAds_isUser(phpAds_Admin))
+	if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 	{
 		if (isset($Session['prefs']['affiliate-index.php']['listorder']))
 			$navorder = $Session['prefs']['affiliate-index.php']['listorder'];
@@ -346,13 +384,16 @@ if ($affiliateid != "")
 		
 		
 		// Get other affiliates
-		$res = phpAds_dbQuery("
-			SELECT
-				*
-			FROM
-				".$phpAds_config['tbl_affiliates']."
-			".phpAds_getAffiliateListOrder ($navorder, $navdirection)."
-		") or phpAds_sqlDie();
+		if (phpAds_isUser(phpAds_Admin))
+		{
+			$query="SELECT * FROM ".$phpAds_config['tbl_affiliates'].phpAds_getAffiliateListOrder($navorder, $navdirection);
+		}
+		elseif (phpAds_isUser(phpAds_Affiliate))
+		{
+			$query="SELECT * FROM ".$phpAds_config['tbl_affiliates']." WHERE agencyid=".$Session['userid'].phpAds_getAffiliateListOrder($navorder, $navdirection);
+		}
+		$res = phpAds_dbQuery($query)
+			or phpAds_sqlDie();
 		
 		while ($row = phpAds_dbFetchArray($res))
 		{
@@ -446,7 +487,7 @@ echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>";
 // Name
 echo "<tr><td width='30'>&nbsp;</td><td width='200'>".$strName."</td>";
 
-if (phpAds_isUser(phpAds_Admin))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 	echo "<td width='100%'><input onBlur='phpAds_formUpdate(this);' class='flat' type='text' name='name' size='35' style='width:350px;' value='".phpAds_htmlQuotes($affiliate['name'])."' tabindex='".($tabindex++)."'></td>";
 else
 	echo "<td width='100%'>".(isset($affiliate['name']) ? $affiliate['name'] : '');
@@ -533,7 +574,7 @@ if (isset($errormessage) && count($errormessage))
 // Username
 echo "<tr><td width='30'>&nbsp;</td><td width='200'>".$strUsername."</td>";
 
-if (phpAds_isUser(phpAds_Admin))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 	echo "<td width='370'><input onBlur='phpAds_formUpdate(this);' class='flat' type='text' name='username' size='25' value='".phpAds_htmlQuotes($affiliate['username'])."' tabindex='".($tabindex++)."'></td>";
 else
 	echo "<td width='370'>".(isset($affiliate['username']) ? $affiliate['username'] : '');
@@ -543,7 +584,7 @@ echo "<td colspan='1'><img src='images/break-l.gif' height='1' width='200' vspac
 
 
 // Password
-if (phpAds_isUser(phpAds_Admin))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 {
 	echo "<tr><td width='30'>&nbsp;</td><td width='200'>".$strPassword."</td>";
 	echo "<td width='370'><input class='flat' type='password' name='password' size='25' value='".$affiliate['password']."' tabindex='".($tabindex++)."'></td>";
@@ -567,7 +608,7 @@ else
 }
 
 // Permissions
-if (phpAds_isUser(phpAds_Admin))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 {
 	echo "<tr height='1'><td colspan='3' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
 	echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>";
@@ -637,7 +678,7 @@ while ($row = phpAds_dbFetchArray($res))
 	phpAds_formSetRequirements('contact', '<?php echo addslashes($strContact); ?>', true);
 	phpAds_formSetRequirements('website', '<?php echo addslashes($strWebsite); ?>', true, 'url');
 	phpAds_formSetRequirements('email', '<?php echo addslashes($strEMail); ?>', true, 'email');
-<?php if (phpAds_isUser(phpAds_Admin)) { ?>
+<?php if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency)) { ?>
 	phpAds_formSetRequirements('name', '<?php echo addslashes($strName); ?>', true, 'unique');
 	phpAds_formSetRequirements('username', '<?php echo addslashes($strUsername); ?>', false, 'unique');
 

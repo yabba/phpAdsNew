@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -24,7 +24,7 @@ phpAds_registerGlobal ('type', 'period', 'start', 'limit');
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency);
 
 
 

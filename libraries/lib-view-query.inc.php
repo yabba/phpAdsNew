@@ -1,4 +1,4 @@
-<?php // $Revision: 2.6 $
+<?php // $Revision: 2.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -45,6 +45,7 @@ function phpAds_buildQuery ($part, $lastpart, $precondition)
 		",".$phpAds_config['tbl_banners'].".alt as alt".
 		",".$phpAds_config['tbl_banners'].".block as block".
 		",".$phpAds_config['tbl_banners'].".capping as capping".
+		",".$phpAds_config['tbl_banners'].".session_capping as session_capping".
 		",".$phpAds_config['tbl_banners'].".compiledlimitation as compiledlimitation".
 		",".$phpAds_config['tbl_campaigns'].".weight as campaignweight".
 		" FROM".
@@ -209,7 +210,9 @@ function phpAds_buildQuery ($part, $lastpart, $precondition)
 				// Keywords
 				else
 				{
-					if(!$phpAds_config['mult_key'])
+					if ($phpAds_config['use_keywords'])
+					{
+						if (!$phpAds_config['mult_key'])
 					{
 						if ($operator == 'OR')
 							$conditions .= "OR ".$phpAds_config['tbl_banners'].".keyword = '".trim($part_array[$k])."' ";
@@ -230,12 +233,13 @@ function phpAds_buildQuery ($part, $lastpart, $precondition)
 				}
 			}
 		}
+		}
 		
 		// Strip first AND or OR from $conditions
 		$conditions = strstr($conditions, ' ');
 		
 		// Add global keyword
-		if ($lastpart == true && $onlykeywords == true)
+		if ($phpAds_config['use_keywords'] && $lastpart == true && $onlykeywords == true)
 			$conditions .= "OR CONCAT(' ',".$phpAds_config['tbl_banners'].".keyword,' ') LIKE '% global %' ";
 		
 		// Add conditions to select

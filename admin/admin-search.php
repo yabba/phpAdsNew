@@ -24,7 +24,7 @@ phpAds_registerGlobal ('keyword', 'client', 'campaign', 'banner', 'zone', 'affil
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency);
 
 
 // Check Searchselection
@@ -162,37 +162,98 @@ if (!isset($keyword))
 <tr><td width='20'>&nbsp;</td><td>
 	
 <?php
+
+	if (phpAds_isUser(phpAds_Admin))
+	{
 	$query_clients =
-		"SELECT *".
+			"SELECT clientid,clientname".
 		" FROM ".$phpAds_config['tbl_clients'].
 		" WHERE clientname LIKE '%".$keyword."%'";
-  	$res_clients = phpAds_dbQuery($query_clients) or phpAds_sqlDie();
 	
 	$query_campaigns =
-		"SELECT *".
+			"SELECT campaignid, campaignname, clientid".
 		" FROM ".$phpAds_config['tbl_campaigns'].
 		" WHERE campaignname LIKE '%".$keyword."%'";
-  	$res_campaigns = phpAds_dbQuery($query_campaigns) or phpAds_sqlDie();
 	
 	$query_banners =
-		"SELECT *".
+			"SELECT bannerid, description ,alt, keyword, storagetype".
 		" FROM ".$phpAds_config['tbl_banners'].
-		" WHERE keyword LIKE '%".$keyword."%'".
-		" OR alt LIKE '%".$keyword."%'".
+			" WHERE alt LIKE '%".$keyword."%'".
 		" OR description LIKE '%".$keyword."%'";
-  	$res_banners = phpAds_dbQuery($query_banners) or phpAds_sqlDie();
+		if ($phpAds_config['use_keywords'])
+			$query_banners .= " OR keyword LIKE '%".$keyword."%'";
 	
 	$query_affiliates =
-		"SELECT *".
+			"SELECT affiliateid, name".
 		" FROM ".$phpAds_config['tbl_affiliates'].
 		" WHERE name LIKE '%".$keyword."%'";
-  	$res_affiliates = phpAds_dbQuery($query_affiliates) or phpAds_sqlDie();
 	
 	$query_zones =
-		"SELECT *".
+			"SELECT zoneid, zonename, description".
 		" FROM ".$phpAds_config['tbl_zones'].
 		" WHERE zonename LIKE '%".$keyword."%'".
 		" OR description LIKE '%".$keyword."%'";
+	}
+	elseif (phpAds_isUser(phpAds_Agency))
+	{
+		$query_clients =
+			"SELECT clientid,clientname".
+			" FROM ".$phpAds_config['tbl_clients'].
+			" WHERE agencyid=".phpAds_getUserID().
+			" AND clientname LIKE '%".$keyword."%'";
+
+		$query_campaigns =
+			"SELECT m.campaignid as campaignid".
+			",m.campaignname as campaignname".
+			",m.clientid as clientid".
+			" FROM ".$phpAds_config['tbl_campaigns']." AS m".
+			",".$phpAds_config['tbl_clients']." AS c".
+			" WHERE m.clientid=c.clientid".
+			" AND c.agencyid=".phpAds_getUserID().
+			" AND m.campaignname LIKE '%".$keyword."%'";
+
+		$query_banners =
+			"SELECT b.bannerid as bannerid".
+			",b.description as description".
+			",b.alt as alt".
+			",b.keyword as keyword".
+			",b.storagetype as storagetype".
+			",b.campaignid as campaignid".
+			",m.clientid as clientid".
+			" FROM ".$phpAds_config['tbl_banners']." AS b".
+			",".$phpAds_config['tbl_campaigns']." AS m".
+			",".$phpAds_config['tbl_clients']." AS c".
+			" WHERE m.clientid=c.clientid".
+			" AND b.campaignid=m.campaignid".
+			" AND c.agencyid=".phpAds_getUserID().
+			" AND (b.alt LIKE '%".$keyword."%'".
+			" OR b.description LIKE '%".$keyword."%'";
+			
+			if ($phpAds_config['use_keywords'])
+				$query_banners .= " OR b.keyword LIKE '%".$keyword."%'";
+
+		$query_banners .= ")";
+		$query_affiliates =
+			"SELECT affiliateid,name".
+			" FROM ".$phpAds_config['tbl_affiliates'].
+			" WHERE agencyid=".phpAds_getUserID().
+			" AND name LIKE '%".$keyword."%'";
+
+		$query_zones =
+			"SELECT zoneid as zoneid".
+			", zonename as zonename".
+			", description as description".
+			" FROM ".$phpAds_config['tbl_zones']." AS z".
+			",".$phpAds_config['tbl_affiliates']." AS a".
+			" WHERE a.affiliateid=z.affiliateid".
+			" AND a.agencyid=".phpAds_getUserID().
+			" AND (z.zonename LIKE '%".$keyword."%'".
+			" OR z.description LIKE '%".$keyword."%')";
+	}
+	$res_clients = phpAds_dbQuery($query_clients) or phpAds_sqlDie();
+	$res_campaigns = phpAds_dbQuery($query_campaigns) or phpAds_sqlDie();
+	$res_banners = phpAds_dbQuery($query_banners) or phpAds_sqlDie();
+	$res_affiliates = phpAds_dbQuery($query_affiliates) or phpAds_sqlDie();
   	$res_zones = phpAds_dbQuery($query_zones) or phpAds_sqlDie();
 	
 	
@@ -251,7 +312,7 @@ if (!isset($keyword))
 			
 			if (!$compact)
 			{
-				$query_c_expand = "SELECT * FROM ".$phpAds_config['tbl_campaigns']." WHERE clientid=".$row_clients['clientid'];
+				$query_c_expand = "SELECT campaignid,campaignname FROM ".$phpAds_config['tbl_campaigns']." WHERE clientid=".$row_clients['clientid'];
 	  			$res_c_expand = phpAds_dbQuery($query_c_expand) or phpAds_sqlDie();
 				
 				while ($row_c_expand = phpAds_dbFetchArray($res_c_expand))
@@ -284,7 +345,7 @@ if (!isset($keyword))
 					
 					
 					
-					$query_b_expand = "SELECT * FROM ".$phpAds_config['tbl_banners']." WHERE campaignid=".$row_c_expand['campaignid'];
+					$query_b_expand = "SELECT bannerid, campaignid, description, alt, keyword, storagetype FROM ".$phpAds_config['tbl_banners']." WHERE campaignid=".$row_c_expand['campaignid'];
 		  			$res_b_expand = phpAds_dbQuery($query_b_expand) or phpAds_sqlDie();
 					
 					while ($row_b_expand = phpAds_dbFetchArray($res_b_expand))
@@ -302,11 +363,11 @@ if (!isset($keyword))
 						echo "<td height='25'>";
 						echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 						
-						if ($row_b_expand['format'] == 'html')
+						if ($row_b_expand['storagetype'] == 'html')
 						{
 							echo "<img src='images/icon-banner-html.gif' align='absmiddle'>&nbsp;";
 						}
-						elseif ($row_b_expand['format'] == 'url')
+						elseif ($row_b_expand['storagetype'] == 'url')
 						{
 							echo "<img src='images/icon-banner-url.gif' align='absmiddle'>&nbsp;";
 						}
@@ -372,7 +433,7 @@ if (!isset($keyword))
 			
 			if (!$compact)
 			{
-				$query_b_expand = "SELECT * FROM ".$phpAds_config['tbl_banners']." WHERE campaignid=".$row_campaigns['campaignid'];
+				$query_b_expand = "SELECT bannerid,campaignid,description,alt,keyword,storagetype FROM ".$phpAds_config['tbl_banners']." WHERE campaignid=".$row_campaigns['campaignid'];
 	  			$res_b_expand = phpAds_dbQuery($query_b_expand) or phpAds_sqlDie();
 				
 				while ($row_b_expand = phpAds_dbFetchArray($res_b_expand))
@@ -390,11 +451,11 @@ if (!isset($keyword))
 					echo "<td height='25'>";
 					echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 					
-					if ($row_b_expand['format'] == 'html')
+					if ($row_b_expand['storagetype'] == 'html')
 					{
 						echo "<img src='images/icon-banner-html.gif' align='absmiddle'>&nbsp;";
 					}
-					elseif ($row_b_expand['format'] == 'url')
+					elseif ($row_b_expand['storagetype'] == 'url')
 					{
 						echo "<img src='images/icon-banner-url.gif' align='absmiddle'>&nbsp;";
 					}
@@ -444,11 +505,11 @@ if (!isset($keyword))
 			echo "<td height='25'>";
 			echo "&nbsp;&nbsp;";
 			
-			if ($row_banners['format'] == 'html')
+			if ($row_banners['storagetype'] == 'html')
 			{
 				echo "<img src='images/icon-banner-html.gif' align='absmiddle'>&nbsp;";
 			}
-			elseif ($row_banners['format'] == 'url')
+			elseif ($row_banners['storagetype'] == 'url')
 			{
 				echo "<img src='images/icon-banner-url.gif' align='absmiddle'>&nbsp;";
 			}
@@ -457,7 +518,7 @@ if (!isset($keyword))
 				echo "<img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;";
 			}
 			
-			echo "<a href='JavaScript:GoOpener(\"banner-edit.php?clientid=".phpAds_getCampaignParentClientID($row_banners['campaignid'])."&campaignid=".$row_banners['campaignid']."&bannerid=".$row_banners['bannerid']."\")'>".$name."</a>";
+			echo "<a href='JavaScript:GoOpener(\"banner-edit.php?clientid=".$row_banners['clientid']."&campaignid=".$row_banners['campaignid']."&bannerid=".$row_banners['bannerid']."\")'>".$name."</a>";
 			echo "</td>";
 			
 			echo "<td height='25'>".$row_banners['bannerid']."</td>";
@@ -467,12 +528,12 @@ if (!isset($keyword))
 		   	
 			// Button 1
 			echo "<td height='25'>";
-			echo "<a href='JavaScript:GoOpener(\"banner-acl.php?clientid=".phpAds_getCampaignParentClientID($row_banners['campaignid'])."&campaignid=".$row_banners['campaignid']."&bannerid=".$row_banners['bannerid']."\")'><img src='images/icon-acl.gif' border='0' align='absmiddle' alt='$strACL'>&nbsp;$strACL</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+			echo "<a href='JavaScript:GoOpener(\"banner-acl.php?clientid=".$row_banners['clientid']."&campaignid=".$row_banners['campaignid']."&bannerid=".$row_banners['bannerid']."\")'><img src='images/icon-acl.gif' border='0' align='absmiddle' alt='$strACL'>&nbsp;$strACL</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 			echo "</td>";
 			
 			// Button 2
 			echo "<td height='25'>";
-			echo "<a href='JavaScript:GoOpener(\"banner-delete.php?clientid=".phpAds_getCampaignParentClientID($row_banners['campaignid'])."&campaignid=".$row_banners['campaignid']."&bannerid=".$row_banners['bannerid']."\", true)'".phpAds_DelConfirm($strConfirmDeleteBanner)."><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+			echo "<a href='JavaScript:GoOpener(\"banner-delete.php?clientid=".$row_banners['clientid']."&campaignid=".$row_banners['campaignid']."&bannerid=".$row_banners['bannerid']."\", true)'".phpAds_DelConfirm($strConfirmDeleteBanner)."><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 			echo "</td></tr>";
 			
 			$i++;
@@ -517,7 +578,7 @@ if (!isset($keyword))
 			
 			if (!$compact)
 			{
-				$query_z_expand = "SELECT * FROM ".$phpAds_config['tbl_zones']." WHERE affiliateid=".$row_affiliates['affiliateid'];
+				$query_z_expand = "SELECT zoneid,zonename,description FROM ".$phpAds_config['tbl_zones']." WHERE affiliateid=".$row_affiliates['affiliateid'];
 	  			$res_z_expand = phpAds_dbQuery($query_z_expand) or phpAds_sqlDie();
 				
 				while ($row_z_expand = phpAds_dbFetchArray($res_z_expand))

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.7 $
+<?php // $Revision: 2.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -94,6 +94,8 @@ function phpAds_PageHeader($ID, $extra="")
 		// Prepare Navigation
 		if (phpAds_isUser(phpAds_Admin))
 			$pages	= $phpAds_nav['admin'];
+		elseif (phpAds_isUser(phpAds_Agency))
+			$pages	= $phpAds_nav['agency'];
 		elseif (phpAds_isUser(phpAds_Client))
 			$pages  = $phpAds_nav['client'];
 		else
@@ -249,6 +251,8 @@ function phpAds_PageHeader($ID, $extra="")
 		// Prepare Navigation
 		if (phpAds_isUser(phpAds_Admin))
 			$pages	= $phpAds_nav['admin'];
+		elseif (phpAds_isUser(phpAds_Agency))
+			$pages  = $phpAds_nav['agency'];
 		elseif (phpAds_isUser(phpAds_Client))
 			$pages  = $phpAds_nav['client'];
 		elseif (phpAds_isUser(phpAds_Affiliate))
@@ -297,7 +301,7 @@ function phpAds_PageHeader($ID, $extra="")
 		
 		
 		
-		if (phpAds_isLoggedIn() && phpAds_isUser(phpAds_Admin) && !defined('phpAds_installing'))
+		if (phpAds_isLoggedIn() && ( phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency) ) && !defined('phpAds_installing'))
 		{
 			$searchbar  = "\t\t<table cellpadding='0' cellspacing='0' border='0' bgcolor='#0066CC' height='24'>\n";
 			$searchbar .= "\t\t<form name='search' action='admin-search.php' target='SearchWindow' onSubmit=\"search_window(document.search.keyword.value,'".$phpAds_config['url_prefix']."/admin/admin-search.php'); return false;\">\n";
@@ -594,6 +598,8 @@ function phpAds_ShowSections($sections)
 	// Prepare Navigation
 	if (phpAds_isUser(phpAds_Admin))
 		$pages	= $phpAds_nav['admin'];
+	elseif (phpAds_isUser(phpAds_Agency))
+		$pages  = $phpAds_nav['agency'];
 	elseif (phpAds_isUser(phpAds_Client))
 		$pages  = $phpAds_nav['client'];
 	else
@@ -813,5 +819,358 @@ function phpAds_PrepareHelp($default='')
 	$phpAds_helpDefault = $default;
 	$phpAds_showHelp = true;
 }
+
+//================================================================================
+//	statsPresenter Class
+//================================================================================
+/*
+|
+|
+|
+|
+|
+|
+|
+*/
+
+
+function rowPresenter ($array, $i=0, $level=0, $parent='', $isClient=false, $id=0)
+{
+
+	global $HTTP_SERVER_VARS, $phpAds_TextAlignRight, $phpAds_TextDirection, $hideinactive,$i;
+
+	if (is_array($array))
+	{
+	
+		foreach($array as $array)
+		{
+		
+			if ($array['kind'] == 'campaign' && $array['active'] == 'f' && $hideinactive == '1')			
+				continue;
+
+			// Define kind of row and id
+			$kind 		= $array['kind'];
+			$thisID		= $array['id'];
+	
+			// Inserts divider if NOT top level (level > 0)
+			if ($level > 0)
+				echo "<tr ".($i%2==0?"bgcolor='#F6F6F6'":"")."height='1'><td><img src='images/spacer.gif' width='1' height='1'></td><td colspan='6' bgcolor='#888888'><img src='images/break-l.gif' height='1' width='100%'></td></tr>";
+			
+			// Sets background color of the row
+			echo "<tr height='25' ".($i%2==0?"bgcolor='#F6F6F6'":"").">";
+	
+			// Indents as necesseary
+			echo "<td height='25'>";
+			echo "<img src='images/spacer.gif' height='16' width='". 4 ."'>";
+			echo "<img src='images/spacer.gif' height='16' width='". ($level*20)  ."'>";
+			
+			// expanding arrows 
+			if (isset($array['children']) && ($array['anonymous'] == 'f' || (!phpAds_isUser(phpAds_Affiliate) && !phpAds_isUser(phpAds_Client))))
+			{
+				if (isset($array['expand']) && $array['expand'] == '1')
+					echo "<a href='".$HTTP_SERVER_VARS['PHP_SELF']."?_id_=".($parent !='' ? $parent . "-" : '') . $thisID."&collapse=1&".($isClient ? 'clientid='.$id : 'affiliateid='.$id )."'><img src='images/triangle-d.gif' align='absmiddle' align='absmiddle' border='0'></a>";
+				else
+					echo "<a href='".$HTTP_SERVER_VARS['PHP_SELF']."?_id_=".($parent !='' ? $parent . "-" : '') . $thisID."&expand=1&".($isClient ? 'clientid='.$id : 'affiliateid='.$id )."'><img src='images/".$phpAds_TextDirection."/triangle-l.gif' align='absmiddle' border='0'></a>";
+			}
+			else
+				echo "<img src='images/spacer.gif' height='16' width='". 16 ."' align='absmiddle'>";
+	
+			echo "<img src='images/spacer.gif' height='16' width='". 4  ."'>";
+	
+	
+			// specific zone stuff
+			if ($kind == 'zone') {
+				// icon
+				if ($array['delivery'] == phpAds_ZoneBanner)
+					echo "<img src='images/icon-zone.gif' align='absmiddle'>";
+				elseif ($array['delivery'] == phpAds_ZoneInterstitial)
+					echo "<img src='images/icon-interstitial.gif' align='absmiddle'>";
+				elseif ($array['delivery'] == phpAds_ZonePopup)
+					echo "<img src='images/icon-popup.gif' align='absmiddle'>";
+				elseif ($array['delivery'] == phpAds_ZoneText)
+					echo "<img src='images/icon-textzone.gif' align='absmiddle'>";
+					
+				// spacer between icon and name
+				echo "<img src='images/spacer.gif' height='16' width='". 4 ."' align='absmiddle'>";
+					
+				// name and info
+				echo "<a href='stats-zone-history.php?affiliateid=".$array['affiliateid']."&zoneid=".$array['id']."'>".$array['name']."</a>";
+				echo "</td>";
+				echo "<td height='25'>".$array['id']."</td>";
+					
+					
+			} 
+			else if ($kind == 'campaign')
+			{
+				// check whether the campaign is active
+				if ($array['active'] == 't')
+					echo "<img src='images/icon-campaign.gif' align='absmiddle'>";
+				else
+					echo "<img src='images/icon-campaign-d.gif' align='absmiddle'>";
+
+				// spacer between icon and name
+				echo "<img src='images/spacer.gif' height='16' width='". 4 ."' align='absmiddle'>";
+					
+				// get campaign name
+				$name = '';
+				if (isset($array['alt']) && $array['alt'] != '') $name = $array['alt'];
+				if (isset($array['name']) && $array['name'] != '') $name = $array['name'];
+				
+				// check whether we should show the name and id of this banner	
+				if ($array['anonymous'] == 't' && (phpAds_isUser(phpAds_Affiliate) || phpAds_isUser(phpAds_Client)))
+				{
+					echo "<a href='#'>".$GLOBALS['strHiddenCampaign']."</a></td>";						
+					echo "<td height='25'></td>";
+
+				}
+				else	
+				{
+			
+					echo 
+						($isClient
+							? "<a href='stats-campaign-history.php?clientid=".$id."&campaignid=".$array['id']."'>".$name."</a>"
+							: "<a href='stats-campaign-affiliates.php?clientid=".$id."&campaignid=".$array['id']."'>".$name."</a>"
+						);
+				
+					echo "</td><td height='25'>".$array['id']."</td>";
+				}
+			} 
+			else if ($kind == 'banner') 
+			{
+			
+				if (ereg ('bannerid:'.$array['id'], $array['what']))
+					echo "<img src='images/icon-zone-linked.gif' align='absmiddle'>";
+				else
+					echo "<img src='images/icon-banner-stored.gif' align='absmiddle'>";
+	
+				// spacer between icon and name
+				echo "<img src='images/spacer.gif' height='16' width='". 4 ."' align='absmiddle'>";
+
+				if ($isClient)
+				{					
+					echo "<a href='stats-banner-history.php?clientid=".$id."&bannerid=".$array['id']."&campaignid=".phpAds_getBannerParentClientID($array['id'])."'>". ($array['anonymous'] == 't' ? "(Hidden Banner)" : phpAds_getBannerName($array['id'], 30, false)) . "</td>";				
+				}
+				else
+				{
+					$thiszone = explode('-',$parent);
+					echo "<a href='stats-linkedbanner-history.php?affiliateid=".$id."&zoneid=".$thiszone[0]."&bannerid=".$array['id']."'>". ($array['anonymous'] == 't' ? "(Hidden Banner)" : phpAds_getBannerName($array['id'], 30, false)) . "</td>";
+				}
+
+					
+
+				echo "</td>";
+				echo "<td height='25'>".$array['id']."</td>";
+			}
+			
+			echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($array['views'])."</td>";
+			echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($array['clicks'])."</td>";
+			echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_buildCTR($array['views'], $array['clicks'])."</td>";
+			echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($array['conversions'])."</td>";
+			echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_buildCTR($array['clicks'], $array['conversions'])."&nbsp;&nbsp;</td>";
+			echo "</tr>";
+			
+			if ($array['expand'] == TRUE && ($array['anonymous'] != 't' || (!phpAds_isUser(phpAds_Affiliate) && !phpAds_isUser(phpAds_Client)))  && is_array($array['children'])) 
+				rowPresenter($array['children'], $i, $level+1, ($parent !='' ? $parent . "-" : '') . $thisID, $isClient, $id);
+	
+			if ($level == 0)
+				echo "<tr height='1'><td colspan='7' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
+						
+			if ($level==0) $i++;
+
+		}
+
+
+
+	}
+
+}
+
+/*
+function zoneRow ($array, $i=0, $level=0) {
+
+	global $phpAds_TextAlignRight, $phpAds_TextDirection;
+
+	if (is_array($array))
+	{
+		foreach($array as $array)
+		{
+			// sets background color of the row
+			echo "<tr height='25' ".($i%2==0?"bgcolor='#F6F6F6'":"").">";
+			echo "<td height='25'><img src='images/spacer.gif' height='16' width='". $level*25 ."'>";
+
+			// expanding arrows
+			if (isset($array['children']))
+			{
+				if (isset($array['expand']) && $array['expand'] == '1')
+					echo "<a href='stats-affiliate-zones.php?_zone_=".$array['id']."&collapse=1'><img src='images/triangle-d.gif' align='absmiddle' align='absmiddle' border='0'></a>";
+				else
+					echo "<a href='stats-affiliate-zones.php?_zone_=".$array['id']."&expand=1'><img src='images/".$phpAds_TextDirection."/triangle-l.gif' align='absmiddle' border='0'></a>";
+			}
+			else
+				echo "<img src='images/spacer.gif' height='16' width='". ($level+1)*16 ."' align='absmiddle'>";
+	
+			echo "&nbsp;";
+
+			// icon
+			if ($array['delivery'] == phpAds_ZoneBanner)
+				echo "<img src='images/icon-zone.gif' align='absmiddle'>";
+			elseif ($array['delivery'] == phpAds_ZoneInterstitial)
+				echo "<img src='images/icon-interstitial.gif' align='absmiddle'>";
+			elseif ($array['delivery'] == phpAds_ZonePopup)
+				echo "<img src='images/icon-popup.gif' align='absmiddle'>";
+			elseif ($array['delivery'] == phpAds_ZoneText)
+				echo "<img src='images/icon-textzone.gif' align='absmiddle'>";
+
+
+			echo "&nbsp;";
+			
+			// name and info
+			echo "<a href='stats-zone-history.php?affiliateid=".$array['affiliateid']."&zoneid=".$array['id']."'>".$array['name']."</a>";
+			echo "</td>";
+			
+			echo "<td height='25'>".$array['id']."</td>";
+			echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($array['views'])."</td>";
+			echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($array['clicks'])."</td>";
+			echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_buildCTR($array['views'], $array['clicks'])."</td>";
+			echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($array['conversions'])."</td>";
+			echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_buildCTR($array['clicks'], $array['conversions'])."&nbsp;&nbsp;</td>";
+			echo "</tr>";
+			
+			if ($array['expand'] == TRUE && is_array($array['children'])) campaignRow($array['children'], $i, 1);
+
+			if ($level == 0)
+				echo "<tr height='1'><td colspan='7' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
+			
+		}
+
+	}
+
+}
+
+function campaignRow ($array, $i=0, $level=0) {
+
+	global $phpAds_TextAlignRight, $phpAds_TextDirection, $hideinactive;
+
+	if (is_array($array))
+	{
+				
+		foreach ($array as $array)
+		{
+				
+			if ($array['active'] == 't' || $hideinactive == '0')
+			{
+				
+				
+				$name = phpAds_breakString ($name, '30');
+		
+				// Divider
+				if ($level == 1) {
+					echo "<tr height='1'>";
+					echo "<td ".($i%2==0?"bgcolor='#F6F6F6'":"")."><img src='images/spacer.gif' width='1' height='1'></td>";
+					echo "<td colspan='6' bgcolor='#888888'><img src='images/break-l.gif' height='1' width='100%'></td>";
+					echo "</tr>";
+				}
+						
+				// spacer
+				echo "<tr height='25' ".($i%2==0?"bgcolor='#F6F6F6'":"").">";
+				echo "<td height='25'><img src='images/spacer.gif' height='16' width='" . $level*25 ."'>";
+						
+				echo "&nbsp;";
+				// Expanding / Collapsing arrows
+				if (isset($array['children'])  && $array['anonymous'] == 'f')
+				{
+					if (isset($array['expand']) && $array['expand'] == '1')
+						echo "<a href='stats-affiliate-zones.php?_zone_=".$zone['id']."&_campaign_=".$array['id']."&collapse=1'><img src='images/triangle-d.gif' align='absmiddle' align='absmiddle' border='0'></a>";
+					else
+						echo "<a href='stats-affiliate-zones.php?_zone_=".$zone['id']."&_campaign_=".$array['id']."&expand=1'><img src='images/".$phpAds_TextDirection."/triangle-l.gif' align='absmiddle' border='0'></a>";
+				}
+				else
+					echo "<img src='images/spacer.gif' height='16' width='". ($level+1)*16 ."' align='absmiddle'>";
+	
+				echo "&nbsp;";
+	
+						
+				// check whether the campaign is active				
+				if ($array['active'] == 't')
+					echo "<img src='images/icon-campaign.gif' align='absmiddle'>";
+				else
+					echo "<img src='images/icon-campaign-d.gif' align='absmiddle'>";
+	
+				echo "&nbsp;";
+					
+				// check whether we should show the name and id of this banner	
+				if ($array['anonymous'] == 'f') {
+					echo "<a href='stats-banner-history.php?clientid=".$clientid."&campaignid=".$array['clientid']."&bannerid=".$array['id']."'>".$name."</a></td>";
+					echo "<td height='25'>".$array['id']."</td>";					
+				}
+				else	
+				{
+					echo "<a href='#'>Hidden Banner</a></td>";						
+					echo "<td height='25'></td>";
+				}
+				
+				// echo the columns and corresponding values
+				echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($array['views'])."</td>";
+				echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($array['clicks'])."</td>";
+				echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($array['CTR'])."</td>";
+				echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($array['conversions'])."</td>";
+				echo "<td height='25' align='".$phpAds_TextAlignRight."'>".number_format(phpAds_formatNumber($array['CNVR']), $phpAds_config['percentage_decimals'], $phpAds_DecimalPoint, $phpAds_ThousandsSeperator)."%&nbsp;&nbsp;</td>";
+				
+				if ($array['expand'] == TRUE && $array['anonymous'] == 'f' && is_array($array['children'])) bannerRow($array['children'], $i, 2);
+	
+				if ($level == 0)
+					echo "<tr height='1'><td colspan='7' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
+
+			}			
+			
+		}
+	}
+}
+
+
+function bannerRow ($array, $i=0, $level=0) {
+
+	global $phpAds_TextAlignRight, $phpAds_TextDirection;
+
+	if (is_array($array)){
+	
+		foreach ($array as $array)
+		{
+			// Divider
+			echo "<tr height='1'>";
+			echo "<td ".($i%2==0?"bgcolor='#F6F6F6'":"")."><img src='images/spacer.gif' width='1' height='1'></td>";
+			echo "<td colspan='7' bgcolor='#888888'><img src='images/break-l.gif' height='1' width='100%'></td>";
+			echo "</tr>";
+
+			// Icon & name
+			echo "<tr height='25' ".($i%2==0?"bgcolor='#F6F6F6'":"").">";
+			echo "<td height='25'><img src='images/spacer.gif' height='16' width='" . $level*25 . "'>";
+
+
+			echo "<img src='images/spacer.gif' height='16' width='". 16 ."' align='absmiddle'>";
+
+			if (ereg ('bannerid:'.$array['id'], $zone['what']))
+				echo "<img src='images/icon-zone-linked.gif' align='absmiddle'>";
+			else
+				echo "<img src='images/icon-banner-stored.gif' align='absmiddle'>";
+	
+			echo "&nbsp;";
+
+			echo "<a href='stats-linkedbanner-history.php?affiliateid=".$zone['affiliateid']."&zoneid=".$zone['id']."&bannerid=".$array['id']."'>". ($array['anonymous'] == 't' ? "(Hidden Banner)" : phpAds_getBannerName($array['id'], 30, false)) . "</td>";
+			echo "</td>";
+	
+	
+			echo "<td height='25'>" . ($array['anonymous'] == 'f' || phpAds_isUser(phpAds_Admin) ? $array['id'] : "") . "</td>";
+			echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($array['views'])."</td>";
+			echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($array['clicks'])."</td>";
+			echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_buildCTR($array['views'], $array['clicks'])."</td>";
+			echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($array['conversions'])."</td>";
+			echo "<td height='25' align='".$phpAds_TextAlignRight."'>".number_format(($array['clicks'] ? $array['conversions'] / $array['clicks'] * 100 : 0), $phpAds_config['percentage_decimals'], $phpAds_DecimalPoint, $phpAds_ThousandsSeperator)."%&nbsp;&nbsp;</td>";
+			echo "</tr>";
+		}
+	}
+}
+*/
+
 
 ?>

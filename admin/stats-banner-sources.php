@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -31,7 +31,7 @@ phpAds_registerGlobal (
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin+phpAds_Client);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency + phpAds_Client);
 
 // Check to see if they are switching...
 if (isset($distributiontype) && ($distributiontype == 'z') )
@@ -84,9 +84,10 @@ if (phpAds_isUser(phpAds_Client))
 	if (phpAds_getUserID() == phpAds_getCampaignParentClientID ($campaignid))
 	{
 		$res = phpAds_dbQuery(
-			"SELECT *".
+			"SELECT campaignid,campaignname".
 			" FROM ".$phpAds_config['tbl_campaigns'].
-			" WHERE clientid = ".phpAds_getUserID().
+			" WHERE clientid=".phpAds_getUserID().
+			" AND campaignid=".$campaignid.
 			phpAds_getCampaignListOrder ($navorder, $navdirection)
 		) or phpAds_sqlDie();
 		
@@ -117,14 +118,25 @@ if (phpAds_isUser(phpAds_Client))
 	}
 }
 
-if (phpAds_isUser(phpAds_Admin))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 {
-	$res = phpAds_dbQuery(
-		"SELECT *".
+	if (phpAds_isUser(phpAds_Admin))
+	{
+		$query = "SELECT campaignid,campaignname".
 		" FROM ".$phpAds_config['tbl_campaigns'].
 		" WHERE clientid = ".$clientid.
-		phpAds_getCampaignListOrder ($navorder, $navdirection)
-	) or phpAds_sqlDie();
+			phpAds_getCampaignListOrder ($navorder, $navdirection);
+	}
+	elseif (phpAds_isUser(phpAds_Agency))
+	{
+		$query = "SELECT campaignid,campaignname".
+			" FROM ".$phpAds_config['tbl_campaigns'].
+			" WHERE clientid=".$clientid.
+			" AND agencyid=".phpAds_getUserID().
+			phpAds_getCampaignListOrder ($navorder, $navdirection);
+	}
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
 	{
@@ -177,14 +189,14 @@ $sources = array();
 
 // Get the adviews/clicks for each campaign
 $res_stats = phpAds_dbQuery(
-	"SELECT".
-	" source".
-	",sum(views) as views".
+	"SELECT ".
+	//" source".
+	"sum(views) as views".
 	",sum(clicks) as clicks".
 	",sum(conversions) as conversions".
 	" FROM ".$phpAds_config['tbl_adstats'].
-	" WHERE bannerid=".$bannerid.
-	" GROUP BY source"
+	" WHERE bannerid=".$bannerid
+	//." GROUP BY source"
 ) or phpAds_sqlDie();
 
 while ($row_stats = phpAds_dbFetchArray($res_stats))
@@ -239,7 +251,7 @@ for ($i=0; $i<$arrlen; $i++)
 if ($expand == 'all')
 	$sources['expand'] = 'all';
 
-echo "\t\t\t\t<form action='".$HTTP_SERVER_VARS['PHP_SELF']."'>\n";
+echo "\t\t\t\t<form action='".$HTTP_SERVER_VARS['PHP_SELF']."' method='post'>\n";
 echo "\t\t\t\t<input type='hidden' name='clientid' value='".$clientid."'>\n";
 echo "\t\t\t\t<input type='hidden' name='campaignid' value='".$campaignid."'>\n";
 echo "\t\t\t\t<input type='hidden' name='bannerid' value='".$bannerid."'>\n";

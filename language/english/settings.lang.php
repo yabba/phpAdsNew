@@ -1,4 +1,4 @@
-<?php // $Revision: 2.12 $
+<?php // $Revision: 2.13 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -129,6 +129,7 @@ $GLOBALS['strInvocationAndDelivery']		= "Invocation and delivery settings";
 
 $GLOBALS['strAllowedInvocationTypes']		= "Allowed invocation types";
 $GLOBALS['strAllowRemoteInvocation']		= "Allow Remote Invocation";
+$GLOBALS['strAllowRemoteInvocationNoCookies']		= "Allow Remote Invocation - no Cookies";
 $GLOBALS['strAllowRemoteJavascript']		= "Allow Remote Invocation for Javascript";
 $GLOBALS['strAllowRemoteFrames']		= "Allow Remote Invocation for Frames";
 $GLOBALS['strAllowRemoteXMLRPC']		= "Allow Remote Invocation using XML-RPC";
@@ -151,6 +152,7 @@ $GLOBALS['strRetrieveRandom']			= "Random banner retrieval (default)";
 $GLOBALS['strRetrieveNormalSeq']		= "Normal sequental banner retrieval";
 $GLOBALS['strWeightSeq']			= "Weight based sequential banner retrieval";
 $GLOBALS['strFullSeq']				= "Full sequential banner retrieval";
+$GLOBALS['strUseKeywords']				= "Use keywords to select banners";
 $GLOBALS['strUseConditionalKeys']		= "Allow logical operators when using direct selection";
 $GLOBALS['strUseMultipleKeys']			= "Allow multiple keywords when using direct selection";
 
@@ -210,6 +212,7 @@ $GLOBALS['strHostAndGeo']				= "Host information and Geotargeting";
 $GLOBALS['strRemoteHost']				= "Remote host";
 $GLOBALS['strReverseLookup']			= "Try to determine the hostname of the visitor if it is not supplied by the server";
 $GLOBALS['strProxyLookup']				= "Try to determine the real IP address of the visitor if he is using a proxy server";
+$GLOBALS['strObfuscate']					= "Obfuscate source when delivering ads.";
 
 $GLOBALS['strGeotargeting']				= "Geotargeting";
 $GLOBALS['strGeotrackingType']			= "Type of geotargeting database";
@@ -248,6 +251,7 @@ $GLOBALS['strWarnLimit']				= "Send a warning when the number of impressions lef
 $GLOBALS['strWarnLimitErr']				= "Warn Limit should be a positive number";
 $GLOBALS['strWarnAdmin']				= "Send a warning to the administrator every time a campaign is almost expired";
 $GLOBALS['strWarnClient']				= "Send a warning to the advertiser every time a campaign is almost expired";
+$GLOBALS['strWarnAgency']				= "Send a warning to the agency every time a campaign is almost expired";
 $GLOBALS['strQmailPatch']				= "Enable qmail patch";
 
 $GLOBALS['strAutoCleanTables']			= "Database pruning";

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.7 $
+<?php // $Revision: 1.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -12,12 +12,9 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-
-
 // Include required files
 require ("config.php");
 require ("lib-statistics.inc.php");
-
 
 // Register input variables
 phpAds_registerGlobal (
@@ -31,7 +28,7 @@ phpAds_registerGlobal (
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency);
 
 
 // Set default values
@@ -46,13 +43,14 @@ $tabindex = 1;
 /* HTML framework                                        */
 /*********************************************************/
 
-$extra  = "<br><br><br>";
-$extra .= "<b>$strMaintenance</b><br>";
-$extra .= "<img src='images/break.gif' height='1' width='160' vspace='4'><br>";
-$extra .= "<a href='stats-reset.php?all=true'".phpAds_DelConfirm($strConfirmResetStats).">";
-$extra .= "<img src='images/".$phpAds_TextDirection."/icon-undo.gif' align='absmiddle' border='0'>&nbsp;$strResetStats</a>";
-$extra .= "<br><br>";
-
+if (phpAds_isUser(phpAds_Admin)) {
+	$extra  = "<br><br><br>";
+	$extra .= "<b>$strMaintenance</b><br>";
+	$extra .= "<img src='images/break.gif' height='1' width='160' vspace='4'><br>";
+	$extra .= "<a href='stats-reset.php?all=true'".phpAds_DelConfirm($strConfirmResetStats).">";
+	$extra .= "<img src='images/".$phpAds_TextDirection."/icon-undo.gif' align='absmiddle' border='0'>&nbsp;$strResetStats</a>";
+	$extra .= "<br><br>";
+}
 phpAds_PageHeader("2.1", $extra);
 phpAds_ShowSections(array("2.1", "2.4", "2.2", "2.5"));
 
@@ -91,8 +89,6 @@ if (isset($Session['prefs']['stats-global-advertiser.php']['nodes']))
 else
 	$node_array = array();
 
-
-
 /*********************************************************/
 /* Main code                                             */
 /*********************************************************/
@@ -101,30 +97,38 @@ else
 if (phpAds_isUser(phpAds_Admin))
 {
 	$res_clients = phpAds_dbQuery(
-		"SELECT *".
+		"SELECT clientid,clientname".
 		" FROM ".$phpAds_config['tbl_clients'].
 		phpAds_getClientListOrder ($listorder, $orderdirection)
 	) or phpAds_sqlDie();
 	
 	$res_campaigns = phpAds_dbQuery(
-		"SELECT *".
+		"SELECT campaignid,campaignname,clientid,views,clicks,conversions,active".
 		" FROM ".$phpAds_config['tbl_campaigns'].
 		phpAds_getCampaignListOrder ($listorder, $orderdirection)
 	) or phpAds_sqlDie();
 }
-else
+elseif (phpAds_isUser(phpAds_Agency))
 {
 	$res_clients = phpAds_dbQuery(
-		"SELECT *".
+		"SELECT clientid,clientname".
 		" FROM ".$phpAds_config['tbl_clients'].
-		" WHERE clientid=".$Session['clientid'].
+		" WHERE agencyid=".phpAds_getUserID().
 		phpAds_getClientListOrder ($listorder, $orderdirection)
 	) or phpAds_sqlDie();
 	
 	$res_campaigns = phpAds_dbQuery(
-		"SELECT *".
-		" FROM ".$phpAds_config['tbl_campaigns'].
-		" WHERE clientid=".$Session['clientid'].
+		"SELECT m.campaignid as campaignid".
+		",m.campaignname as campaignname".
+		",m.clientid as clientid".
+		",m.views as views".
+		",m.clicks as clicks".
+		",m.conversions as conversions".
+		",m.active as active".
+		" FROM ".$phpAds_config['tbl_campaigns']." AS m".
+		",".$phpAds_config['tbl_clients']." AS c".
+		" WHERE m.clientid=c.clientid".
+		" AND c.agencyid=".phpAds_getUserID().
 		phpAds_getCampaignListOrder ($listorder, $orderdirection)
 	) or phpAds_sqlDie();
 }
@@ -164,21 +168,41 @@ switch ($period)
 }
 
 // Get the banners for each campaign
-$res_banners = phpAds_dbQuery("
-	SELECT 
-		bannerid,
-		campaignid,
-		alt,
-		description,
-		active,
-		storagetype
-	FROM 
-		".$phpAds_config['tbl_banners']."
-		".phpAds_getBannerListOrder ($listorder, $orderdirection)."
-	") or phpAds_sqlDie();
+if (phpAds_isUser(phpAds_Admin))
+{
+	$query = "SELECT bannerid".
+		",campaignid".
+		",alt".
+		",description".
+		",active".
+		",storagetype".
+		" FROM ".$phpAds_config['tbl_banners'].
+		phpAds_getBannerListOrder ($listorder, $orderdirection);
+	
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	$query = "SELECT b.bannerid AS bannerid".
+		",b.campaignid AS campaignid".
+		",b.alt AS alt".
+		",b.description AS description".
+		",b.active AS active".
+		",b.storagetype AS storagetype".
+		" FROM ".$phpAds_config['tbl_banners']." AS b".
+		",".$phpAds_config['tbl_campaigns']." AS m".
+		",".$phpAds_config['tbl_clients']." AS c".
+		" WHERE b.campaignid=m.campaignid".
+		" AND m.clientid=c.clientid".
+		" AND c.agencyid=".phpAds_getUserID().
+		phpAds_getBannerListOrder ($listorder, $orderdirection);
+}
+
+$res_banners = phpAds_dbQuery($query)
+	or phpAds_sqlDie();
 
 while ($row_banners = phpAds_dbFetchArray($res_banners))
 {
+
 	if (isset($clients[$row_banners['campaignid']]))
 	{
 		$clients[$row_banners['campaignid']]['count']++;
@@ -199,7 +223,7 @@ while ($row_banners = phpAds_dbFetchArray($res_banners))
 		",sum(clicks) as clicks".
 		",sum(conversions) as conversions".
 		" FROM ".$phpAds_config['tbl_adstats'].
-		" WHERE bannerid = ".$row_banners['bannerid'].
+		" WHERE bannerid=".$row_banners['bannerid'].
 		$limit
 	) or phpAds_sqlDie();
 	
@@ -209,6 +233,7 @@ while ($row_banners = phpAds_dbFetchArray($res_banners))
 		$banners[$row_banners['bannerid']]['conversions'] = $row_stats['conversions'];
 		$banners[$row_banners['bannerid']]['views'] = $row_stats['views'];
 	}
+	
 }
 
 // Add ID found in expand to expanded nodes
@@ -243,7 +268,6 @@ for ($i=0; $i < $node_array_size;$i++)
 			$campaigns[$node_array[$i]]['expand'] = 1;
 	}
 }
-
 
 
 // Build Tree
@@ -559,7 +583,7 @@ if ($clientshidden > 0 || $totalviews > 0 || $totalclicks > 0 || $totalconversio
 								echo "<img src='images/icon-banner-stored-d.gif' align='absmiddle'>";
 						}
 						
-						echo "&nbsp;<a href='stats-banner-history.php?clientid=".$client['clientid']."&campaignid=".$campaigns[$ckey]['clientid']."&bannerid=".$banners[$bkey]['bannerid']."'>".$name."</a></td>";
+						echo "&nbsp;<a href='stats-banner-history.php?clientid=".$client['clientid']."&campaignid=".$campaigns[$ckey]['campaignid']."&bannerid=".$banners[$bkey]['bannerid']."'>".$name."</a></td>";
 						
 						// ID
 						echo "<td height='25' align='".$phpAds_TextAlignRight."'>".$banners[$bkey]['bannerid']."</td>";
@@ -693,5 +717,7 @@ phpAds_SessionDataStore();
 /*********************************************************/
 
 phpAds_PageFooter();
+
+
 
 ?>

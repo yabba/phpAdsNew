@@ -1,4 +1,4 @@
-<?php // $Revision: 2.6 $
+<?php // $Revision: 2.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -25,8 +25,71 @@ phpAds_registerGlobal ('period', 'start', 'limit');
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin+phpAds_Client);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency + phpAds_Client);
 
+// Check so that user doesnt access page through URL
+if (phpAds_isUser(phpAds_Client))
+{
+	if (phpAds_isAllowed(phpAds_ViewTargetingStats))
+	{
+		$clientid = phpAds_getUserID();
+		
+		if (isset($campaignid) && $campaignid != '')
+		{
+			$query = "SELECT c.clientid".
+				" FROM ".$phpAds_config['tbl_clients']." AS c".
+				",".$phpAds_config['tbl_campaigns']." AS m".
+				" WHERE c.clientid=m.clientid".
+				" AND c.clientid=".$clientid.
+				" AND m.campaignid=".$campaignid.
+				" AND agencyid=".phpAds_getAgencyID();
+		}
+		else
+		{
+			$query = "SELECT c.clientid".
+				" FROM ".$phpAds_config['tbl_clients']." AS c".
+				" WHERE c.clientid=".$clientid.
+				" AND agencyid=".phpAds_getAgencyID();
+		}
+		$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+		if (phpAds_dbNumRows($res) == 0)
+		{
+			phpAds_PageHeader("2");
+			phpAds_Die ($strAccessDenied, $strNotAdmin);
+		}
+	}
+	else
+	{
+		phpAds_PageHeader("2");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
+	}
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	if (isset($campaignid) && $campaignid != '')
+	{
+		$query = "SELECT c.clientid".
+			" FROM ".$phpAds_config['tbl_clients']." AS c".
+			",".$phpAds_config['tbl_campaigns']." AS m".
+			" WHERE c.clientid=m.clientid".
+			" AND c.clientid=".$clientid.
+			" AND m.campaignid=".$campaignid.
+			" AND agencyid=".phpAds_getUserID();
+	}
+	else
+	{
+		$query = "SELECT c.clientid".
+			" FROM ".$phpAds_config['tbl_clients']." AS c".
+			" WHERE c.clientid=".$clientid.
+			" AND agencyid=".phpAds_getUserID();
+	}
+	$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+	if (phpAds_dbNumRows($res) == 0)
+	{
+		phpAds_PageHeader("2");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
+	}
+}
 
 
 /*********************************************************/
@@ -49,7 +112,7 @@ if (phpAds_isUser(phpAds_Client))
 	if (phpAds_getUserID() == phpAds_getCampaignParentClientID ($campaignid))
 	{
 		$res = phpAds_dbQuery(
-			"SELECT *".
+			"SELECT campaignid,campaignname".
 			" FROM ".$phpAds_config['tbl_campaigns'].
 			" WHERE clientid= ".phpAds_getUserID().
 			phpAds_getCampaignListOrder ($navorder, $navdirection)
@@ -75,14 +138,27 @@ if (phpAds_isUser(phpAds_Client))
 	}
 }
 
-if (phpAds_isUser(phpAds_Admin))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 {
-	$res = phpAds_dbQuery(
-		"SELECT *".
+	if (phpAds_isUser(phpAds_Admin))
+	{
+		$query = "SELECT campaignid,campaignname".
 		" FROM ".$phpAds_config['tbl_campaigns'].
 		" WHERE clientid=".$clientid.
-		phpAds_getCampaignListOrder ($navorder, $navdirection)
-	) or phpAds_sqlDie();
+			phpAds_getCampaignListOrder ($navorder, $navdirection);
+	}
+	elseif (phpAds_isUser(phpAds_Agency))
+	{
+		$query = "SELECT m.campaignid,m.campaignname".
+			" FROM ".$phpAds_config['tbl_campaigns']." AS m".
+			",".$phpAds_config['tbl_clients']." AS c".
+			" WHERE m.clientid=c.clientid".
+			" AND m.clientid=".$clientid.
+			" AND c.agencyid=".phpAds_getUserID().
+			phpAds_getCampaignListOrder ($navorder, $navdirection);
+	}
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
 	{

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.6 $
+<?php // $Revision: 2.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -24,7 +24,7 @@ define ('phpAds_path', '.');
 /*********************************************************/
 
 require	(phpAds_path."/config.inc.php");
-require (phpAds_path."/libraries/lib-io.inc.php");
+require_once (phpAds_path."/libraries/lib-io.inc.php");
 require (phpAds_path."/libraries/lib-db.inc.php");
 
 if (($phpAds_config['log_adviews'] && !$phpAds_config['log_beacon']) || $phpAds_config['acl'])
@@ -155,6 +155,7 @@ phpAds_registerGlobal (
 	,'withtext'
 	,'withText'
 	,'what'
+	,'referer'
 );
 
 
@@ -193,7 +194,7 @@ $limitations = phpAds_getLayerLimitations();
 if ($limitations['compatible'])
 {
 	$output = view_raw ($what, $clientid, $campaignid, $target, $source, $withtext, $context, $limitations['richmedia']);
-	
+	phpAds_flushCookie ();
 	// Exit if no matching banner was found
 	if (!$output) exit;
 	

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -26,8 +26,18 @@ phpAds_registerGlobal ('startday', 'startmonth', 'startyear',
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency);
 
+if (phpAds_isUser(phpAds_Agency))
+{
+	$query = "SELECT clientid FROM ".$phpAds_config['tbl_clients']." WHERE clientid=".$clientid." AND agencyid=".phpAds_getUserID();
+	$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+	if (phpAds_dbNumRows($res) == 0)
+	{
+		phpAds_PageHeader("2");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
+	}
+}
 
 
 /*********************************************************/

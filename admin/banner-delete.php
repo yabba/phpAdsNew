@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -27,8 +27,29 @@ phpAds_registerGlobal ('returnurl');
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency);
 
+if (phpAds_isUser(phpAds_Agency))
+{
+	$query = "SELECT ".
+		$phpAds_config['tbl_banners'].".bannerid as bannerid".
+		" FROM ".$phpAds_config['tbl_clients'].
+		",".$phpAds_config['tbl_campaigns'].
+		",".$phpAds_config['tbl_banners'].
+		" WHERE ".$phpAds_config['tbl_campaigns'].".clientid=".$clientid.
+		" AND ".$phpAds_config['tbl_banners'].".campaignid=".$campaignid.
+		" AND ".$phpAds_config['tbl_banners'].".bannerid=".$bannerid.
+		" AND ".$phpAds_config['tbl_banners'].".campaignid=".$phpAds_config['tbl_campaigns'].".campaignid".
+		" AND ".$phpAds_config['tbl_campaigns'].".clientid=".$phpAds_config['tbl_clients'].".clientid".
+		" AND ".$phpAds_config['tbl_clients'].".agencyid=".phpAds_getUserID();
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
+	if (phpAds_dbNumRows($res) == 0)
+	{
+		phpAds_PageHeader("2");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
+	}
+}
 
 
 /*********************************************************/

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.7 $
+<?php // $Revision: 2.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -27,7 +27,7 @@ function Plugin_ClienthistoryInfo()
 		"plugin-description"	=> $strPluginClient,
 		"plugin-author"			=> "Niels Leenheer",
 		"plugin-export"			=> "csv",
-		"plugin-authorize"		=> phpAds_Admin+phpAds_Client,
+		"plugin-authorize"		=> phpAds_Admin+phpAds_Agency+phpAds_Client,
 		"plugin-execute"		=> "Plugin_ClienthistoryExecute",
 		"plugin-import"			=> array (
 			"campaignid"			=> array (
@@ -105,6 +105,8 @@ function Plugin_ClienthistoryExecute($clientid, $delimiter=",")
 		for (reset($stats);$key=key($stats);next($stats))
 		{
 			$row = array();
+			
+			//$key = implode('/',array_reverse(split('[-]',$key)));
 			
 			$row[] = $key;
 			$row[] = $stats[$key]['views'];

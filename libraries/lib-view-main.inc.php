@@ -1,4 +1,4 @@
-<?php // $Revision: 2.13 $
+<?php // $Revision: 2.14 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -28,6 +28,9 @@ function view_raw($what, $clientid = 0, $campaignid = 0, $target = '', $source =
 	global $phpAds_followedChain;
 	
 	$userid = phpAds_getUniqueUserID();
+	phpAds_setCookie("phpAds_id", $userid, time()+365*24*60*60);
+
+	
 	$outputbuffer = '';
 	
 	
@@ -127,8 +130,10 @@ function view_raw($what, $clientid = 0, $campaignid = 0, $target = '', $source =
 		$outputbuffer = str_replace ('{source}', $source, $outputbuffer);
 		
 		// Set path of phpAdsNew
-		if ($HTTP_SERVER_VARS['SERVER_PORT'] == 443) $phpAds_config['url_prefix'] = str_replace ('http://', 'https://', $phpAds_config['url_prefix']);
-		if (isset($HTTP_SERVER_VARS['HTTP_HOST']))   $phpAds_config['url_prefix'] = preg_replace ('#//[^/]+/#', '//'.$HTTP_SERVER_VARS['HTTP_HOST'].'/', $phpAds_config['url_prefix']);
+		if ($HTTP_SERVER_VARS['SERVER_PORT'] == 443)
+			$phpAds_config['url_prefix'] = $phpAds_config['ssl_url_prefix'];	
+		if (isset($HTTP_SERVER_VARS['HTTP_HOST']))
+			$phpAds_config['url_prefix'] = preg_replace ('#//[^/]+/#', '//'.$HTTP_SERVER_VARS['HTTP_HOST'].'/', $phpAds_config['url_prefix']);
 		$outputbuffer = str_replace ('{url_prefix}', $phpAds_config['url_prefix'], $outputbuffer);
 		
 		
@@ -144,7 +149,9 @@ function view_raw($what, $clientid = 0, $campaignid = 0, $target = '', $source =
 		// Web banner..
 		if ($row['storagetype'] == 'web')
 		{
-			if ($HTTP_SERVER_VARS['SERVER_PORT'] == 443) $phpAds_config['type_web_url'] = str_replace ('http://', 'https://', $phpAds_config['type_web_url']);
+			if ($HTTP_SERVER_VARS['SERVER_PORT'] == 443)
+				$phpAds_config['type_web_url'] = $phpAds_config['type_web_ssl_url'];
+				
 			$outputbuffer = str_replace ('{image_url_prefix}', $phpAds_config['type_web_url'], $outputbuffer);
 		}
 		
@@ -220,13 +227,13 @@ function view_raw($what, $clientid = 0, $campaignid = 0, $target = '', $source =
 		if (isset($HTTP_SERVER_VARS['HTTP_USER_AGENT']) && preg_match("#Mozilla/(1|2|3|4)#", $HTTP_SERVER_VARS['HTTP_USER_AGENT']) && !preg_match("#compatible#", $HTTP_SERVER_VARS['HTTP_USER_AGENT']))
 		{
 			$outputbuffer .= '<layer id="beacon_'.$row['bannerid'].'" width="0" height="0" border="0" visibility="hide">';
-			$outputbuffer .= '<img src=\''.$phpAds_config['url_prefix'].'/adlog.php?bannerid='.$row['bannerid'].'&amp;clientid='.$row['clientid'].'&amp;campaignid='.$row['campaignid'].'&amp;zoneid='.$row['zoneid'].'&amp;source='.$source.'&amp;block='.$row['block'].'&amp;capping='.$row['capping'].'&amp;cb='.md5(uniqid('', 1)).'\' width=\'0\' height=\'0\' alt=\'\'>';
+			$outputbuffer .= '<img src=\''.$phpAds_config['url_prefix'].'/adlog.php?bannerid='.$row['bannerid'].'&amp;clientid='.$row['clientid'].'&amp;campaignid='.$row['campaignid'].'&amp;zoneid='.$row['zoneid'].'&amp;source='.$source.'&amp;block='.$row['block'].'&amp;capping='.$row['capping'].'&amp;session_capping='.$row['session_capping'].'&amp;cb='.md5(uniqid('', 1)).'\' width=\'0\' height=\'0\' alt=\'\'>';
 			$outputbuffer .= '</layer>';
 		}
 		else
 		{
 			//$outputbuffer .= '<div id="beacon_'.$row['bannerid'].'" style="width: 0px; height: 0px; overflow: hidden;">';
-			$outputbuffer .= '<img src=\''.$phpAds_config['url_prefix'].'/adlog.php?bannerid='.$row['bannerid'].'&amp;clientid='.$row['clientid'].'&amp;campaignid='.$row['campaignid'].'&amp;zoneid='.$row['zoneid'].'&amp;source='.$source.'&amp;block='.$row['block'].'&amp;capping='.$row['capping'].'&amp;cb='.md5(uniqid('', 1)).'\' width=\'0\' height=\'0\' alt=\'\' style=\'width: 0px; height: 0px;\'>';
+			$outputbuffer .= '<img src=\''.$phpAds_config['url_prefix'].'/adlog.php?bannerid='.$row['bannerid'].'&amp;clientid='.$row['clientid'].'&amp;campaignid='.$row['campaignid'].'&amp;zoneid='.$row['zoneid'].'&amp;source='.$source.'&amp;block='.$row['block'].'&amp;capping='.$row['capping'].'&amp;session_capping='.$row['session_capping'].'&amp;cb='.md5(uniqid('', 1)).'\' width=\'0\' height=\'0\' alt=\'\' style=\'width: 0px; height: 0px;\'>';
 			//$outputbuffer .= '</div>';
 		}
 		

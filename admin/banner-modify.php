@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -27,8 +27,7 @@ phpAds_registerGlobal ('returnurl', 'duplicate', 'moveto_x', 'moveto', 'applyto_
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin);
-
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency);
 
 
 /*********************************************************/
@@ -37,10 +36,47 @@ phpAds_checkAccess(phpAds_Admin);
 
 if (isset($bannerid) && $bannerid != '')
 {
+	if (phpAds_isUser(phpAds_Agency))
+	{
+		$query = "SELECT ".
+			$phpAds_config['tbl_banners'].".bannerid as bannerid".
+			" FROM ".$phpAds_config['tbl_clients'].
+			",".$phpAds_config['tbl_campaigns'].
+			",".$phpAds_config['tbl_banners'].
+			" WHERE ".$phpAds_config['tbl_banners'].".bannerid=".$bannerid.
+			" AND ".$phpAds_config['tbl_banners'].".campaignid=".$phpAds_config['tbl_campaigns'].".campaignid".
+			" AND ".$phpAds_config['tbl_campaigns'].".clientid=".$phpAds_config['tbl_clients'].".clientid".
+			" AND ".$phpAds_config['tbl_clients'].".agencyid=".phpAds_getUserID();
+		$res = phpAds_dbQuery($query)
+			or phpAds_sqlDie();
+		if (phpAds_dbNumRows($res) == 0)
+		{
+			phpAds_PageHeader("2");
+			phpAds_Die ($strAccessDenied, $strNotAdmin);
+		}
+	}
+	
 	if (isset($moveto_x) && $moveto != '')
 	{
+		if (phpAds_isUser(phpAds_Agency))
+		{
+			$query = "SELECT ".
+				$phpAds_config['tbl_campaigns'].".campaignid as campaignid".
+				" FROM ".$phpAds_config['tbl_clients'].
+				",".$phpAds_config['tbl_campaigns'].
+				" WHERE ".$phpAds_config['tbl_campaigns'].".campaignid=".$moveto.
+				" AND ".$phpAds_config['tbl_campaigns'].".clientid=".$phpAds_config['tbl_clients'].".clientid".
+				" AND ".$phpAds_config['tbl_clients'].".agencyid=".phpAds_getUserID();
+			$res = phpAds_dbQuery($query)
+				or phpAds_sqlDie();
+			if (phpAds_dbNumRows($res) == 0)
+			{
+				phpAds_PageHeader("2");
+				phpAds_Die ($strAccessDenied, $strNotAdmin);
+			}
+		}
 		// Move the banner
-		$res = phpAds_dbQuery("UPDATE ".$phpAds_config['tbl_banners']." SET campaignid = '".$moveto."' WHERE bannerid = '".$bannerid."'") or phpAds_sqlDie();
+		$res = phpAds_dbQuery("UPDATE ".$phpAds_config['tbl_banners']." SET campaignid=".$moveto." WHERE bannerid=".$bannerid) or phpAds_sqlDie();
 		
 		// Rebuild priorities
 		phpAds_PriorityCalculate ();
@@ -58,7 +94,25 @@ if (isset($bannerid) && $bannerid != '')
 	}
 	elseif (isset($applyto_x) && $applyto != '')
 	{
-		// Apply display limitation to
+		if (phpAds_isUser(phpAds_Agency))
+		{
+			$query = "SELECT ".
+				$phpAds_config['tbl_banners'].".bannerid as bannerid".
+				" FROM ".$phpAds_config['tbl_clients'].
+				",".$phpAds_config['tbl_campaigns'].
+				",".$phpAds_config['tbl_banners'].
+				" WHERE ".$phpAds_config['tbl_banners'].".bannerid=".$applyto.
+				" AND ".$phpAds_config['tbl_banners'].".campaignid=".$phpAds_config['tbl_campaigns'].".campaignid".
+				" AND ".$phpAds_config['tbl_campaigns'].".clientid=".$phpAds_config['tbl_clients'].".clientid".
+				" AND ".$phpAds_config['tbl_clients'].".agencyid=".phpAds_getUserID();
+			$res = phpAds_dbQuery($query)
+				or phpAds_sqlDie();
+			if (phpAds_dbNumRows($res) == 0)
+			{
+				phpAds_PageHeader("2");
+				phpAds_Die ($strAccessDenied, $strNotAdmin);
+			}
+		}
 		
 		// Delete old limitations
 	   	$res = phpAds_dbQuery("

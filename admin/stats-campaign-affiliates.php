@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -32,7 +32,57 @@ phpAds_registerGlobal (
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin+phpAds_Client);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency + phpAds_Client);
+
+if (phpAds_isUser(phpAds_Agency))
+{
+	if (isset($campaignid) && $campaignid != '')
+	{
+		$query = "SELECT c.clientid".
+			" FROM ".$phpAds_config['tbl_clients']." AS c".
+			",".$phpAds_config['tbl_campaigns']." AS m".
+			" WHERE c.clientid=m.clientid".
+			" AND c.clientid=".$clientid.
+			" AND m.campaignid=".$campaignid.
+			" AND agencyid=".phpAds_getUserID();
+	}
+	else
+	{
+		$query = "SELECT c.clientid".
+			" FROM ".$phpAds_config['tbl_clients']." AS c".
+			" WHERE c.clientid=".$clientid.
+			" AND agencyid=".phpAds_getUserID();
+	}
+	$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+	if (phpAds_dbNumRows($res) == 0)
+	{
+		phpAds_PageHeader("2");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
+	}
+}
+elseif (phpAds_isUser(phpAds_Client))
+{
+	$clientid = phpAds_getUserID();
+	if (isset($campaignid) && $campaignid != '')
+	{
+		$query = "SELECT clientid ".
+			" FROM ".$phpAds_config['tbl_campaigns'].
+			" WHERE clientid=".$clientid.
+			" AND campaignid=".$campaignid;
+	}
+	else
+	{
+		$query = "SELECT clientid".
+			"FROM ".$phpAds_config['tbl_campaigns'].
+			" WHERE clientid=".$clientid;
+	}
+	$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+	if (phpAds_dbNumRows($res) == 0)
+	{
+		phpAds_PageHeader("2");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
+	}
+}
 
 
 // Check to see if they are switching...
@@ -87,10 +137,9 @@ if (phpAds_isUser(phpAds_Client))
 {
 	if (phpAds_getUserID() == phpAds_getCampaignParentClientID ($campaignid))
 	{
-		$res = phpAds_dbQuery(
-			"SELECT *".
+		$res = phpAds_dbQuery("SELECT campaignid,campaignname".
 			" FROM ".$phpAds_config['tbl_campaigns'].
-			" WHERE clientid = ".phpAds_getUserID().
+			" WHERE clientid=".$clientid.
 			phpAds_getCampaignListOrder ($navorder, $navdirection)
 		) or phpAds_sqlDie();
 		
@@ -113,15 +162,28 @@ if (phpAds_isUser(phpAds_Client))
 		phpAds_Die ($strAccessDenied, $strNotAdmin);
 	}
 }
-
-if (phpAds_isUser(phpAds_Admin))
+elseif (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 {
-	$res = phpAds_dbQuery(
-		"SELECT *".
+	if (phpAds_isUser(phpAds_Admin))
+	{
+		$query = "SELECT campaignid,campaignname".
 		" FROM ".$phpAds_config['tbl_campaigns'].
-		" WHERE clientid = ".$clientid.
-		phpAds_getCampaignListOrder ($navorder, $navdirection)
-	) or phpAds_sqlDie();
+			" WHERE clientid=".$clientid.
+			phpAds_getCampaignListOrder ($navorder, $navdirection);
+	}
+	elseif (phpAds_isUser(phpAds_Agency))
+	{
+		$query = "SELECT m.campaignid AS campaignid".
+			",m.campaignname AS campaignname".
+			" FROM ".$phpAds_config['tbl_campaigns']." AS m".
+			",".$phpAds_config['tbl_clients']." AS c".
+			" WHERE m.clientid=c.clientid".
+			" AND m.clientid=".$clientid.
+			" AND c.agencyid=".phpAds_getUserID().
+			phpAds_getCampaignListOrder ($navorder, $navdirection);
+	}
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
 	{
@@ -155,14 +217,31 @@ $totalconversions = 0;
 $totalviews = 0;
 
 // Get affiliates and build the tree
-$res_affiliates = phpAds_dbQuery("
-	SELECT 
-		affiliateid, name
-	FROM 
-		".$phpAds_config['tbl_affiliates']."
-	".phpAds_getAffiliateListOrder ($listorder, $orderdirection)."
-	") or phpAds_sqlDie();
-
+if (phpAds_isUser(phpAds_Admin))
+{
+	$query = "SELECT affiliateid".
+		",name".
+		" FROM ".$phpAds_config['tbl_affiliates'].
+		phpAds_getAffiliateListOrder($listorder, $orderdirection);
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	$query = "SELECT affiliateid".
+		",name".
+		" FROM ".$phpAds_config['tbl_affiliates'].
+		" WHERE agencyid=".phpAds_getUserID().
+		phpAds_getAffiliateListOrder($listorder, $orderdirection);
+}
+elseif (phpAds_isUser(phpAds_Client))
+{
+	$query = "SELECT affiliateid".
+		",name".
+		" FROM ".$phpAds_config['tbl_affiliates'].
+		" WHERE agencyid=".phpAds_getAgencyID().
+		phpAds_getAffiliateListOrder($listorder, $orderdirection);
+}
+$res_affiliates = phpAds_dbQuery($query)
+	or phpAds_sqlDie();
 
 while ($row_affiliates = phpAds_dbFetchArray($res_affiliates))
 {
@@ -172,13 +251,44 @@ while ($row_affiliates = phpAds_dbFetchArray($res_affiliates))
 }
 
 // Get the zones for each affiliate
-$res_zones = phpAds_dbQuery("
-	SELECT 
-		zoneid, affiliateid, zonename, delivery, what
-	FROM 
-		".$phpAds_config['tbl_zones']."
-		".phpAds_getZoneListOrder ($listorder, $orderdirection)."
-	") or phpAds_sqlDie();
+if (phpAds_isUser(phpAds_Admin))
+{
+	$query = "SELECT zoneid".
+		",affiliateid".
+		",zonename".
+		",delivery".
+		",what".
+		" FROM ".$phpAds_config['tbl_zones'].
+		phpAds_getZoneListOrder ($listorder, $orderdirection);
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	$query = "SELECT z.zoneid AS zoneid".
+		",z.affiliateid AS affiliateid".
+		",z.zonename AS zonename".
+		",z.delivery AS delivery".
+		",z.what AS what".
+		" FROM ".$phpAds_config['tbl_zones']." AS z".
+		",".$phpAds_config['tbl_affiliates']." AS a".
+		" WHERE z.affiliateid=a.affiliateid".
+		" AND a.agencyid=".phpAds_getAgencyID().
+		phpAds_getZoneListOrder ($listorder, $orderdirection);
+}
+elseif (phpAds_isUser(phpAds_Client))
+{
+	$query = "SELECT z.zoneid AS zoneid".
+		",z.affiliateid AS affiliateid".
+		",z.zonename AS zonename".
+		",z.delivery AS delivery".
+		",z.what AS what".
+		" FROM ".$phpAds_config['tbl_zones']." AS z".
+		",".$phpAds_config['tbl_affiliates']." AS a".
+		" WHERE z.affiliateid=a.affiliateid".
+		" AND a.agencyid=".phpAds_getAgencyID().
+		phpAds_getZoneListOrder ($listorder, $orderdirection);
+}
+$res_zones = phpAds_dbQuery($query)
+	or phpAds_sqlDie();
 
 while ($row_zones = phpAds_dbFetchArray($res_zones))
 {
@@ -315,6 +425,8 @@ $totalclicks += $manual['clicks'];
 $totalconversions += $manual['conversions'];
 $totalviews += $manual['views'];
 
+/*
+// dropdown menu to select either zone or source
 echo "\t\t\t\t<form action='".$HTTP_SERVER_VARS['PHP_SELF']."'>\n";
 echo "\t\t\t\t<input type='hidden' name='clientid' value='".$clientid."'>\n";
 echo "\t\t\t\t<input type='hidden' name='campaignid' value='".$campaignid."'>\n";
@@ -325,7 +437,7 @@ echo "\t\t\t\t</select>\n";
 
 phpAds_ShowBreak();
 echo "\t\t\t\t</form>\n";
-
+*/
 
 if ($totalviews > 0 || $totalclicks > 0 || $totalconversions > 0)
 {

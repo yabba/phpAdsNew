@@ -1,4 +1,4 @@
-<?php // $Revision: 2.10 $
+<?php // $Revision: 2.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -31,7 +31,7 @@ require (phpAds_path.'/libraries/defaults/config.template.php');
 
 
 // Register input variables
-require ("../libraries/lib-io.inc.php");
+require_once ("../libraries/lib-io.inc.php");
 phpAds_registerGlobal ('step', 'ignore', 'retry');
 
 
@@ -68,15 +68,15 @@ $link = phpAds_dbConnect();
 if (!$link)
 {
 	phpAds_PageHeader('');
-	phpAds_Die ("A fatal error occurred", $phpAds_productname." can't connect to the database, 
+	phpAds_Die ("A fatal error occurred", "phpAdsNew can't connect to the database, 
 										   please make sure the database is working 
-										   and ".$phpAds_productname." is configured correctly");
+										   and phpAdsNew is configured correctly");
 }
 else
 {
 	// Load settings from the database
 	// in case settings are stored in the database
-	phpAds_LoadDbConfig();
+	phpAds_LoadDbConfig(phpAds_getAgencyID());
 }
 
 

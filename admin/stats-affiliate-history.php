@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -21,12 +21,11 @@ require ("lib-expiration.inc.php");
 
 
 // Register input variables
-phpAds_registerGlobal ('period', 'start', 'limit', 'source');
+phpAds_registerGlobal ('period', 'start', 'limit');
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin+phpAds_Affiliate);
-
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency + phpAds_Affiliate);
 
 
 /*********************************************************/
@@ -37,6 +36,23 @@ if (phpAds_isUser(phpAds_Affiliate))
 {
 	$affiliateid = phpAds_getUserID();
 }
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	if (isset($affiliateid) && ($affiliateid != ''))
+	{
+		$query = "SELECT affiliateid".
+			" FROM ".$phpAds_config['tbl_affiliates'].
+			" WHERE affiliateid=".$affiliateid.
+			" AND agencyid=".phpAds_getUserID();
+
+		$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+		if (phpAds_dbNumRows($res) == 0)
+		{
+			phpAds_PageHeader("2");
+			phpAds_Die ($strAccessDenied, $strNotAdmin);
+		}
+	}
+}
 
 
 
@@ -44,14 +60,21 @@ if (phpAds_isUser(phpAds_Affiliate))
 /* HTML framework                                        */
 /*********************************************************/
 
-if (phpAds_isUser(phpAds_Admin))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 {
-	$res = phpAds_dbQuery("
-		SELECT
-			*
-		FROM
-			".$phpAds_config['tbl_affiliates']."
-	") or phpAds_sqlDie();
+	if (phpAds_isUser(phpAds_Admin))
+	{
+		$query = "SELECT affiliateid,name".
+			" FROM ".$phpAds_config['tbl_affiliates'];
+	}
+	elseif (phpAds_isUser(phpAds_Agency))
+	{
+		$query = "SELECT affiliateid,name".
+			" FROM ".$phpAds_config['tbl_affiliates'].
+			" WHERE agencyid=".phpAds_getUserID();
+	}
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
 	{

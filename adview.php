@@ -1,4 +1,4 @@
-<?php // $Revision: 2.13 $
+<?php // $Revision: 2.14 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -24,7 +24,7 @@ define ('phpAds_path', '.');
 /*********************************************************/
 
 require	(phpAds_path."/config.inc.php"); 
-require (phpAds_path."/libraries/lib-io.inc.php");
+require_once (phpAds_path."/libraries/lib-io.inc.php");
 require (phpAds_path."/libraries/lib-db.inc.php");
 
 if ($phpAds_config['log_adviews'] || $phpAds_config['acl'])
@@ -53,6 +53,7 @@ phpAds_registerGlobal (
 	,'source'
 	,'n'
 	,'what'
+	,'referer'	
 );
 
 
@@ -131,44 +132,25 @@ else
 if ($found)
 {
 	// Log this impression
-	if ($phpAds_config['block_adviews'] == 0 ||
-	   ($phpAds_config['block_adviews'] > 0 && 
-	   (!isset($HTTP_COOKIE_VARS['phpAds_blockView'][$row['bannerid']]) ||
-	   	$HTTP_COOKIE_VARS['phpAds_blockView'][$row['bannerid']] <= time())))
+	if (!phpAds_isViewBlocked($row['bannerid']))
 	{
 		if ($phpAds_config['log_adviews'])
 			phpAds_logImpression ($userid, $row['bannerid'], $row['zoneid'], $source);
 		
 		// Send block cookies
-		if ($phpAds_config['block_adviews'] > 0)
-			phpAds_setCookie ("phpAds_blockView[".$row['bannerid']."]", time() + $phpAds_config['block_adviews'],
-							  time() + $phpAds_config['block_adviews'] + 43200);
+		phpAds_updateViewBlockTime($row['bannerid']);
 	}
 	
 	
 	// Block
-	if ($row['block'] != '' && $row['block'] != '0')
-		phpAds_setCookie ("phpAds_blockAd[".$row['bannerid']."]", time() + $row['block'], time() + $row['block'] + 43200);
+	phpAds_updateAdBlockTime($row['bannerid'], $row['block']);
 	
 	
 	// Set capping
-	if ($row['capping'] != '' && $row['capping'] != '0')
-	{
-		if (isset($HTTP_COOKIE_VARS['phpAds_capAd']) && isset($HTTP_COOKIE_VARS['phpAds_capAd'][$row['bannerid']]))
-			$newcap = $HTTP_COOKIE_VARS['phpAds_capAd'][$row['bannerid']] + 1;
-		else
-			$newcap = 1;
-		
-		phpAds_setCookie ("phpAds_capAd[".$row['bannerid']."]", $newcap, time() + 31536000);
-	}
+	phpAds_updateAdCapping($row['bannerid'], $row['capping'], $row['session_capping']);
 	
-	
-	if ($phpAds_config['geotracking_type'] != '' && $phpAds_config['geotracking_cookie'])
-		if (!isset($HTTP_COOKIE_VARS['phpAds_geoInfo']) && $phpAds_geo)
-			phpAds_setCookie ("phpAds_geoInfo", 
-				($phpAds_geo['country'] ? $phpAds_geo['country'] : '').'|'.
-			   	($phpAds_geo['continent'] ? $phpAds_geo['continent'] : '').'|'.
-				($phpAds_geo['region'] ? $phpAds_geo['region'] : ''), 0);
+	// Set geotracking
+	phpAds_updateGeoTracking($phpAds_geo);
 	
 	
 	// Send bannerid headers
@@ -237,7 +219,9 @@ if ($found)
 			phpAds_setCookie ("phpAds_banner[".$n."]", serialize($cookie), 0);
 			phpAds_flushCookie ();
 			
-			if (($HTTP_SERVER_VARS['SERVER_PORT'] == 443) $row['imageurl'] = str_replace ('http://', 'https://', $row['imageurl']);
+			if ($HTTP_SERVER_VARS['SERVER_PORT'] == 443)
+				$row['imageurl'] = str_replace ($phpAds_config['type_web_url'], $phpAds_config['type_web_ssl_url'], $row['imageurl']);
+				
 			header 	  ("Location: ".$row['imageurl']);
 			break;
 		
@@ -249,6 +233,11 @@ if ($found)
 			phpAds_setCookie ("phpAds_banner[".$n."]", serialize($cookie), 0);
 			phpAds_flushCookie ();
 			
+			if ($HTTP_SERVER_VARS['SERVER_PORT'] == 443)
+				$phpAds_config['type_web_url'] = $phpAds_config['type_web_ssl_url'];
+				
+			$row['imageurl'] = str_replace ('{image_url_prefix}', $phpAds_config['type_web_url'], $row['imageurl']);
+
 			header 	  ("Location: ".$row['imageurl']);
 			break;
 		

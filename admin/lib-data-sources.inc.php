@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -17,9 +17,10 @@ function phpAds_getSources($name='', $parent='')
 		$query =
 			"SELECT".
 			" SUBSTRING_INDEX(SUBSTRING_INDEX(source,'/',".$n."),'/',-1) AS source_part".
-			",SUM(views) AS sum_views".
-			" FROM ".$phpAds_config['tbl_adstats'].
+			",COUNT(*) AS sum_views".
+			" FROM ".$phpAds_config['tbl_adviews'].
 			" WHERE source LIKE '".$parent."/%'".
+			" AND t_stamp > DATE_SUB(NOW(), INTERVAL 7 DAY)".
 			" GROUP BY source_part".
 			" ORDER BY sum_views DESC"
 		;
@@ -29,8 +30,9 @@ function phpAds_getSources($name='', $parent='')
 		$query =
 			"SELECT".
 			" SUBSTRING_INDEX(source, '/', 1) AS source_part".
-			",SUM(views) AS sum_views".
-			" FROM ".$phpAds_config['tbl_adstats'].
+			",COUNT(*) AS sum_views".
+			" FROM ".$phpAds_config['tbl_adviews'].
+			" WHERE t_stamp > DATE_SUB(NOW(), INTERVAL 7 DAY)".
 			" GROUP BY source_part".
 			" ORDER BY sum_views DESC"
 		;

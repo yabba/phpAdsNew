@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -53,7 +53,6 @@ while ($current = phpAds_dbFetchArray($res))
 			phpAds_ImageDelete ('sql', $filename);
 			
 			// Update fields
-			//$current['imageurl'] 	= $phpAds_config['type_web_url'].'/'.$current['filename'];
 			$current['imageurl'] 	= '{image_url_prefix}/'.$current['filename'];
 			$current['storagetype'] = 'web';
 			

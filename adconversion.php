@@ -1,4 +1,4 @@
-<?php // $Revision: 1.2 $
+<?php // $Revision: 1.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -24,12 +24,12 @@ define ('phpAds_path', '.');
 /*********************************************************/
 
 require	(phpAds_path."/config.inc.php"); 
-require (phpAds_path."/libraries/lib-io.inc.php");
+require_once (phpAds_path."/libraries/lib-io.inc.php");
 require (phpAds_path."/libraries/lib-db.inc.php");
 require (phpAds_path."/libraries/lib-remotehost.inc.php");
 require (phpAds_path."/libraries/lib-log.inc.php");
 require (phpAds_path."/libraries/lib-cache.inc.php");
-
+require (phpAds_path."/libraries/lib-view-tracker.inc.php");
 
 
 /*********************************************************/
@@ -39,6 +39,7 @@ require (phpAds_path."/libraries/lib-cache.inc.php");
 phpAds_registerGlobal (
 	 'block'
 	,'capping'
+	,'session_capping'
 	,'trackerid'
 );
 
@@ -50,13 +51,11 @@ phpAds_registerGlobal (
 
 // Determine the user ID
 $userid = phpAds_getUniqueUserID(false);
-// Send the user ID
-//phpAds_setCookie("phpAds_id", $userid, time()+365*24*60*60);
 
-if ($phpAds_config['block_adconversions'] == 0 ||
-   ($phpAds_config['block_adconversions'] > 0 && 
-   (!isset($HTTP_COOKIE_VARS['phpAds_blockConversion'][$trackerid]) ||
-   	$HTTP_COOKIE_VARS['phpAds_blockConversion'][$trackerid] <= time())))
+// Send the user ID
+// phpAds_setCookie("phpAds_id", $userid, time()+365*24*60*60);
+
+if (!phpAds_isConversionBlocked($trackerid))
 {
 	if ($phpAds_config['log_adconversions'])
 	{
@@ -65,19 +64,10 @@ if ($phpAds_config['block_adconversions'] == 0 ||
 	}
 	
 	// Send block cookies
-	if ($phpAds_config['block_adconversions'] > 0)
-		phpAds_setCookie ("phpAds_blockConversion[".$trackerid."]", time() + $phpAds_config['block_adconversions'],
-						  time() + $phpAds_config['block_adconversions'] + 43200);
+	phpAds_updateConversionBlockTime($trackerid);
 }
 
-
-if ($phpAds_config['geotracking_type'] != '' && $phpAds_config['geotracking_cookie'])
-	if (!isset($HTTP_COOKIE_VARS['phpAds_geoInfo']) && $phpAds_geo)
-		phpAds_setCookie ("phpAds_geoInfo", 
-			($phpAds_geo['country'] ? $phpAds_geo['country'] : '').'|'.
-		   	($phpAds_geo['continent'] ? $phpAds_geo['continent'] : '').'|'.
-			($phpAds_geo['region'] ? $phpAds_geo['region'] : ''), 0);
-
+phpAds_updateGeotracking($phpAds_geo);
 
 phpAds_flushCookie ();
 

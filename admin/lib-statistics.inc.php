@@ -1,4 +1,4 @@
-<?php // $Revision: 2.10 $
+<?php // $Revision: 2.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -59,7 +59,28 @@ function phpAds_getClientName ($clientid)
 	else
 		return ($strUntitled);
 }
+/*********************************************************/
+/* Fetch the agency name from the database               */
+/*********************************************************/
 
+function phpAds_getAgencyName ($id)
+{
+	global $phpAds_config;
+			
+		$res = phpAds_dbQuery("
+			SELECT
+				name
+			FROM
+				".$phpAds_config['tbl_agency']."
+			WHERE
+				agencyid = ".$id
+			) or phpAds_sqlDie(); 
+
+	$result = phpAds_dbFetchArray($res);
+	return $result['name'];
+
+
+}
 /*********************************************************/
 /* Fetch the campaign name from the database             */
 /*********************************************************/
@@ -328,6 +349,27 @@ function phpAds_getCampaignParentClientID ($campaignid)
 	return $campaign_details['clientid'];
 }
 
+/*********************************************************/
+/* Fetch the ID of the parent of a banner              */
+/*********************************************************/
+
+function phpAds_getBannerParentClientID ($bannerid)
+{
+	global $phpAds_config;
+
+	$banner_result = phpAds_dbQuery(
+					"SELECT 
+						campaignid
+					FROM 
+						".$phpAds_config['tbl_banners']."
+					WHERE
+						bannerid = ".$bannerid
+				);
+	
+	$result = phpAds_dbFetchArray($banner_result);
+
+	return $result['campaignid'];
+}
 
 /*********************************************************/
 /* Fetch the ID of the parent of a tracker               */

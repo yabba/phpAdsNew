@@ -1,4 +1,4 @@
-<?php // $Revision: 2.6 $
+<?php // $Revision: 2.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -35,8 +35,39 @@ phpAds_registerGlobal (
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin+phpAds_Client);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency + phpAds_Client);
 
+if (phpAds_isUser(phpAds_Agency))
+{
+	$query = "SELECT m.clientid as clientid, m.campaignid as campaignid".
+		" FROM ".$phpAds_config['tbl_clients']." AS c".
+		",".$phpAds_config['tbl_campaigns']." AS m".
+		" WHERE c.clientid=m.clientid".
+		" AND m.clientid=".$clientid.
+		" AND m.campaignid=".$campaignid.
+		" AND c.agencyid=".phpAds_getUserID();
+	$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+	if (phpAds_dbNumRows($res) == 0)
+	{
+		phpAds_PageHeader("2");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
+	}
+}
+elseif (phpAds_isUser(phpAds_Client))
+{
+	$clientid = phpAds_getUserID();
+	
+	$query = "SELECT clientid,campaignid".
+		" FROM ".$phpAds_config['tbl_clients'].
+		" WHERE clientid=".$clientid.
+		" AND m.campaignid=".$campaignid;
+	$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+	if (phpAds_dbNumRows($res) == 0)
+	{
+		phpAds_PageHeader("2");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
+	}
+}
 
 // Check to see if they are switching...
 if (isset($distributiontype) && ($distributiontype == 's') )
@@ -123,15 +154,27 @@ if (phpAds_isUser(phpAds_Client))
 		phpAds_Die ($strAccessDenied, $strNotAdmin);
 	}
 }
-
-if (phpAds_isUser(phpAds_Admin))
+elseif (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 {
-	$res = phpAds_dbQuery(
-		"SELECT *".
+	if (phpAds_isUser(phpAds_Admin))
+	{
+		$query = "SELECT campaignid,campaignname".
 		" FROM ".$phpAds_config['tbl_campaigns'].
-		" WHERE clientid = ".$clientid.
-		phpAds_getCampaignListOrder ($navorder, $navdirection)
-	) or phpAds_sqlDie();
+			" WHERE clientid=".$clientid.
+			phpAds_getCampaignListOrder($navorder,$navdirection);
+	}
+	elseif (phpAds_isUser(phpAds_Agency))
+	{
+		$query = "SELECT m.campaignid AS campaignid".
+			",m.campaignname AS campaignname".
+			" FROM ".$phpAds_config['tbl_campaigns']." AS m".
+			",".$phpAds_config['tbl_clients']." AS c".
+			" WHERE c.clientid=m.clientid".
+			" AND m.clientid=".$clientid.
+			phpAds_getCampaignListOrder($navorder,$navdirection);
+	}
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
 	{
@@ -329,6 +372,7 @@ $totalviews += $manual['views'];
 echo "\t\t\t\t<form action='".$HTTP_SERVER_VARS['PHP_SELF']."'>\n";
 echo "\t\t\t\t<input type='hidden' name='clientid' value='".$clientid."'>\n";
 echo "\t\t\t\t<input type='hidden' name='campaignid' value='".$campaignid."'>\n";
+echo "\t\t\t\t<input type='hidden' name='bannerid' value='".$bannerid."'>\n";
 echo "\t\t\t\t".$strDistributionBy." <select name='distributiontype' onChange='this.form.submit();' accesskey='".$keyList."' tabindex='".($tabindex++)."'>\n";
 echo "\t\t\t\t\t<option value='z' selected>".$strZone."</option>\n";
 echo "\t\t\t\t\t<option value='s'>".$strSource."</option>\n";
@@ -410,9 +454,9 @@ if ($totalviews > 0 || $totalclicks > 0 || $totalconversions > 0)
 				if (isset($affiliate['zones']) && !$anonymous)
 				{
 					if ($affiliate['expand'] == '1')
-						echo "&nbsp;<a href='stats-banner-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&collapse=".$affiliate['affiliateid']."'><img src='images/triangle-d.gif' align='absmiddle' border='0'></a>&nbsp;";
+						echo "&nbsp;<a href='stats-banner-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&bannerid=".$bannerid."&collapse=".$affiliate['affiliateid']."'><img src='images/triangle-d.gif' align='absmiddle' border='0'></a>&nbsp;";
 					else
-						echo "&nbsp;<a href='stats-banner-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&expand=".$affiliate['affiliateid']."'><img src='images/".$phpAds_TextDirection."/triangle-l.gif' align='absmiddle' border='0'></a>&nbsp;";
+						echo "&nbsp;<a href='stats-banner-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&bannerid=".$bannerid."&expand=".$affiliate['affiliateid']."'><img src='images/".$phpAds_TextDirection."/triangle-l.gif' align='absmiddle' border='0'></a>&nbsp;";
 				}
 				else
 					echo "&nbsp;<img src='images/spacer.gif' height='16' width='16'>&nbsp;";
@@ -546,10 +590,10 @@ if ($totalviews > 0 || $totalclicks > 0 || $totalconversions > 0)
 	echo "\t\t\t\t<tr>\n";
 	echo "\t\t\t\t\t<td colspan='7' align='".$phpAds_TextAlignRight."' nowrap>";
 	echo "<img src='images/triangle-d.gif' align='absmiddle' border='0'>";
-	echo "&nbsp;<a href='stats-banner-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&expand=all' accesskey='".$keyExpandAll."'>".$strExpandAll."</a>";
+	echo "&nbsp;<a href='stats-banner-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&bannerid=".$bannerid."&expand=all' accesskey='".$keyExpandAll."'>".$strExpandAll."</a>";
 	echo "&nbsp;&nbsp;|&nbsp;&nbsp;";
 	echo "<img src='images/".$phpAds_TextDirection."/triangle-l.gif' align='absmiddle' border='0'>";
-	echo "&nbsp;<a href='stats-banner-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&expand=none' accesskey='".$keyCollapseAll."'>".$strCollapseAll."</a>";
+	echo "&nbsp;<a href='stats-banner-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&bannerid=".$bannerid."&expand=none' accesskey='".$keyCollapseAll."'>".$strCollapseAll."</a>";
 	echo "</td>\n";
 	echo "\t\t\t\t</tr>";
 

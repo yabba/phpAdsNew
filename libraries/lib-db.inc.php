@@ -1,4 +1,4 @@
-<?php // $Revision: 2.7 $
+<?php // $Revision: 2.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -26,7 +26,7 @@ if ($phpAds_config['compatibility_mode'])
 	$phpAds_config['tbl_adconversions'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_adconversions'];
 	$phpAds_config['tbl_adstats'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_adstats'];
 	$phpAds_config['tbl_adviews'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_adviews'];
-	$phpAds_config['tbl_affiliates']= $phpAds_config['dbname'].".".$phpAds_config['tbl_affiliates'];
+	$phpAds_config['tbl_affiliates']			= $phpAds_config['dbname'].".".$phpAds_config['tbl_affiliates'];
 	$phpAds_config['tbl_banners'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_banners'];
 	$phpAds_config['tbl_cache'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_cache'];
 	$phpAds_config['tbl_campaigns'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_campaigns'];
@@ -40,6 +40,8 @@ if ($phpAds_config['compatibility_mode'])
 	$phpAds_config['tbl_trackers'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_trackers'];
 	$phpAds_config['tbl_userlog'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_userlog'];
 	$phpAds_config['tbl_zones'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_zones'];
+	$phpAds_config['tbl_variables'] 			= $phpAds_config['dbname'].".".$phpAds_config['tbl_variables'];
+	$phpAds_config['tbl_variablevalues'] 		= $phpAds_config['dbname'].".".$phpAds_config['tbl_variablevalues'];
 }
 
 // Disable delayed inserts when not using MyISAM tables

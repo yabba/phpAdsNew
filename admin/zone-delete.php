@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -24,7 +24,7 @@ phpAds_registerGlobal ('returnurl');
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin+phpAds_Affiliate);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency + phpAds_Affiliate);
 
 
 
@@ -56,18 +56,43 @@ if (isset($zoneid) && $zoneid != '')
 			$affiliateid = $row["affiliateid"];
 		}
 	}
+	elseif (phpAds_isUser(phpAds_Agency))
+	{
+		$query = "SELECT z.affiliateid AS affiliateid".
+			" FROM ".$phpAds_config['tbl_zones']." AS z".
+			",".$phpAds_config['tbl_affiliates']." AS a".
+			" WHERE z.affiliateid = a.affiliateid".
+			" AND a.agencyid=".phpAds_getUserID();
+	
+		$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+		if (phpAds_dbNumRows($res) == 0)
+		{
+			phpAds_PageHeader("2");
+			phpAds_Die ($strAccessDenied, $strNotAdmin);
+		}
+	}
 	
 	
 	// Reset append codes which called this zone
-	$res = phpAds_dbQuery("
-			SELECT
-				zoneid,
-				append
-			FROM
-				".$phpAds_config['tbl_zones']."
-			WHERE
-				appendtype = ".phpAds_ZoneAppendZone."
-		");
+	if (phpAds_isUser(phpAds_Admin))
+	{
+		$query = "SELECT zoneid,append".
+			" FROM ".$phpAds_config['tbl_zones'].
+			" WHERE appendtype=".phpAds_ZoneAppendZone;
+	}
+	elseif (phpAds_isUser(phpAds_Agency))
+	{
+		$query = "SELECT z.zoneid AS zoneid".
+			",z.append AS append".
+			" FROM ".$phpAds_config['tbl_zones']." AS z".
+			",".$phpAds_config['tbl_affiliates']." AS a".
+			" WHERE z.affiliateid = a.affiliateid".
+			" AND a.agencyid=".phpAds_getUserID().
+			" AND appendtype=".phpAds_ZoneAppendZone;
+	}
+	
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
 	{
@@ -82,7 +107,7 @@ if (isset($zoneid) && $zoneid != '')
 						appendtype = ".phpAds_ZoneAppendRaw.",
 						append = ''
 					WHERE
-						zoneid = '".$row['zoneid']."'
+						zoneid =".$row['zoneid']."
 				");
 		}
 	}
@@ -93,7 +118,7 @@ if (isset($zoneid) && $zoneid != '')
 		DELETE FROM
 			".$phpAds_config['tbl_zones']."
 		WHERE
-			zoneid = '$zoneid'
+			zoneid=$zoneid
 		") or phpAds_sqlDie();
 }
 

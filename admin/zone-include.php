@@ -1,4 +1,4 @@
-<?php // $Revision: 2.7 $
+<?php // $Revision: 2.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -33,7 +33,7 @@ phpAds_registerGlobal (
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin+phpAds_Affiliate);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency + phpAds_Affiliate);
 
 
 
@@ -41,24 +41,81 @@ phpAds_checkAccess(phpAds_Admin+phpAds_Affiliate);
 /* Affiliate interface security                          */
 /*********************************************************/
 
-if (phpAds_isUser(phpAds_Affiliate))
+if (phpAds_isUser(phpAds_Admin))
 {
-	$result = phpAds_dbQuery(
-		"SELECT affiliateid".
-		" FROM ".$phpAds_config['tbl_zones'].
-		" WHERE zoneid=".$zoneid
-	) or phpAds_sqlDie();
+	$query = "SELECT a.agencyid AS agencyid".
+		" FROM ".$phpAds_config['tbl_affiliates']." AS a".
+		",".$phpAds_config['tbl_zones']." AS z".
+		" WHERE z.affiliateid=".$affiliateid.
+		" AND z.zoneid=".$zoneid.
+		" AND z.affiliateid=a.affiliateid";
+	
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
+		
+	if ($row = phpAds_dbFetchArray($res))
+	{
+		$agencyid = $row['agencyid'];
+	}
+	else
+	{
+		phpAds_PageHeader("2");
+		phpAds_Die ($strAccessDenied, $strParametersWrong);
+	}
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	$agencyid = phpAds_getUserID();
+	
+	$query = "SELECT z.zoneid as zoneid".
+		" FROM ".$phpAds_config['tbl_affiliates']." AS a".
+		",".$phpAds_config['tbl_zones']." AS z".
+		" WHERE z.affiliateid=".$affiliateid.
+		" AND z.zoneid=".$zoneid.
+		" AND z.affiliateid=a.affiliateid".
+		" AND a.agencyid=".$agencyid;
+	
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
+		
+	if (phpAds_dbNumRows($res) == 0)
+	{
+		phpAds_PageHeader("2");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
+	}
+}
+elseif (phpAds_isUser(phpAds_Affiliate))
+{
+	if (phpAds_isAllowed(phpAds_LinkBanners))
+	{
+		$affiliateid = phpAds_getUserID();
+		
+		$query = "SELECT a.agencyid".
+			" FROM ".$phpAds_config['tbl_zones']." AS z".
+			",".$phpAds_config['tbl_affiliates']." AS a".
+			" WHERE z.affiliateid=a.affiliateid".
+			" AND z.zoneid=".$zoneid.
+			" AND a.affiliateid=".$affiliateid;
+			
+		$result = phpAds_dbQuery($query)
+			or phpAds_sqlDie();
 	
 	$row = phpAds_dbFetchArray($result);
 	
-	if ($row["affiliateid"] == '' || phpAds_getUserID() != $row["affiliateid"] || !phpAds_isAllowed(phpAds_LinkBanners))
+		if (phpAds_dbNumRows($res) == 0)
 	{
 		phpAds_PageHeader("1");
 		phpAds_Die ($strAccessDenied, $strNotAdmin);
 	}
 	else
 	{
-		$affiliateid = $row["affiliateid"];
+			$agencyid = $row["agencyid"];
+		}
+	}
+	else
+	{
+		phpAds_PageHeader("1");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
 	}
 }
 
@@ -74,7 +131,7 @@ if (isset($zoneid) && $zoneid != '')
 	{
 		// Update zonetype
 		$result = phpAds_dbQuery(
-			"SELECT *".
+			"SELECT zonetype".
 			" FROM ".$phpAds_config['tbl_zones'].
 			" WHERE zoneid=".$zoneid
 		) or phpAds_sqlDie();
@@ -225,7 +282,7 @@ while ($row = phpAds_dbFetchArray($res))
 	);
 }
 
-if (phpAds_isUser(phpAds_Admin))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 {
 	phpAds_PageShortcut($strAffiliateProperties, 'affiliate-edit.php?affiliateid='.$affiliateid, 'images/icon-affiliate.gif');
 	phpAds_PageShortcut($strZoneHistory, 'stats-zone-history.php?affiliateid='.$affiliateid.'&zoneid='.$zoneid, 'images/icon-statistics.gif');
@@ -245,11 +302,13 @@ if (phpAds_isUser(phpAds_Admin))
 	$extra .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"."\n";
 	$extra .= "<select name='moveto' style='width: 110;'>"."\n";
 	
-	$res = phpAds_dbQuery(
-		"SELECT *".
+	$query = "SELECT affiliateid,name".
 		" FROM ".$phpAds_config['tbl_affiliates'].
-		" WHERE affiliateid != ".$affiliateid
-	) or phpAds_sqlDie();
+		" WHERE affiliateid != ".$affiliateid.
+		" AND agencyid=".$agencyid;
+
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
 		$extra .= "\t"."<option value='".$row['affiliateid']."'>".phpAds_buildAffiliateName($row['affiliateid'], $row['name'])."</option>"."\n";
@@ -293,6 +352,7 @@ function phpAds_showZoneCampaign ($width, $height, $what, $delivery)
 {
 	global
 		 $affiliateid
+		,$agencyid
 		,$hideinactive
 		,$phpAds_config
 		,$phpAds_TextAlignRight
@@ -328,11 +388,18 @@ function phpAds_showZoneCampaign ($width, $height, $what, $delivery)
 		}
 	}
 	
-	// Fetch all campaigns
-	$res = phpAds_dbQuery(
-		"SELECT *".
-		" FROM ".$phpAds_config['tbl_campaigns']
-	) or phpAds_sqlDie();
+	// Fetch all campaigns for the agency
+	$query = "SELECT m.campaignid AS campaignid".
+		",m.campaignname as campaignname".
+		",m.clientid as clientid".
+		",m.active as active".
+		" FROM ".$phpAds_config['tbl_campaigns']." AS m".
+		",".$phpAds_config['tbl_clients']." AS c".
+		" WHERE m.clientid=c.clientid".
+		" AND c.agencyid=".$agencyid;
+	
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
 		$campaigns[$row['campaignid']] = $row;
@@ -341,25 +408,36 @@ function phpAds_showZoneCampaign ($width, $height, $what, $delivery)
 	
 	
 	// Fetch all banners which can be linked
-	$query = 
-		"SELECT *".
-		" FROM ".$phpAds_config['tbl_banners']
-	;
+	$query = "SELECT b.bannerid AS bannerid".
+		",b.campaignid AS campaignid".
+		",b.alt AS alt".
+		",b.description AS description".
+		",b.active AS active".
+		",b.storagetype AS storagetype".
+		",b.contenttype AS contenttype".
+		",b.width AS width".
+		",b.height AS height".
+		" FROM ".$phpAds_config['tbl_banners']." AS b".
+		",".$phpAds_config['tbl_campaigns']." AS m".
+		",".$phpAds_config['tbl_clients']." AS c".
+		" WHERE b.campaignid=m.campaignid".
+		" AND m.clientid=c.clientid".
+		" AND c.agencyid=".$agencyid;
 	
 	if ($delivery != phpAds_ZoneText)
 	{
 		if ($width != -1 && $height != -1)
-			$query .= " WHERE width = $width AND height = $height AND contenttype != 'txt'";
+			$query .= " AND width = $width AND height = $height AND contenttype != 'txt'";
 		elseif ($width != -1)
-			$query .= " WHERE width = $width AND contenttype != 'txt'";
+			$query .= " AND width = $width AND contenttype != 'txt'";
 		elseif ($height != -1)
-			$query .= " WHERE height = $height AND contenttype != 'txt'";
+			$query .= " AND height = $height AND contenttype != 'txt'";
 		else
-			$query .= " WHERE contenttype != 'txt'";
+			$query .= " AND contenttype != 'txt'";
 	}
 	else
 	{
-		$query .= " WHERE contenttype = 'txt'";
+		$query .= " AND contenttype = 'txt'";
 	}
 	
 	$query .= " ORDER BY bannerid";
@@ -398,10 +476,12 @@ function phpAds_showZoneCampaign ($width, $height, $what, $delivery)
 			echo "<option value='' selected></option>"."\n";
 		
 		// Fetch all campaigns
-		$res = phpAds_dbQuery(
-			"SELECT *".
-			" FROM ".$phpAds_config['tbl_clients']
-		) or phpAds_sqlDie();
+		$query = "SELECT clientid,clientname".
+			" FROM ".$phpAds_config['tbl_clients'].
+			" WHERE agencyid=".$agencyid;
+		
+		$res = phpAds_dbQuery($query)
+			or phpAds_sqlDie();
 		
 		while ($row = phpAds_dbFetchArray($res))
 		{
@@ -428,7 +508,7 @@ function phpAds_showZoneCampaign ($width, $height, $what, $delivery)
 			
 			// Fetch all campaigns
 			$res = phpAds_dbQuery(
-				"SELECT *".
+				"SELECT campaignid,campaignname,active".
 				" FROM ".$phpAds_config['tbl_campaigns'].
 				" WHERE	clientid = ".$GLOBALS['clientid']
 			) or phpAds_sqlDie();
@@ -520,7 +600,7 @@ function phpAds_showZoneCampaign ($width, $height, $what, $delivery)
 				
 				
 				// Name
-				if (phpAds_isUser(phpAds_Admin))
+				if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 				{
 					echo "<a href='campaign-edit.php?clientid=".$campaign['clientid']."&campaignid=".$campaign['campaignid']."'>";
 					echo phpAds_breakString ($campaign['campaignname'], '60')."</a>";
@@ -593,7 +673,7 @@ function phpAds_showZoneCampaign ($width, $height, $what, $delivery)
 						
 						
 						// Name
-						if (phpAds_isUser(phpAds_Admin))
+						if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 						{
 							echo "<a href='banner-edit.php?clientid=".$campaign['clientid']."&campaignid=".$campaign['campaignid']."&bannerid=".$banner['bannerid']."'>";
 							echo $name."</a>"."\n";
@@ -693,6 +773,7 @@ function phpAds_showZoneBanners ($width, $height, $what, $zonetype, $delivery)
 		,$showcampaigns
 		,$hideinactive
 		,$affiliateid
+		,$agencyid
 		,$zoneid
 		,$strName
 		,$strID
@@ -762,35 +843,53 @@ function phpAds_showZoneBanners ($width, $height, $what, $zonetype, $delivery)
 	}
 	
 	// Fetch all campaigns
-	$res = phpAds_dbQuery(
-		"SELECT *".
-		" FROM ".$phpAds_config['tbl_campaigns']
-	) or phpAds_sqlDie();
+	$query = "SELECT m.campaignid AS campaignid".
+		",m.clientid AS clientid".
+		",m.campaignname AS campaignname".
+		",m.active AS active".
+		" FROM ".$phpAds_config['tbl_campaigns']." AS m".
+		",".$phpAds_config['tbl_clients']." AS c".
+		" WHERE m.clientid=c.clientid".
+		" AND c.agencyid=".$agencyid;
+	
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
 		$campaigns[$row['campaignid']] = $row;
 	
 	
 	// Fetch all banners which can be linked
-	$query =
-		"SELECT	*".
-		" FROM ".$phpAds_config['tbl_banners']
-	;
+	$query = "SELECT b.bannerid AS bannerid".
+		",b.campaignid AS campaignid".
+		",b.alt AS alt".
+		",b.description AS description".
+		",b.active AS active".
+		",b.storagetype AS storagetype".
+		",b.contenttype AS contenttype".
+		",b.width AS width".
+		",b.height AS height".
+		" FROM ".$phpAds_config['tbl_banners']." AS b".
+		",".$phpAds_config['tbl_campaigns']." AS m".
+		",".$phpAds_config['tbl_clients']." AS c".
+		" WHERE b.campaignid=m.campaignid".
+		" AND m.clientid=c.clientid".
+		" AND c.agencyid=".$agencyid;
 	
 	if ($delivery != phpAds_ZoneText)
 	{
 		if ($width != -1 && $height != -1)
-			$query .= " WHERE width = $width AND height = $height AND contenttype != 'txt'";
+			$query .= " AND width = $width AND height = $height AND contenttype != 'txt'";
 		elseif ($width != -1)
-			$query .= " WHERE width = $width AND contenttype != 'txt'";
+			$query .= " AND width = $width AND contenttype != 'txt'";
 		elseif ($height != -1)
-			$query .= " WHERE height = $height AND contenttype != 'txt'";
+			$query .= " AND height = $height AND contenttype != 'txt'";
 		else
-			$query .= " WHERE contenttype != 'txt'";
+			$query .= " AND contenttype != 'txt'";
 	}
 	else
 	{
-		$query .= " WHERE contenttype = 'txt'";
+		$query .= " AND contenttype = 'txt'";
 	}
 	
 	$query .= " ORDER BY bannerid";
@@ -832,10 +931,12 @@ function phpAds_showZoneBanners ($width, $height, $what, $zonetype, $delivery)
 			echo "<option value='' selected></option>"."\n";
 		
 		// Fetch all advertisers
-		$res = phpAds_dbQuery(
-			"SELECT	*".
-			" FROM ".$phpAds_config['tbl_clients']
-		) or phpAds_sqlDie();
+		$query = "SELECT clientid,clientname".
+			" FROM ".$phpAds_config['tbl_clients'].
+			" WHERE agencyid=".$agencyid;
+
+		$res = phpAds_dbQuery($query)
+			or phpAds_sqlDie();
 		
 		while ($row = phpAds_dbFetchArray($res))
 		{
@@ -864,7 +965,7 @@ function phpAds_showZoneBanners ($width, $height, $what, $zonetype, $delivery)
 			
 			// Fetch all campaigns
 			$res = phpAds_dbQuery(
-				"SELECT *".
+				"SELECT campaignid,campaignname".
 				" FROM ".$phpAds_config['tbl_campaigns'].
 				" WHERE clientid=".$GLOBALS['clientid']
 			) or phpAds_sqlDie();
@@ -1007,9 +1108,9 @@ function phpAds_showZoneBanners ($width, $height, $what, $zonetype, $delivery)
 					
 					
 					// Name
-					if (phpAds_isUser(phpAds_Admin))
+					if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 					{
-						echo "<a href='campaign-edit.php?clientid=".$campaign['clientid']."&campaignid=".$campaign['clientid']."'>"."\n";
+						echo "<a href='campaign-edit.php?clientid=".$campaign['clientid']."&campaignid=".$campaign['campaignid']."'>"."\n";
 						echo phpAds_breakString ($campaign['campaignname'], '60')."</a>"."\n";
 					}
 					else
@@ -1110,7 +1211,7 @@ function phpAds_showZoneBanners ($width, $height, $what, $zonetype, $delivery)
 						}
 						
 						// Name
-						if (phpAds_isUser(phpAds_Admin))
+						if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 						{
 							echo "<a href='banner-edit.php?clientid=".$campaign['clientid']."&campaignid=".$campaign['campaignid']."&bannerid=".$banner['bannerid']."'>"."\n";
 							echo $name."</a></td>"."\n";

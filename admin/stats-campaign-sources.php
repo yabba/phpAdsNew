@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -32,7 +32,7 @@ phpAds_registerGlobal (
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin+phpAds_Client);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency + phpAds_Client);
 
 // Check to see if they are switching...
 if (isset($distributiontype) && ($distributiontype == 'z') )
@@ -85,7 +85,7 @@ if (phpAds_isUser(phpAds_Client))
 	if (phpAds_getUserID() == phpAds_getCampaignParentClientID ($campaignid))
 	{
 		$res = phpAds_dbQuery(
-			"SELECT *".
+			"SELECT campaignid,campaignname".
 			" FROM ".$phpAds_config['tbl_campaigns'].
 			" WHERE clientid = ".phpAds_getUserID().
 			phpAds_getCampaignListOrder ($navorder, $navdirection)
@@ -110,15 +110,28 @@ if (phpAds_isUser(phpAds_Client))
 		phpAds_Die ($strAccessDenied, $strNotAdmin);
 	}
 }
-
-if (phpAds_isUser(phpAds_Admin))
+elseif (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 {
-	$res = phpAds_dbQuery(
-		"SELECT *".
+	if (phpAds_isUser(phpAds_Admin))
+	{
+		$query = "SELECT campaignid,campaignname".
 		" FROM ".$phpAds_config['tbl_campaigns'].
-		" WHERE clientid = ".$clientid.
-		phpAds_getCampaignListOrder ($navorder, $navdirection)
-	) or phpAds_sqlDie();
+			" WHERE clientid=".$clientid.
+			phpAds_getCampaignListOrder ($navorder, $navdirection);
+	}
+	elseif (phpAds_isUser(phpAds_Agency))
+	{
+		$query = "SELECT m.campaignid AS campaignid".
+			",m.campaignname AS campaignname".
+			" FROM ".$phpAds_config['tbl_campaigns']." AS m".
+			",".$phpAds_config['tbl_clients']." AS c".
+			" WHERE m.clientid=c.clientid".
+			" AND m.clientid=".$clientid.
+			" AND c.agencyid=".phpAds_getUserID().
+			phpAds_getCampaignListOrder ($navorder, $navdirection);
+	}
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
 	{

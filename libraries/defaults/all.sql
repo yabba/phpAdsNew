@@ -24,9 +24,7 @@ CREATE TABLE phpads_adclicks (
    host varchar(255) NOT NULL,
    source varchar(50) NOT NULL,
    country char(2) NOT NULL,
-   KEY bannerid_date (bannerid,t_stamp),
-   KEY date (t_stamp),
-   KEY user (userid)
+   KEY date (t_stamp)
 );
 
 
@@ -34,15 +32,14 @@ CREATE TABLE phpads_adclicks (
 
 
 CREATE TABLE phpads_adconversions (
+   conversionid BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
    userid varchar(32) NOT NULL,
    trackerid mediumint(9) DEFAULT '0' NOT NULL,
    t_stamp timestamp(14),
    host varchar(255) NOT NULL,
    country char(2) NOT NULL,
    conversionlogid mediumint(9) DEFAULT '0' NOT NULL,
-   KEY trackerid_date (trackerid,t_stamp),
-   KEY date (t_stamp),
-   KEY user (userid)
+   PRIMARY KEY (conversionid)
 );
 
 
@@ -57,9 +54,8 @@ CREATE TABLE phpads_adstats (
   hour tinyint(4) DEFAULT '0' NOT NULL,
   bannerid smallint(6) DEFAULT '0' NOT NULL,
   zoneid smallint(6) DEFAULT '0' NOT NULL,
-  source varchar(50) NOT NULL,
-  PRIMARY KEY (day,hour,bannerid,zoneid,source),
-  KEY bannerid_day (bannerid,day)
+  PRIMARY KEY (day,hour,bannerid,zoneid),
+  KEY day (day)
 );
 
 
@@ -74,17 +70,15 @@ CREATE TABLE phpads_adviews (
    host varchar(255) NOT NULL,
    source varchar(50) NOT NULL,
    country char(2) NOT NULL,
-   KEY bannerid_date (bannerid,t_stamp),
-   KEY date (t_stamp),
-   KEY user (userid)
+   KEY date (t_stamp)
 );
 
 
 -- Table structure for table 'phpads_affiliates'
 
-
 CREATE TABLE phpads_affiliates (
    affiliateid mediumint(9) NOT NULL AUTO_INCREMENT,
+   agencyid mediumint(9) DEFAULT '0' NOT NULL,
    name varchar(255) NOT NULL,
    contact varchar(255),
    email varchar(64) NOT NULL,
@@ -95,6 +89,21 @@ CREATE TABLE phpads_affiliates (
    language varchar(64),
    publiczones enum('t','f') DEFAULT 'f' NOT NULL,
    PRIMARY KEY (affiliateid)
+);
+
+
+-- Table structure for table 'phpads_agency'
+
+CREATE TABLE phpads_agency (
+   agencyid mediumint(9) NOT NULL AUTO_INCREMENT,
+   name varchar(255) NOT NULL,
+   contact varchar(255),
+   email varchar(64) NOT NULL,
+   username varchar(64),
+   password varchar(64),
+   permissions mediumint(9),
+   language varchar(64),
+   PRIMARY KEY (agencyid)
 );
 
 
@@ -125,8 +134,10 @@ CREATE TABLE phpads_banners (
    bannertext blob NOT NULL,
    description varchar(255) NOT NULL,
    autohtml enum('t','f') DEFAULT 't' NOT NULL,
+   adserver varchar(50) NOT NULL,
    block int(11) DEFAULT '0' NOT NULL,
    capping int(11) DEFAULT '0' NOT NULL,
+   session_capping int(11) DEFAULT '0' NOT NULL,
    compiledlimitation blob NOT NULL,
    append blob NOT NULL,
    appendtype tinyint(4) DEFAULT '0' NOT NULL,
@@ -156,9 +167,9 @@ CREATE TABLE phpads_campaigns (
    campaignid mediumint(9) NOT NULL AUTO_INCREMENT,
    campaignname varchar(255) NOT NULL,
    clientid mediumint(9) DEFAULT '0' NOT NULL,
-   views mediumint(9) DEFAULT '-1',
-   clicks mediumint(9) DEFAULT '-1',
-   conversions mediumint(9) DEFAULT '-1',
+   views int(11) DEFAULT '-1',
+   clicks int(11) DEFAULT '-1',
+   conversions int(11) DEFAULT '-1',
    expire date DEFAULT '0000-00-00',
    activate date DEFAULT '0000-00-00',
    active enum('t','f') DEFAULT 't' NOT NULL,
@@ -192,6 +203,7 @@ CREATE TABLE phpads_campaigns_trackers (
 
 CREATE TABLE phpads_clients (
    clientid mediumint(9) NOT NULL AUTO_INCREMENT,
+   agencyid mediumint(9) DEFAULT '0' NOT NULL,
    clientname varchar(255) NOT NULL,
    contact varchar(255),
    email varchar(64) NOT NULL,
@@ -211,7 +223,7 @@ CREATE TABLE phpads_clients (
 
 
 CREATE TABLE phpads_config (
-   configid tinyint(2) DEFAULT '0' NOT NULL,
+   agencyid tinyint(2) DEFAULT '0' NOT NULL,
    config_version decimal(7,3) DEFAULT '0.000' NOT NULL,
    table_border_color varchar(7) DEFAULT '#000099',
    table_back_color varchar(7) DEFAULT '#CCCCCC',
@@ -238,6 +250,10 @@ CREATE TABLE phpads_config (
    admin_pw varchar(64) DEFAULT 'phpadspass',
    admin_fullname varchar(255) DEFAULT 'Your Name',
    admin_email varchar(64) DEFAULT 'your@email.com',
+   warn_admin enum('t','f') DEFAULT 't',
+   warn_agency enum('t','f') DEFAULT 't',
+   warn_client enum('t','f') DEFAULT 't',
+   warn_limit mediumint(9) DEFAULT'0' NOT NULL,
    admin_email_headers varchar(64),
    admin_novice enum('t','f') DEFAULT 't',
    default_banner_weight tinyint(4) DEFAULT '1',
@@ -262,6 +278,7 @@ CREATE TABLE phpads_config (
    updates_timestamp int(11) DEFAULT '0',
    updates_last_seen decimal(7,3) DEFAULT '0.000',
    allow_invocation_plain enum('t','f') DEFAULT 'f',
+   allow_invocation_plain_nocookies enum('t','f') DEFAULT 't',
    allow_invocation_js enum('t','f') DEFAULT 't',
    allow_invocation_frame enum('t','f') DEFAULT 'f',
    allow_invocation_xmlrpc enum('t','f') DEFAULT 'f',
@@ -275,9 +292,10 @@ CREATE TABLE phpads_config (
    auto_clean_tables_vacuum enum('t','f') DEFAULT 't',
    autotarget_factor float DEFAULT '-1',
    maintenance_timestamp int(11) DEFAULT '0',
+   compact_stats enum('t','f') DEFAULT 't',
    statslastday date DEFAULT '0000-00-00' NOT NULL,
    statslasthour tinyint(4) DEFAULT '0' NOT NULL,
-   PRIMARY KEY (configid)
+   PRIMARY KEY (agencyid)
 );
 
 
@@ -333,11 +351,13 @@ CREATE TABLE phpads_session (
 
 CREATE TABLE phpads_targetstats (
    day date DEFAULT '0000-00-00' NOT NULL,
+   hour tinyint(4) DEFAULT '0' NOT NULL,
    campaignid smallint(6) DEFAULT '0' NOT NULL,
+   zoneid smallint(6) DEFAULT '0' NOT NULL,
    target int(11) DEFAULT '0' NOT NULL,
    views int(11) DEFAULT '0' NOT NULL,
    modified tinyint(4) DEFAULT '0' NOT NULL,
-   PRIMARY KEY (day,campaignid)
+   PRIMARY KEY (day,hour,campaignid,zoneid)
 );
 
 
@@ -368,6 +388,32 @@ CREATE TABLE phpads_userlog (
    object mediumint(9),
    details blob,
    PRIMARY KEY (userlogid)
+);
+
+
+-- Table structure for table 'phpads_variables'
+
+
+CREATE TABLE phpads_variables (
+   variableid mediumint(9) UNSIGNED NOT NULL AUTO_INCREMENT,
+   trackerid varchar(32) NOT NULL,
+   name varchar(250) NOT NULL,
+   description varchar(250),
+   variabletype enum('js','qs') NOT NULL,
+   datatype enum('int','string') NOT NULL,
+   PRIMARY KEY (variableid)
+);
+
+
+-- Table structure for table 'phpads_variablevalues'
+
+
+CREATE TABLE phpads_variablevalues (
+   valueid mediumint(9) UNSIGNED NOT NULL AUTO_INCREMENT,
+   variableid mediumint(9) NOT NULL,
+   value varchar(50) NULL,
+   conversionsid BIGINT(20) UNSIGNED NOT NULL,
+   PRIMARY KEY (valueid)
 );
 
 

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.10 $
+<?php // $Revision: 2.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -51,6 +51,7 @@ phpAds_registerGlobal (
 	,'what'
 	,'width'
 	,'withtext'
+	,'bannerid'
 );
 
 // Load translations
@@ -101,6 +102,7 @@ function phpAds_GenerateInvocationCode()
 		,$what
 		,$width
 		,$withtext
+		,$bannerid
 	;
 	
 	// Check if affiliate is on the same server
@@ -140,8 +142,12 @@ function phpAds_GenerateInvocationCode()
 	if (isset($source) && $source != '')
 		$parameters['source'] = "source=".urlencode($source);
 	
+	if (isset($bannerid) && $bannerid != '')
+		$parameters['bannerid'] = "bannerid=".urlencode($bannerid);
 	
 	// Remote invocation
+	
+	// Remote invocation - regular 
 	if ($codetype=='adview')
 	{
 		if (isset($uniqueid) && $uniqueid != '')
@@ -160,6 +166,28 @@ function phpAds_GenerateInvocationCode()
 		$buffer .= "' border='0' alt=''></a>\n";
 	}
 	
+	// Remote invocation - no cookies
+	else if ($codetype=='adviewnocookies')
+	{
+		if (isset($uniqueid) && $uniqueid != '')
+			$parameters[] = "n=".$uniqueid;	
+		
+		$buffer .= "<a href='".$phpAds_config['url_prefix']."/adclick.php";
+		//$buffer .= "?n=".$uniqueid;	
+		$buffer .= "?bannerid=" . $bannerid;
+		$buffer .= "'";
+		if (isset($target) && $target != '')
+			$buffer .= " target='".$target."'";
+		else
+			$buffer .= " target='_blank'";
+		$buffer .= "><img src='".$phpAds_config['url_prefix']."/adview.php";
+		
+		$parameters['what'] = "what=bannerid:" . $bannerid;
+		
+		if (sizeof($parameters) > 0)
+			$buffer .= "?" . implode ("&amp;", $parameters);
+		$buffer .= "' border='0' alt=''></a>\n";
+	}
 	
 	// Set parameters
 	if (isset($target) && $target != '')
@@ -473,6 +501,19 @@ function phpAds_generateTrackerCode()
 	return $buffer;
 }
 
+function phpAds_generateJavascriptTrackerCode()
+{
+	global $trackerid, $phpAds_config;
+
+	$buffer  = "<script language='JavaScript' type='text/javascript'>\n";
+	$buffer .= "\tdocument.write (\"<\" + \"script language='JavaScript' type='text/javascript' src='\");\n";
+	$buffer .= "\tdocument.write (\"".$phpAds_config['url_prefix']."/adconversionjs.php?trackerid=".$trackerid."\");\n";
+	$buffer .= "\tdocument.write (\"'><\" + \"/script>\");\n";
+	$buffer .= "</script>";
+	
+	return $buffer;
+
+}
 
 
 /*********************************************************/
@@ -520,6 +561,7 @@ function phpAds_placeInvocationForm($extra = '', $zone_invocation = false)
 		,$what
 		,$width
 		,$withtext
+		,$bannerid
 	;
 	
 	
@@ -550,6 +592,7 @@ function phpAds_placeInvocationForm($extra = '', $zone_invocation = false)
 		$allowed['adframe']  = $phpAds_config['allow_invocation_frame'];
 		$allowed['adjs'] 	 = $phpAds_config['allow_invocation_js'];
 		$allowed['adview'] 	 = $phpAds_config['allow_invocation_plain'];
+		$allowed['adviewnocookies']  = $phpAds_config['allow_invocation_plain_nocookies'];
 		$allowed['local'] 	 = $phpAds_config['allow_invocation_local'];
 		
 		if (is_array($extra)) $allowed['popup'] = false;
@@ -567,6 +610,7 @@ function phpAds_placeInvocationForm($extra = '', $zone_invocation = false)
 			$allowed['popup'] =
 			$allowed['adframe'] =
 			$allowed['adview'] = false;
+			$allowed['adviewnocookies'] = false;
 		}
 		
 		if (!isset($codetype) || $allowed[$codetype] == false)
@@ -585,6 +629,7 @@ function phpAds_placeInvocationForm($extra = '', $zone_invocation = false)
 		echo "<select name='codetype' onChange=\"this.form.submit()\" accesskey=".$GLOBALS['keyList']." tabindex='".($tabindex++)."'>";
 		
 		if ($allowed['adview'])  echo "<option value='adview'".($codetype == 'adview' ? ' selected' : '').">".$GLOBALS['strInvocationRemote']."</option>";
+		if ($allowed['adviewnocookies'])  echo "<option value='adviewnocookies'".($codetype == 'adviewnocookies' ? ' selected' : '').">".$GLOBALS['strInvocationRemoteNoCookies']."</option>";
 		if ($allowed['adjs'])    echo "<option value='adjs'".($codetype == 'adjs' ? ' selected' : '').">".$GLOBALS['strInvocationJS']."</option>";
 		if ($allowed['adframe']) echo "<option value='adframe'".($codetype == 'adframe' ? ' selected' : '').">".$GLOBALS['strInvocationIframes']."</option>";
 		if ($allowed['xmlrpc'])  echo "<option value='xmlrpc'".($codetype == 'xmlrpc' ? ' selected' : '').">".$GLOBALS['strInvocationXmlRpc']."</option>";
@@ -619,7 +664,7 @@ function phpAds_placeInvocationForm($extra = '', $zone_invocation = false)
 		include ('../libraries/layerstyles/'.$layerstyle.'/invocation.inc.php');
 	}
 	
-	
+	//
 	
 	if ($codetype != '')
 	{
@@ -654,19 +699,26 @@ function phpAds_placeInvocationForm($extra = '', $zone_invocation = false)
 		// Hide when integrated in zone-advanced.php
 		if (!(is_array($extra) && isset($extra['zoneadvanced']) && $extra['zoneadvanced']))
 		{
+		
 			// Header
+
+			//Parameters Section
 			echo "<table border='0' width='100%' cellpadding='0' cellspacing='0'>";
 			echo "<tr><td height='25' colspan='3'><img src='images/icon-overview.gif' align='absmiddle'>&nbsp;<b>".$GLOBALS['strParameters']."</b></td></tr>";
 			echo "<tr height='1'><td width='30'><img src='images/break.gif' height='1' width='30'></td>";
 			echo "<td width='200'><img src='images/break.gif' height='1' width='200'></td>";
 			echo "<td width='100%'><img src='images/break.gif' height='1' width='100%'></td></tr>";
-			echo "<tr".($zone_invocation ? '' : " bgcolor='#F6F6F6'")."><td height='10' colspan='3'>&nbsp;</td></tr>";
+			echo "<tr".($zone_invocation || $codetype == 'adviewnocookies' ? '' : " bgcolor='#F6F6F6'")."><td height='10' colspan='3'>&nbsp;</td></tr>";
+			//echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>";			
 		}
 		
 		
 		
 		if ($codetype == 'adview')
 			$show = array ('what' => true, 'clientid' => true, 'campaignid' => true, 'target' => true, 'source' => true);
+		
+		if ($codetype == 'adviewnocookies')
+			$show = array ('what' => true, 'clientid' => true, 'campaignid' => true, 'target' => true, 'source' => true, 'bannerid' => true);
 		
 		if ($codetype == 'adjs')
 			$show = array ('what' => true, 'clientid' => true, 'campaignid' => true, 'block' => true, 'target' => true, 'source' => true, 'withtext' => true, 'blockcampaign' => true);
@@ -692,7 +744,7 @@ function phpAds_placeInvocationForm($extra = '', $zone_invocation = false)
 		
 		
 		// What
-		if (!$zone_invocation && isset($show['what']) && $show['what'] == true)
+		if (!$zone_invocation && isset($show['what']) && $show['what'] == true  && $codetype != 'adviewnocookies')
 		{
 			echo "<tr bgcolor='#F6F6F6'><td width='30'>&nbsp;</td>";
 			echo "<td width='200' valign='top'>".$GLOBALS['strInvocationWhat']."</td><td width='370'>";
@@ -701,7 +753,7 @@ function phpAds_placeInvocationForm($extra = '', $zone_invocation = false)
 			echo "<td bgcolor='#F6F6F6' colspan='2'><img src='images/break-l.gif' height='1' width='200' vspace='6'></td></tr>";
 		}
 		
-		
+		/* Remove advetiser from direct invocation - not needed
 		// ClientID
 		if (!$zone_invocation && isset($show['clientid']) && $show['clientid'] == true)
 		{
@@ -731,9 +783,11 @@ function phpAds_placeInvocationForm($extra = '', $zone_invocation = false)
 			echo "<tr bgcolor='#F6F6F6'><td width='30'><img src='images/spacer.gif' height='1' width='100%'></td>";
 			echo "<td bgcolor='#F6F6F6' colspan='2'><img src='images/break-l.gif' height='1' width='200' vspace='6'></td></tr>";
 		}
+		*/
+		
 		
 		// CampaignID
-		if (!$zone_invocation && isset($show['campaignid']) && $show['campaignid'] == true)
+		if (!$zone_invocation && isset($show['campaignid']) && $show['campaignid'] == true && $codetype != 'adviewnocookies')
 		{
 			// Display available campaigns...
 			echo "<tr bgcolor='#F6F6F6'><td width='30'>&nbsp;</td>\n";
@@ -741,10 +795,22 @@ function phpAds_placeInvocationForm($extra = '', $zone_invocation = false)
 			echo "<select name='campaignid' style='width:350px;' tabindex='".($tabindex++)."'>\n";
 				echo "<option value='0'>-</option>\n";
 
-			$res = phpAds_dbQuery(
-				"SELECT campaignid, campaignname".
-				" FROM ".$phpAds_config['tbl_campaigns']
-			) or phpAds_sqlDie();
+			if (phpAds_isUser(phpAds_Admin))
+			{
+				$query = "SELECT campaignid,campaignname".
+					" FROM ".$phpAds_config['tbl_campaigns'];
+			}
+			elseif (phpAds_isUser(phpAds_Agency))
+			{
+				$query = "SELECT m.campaignid AS campaignid".
+					",m.campaignname AS campaignname".
+					" FROM ".$phpAds_config['tbl_campaigns']." AS m".
+					",".$phpAds_config['tbl_clients']." AS c".
+					" WHERE m.clientid=c.clientid".
+					" AND c.agencyid=".phpAds_getAgencyID();
+			}
+			$res = phpAds_dbQuery($query)
+				or phpAds_sqlDie();
 				
 			while ($row = phpAds_dbFetchArray($res))
 			{
@@ -760,6 +826,16 @@ function phpAds_placeInvocationForm($extra = '', $zone_invocation = false)
 			echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>";
 		}
 		
+		// BannerID
+		if (isset($show['bannerid']) && $show['bannerid'] == true)
+		{
+			echo "<tr><td width='30'>&nbsp;</td>";
+			echo "<td width='200'>".$GLOBALS['strInvocationBannerID']."</td><td width='370'>";
+				echo "<input class='flat' type='text' name='bannerid' size='' value='".(isset($bannerid) ? $bannerid : '')."' style='width:175px;' tabindex='".($tabindex++)."'></td></tr>";
+			echo "<tr><td width='30'><img src='images/spacer.gif' height='1' width='100%'></td>";
+			echo "<td colspan='2'><img src='images/break-l.gif' height='1' width='200' vspace='6'></td></tr>";
+		}
+	
 		
 		// Target
 		if (isset($show['target']) && $show['target'] == true)
@@ -769,7 +845,6 @@ function phpAds_placeInvocationForm($extra = '', $zone_invocation = false)
 				echo "<input class='flat' type='text' name='target' size='' value='".(isset($target) ? $target : '')."' style='width:175px;' tabindex='".($tabindex++)."'></td></tr>";
 			echo "<tr><td width='30'><img src='images/spacer.gif' height='1' width='100%'></td>";
 		}
-		
 		
 		// Source
 		if (isset($show['source']) && $show['source'] == true)

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.11 $
+<?php // $Revision: 2.12 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -52,6 +52,9 @@ function phpAds_logImpression ($userid, $bannerid, $zoneid, $source)
 {
 	global $HTTP_SERVER_VARS, $phpAds_config, $phpAds_geo;
 	
+	//decrypt source
+	$source = phpAds_decrypt($source);
+
 	// Check if host is on list of hosts to ignore
 	if ($host = phpads_logCheckHost())
 	{
@@ -77,6 +80,7 @@ function phpAds_logImpression ($userid, $bannerid, $zoneid, $source)
 			",'".$source."'".
 			",'".$log_country."')"
 		);
+		
 	}
 }
 
@@ -88,6 +92,9 @@ function phpAds_logClick($userid, $bannerid, $zoneid, $source)
 {
 	global $HTTP_SERVER_VARS, $phpAds_config, $phpAds_geo;
 	
+	//decrypt source
+	$source = phpAds_decrypt($source);
+
 	// Check if host is on list of hosts to ignore
 	if ($host = phpads_logCheckHost())
 	{
@@ -143,7 +150,10 @@ function phpAds_logConversion($userid, $trackerid)
 			",'".$log_host."'".
 			",'".$log_country."')"
 		);
+		
+		return phpAds_dbInsertID();
 	}
+	
 }
 
 ?>

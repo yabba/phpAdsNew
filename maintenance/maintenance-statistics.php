@@ -1,4 +1,4 @@
-<?php // $Revision: 1.12 $
+<?php // $Revision: 1.13 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -119,12 +119,11 @@ function phpAds_countViews($begin_timestamp, $end_timestamp, $day, $hour)
 	$report .= "\tCounting the verbose views between ".$begin_timestamp." and ".$end_timestamp."...\n";
 	$view_query = "SELECT bannerid".
 					",zoneid".
-					",source".
 					",count(*) as views".
 					" FROM ".$phpAds_config['tbl_adviews'].
 					" WHERE t_stamp>=".$begin_timestamp.
 					" AND t_stamp<".$end_timestamp.
-					" GROUP BY bannerid,zoneid,source";
+					" GROUP BY bannerid,zoneid";
 	$view_result = phpAds_dbQuery($view_query)
 		or $report.= "Could not perform SQL: ".$view_query."\n";
 	
@@ -136,7 +135,6 @@ function phpAds_countViews($begin_timestamp, $end_timestamp, $day, $hour)
 	    				",hour=".$hour.
 	    				",bannerid=".$view_row['bannerid'].
 	    				",zoneid=".$view_row['zoneid'].
-	    				",source='".$view_row['source']."'".
 	    				",views=".$view_row['views'];
 	    $stat_result = phpAds_dbQuery($stat_query)
 	    	or $report.= " Could not perform SQL: ".$stat_query."\n";
@@ -148,8 +146,7 @@ function phpAds_countViews($begin_timestamp, $end_timestamp, $day, $hour)
 							" WHERE day='".$day."'".
 							" AND hour=".$hour.
 							" AND bannerid=".$view_row['bannerid'].
-							" AND zoneid=".$view_row['zoneid'].
-							" AND source='".$view_row['source']."'";
+							" AND zoneid=".$view_row['zoneid'];
 		    $stat_result = phpAds_dbQuery($stat_query)
 		    	or $report.= " Could not perform SQL: ".$stat_query."\n";
 	    }
@@ -169,12 +166,11 @@ function phpAds_countClicks($begin_timestamp, $end_timestamp, $day, $hour)
 	$report .= "\tCounting the verbose clicks between ".$begin_timestamp." and ".$end_timestamp."...\n";
 	$click_query = "SELECT bannerid".
 					",zoneid".
-					",source".
 					",count(*) as clicks".
 					" FROM ".$phpAds_config['tbl_adclicks'].
 					" WHERE t_stamp>=".$begin_timestamp.
 					" AND t_stamp<".$end_timestamp.
-					" GROUP BY bannerid,zoneid,source";
+					" GROUP BY bannerid,zoneid";
 	$click_result = phpAds_dbQuery($click_query)
 		or $report.= "Could not perform SQL: ".$click_query."\n";
 	
@@ -185,8 +181,7 @@ function phpAds_countClicks($begin_timestamp, $end_timestamp, $day, $hour)
 						" WHERE day='".$day."'".
 						" AND hour=".$hour.
 						" AND bannerid=".$click_row['bannerid'].
-						" AND zoneid=".$click_row['zoneid'].
-						" AND source='".$click_row['source']."'";
+						" AND zoneid=".$click_row['zoneid'];
 	    $stat_result = phpAds_dbQuery($stat_query)
 	    	or $report.= " Could not perform SQL: ".$stat_query."\n";
 	    
@@ -197,7 +192,6 @@ function phpAds_countClicks($begin_timestamp, $end_timestamp, $day, $hour)
 		    				",hour=".$hour.
 		    				",bannerid=".$click_row['bannerid'].
 		    				",zoneid=".$click_row['zoneid'].
-		    				",source='".$click_row['source']."'".
 		    				",clicks=".$click_row['clicks'];
 		    $stat_result = phpAds_dbQuery($stat_query)
 		    	or $report.= " Could not perform SQL: ".$stat_query."\n";
@@ -253,6 +247,25 @@ function phpAds_countConversions($begin_timestamp, $end_timestamp, $day, $hour)
 		{
 			$found = false;
 			$action_query =
+				"SELECT c.t_stamp AS t_stamp".
+				",c.bannerid AS bannerid".
+				",c.zoneid AS zoneid".
+				",c.host AS host".
+				",c.source AS source".
+				",c.country AS country".
+				" FROM ".$phpAds_config['tbl_adclicks']." AS c".
+				",".$phpAds_config['tbl_banners']." AS b".
+				" WHERE c.userid='".$userid."'".
+				" AND c.bannerid=b.bannerid".
+				" AND b.campaignid=".$campaign_row['campaignid'].
+				" AND c.t_stamp>= DATE_SUB(".$t_stamp.", INTERVAL ".$campaign_row['clickwindow']." SECOND)".
+				" AND c.t_stamp<".$t_stamp.
+				" ORDER BY t_stamp DESC".
+				" LIMIT 1"
+			;
+			
+			/*
+			$action_query =
 				"SELECT t_stamp".
 				",bannerid".
 				",zoneid".
@@ -266,6 +279,7 @@ function phpAds_countConversions($begin_timestamp, $end_timestamp, $day, $hour)
 				" ORDER BY t_stamp DESC".
 				" LIMIT 1"
 			;
+			*/
 			
 			$action_res = phpAds_dbQuery($action_query)
 				or $report.= "Could not perform SQL: ".$action_query."\n";
@@ -277,6 +291,26 @@ function phpAds_countConversions($begin_timestamp, $end_timestamp, $day, $hour)
 			}
 			else
 			{
+
+				$action_query =
+					"SELECT v.t_stamp AS t_stamp".
+					",v.bannerid AS bannerid".
+					",v.zoneid AS zoneid".
+					",v.host AS host".
+					",v.source AS source".
+					",v.country AS country".
+					" FROM ".$phpAds_config['tbl_adviews']." AS v".
+					",".$phpAds_config['tbl_banners']." AS b".
+					" WHERE v.userid='".$userid."'".
+					" AND v.bannerid=b.bannerid".
+					" AND b.campaignid=".$campaign_row['campaignid'].
+					" AND v.t_stamp>= DATE_SUB(".$t_stamp.", INTERVAL ".$campaign_row['viewwindow']." SECOND)".
+					" AND v.t_stamp<".$t_stamp.
+					" ORDER BY t_stamp DESC".
+					" LIMIT 1"
+				;
+
+				/*
 				$action_query =
 					"SELECT t_stamp".
 					",bannerid".
@@ -291,6 +325,7 @@ function phpAds_countConversions($begin_timestamp, $end_timestamp, $day, $hour)
 					" ORDER BY t_stamp DESC".
 					" LIMIT 1"
 				;
+				*/
 				
 				$action_res = phpAds_dbQuery($action_query)
 					or $report.= "Could not perform SQL: ".$action_query."\n";
@@ -397,8 +432,7 @@ function phpAds_countConversions($begin_timestamp, $end_timestamp, $day, $hour)
 						" WHERE day='".$day."'".
 						" AND hour=".$hour.
 						" AND bannerid=".$conversion_row['action_bannerid'].
-						" AND zoneid=".$conversion_row['action_zoneid'].
-						" AND source='".$conversion_row['action_source']."'";
+						" AND zoneid=".$conversion_row['action_zoneid'];
 	    $stat_result = phpAds_dbQuery($stat_query)
 	    	or $report.= " Could not perform SQL: ".$stat_query."\n";
 	    
@@ -409,7 +443,6 @@ function phpAds_countConversions($begin_timestamp, $end_timestamp, $day, $hour)
 		    				",hour=".$hour.
 		    				",bannerid=".$conversion_row['action_bannerid'].
 		    				",zoneid=".$conversion_row['action_zoneid'].
-		    				",source='".$conversion_row['action_source']."'".
 		    				",conversions=".$conversion_row['conversions'];
 		    $stat_result = phpAds_dbQuery($stat_query)
 		    	or $report.= " Could not perform SQL: ".$stat_query."\n";

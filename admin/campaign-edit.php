@@ -1,4 +1,4 @@
-<?php // $Revision: 2.16 $
+<?php // $Revision: 2.17 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -51,8 +51,34 @@ phpAds_registerGlobal (
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency);
 
+if (phpAds_isUser(phpAds_Agency))
+{
+	if (isset($campaignid) && $campaignid != '')
+	{
+		$query = "SELECT c.clientid".
+			" FROM ".$phpAds_config['tbl_clients']." AS c".
+			",".$phpAds_config['tbl_campaigns']." AS m".
+			" WHERE c.clientid=m.clientid".
+			" AND c.clientid=".$clientid.
+			" AND m.campaignid=".$campaignid.
+			" AND agencyid=".phpAds_getUserID();
+	}
+	else
+	{
+		$query = "SELECT c.clientid".
+			" FROM ".$phpAds_config['tbl_clients']." AS c".
+			" WHERE c.clientid=".$clientid.
+			" AND agencyid=".phpAds_getUserID();
+	}
+	$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+	if (phpAds_dbNumRows($res) == 0)
+	{
+		phpAds_PageHeader("2");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
+	}
+}
 
 
 /*********************************************************/
@@ -311,12 +337,13 @@ if ($campaignid != "")
 	
 	
 	// Get other campaigns
-	$res = phpAds_dbQuery(
-		"SELECT *".
+	$query = "SELECT campaignid,campaignname".
 		" FROM ".$phpAds_config['tbl_campaigns'].
 		" WHERE clientid = ".$clientid.
-		phpAds_getCampaignListOrder ($navorder, $navdirection)
-	) or phpAds_sqlDie();
+		phpAds_getCampaignListOrder ($navorder, $navdirection);
+
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
 	{
@@ -344,11 +371,21 @@ if ($campaignid != "")
 	$extra .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	$extra .= "<select name='moveto' style='width: 110;'>";
 	
-	$res = phpAds_dbQuery(
-		"SELECT *".
+	if (phpAds_isUser(phpAds_Admin))
+	{
+		$query = "SELECT clientid,clientname".
 		" FROM ".$phpAds_config['tbl_clients'].
-		" WHERE clientid!=".phpAds_getCampaignParentClientID($campaignid)
-	) or phpAds_sqlDie();
+			" WHERE clientid!=".$clientid;
+	}
+	elseif (phpAds_isUser(phpAds_Agency))
+	{
+		$query = "SELECT clientid,clientname".
+			" FROM ".$phpAds_config['tbl_clients'].
+			" WHERE clientid!=".$clientid.
+			" AND agencyid=".phpAds_getUserID();
+	}
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
 		$extra .= "<option value='".$row['clientid']."'>".phpAds_buildName($row['clientid'], $row['clientname'])."</option>";

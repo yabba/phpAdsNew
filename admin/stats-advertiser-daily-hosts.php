@@ -1,4 +1,4 @@
-<?php // $Revision: 1.2 $
+<?php // $Revision: 1.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -20,7 +20,7 @@ require ("lib-statistics.inc.php");
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin+phpAds_Client);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency + phpAds_Client);
 
 
 
@@ -32,6 +32,23 @@ if (phpAds_isUser(phpAds_Client))
 {
 	$clientid = phpAds_getUserID();
 }
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	if (isset($clientid) && ($clientid != ''))
+	{
+		$query = "SELECT clientid".
+			" FROM ".$phpAds_config['tbl_clients'].
+			" WHERE clientid=".$clientid.
+			" AND agencyid=".phpAds_getUserID();
+
+		$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+		if (phpAds_dbNumRows($res) == 0)
+		{
+			phpAds_PageHeader("2");
+			phpAds_Die ($strAccessDenied, $strNotAdmin);
+		}
+	}
+}
 
 
 
@@ -41,37 +58,29 @@ if (phpAds_isUser(phpAds_Client))
 
 $bannerids = array();
 
-$idresult = phpAds_dbQuery ("
-	SELECT
-		b.bannerid
-	FROM
-		".$phpAds_config['tbl_banners']." AS b,
-		".$phpAds_config['tbl_campaigns']." AS c
-	WHERE
-		c.clientid = $clientid AND
-		c.campaignid = b.campaignid
-");
+$idresult = phpAds_dbQuery (
+	"SELECT b.bannerid".
+	" FROM ".$phpAds_config['tbl_banners']." AS b".
+	",".$phpAds_config['tbl_campaigns']." AS c".
+	" WHERE c.clientid=".$clientid.
+	" AND c.campaignid=b.campaignid"
+) or phpAds_sqlDie();
 
 while ($row = phpAds_dbFetchArray($idresult))
 {
-	$bannerids[] = "bannerid = ".$row['bannerid'];
+	$bannerids[] = "bannerid=".$row['bannerid'];
 }
 
 
-$res = phpAds_dbQuery("
-	SELECT
-		DATE_FORMAT(day, '%Y%m%d') as date,
-		DATE_FORMAT(day, '$date_format') as date_formatted
-	FROM
-		".$phpAds_config['tbl_adstats']."
-	WHERE
-		(".implode(' OR ', $bannerids).")
-	GROUP BY
-		day
-	ORDER BY
-		day DESC
-	LIMIT 7
-") or phpAds_sqlDie();
+$res = phpAds_dbQuery(
+	"SELECT DATE_FORMAT(day, '%Y%m%d') as date".
+	",DATE_FORMAT(day, '".$date_format."') as date_formatted".
+	" FROM ".$phpAds_config['tbl_adstats'].
+	" WHERE (".implode(' OR ', $bannerids).")".
+	" GROUP BY day".
+	" ORDER BY day DESC".
+	" LIMIT 7"
+) or phpAds_sqlDie();
 
 while ($row = phpAds_dbFetchArray($res))
 {
@@ -82,7 +91,7 @@ while ($row = phpAds_dbFetchArray($res))
 	);
 }
 
-if (phpAds_isUser(phpAds_Admin))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 {
 	phpAds_PageShortcut($strClientProperties, 'advertiser-edit.php?clientid='.$clientid, 'images/icon-advertiser.gif');
 	

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -33,7 +33,7 @@ if (!defined('PHPADSNEW_INCLUDED'))
 	
 	// Include required files
 	require	(phpAds_path."/config.inc.php"); 
-	require (phpAds_path."/libraries/lib-io.inc.php");
+	require_once (phpAds_path."/libraries/lib-io.inc.php");
 	require (phpAds_path."/libraries/lib-db.inc.php");
 	
 	

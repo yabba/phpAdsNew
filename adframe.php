@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -24,7 +24,7 @@ define ('phpAds_path', '.');
 /*********************************************************/
 
 require	(phpAds_path."/config.inc.php"); 
-require (phpAds_path."/libraries/lib-io.inc.php");
+require_once (phpAds_path."/libraries/lib-io.inc.php");
 require (phpAds_path."/libraries/lib-db.inc.php");
 
 if (($phpAds_config['log_adviews'] && !$phpAds_config['log_beacon']) || $phpAds_config['acl'])
@@ -60,6 +60,7 @@ phpAds_registerGlobal (
 	,'what'
 	,'withtext'
 	,'withText'
+	,'referer'	
 );
 
 
@@ -89,6 +90,7 @@ if (isset($HTTP_REFERER)) unset($HTTP_REFERER);
 
 // Get the banner
 $banner = view_raw ($what, $clientid, $campaignid, $target, $source, $withtext, $context);
+phpAds_flushCookie ();
 
 
 // Rewrite targets in HTML code to make sure they are 

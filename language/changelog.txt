@@ -206,6 +206,7 @@
     [u] strSystemNeedsUpgrade
     [u] strReverseLookup
     [u] strProxyLookup
+    [u] strObfuscate
     [u] strCompactStats
     [u] strLogAdviews
     [u] strLogAdclicks

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.21 $
+<?php // $Revision: 2.22 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -18,7 +18,7 @@ define ('LIBDBCONFIG_INCLUDED', true);
 
 
 // Current phpAds version
-$phpAds_version = 200.166;
+$phpAds_version = 200.165;
 $phpAds_version_readable = "2.1 Alpha 1";
 $phpAds_productname = "phpAdsNew";
 $phpAds_producturl = "www.phpadsnew.com";
@@ -37,6 +37,7 @@ $GLOBALS['phpAds_settings_information'] = array(
 	'allow_invocation_interstitial' =>	array ('type' => 'boolean', 'sql' => true),
 	'allow_invocation_local' =>		array ('type' => 'boolean', 'sql' => true),
 	'allow_invocation_plain' =>		array ('type' => 'boolean', 'sql' => true),
+	'allow_invocation_plain_nocookies' =>		array ('type' => 'boolean', 'sql' => true),
 	'allow_invocation_popup' =>		array ('type' => 'boolean', 'sql' => true),
 	'allow_invocation_xmlrpc' =>	array ('type' => 'boolean', 'sql' => true),
 	'autotarget_factor' =>			array ('type' => 'double', 'sql' => true),
@@ -50,7 +51,7 @@ $GLOBALS['phpAds_settings_information'] = array(
 	'block_adviews' =>				array ('type' => 'integer', 'sql' => false),
 	'client_welcome' =>				array ('type' => 'boolean', 'sql' => true),
 	'client_welcome_msg' =>			array ('type' => 'string', 'sql' => true),
-	'compact_stats' =>				array ('type' => 'boolean', 'sql' => false),
+	'compact_stats' =>				array ('type' => 'boolean', 'sql' => true),
 	'company_name' =>				array ('type' => 'string', 'sql' => true),
 	'compatibility_mode' => 		array ('type' => 'boolean', 'sql' => false),
 	'config_version' =>				array ('type' => 'string', 'sql' => true),
@@ -103,6 +104,7 @@ $GLOBALS['phpAds_settings_information'] = array(
 	'percentage_decimals' =>		array ('type' => 'integer', 'sql' => true),
 	'persistent_connections' =>		array ('type' => 'boolean', 'sql' => false),
 	'proxy_lookup' =>				array ('type' => 'boolean', 'sql' => false),
+	'obfuscate' =>					array ('type' => 'boolean', 'sql' => false),
 	'qmail_patch' =>				array ('type' => 'boolean', 'sql' => true),
 	'reverse_lookup' =>				array ('type' => 'boolean', 'sql' => false),
 	'table_prefix' =>				array ('type' => 'string', 	'sql' => false),
@@ -110,6 +112,7 @@ $GLOBALS['phpAds_settings_information'] = array(
 	'tbl_acls' => 					array ('type' => 'string', 	'sql' => false),
 	'tbl_adclicks' => 				array ('type' => 'string', 	'sql' => false),
 	'tbl_adconversions' => 			array ('type' => 'string', 	'sql' => false),
+	'tbl_agency' => 				array ('type' => 'string', 	'sql' => false),
 	'tbl_adstats' => 				array ('type' => 'string', 	'sql' => false),
 	'tbl_adviews' => 				array ('type' => 'string', 	'sql' => false),
 	'tbl_affiliates' =>				array ('type' => 'string', 	'sql' => false),
@@ -126,6 +129,8 @@ $GLOBALS['phpAds_settings_information'] = array(
 	'tbl_trackers' => 				array ('type' => 'string', 	'sql' => false),
 	'tbl_userlog' =>				array ('type' => 'string', 	'sql' => false),
 	'tbl_zones' => 					array ('type' => 'string', 	'sql' => false),
+	'tbl_variables' => 				array ('type' => 'string', 	'sql' => false),
+	'tbl_variablevalues' =>			array ('type' => 'string', 	'sql' => false),
 	'type_html_allow' =>			array ('type' => 'boolean', 'sql' => true),
 	'type_html_auto' => 			array ('type' => 'boolean', 'sql' => false),
 	'type_html_php' => 				array ('type' => 'boolean', 'sql' => false),
@@ -137,18 +142,22 @@ $GLOBALS['phpAds_settings_information'] = array(
 	'type_web_ftp' =>				array ('type' => 'string', 'sql' => true),
 	'type_web_mode' =>				array ('type' => 'integer', 'sql' => true),
 	'type_web_url' =>				array ('type' => 'string', 'sql' => false),
+	'type_web_ssl_url' =>			array ('type' => 'string', 'sql' => false),
 	'ui_enabled' =>					array ('type' => 'boolean', 'sql' => false),
 	'ui_forcessl' =>				array ('type' => 'boolean', 'sql' => false),
 	'updates_frequency' =>			array ('type' => 'integer', 'sql' => true),
 	'updates_last_seen' =>			array ('type' => 'string', 'sql' => true),
 	'updates_timestamp' =>			array ('type' => 'integer', 'sql' => true),
 	'url_prefix' => 				array ('type' => 'string', 	'sql' => false),
+	'ssl_url_prefix' => 			array ('type' => 'string', 	'sql' => false),
+	'use_keywords' =>	 			array ('type' => 'boolean', 'sql' => false),
 	'userlog_email' =>				array ('type' => 'boolean', 'sql' => true),
 	'userlog_priority' =>			array ('type' => 'boolean', 'sql' => true),
 	'userlog_autoclean' =>			array ('type' => 'boolean', 'sql' => true),
-	'warn_admin' =>					array ('type' => 'boolean', 'sql' => false),
-	'warn_client' => 				array ('type' => 'boolean', 'sql' => false),
-	'warn_limit' =>					array ('type' => 'integer', 'sql' => false)
+	'warn_admin' =>					array ('type' => 'boolean', 'sql' => true),
+	'warn_agency' => 				array ('type' => 'boolean', 'sql' => true),	
+	'warn_client' => 				array ('type' => 'boolean', 'sql' => true),
+	'warn_limit' =>					array ('type' => 'integer', 'sql' => true)
 );
 
 
@@ -157,13 +166,17 @@ $GLOBALS['phpAds_settings_information'] = array(
 /* Load configuration from database                      */
 /*********************************************************/
 
-function phpAds_LoadDbConfig()
+function phpAds_LoadDbConfig($agencyid = 0)
 {
 	global $phpAds_config, $phpAds_settings_information;
 	
 	if ((!empty($GLOBALS['phpAds_db_link']) || phpAds_dbConnect()) && isset($phpAds_config['tbl_config']))
 	{
-		if ($res = phpAds_dbQuery("SELECT * FROM ".$phpAds_config['tbl_config']." WHERE configid = 0"))
+		$query = "SELECT *".
+			" FROM ".$phpAds_config['tbl_config'].
+			" WHERE agencyid=".$agencyid;
+			
+		if ($res = phpAds_dbQuery($query))
 		{
 			if ($row = phpAds_dbFetchArray($res, 0))
 			{

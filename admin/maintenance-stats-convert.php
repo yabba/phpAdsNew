@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -74,7 +74,6 @@ function phpAds_getVerbose($base, $count)
 		SELECT
 			bannerid,
 			zoneid,
-			source,
 			HOUR(t_stamp) AS hour,
 			COUNT(*) AS qnt
 		FROM
@@ -82,12 +81,12 @@ function phpAds_getVerbose($base, $count)
 		WHERE
 			t_stamp >= $begin_timestamp AND t_stamp <= $end_timestamp
 		GROUP BY 
-			bannerid, zoneid, source, hour
+			bannerid, zoneid, hour
 	") or phpAds_sqlDie();
 	
 	
 	while ($row = phpAds_dbFetchArray($result))
-		$stats["'".$row['bannerid']."'"]["'".$row['zoneid']."'"]["'".$row['hour']."'"]["'".$row['source']."'"] = array('views' => $row['qnt'], 'clicks' => 0);
+		$stats["'".$row['bannerid']."'"]["'".$row['zoneid']."'"]["'".$row['hour']."'"] = array('views' => $row['qnt'], 'clicks' => 0);
 	
 	
 	// Get clicks
@@ -95,7 +94,6 @@ function phpAds_getVerbose($base, $count)
 		SELECT
 			bannerid,
 			zoneid,
-			source,
 			HOUR(t_stamp) AS hour,
 			COUNT(*) AS qnt
 		FROM
@@ -103,15 +101,15 @@ function phpAds_getVerbose($base, $count)
 		WHERE
 			t_stamp >= $begin_timestamp AND t_stamp <= $end_timestamp
 		GROUP BY 
-			bannerid, zoneid, source, hour
+			bannerid, zoneid, hour
 	") or phpAds_sqlDie();
 	
 	
 	while ($row = phpAds_dbFetchArray($result))
-		if (isset($stats["'".$row['bannerid']."'"]["'".$row['zoneid']."'"]["'".$row['hour']."'"]["'".$row['source']."'"]))
-			$stats["'".$row['bannerid']."'"]["'".$row['zoneid']."'"]["'".$row['hour']."'"]["'".$row['source']."'"]['clicks'] = $row['qnt'];
+		if (isset($stats["'".$row['bannerid']."'"]["'".$row['zoneid']."'"]["'".$row['hour']."'"]))
+			$stats["'".$row['bannerid']."'"]["'".$row['zoneid']."'"]["'".$row['hour']."'"]['clicks'] = $row['qnt'];
 		else
-			$stats["'".$row['bannerid']."'"]["'".$row['zoneid']."'"]["'".$row['hour']."'"]["'".$row['source']."'"] = array('views' => 0, 'clicks' => $row['qnt']);
+			$stats["'".$row['bannerid']."'"]["'".$row['zoneid']."'"]["'".$row['hour']."'"] = array('views' => 0, 'clicks' => $row['qnt']);
 	
 	if (isset($stats) && count($stats))
 		return $stats;
@@ -140,21 +138,17 @@ function phpAds_storeCompact ($base, $count, $stats)
 			{
 				$stats_h = $stats_z[$hour];
 				
-				for (reset($stats_h); $source = key($stats_h); next($stats_h))
-				{
-					$stats_s = $stats_h[$source];
-					
 			        $result = phpAds_dbQuery(
 						"INSERT INTO ".
 	                   	$phpAds_config['tbl_adstats']." SET clicks = ".$stats_s['clicks'].", views = ".$stats_s['views'].", 
-						day = $day, hour = $hour, bannerid = $bannerid, zoneid = $zoneid, source = $source ");
+					day = $day, hour = $hour, bannerid = $bannerid, zoneid = $zoneid ");
 					
 		       		if (phpAds_dbAffectedRows() < 1) 
 		       		{
 						$result = phpAds_dbQuery(
 							"UPDATE ".$phpAds_config['tbl_adstats']." SET views = views + ".$stats_s['views'].",
 							clicks = clicks + ".$stats_s['clicks']." WHERE day = $day AND hour = $hour 
-							AND bannerid = $bannerid AND zoneid = $zoneid AND source = $source ");
+						AND bannerid = $bannerid AND zoneid = $zoneid  ");
 		       		}
 					
 					$adclicks += $stats_s['clicks'];
@@ -162,7 +156,6 @@ function phpAds_storeCompact ($base, $count, $stats)
 				}
 			}
 		}
-	}
 	
 	phpAds_printResult ("    ".$adviews." ".$strConvertAdViews." ".$adclicks." ".$strConvertAdClicks."\\n");
 	

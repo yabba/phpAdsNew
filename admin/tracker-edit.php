@@ -1,4 +1,4 @@
-<?php // $Revision: 1.5 $
+<?php // $Revision: 1.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -21,16 +21,44 @@ require ("lib-statistics.inc.php");
 
 // Register input variables
 phpAds_registerGlobal (
-	 'trackername'
+	 'clickwindow'
 	,'description'
 	,'move'
 	,'submit'
+	,'trackername'
+	,'viewwindow'
 );
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency);
 
+if (phpAds_isUser(phpAds_Agency))
+{
+	if (isset($trackerid) && $trackerid != '')
+	{
+		$query = "SELECT c.clientid".
+			" FROM ".$phpAds_config['tbl_clients']." AS c".
+			",".$phpAds_config['tbl_trackers']." AS t".
+			" WHERE c.clientid=t.clientid".
+			" AND c.clientid=".$clientid.
+			" AND t.trackerid=".$trackerid.
+			" AND agencyid=".phpAds_getUserID();
+	}
+	else
+	{
+		$query = "SELECT c.clientid".
+			" FROM ".$phpAds_config['tbl_clients']." AS c".
+			" WHERE c.clientid=".$clientid.
+			" AND agencyid=".phpAds_getUserID();
+	}
+	$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+	if (phpAds_dbNumRows($res) == 0)
+	{
+		phpAds_PageHeader("2");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
+	}
+}
 
 
 /*********************************************************/
@@ -152,11 +180,21 @@ if ($trackerid != "")
 	$extra .= "\t\t\t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"."\n";
 	$extra .= "\t\t\t\t<select name='moveto' style='width: 110;'>"."\n";
 	
-	$res = phpAds_dbQuery(
-		"SELECT *".
+	if (phpAds_isUser(phpAds_Admin))
+	{
+		$query = "SELECT clientid,clientname".
 		" FROM ".$phpAds_config['tbl_clients'].
-		" WHERE clientid != ".$clientid
-	) or phpAds_sqlDie();
+			" WHERE clientid!=".$clientid;
+	}
+	elseif (phpAds_isUser(phpAds_Agency))
+	{
+		$query = "SELECT clientid,clientname".
+			" FROM ".$phpAds_config['tbl_clients'].
+			" WHERE clientid!=".$clientid.
+			" AND agencyid=".phpAds_getAgencyID();
+	}
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
 		$extra .= "\t\t\t\t\t<option value='".$row['clientid']."'>".phpAds_buildName($row['clientid'], $row['clientname'])."</option>\n";
@@ -173,7 +211,7 @@ if ($trackerid != "")
 		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getClientName(phpAds_getTrackerParentClientID($trackerid));
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 		echo "<img src='images/icon-tracker.gif' align='absmiddle'>&nbsp;<b>".phpAds_getTrackerName($trackerid)."</b><br><br><br>";
-		phpAds_ShowSections(array("4.1.4.2", "4.1.4.3", "4.1.4.4"));
+		phpAds_ShowSections(array("4.1.4.2", "4.1.4.3", "4.1.4.5", "4.1.4.4"));
 }
 else
 {

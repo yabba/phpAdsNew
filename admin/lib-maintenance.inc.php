@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -22,9 +22,17 @@ if ($phpAds_config['language'] != 'english' && file_exists(phpAds_path.'/languag
 
 function phpAds_MaintenanceSelection($section)
 {
-	global $phpAds_config;
-	global $phpAds_TextDirection;
-	global $strChooseSection, $strPriority, $strCache, $strBanners, $strStats, $strStorage;
+	global 
+		$phpAds_config
+		,$phpAds_TextDirection
+		,$strBanners
+		,$strCache
+		,$strChooseSection
+		,$strPriority
+		,$strSourceEdit
+		,$strStats
+		,$strStorage
+	;
 
 ?>
 <script language="JavaScript">
@@ -55,6 +63,7 @@ function maintenance_goto_section()
 	if ($phpAds_config['delivery_caching'] != 'none')
 		echo "<option value='cache'".($section == 'zones' ? ' selected' : '').">".$strCache."</option>";
     
+	echo "<option value='source-edit'".($section == 'source-edit' ? ' selected' : '').">".$strSourceEdit."</option>";
 	echo "</select>&nbsp;<a href='javascript:void(0)' onClick='maintenance_goto_section();'>";
 	echo "<img src='images/".$phpAds_TextDirection."/go_blue.gif' border='0'></a>";
     echo "</td></form></tr>";

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.8 $
+<?php // $Revision: 2.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -24,7 +24,7 @@ define ('phpAds_path', '.');
 /*********************************************************/
 
 require	(phpAds_path."/config.inc.php"); 
-require (phpAds_path."/libraries/lib-io.inc.php");
+require_once (phpAds_path."/libraries/lib-io.inc.php");
 require (phpAds_path."/libraries/lib-db.inc.php");
 
 if ($phpAds_config['log_adclicks'])
@@ -86,7 +86,6 @@ if (!isset($bannerid))
 		$bannerid = 'DEFAULT';
 }
 
-
 // Open a connection to the database
 if (phpAds_dbConnect())
 {
@@ -120,38 +119,28 @@ if (phpAds_dbConnect())
 		
 		
 		// Log clicks
-		if (!isset($log) || $log != 'no')
-		{
-			if ($phpAds_config['block_adclicks'] == 0 ||
-			   ($phpAds_config['block_adclicks'] > 0 && 
-			   (!isset($HTTP_COOKIE_VARS['phpAds_blockClick'][$bannerid]) ||
-			   $HTTP_COOKIE_VARS['phpAds_blockClick'][$bannerid] <= time())))
+		if (!phpAds_isClickBlocked($bannerid))
 			{
 				if ($phpAds_config['log_adclicks'])
 					phpAds_logClick($userid, $bannerid, $zoneid, $source);
 				
 				// Send block cookies
-				if ($phpAds_config['block_adclicks'] > 0)
-				{
-					phpAds_setCookie ("phpAds_blockClick[".$bannerid."]", time() + $phpAds_config['block_adclicks'], 
-									  time() + $phpAds_config['block_adclicks'] + 43200);
+			phpAds_updateClickBlockTime($bannerid);
 					phpAds_flushCookie ();
 				}
-			}
-		}
-		
 		
 		// Get vars
 		if (isset($HTTP_GET_VARS))
 			for (reset ($HTTP_GET_VARS); $key = key($HTTP_GET_VARS); next($HTTP_GET_VARS))
 			{
 				if ($key != 'bannerid' &&
-					$key != 'zoneid' &&
-					$key != 'source' &&
+					$key != 'cb' &&
 					$key != 'dest' &&
 					$key != 'ismap' &&
+					$key != 'log' &&
 					$key != 'n' &&
-					$key != 'cb')
+					$key != 'source' &&
+					$key != 'zoneid')
 					$vars[] = $key.'='.$HTTP_GET_VARS[$key];
 			}
 		
@@ -159,12 +148,13 @@ if (phpAds_dbConnect())
 			for (reset ($HTTP_POST_VARS); $key = key($HTTP_POST_VARS); next($HTTP_POST_VARS))
 			{
 				if ($key != 'bannerid' &&
-					$key != 'zoneid' &&
-					$key != 'source' &&
+					$key != 'cb' &&
 					$key != 'dest' &&
 					$key != 'ismap' &&
+					$key != 'log' &&
 					$key != 'n' &&
-					$key != 'cb')
+					$key != 'source' &&
+					$key != 'zoneid')
 					$vars[] = $key.'='.$HTTP_POST_VARS[$key];
 			}
 		
@@ -188,7 +178,6 @@ if (phpAds_dbConnect())
 		{
 			$url .= $ismap;
 		}
-		
 		
 		// Redirect
 		if ($url != '')

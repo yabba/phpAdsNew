@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -25,8 +25,7 @@ phpAds_registerGlobal ('moveto', 'returnurl');
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin);
-
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency);
 
 
 /*********************************************************/
@@ -37,6 +36,33 @@ if (isset($campaignid) && $campaignid != '')
 {
 	if (isset($moveto) && $moveto != '')
 	{
+		if (phpAds_isUser(phpAds_Agency))
+		{
+			$query = "SELECT c.clientid".
+				" FROM ".$phpAds_config['tbl_clients']." AS c".
+				",".$phpAds_config['tbl_campaigns']." AS m".
+				" WHERE c.clientid=m.clientid".
+				" AND c.clientid=".$clientid.
+				" AND m.campaignid=".$campaignid.
+				" AND agencyid=".phpAds_getUserID();
+			$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+			if (phpAds_dbNumRows($res) == 0)
+			{
+				phpAds_PageHeader("2");
+				phpAds_Die ($strAccessDenied, $strNotAdmin);
+			}
+			$query = "SELECT c.clientid".
+				" FROM ".$phpAds_config['tbl_clients']." AS c".
+				" WHERE c.clientid=".$moveto.
+				" AND agencyid=".phpAds_getUserID();
+			$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+			if (phpAds_dbNumRows($res) == 0)
+			{
+				phpAds_PageHeader("2");
+				phpAds_Die ($strAccessDenied, $strNotAdmin);
+			}
+		}
+		
 		// Delete any campaign-tracker links
 		$res = phpAds_dbQuery(
 			"DELETE FROM ".$phpAds_config['tbl_campaigns_trackers'].
@@ -46,7 +72,7 @@ if (isset($campaignid) && $campaignid != '')
 		// Move the campaign
 		$res = phpAds_dbQuery(
 			"UPDATE ".$phpAds_config['tbl_campaigns'].
-			" SET campaignid=".$moveto.
+			" SET clientid=".$moveto.
 			" WHERE campaignid=".$campaignid
 		) or phpAds_sqlDie();
 		

@@ -40,34 +40,34 @@ phpAds_registerGlobal (
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency);
 
-
-/*********************************************************/
-/* Affiliate interface security                          */
-/*********************************************************/
-
-if (phpAds_isUser(phpAds_Client))
+if (phpAds_isUser(phpAds_Agency))
 {
-	$result = phpAds_dbQuery(
-		"SELECT clientid".
-		" FROM ".$phpAds_config['tbl_campaigns'].
-		" WHERE campaignid=".$campaignid
-	) or phpAds_sqlDie();
-	
-	$row = phpAds_dbFetchArray($result);
-	
-	if ($row['clientid'] == '' || phpAds_getUserID() != $row['clientid'] || !phpAds_isAllowed(phpAds_LinkTrackers))
+	if (isset($campaignid) && $campaignid != '')
 	{
-		phpAds_PageHeader("1");
-		phpAds_Die ($strAccessDenied, $strNotAdmin);
+		$query = "SELECT c.clientid".
+			" FROM ".$phpAds_config['tbl_clients']." AS c".
+			",".$phpAds_config['tbl_campaigns']." AS m".
+			" WHERE c.clientid=m.clientid".
+			" AND c.clientid=".$clientid.
+			" AND m.campaignid=".$campaignid.
+			" AND agencyid=".phpAds_getUserID();
 	}
 	else
 	{
-		$clientid = $row['clientid'];
+		$query = "SELECT c.clientid".
+			" FROM ".$phpAds_config['tbl_clients']." AS c".
+			" WHERE c.clientid=".$clientid.
+			" AND agencyid=".phpAds_getUserID();
+	}
+	$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+	if (phpAds_dbNumRows($res) == 0)
+	{
+		phpAds_PageHeader("2");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
 	}
 }
-
 
 /*********************************************************/
 /* Process submitted form                                */
@@ -154,7 +154,7 @@ while ($row = phpAds_dbFetchArray($res))
 	);
 }
 
-if (phpAds_isUser(phpAds_Admin))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 {
 	phpAds_PageShortcut($strClientProperties, 'advertiser-edit.php?clientid='.$clientid, 'images/icon-advertiser.gif');
 	phpAds_PageShortcut($strCampaignHistory, 'stats-campaign-history.php?clientid='.$clientid.'&campaignid='.$campaignid, 'images/icon-statistics.gif');
@@ -171,11 +171,21 @@ if (phpAds_isUser(phpAds_Admin))
 	$extra .= "\t\t\t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"."\n";
 	$extra .= "\t\t\t\t<select name='moveto' style='width: 110;'>"."\n";
 	
-	$res = phpAds_dbQuery(
-		"SELECT *".
+	if (phpAds_isUser(phpAds_Admin))
+	{
+		$query = "SELECT clientid,clientname".
 		" FROM ".$phpAds_config['tbl_clients'].
-		" WHERE clientid != ".$clientid
-	) or phpAds_sqlDie();
+			" WHERE clientid!=".$clientid;
+	}
+	elseif (phpAds_isUser(phpAds_Agency))
+	{
+		$query = "SELECT clientid,clientname".
+			" FROM ".$phpAds_config['tbl_clients'].
+			" WHERE clientid!=".$clientid.
+			" AND agencyid=".phpAds_getUserID();
+	}
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
 		$extra .= "\t\t\t\t\t<option value='".$row['clientid']."'>".phpAds_buildName($row['clientid'], $row['clientname'])."</option>\n";
@@ -336,7 +346,7 @@ else
 		
 		
 		// Name
-		if (phpAds_isUser(phpAds_Admin))
+		if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 		{
 			echo "<a href='tracker-edit.php?clientid=".$tracker['clientid']."&trackerid=".$tracker['trackerid']."'>";
 			echo phpAds_breakString ($tracker['trackername'], '60')."</a>";

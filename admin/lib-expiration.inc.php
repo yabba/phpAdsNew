@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -71,6 +71,34 @@ function phpAds_getAdClicksLeft($campaignid)
 			$clicks = $strUnlimited;
 			
 		return ($clicks);
+	}
+}
+
+/*********************************************************/
+/* Determine the AdClicks left before expiration         */
+/*********************************************************/
+
+function phpAds_getAdConversionsLeft($campaignid)
+{
+	global $phpAds_config;
+	global $strUnlimited;
+	
+	$campaign_query = 
+		"SELECT conversions".
+		" FROM ".$phpAds_config['tbl_campaigns'].
+		" WHERE campaignid=".$campaignid;
+	
+	$res_campaign = phpAds_dbQuery($campaign_query);
+	
+	if (phpAds_dbNumRows($res_campaign) == 1)
+	{
+		$row = phpAds_dbFetchArray($res_campaign);
+		$conversions = $row['conversions'];
+		
+		if ($conversions == -1)
+			$conversions = $strUnlimited;
+			
+		return ($conversions);
 	}
 }
 

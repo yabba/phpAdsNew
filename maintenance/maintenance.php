@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -38,7 +38,7 @@ require (phpAds_path."/libraries/lib-mail.inc.php");
 require (phpAds_path."/libraries/lib-userlog.inc.php");
 require (phpAds_path."/libraries/lib-cache.inc.php");
 require (phpAds_path."/admin/lib-statistics.inc.php");
-
+require (phpAds_path."/admin/lib-data-statistics.inc.php");
 
 
 // Make database connection and load config
@@ -73,6 +73,8 @@ if (date('H') == 0)
 	include ("maintenance-activation.php");
 	include ("maintenance-autotargeting.php");
 	include ("maintenance-cleantables.php");
+	include ("maintenance-optimization.php");
+
 }
 
 include ("maintenance-priority.php");

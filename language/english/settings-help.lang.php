@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -79,6 +79,13 @@ $GLOBALS['phpAds_hlp_url_prefix'] = "
         ".$phpAds_productname." needs to know where it is located on the web server in order 
         to work correctly. You must specify the URL to the directory where ".$phpAds_productname." 
         is installed, for example: <i>http://www.your-url.com/".$phpAds_productname."</i>.
+		";
+		
+$GLOBALS['phpAds_hlp_ssl_url_prefix'] = "
+        ".$phpAds_productname." needs to know where it is located on the web server in order 
+        to work correctly. Sometimes the SSL prefix is different than the regular URL prefix.
+		You must specify the URL to the directory where ".$phpAds_productname." 
+        is installed, for example: <i>https://www.your-url.com/".$phpAds_productname."</i>.
 		";
 		
 $GLOBALS['phpAds_hlp_my_header'] =
@@ -240,6 +247,8 @@ $GLOBALS['phpAds_hlp_proxy_lookup'] = "
 		because it will slow the delivery of banners down considerably.
 		";
 		
+$GLOBALS['phpAds_hlp_obfuscate'] = "Nothing here....";
+
 $GLOBALS['phpAds_hlp_auto_clean_tables'] = 
 $GLOBALS['phpAds_hlp_auto_clean_tables_interval'] = "
 		If you enable this feature, the gathered statistics will be automatically deleted after the
@@ -313,6 +322,7 @@ $GLOBALS['phpAds_hlp_warn_limit'] = "
 		";
 		
 $GLOBALS['phpAds_hlp_allow_invocation_plain'] = 
+$GLOBALS['phpAds_hlp_allow_invocation_plain_nocookies'] = 
 $GLOBALS['phpAds_hlp_allow_invocation_js'] = 
 $GLOBALS['phpAds_hlp_allow_invocation_frame'] = 
 $GLOBALS['phpAds_hlp_allow_invocation_xmlrpc'] = 
@@ -421,6 +431,12 @@ $GLOBALS['phpAds_hlp_type_web_url'] = "
         a trailing slash (/).
 		";
 		
+$GLOBALS['phpAds_hlp_type_web_ssl_url'] = "
+        If you store banners on a web server, ".$phpAds_productname." needs to know which public 
+        URL (SSL) corresponds with the directory you specified below. Do not specify 
+        a trailing slash (/).
+		";
+		
 $GLOBALS['phpAds_hlp_type_html_auto'] = "
         If this option is turned on ".$phpAds_productname." will automatically alter HTML banners 
         in order to allow the clicks to be logged. However even while this option 
@@ -496,9 +512,9 @@ $GLOBALS['phpAds_hlp_userlog_email'] = "
 		can enable this feature. The e-mail messages are stored in the userlog.
 		";
 		
-$GLOBALS['phpAds_hlp_userlog_priority'] = "
-		To ensure the priority calculation ran correct, you can save a report about 
-		the hourly calculation. This report includes the predicted profile and how much 
+$GLOBALS['phpAds_hlp_userlog_inventory'] = "
+		To ensure the inventory calculation ran correctly, you can save a report about 
+		the hourly inventory calculation. This report includes the predicted profile and how much 
 		priority is assigned to all banners. This information might be useful if you 
 		want to submit a bugreport about the priority calculations. The reports are 
 		stored inside the userlog.

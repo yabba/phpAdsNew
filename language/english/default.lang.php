@@ -1,4 +1,4 @@
-<?php // $Revision: 2.20 $
+<?php // $Revision: 2.21 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -49,7 +49,8 @@ $GLOBALS['strShortcuts'] 			= "Shortcuts";
 $GLOBALS['strAdminstration'] 			= "Inventory";
 $GLOBALS['strMaintenance']			= "Maintenance";
 $GLOBALS['strProbability']			= "Probability";
-$GLOBALS['strInvocationcode']			= "Invocationcode";
+$GLOBALS['strInvocationcode']			= "Invocation code";
+$GLOBALS['strTrackerVariables']			= "Tracker Variables";
 $GLOBALS['strBasicInformation'] 		= "Basic information";
 $GLOBALS['strContractInformation'] 		= "Contract information";
 $GLOBALS['strLoginInformation'] 		= "Login information";
@@ -134,6 +135,7 @@ $GLOBALS['strURL2']				= "URL";
 $GLOBALS['strTarget']				= "Target";
 $GLOBALS['strLanguage'] 			= "Language";
 $GLOBALS['strDescription'] 			= "Description";
+$GLOBALS['strVariables'] 			= "Variables";
 $GLOBALS['strID']				= "ID";
 
 
@@ -149,8 +151,10 @@ $GLOBALS['strUsername'] 			= "Username";
 $GLOBALS['strPassword']				= "Password";
 $GLOBALS['strAccessDenied']			= "Access denied";
 $GLOBALS['strPasswordWrong']			= "The password is not correct";
+$GLOBALS['strParametersWrong']		= "The parameters you supplied are not correct";
 $GLOBALS['strNotAdmin']				= "You may not have enough privileges";
 $GLOBALS['strDuplicateClientName']		= "The username you provided already exists, please use a different username.";
+$GLOBALS['strDuplicateAgencyName']		= "The username you provided already exists, please use a different username.";
 $GLOBALS['strInvalidPassword']			= "The new password is invalid, please use a different password.";
 $GLOBALS['strNotSamePasswords']			= "The two passwords you supplied are not the same";
 $GLOBALS['strRepeatPassword']			= "Repeat Password";
@@ -166,13 +170,19 @@ $GLOBALS['strConversions']			= "AdSales";
 $GLOBALS['strCTRShort'] 			= "CTR";
 $GLOBALS['strCNVRShort'] 			= "SR";
 $GLOBALS['strCTR'] 					= "Click-Through Ratio";
-$GLOBALS['strCNVR'] 				= "Conversion Ratio";
+$GLOBALS['strCNVR'] 				= "Sales Ratio";
+$GLOBALS['strCPC']	 				= "Cost Per Click";
+$GLOBALS['strCPCo']	 				= "Cost Per Conversion";
+$GLOBALS['strCPCoShort']	 		= "CPCo";
+$GLOBALS['strCPCShort']	 			= "CPC";
+$GLOBALS['strTotalCost']	 		= "Total Cost";
 $GLOBALS['strTotalViews'] 			= "Total AdViews";
 $GLOBALS['strTotalClicks'] 			= "Total AdClicks";
 $GLOBALS['strTotalConversions'] 	= "Total AdSales";
 $GLOBALS['strViewCredits'] 			= "AdView credits";
 $GLOBALS['strClickCredits'] 		= "AdClick credits";
 $GLOBALS['strConversionCredits'] 	= "AdSale credits";
+$GLOBALS['strImportStats']			= "Import Statistics";
 
 
 // Time and date related
@@ -222,6 +232,7 @@ $GLOBALS['strAllowClientModifyBanner'] 		= "Allow this user to modify his own ba
 $GLOBALS['strAllowClientAddBanner'] 		= "Allow this user to add his own banners";
 $GLOBALS['strAllowClientDisableBanner'] 	= "Allow this user to deactivate his own banners";
 $GLOBALS['strAllowClientActivateBanner'] 	= "Allow this user to activate his own banners";
+$GLOBALS['strAllowClientViewTargetingStats'] 	= "Allow this user to view targeting statistics";
 
 
 // Campaign
@@ -253,6 +264,7 @@ $GLOBALS['strPriorityInformation']	= "Priority information";
 $GLOBALS['strPriorityHigh']			= "High - Paid campaigns";
 $GLOBALS['strPriorityMedium']		= "Medium - Wholesale and remnant campaigns";
 $GLOBALS['strPriorityLow']			= "Low - House and unpaid campaigns";
+$GLOBALS['strHiddenCampaign']		= "Hidden Campaign";
 
 
 // Campaign properties
@@ -411,7 +423,7 @@ $GLOBALS['strDeliveryLimitations']		= "Delivery limitations";
 $GLOBALS['strDeliveryCapping']			= "Delivery capping";
 $GLOBALS['strTimeCapping']				= "Once this banner has been delivered once, don't show this banner again to the same user for:";
 $GLOBALS['strImpressionCapping']		= "Do not show this banner to the same user more than:";
-
+$GLOBALS['strImpressionCappingSession']	= "Do not show this banner during the same session more than:";
 
 // Publisher
 $GLOBALS['strAffiliate']			= "Publisher";
@@ -521,6 +533,7 @@ $GLOBALS['strAverageThisPeriod']		= "Average this period";
 $GLOBALS['strDistribution']			= "Distribution";
 $GLOBALS['strDistributionBy']		= "Distribution by";
 $GLOBALS['strOptimise']				= "Optimise";
+$GLOBALS['strKeywordStatistics']	= "Keyword Statistics";
 $GLOBALS['strResetStats'] 			= "Reset statistics";
 $GLOBALS['strSourceStats']			= "Source statistics";
 $GLOBALS['strSources']				= "Sources";
@@ -536,6 +549,8 @@ $GLOBALS['strTargetModifiedDay']	= "Targets were modified during the day, target
 $GLOBALS['strTargetModifiedWeek']	= "Targets were modified during the week, targeting could be not accurate";
 $GLOBALS['strTargetModifiedMonth']	= "Targets were modified during the month, targeting could be not accurate";
 $GLOBALS['strNoTargetStats']		= "There are currently no statistics about targeting available";
+$GLOBALS['strOVerall']				= "Overall";
+$GLOBALS['strByZone']				= "By Zone";
 
 
 // Hosts
@@ -633,7 +648,7 @@ $GLOBALS['strNoStatsForCampaign'] 		= "There are no statistics available for thi
 
 // Priority
 $GLOBALS['strPriority']				= "Priority";
-
+$GLOBALS['strSourceEdit']			= "Edit Sources";
 
 // Settings
 $GLOBALS['strSettings'] 			= "Settings";
@@ -645,8 +660,31 @@ $GLOBALS['strAdminSettings']			= "Administration settings";
 // Product Updates
 $GLOBALS['strProductUpdates']			= "Product updates";
 
+// Agency
+$GLOBALS['strAgencyManagement']				= "Agency Management";
+$GLOBALS['strAgency']						= "Agency";
+$GLOBALS['strAgencies'] 					= "Agencies";
+$GLOBALS['strAddAgency'] 					= "Add new agency";
+$GLOBALS['strAddAgency_Key'] 				= "Add <u>n</u>ew agency";
+$GLOBALS['strTotalAgencies'] 				= "Total agencies";
+$GLOBALS['strAgencyProperties']				= "Agency properties";
+$GLOBALS['strNoAgencies']					= "There are currently no agencies defined";
+$GLOBALS['strConfirmDeleteAgency'] 			= "Do you really want to delete this agency?";
+$GLOBALS['strHideInactiveAgencies']			= "Hide inactive agencies";
+$GLOBALS['strInactiveAgenciesHidden']		= "inactive agency(ies) hidden";
 
-
+// Tracker Variables
+$GLOBALS['strVariableName']			= "Variable Name";
+$GLOBALS['strVariableDescription']	= "Description";
+$GLOBALS['strVariableType']			= "Variable Type";
+$GLOBALS['strVariableDataType']		= "Data Type";
+$GLOBALS['strJavascript']			= "Javascript";
+$GLOBALS['strQuerystring']			= "Querystring";
+$GLOBALS['strInteger']				= "Integer";
+$GLOBALS['strString']				= "String";
+$GLOBALS['strTrackFollowingVars']	= "Track the following variable";
+$GLOBALS['strAddVariable']			= "Add Variable";
+$GLOBALS['strNoVarsToTrack']		= "No Variables to track.";
 
 /*********************************************************/
 /* Keyboard shortcut assignments                         */

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.6 $
+<?php // $Revision: 2.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -71,12 +71,18 @@ function settings_goto_section()
     echo $GLOBALS['strChooseSection'].":&nbsp;</b>"; 
     
 	echo "<select name='section' onChange='settings_goto_section();' tabindex='".($tabindex++)."'>";
+
+	if (phpAds_isUser(phpAds_Admin))
 	echo "<option value='db'".($section == 'db' ? ' selected' : '').">".$GLOBALS['strDatabaseSettings']."</option>";
+	
 	echo "<option value='invocation'".($section == 'invocation' ? ' selected' : '').">".$GLOBALS['strInvocationAndDelivery']."</option>";
 	echo "<option value='host'".($section == 'host' ? ' selected' : '').">".$GLOBALS['strHostAndGeo']."</option>";
 	echo "<option value='stats'".($section == 'stats' ? ' selected' : '').">".$GLOBALS['strStatisticsSettings']."</option>";
 	echo "<option value='banner'".($section == 'banner' ? ' selected' : '').">".$GLOBALS['strBannerSettings']."</option>";
+
+	if (phpAds_isUser(phpAds_Admin))
 	echo "<option value='admin'".($section == 'admin' ? ' selected' : '').">".$GLOBALS['strAdministratorSettings']."</option>";
+
 	echo "<option value='interface'".($section == 'interface' ? ' selected' : '').">".$GLOBALS['strGuiSettings']."</option>";
 	echo "<option value='defaults'".($section == 'defaults' ? ' selected' : '').">".$GLOBALS['strInterfaceDefaults']."</option>";
 	
@@ -133,10 +139,10 @@ function phpAds_ShowSettings ($data, $errors = array())
 	{
 		$image = $phpAds_config_locked ? 'closed' : 'open';
 		
-		echo "<form name='settingsform' method='post' action='".$HTTP_SERVER_VARS['PHP_SELF']."' onSubmit='return phpAds_formCheck(this);'>";
-		echo "<br><div class='errormessage'><img class='errormessage' src='images/padlock-".$image.".gif' width='16' height='16' border='0' align='absmiddle'>";
+		echo "<form name='settingsform' method='post' action='".$HTTP_SERVER_VARS['PHP_SELF']."' onSubmit='return phpAds_formCheck(this);'>\n";
+		echo "<br><div class='errormessage'><img class='errormessage' src='images/padlock-".$image.".gif' width='16' height='16' border='0' align='absmiddle'>\n";
 		echo $phpAds_config_locked ? $GLOBALS['strEditConfigNotPossible'] : $GLOBALS['strEditConfigPossible'];
-		echo "</div>";
+		echo "</div>\n";
 	}
 	
 	$dependbuffer = "function phpAds_refreshEnabled () {\n";
@@ -301,16 +307,17 @@ function phpAds_ShowSettings_StartSection($name, $error = array())
 	$icon = defined('phpAds_installing') ? 'setup' : 'settings';
 	
 	echo "\t<br><br>\n\n";
-	echo "<table border='0' width='100%' cellpadding='0' cellspacing='0'><tr>";
+	echo "<table border='0' width='100%' cellpadding='0' cellspacing='0'><tr>\n";
+	echo "<input type='hidden' name='submit' value='true'>\n";
     echo "<td height='25' colspan='4'><img src='images/icon-".$icon.".gif' width='16' height='16' align='absmiddle'>&nbsp;";
-	echo "<b>".$name."</b></td></tr>";
+	echo "<b>".$name."</b></td></tr>\n";
 	
-	echo "<tr height='1'>"; 
-    echo "<td bgcolor='#888888' width='30'><img src='images/break.gif' height='1' width='30'></td>";
-    echo "<td bgcolor='#888888' width='200'><img src='images/break.gif' height='1' width='200'></td>";
-    echo "<td bgcolor='#888888' width='100%'><img src='images/break.gif' height='1' width='1'></td>";
-    echo "<td bgcolor='#888888' width='30'><img src='images/break.gif' height='1' width='30'></td>";
-	echo "</tr><tr><td height='10' colspan='4'><img src='images/spacer.gif' width='30' height='1'></td></tr>";
+	echo "<tr height='1'>\n"; 
+    echo "<td bgcolor='#888888' width='30'><img src='images/break.gif' height='1' width='30'></td>\n";
+    echo "<td bgcolor='#888888' width='200'><img src='images/break.gif' height='1' width='200'></td>\n";
+    echo "<td bgcolor='#888888' width='100%'><img src='images/break.gif' height='1' width='1'></td>\n";
+    echo "<td bgcolor='#888888' width='30'><img src='images/break.gif' height='1' width='30'></td>\n";
+	echo "</tr><tr><td height='10' colspan='4'><img src='images/spacer.gif' width='30' height='1'></td></tr>\n";
 	
 	if (count($error))
 	{
@@ -335,33 +342,33 @@ function phpAds_ShowSettings_StartSection($name, $error = array())
 
 function phpAds_ShowSettings_EndSection()
 {
-	echo "<tr><td height='10' colspan='4'>&nbsp;</td></tr>";
-  	echo "<tr height='1'><td colspan='4' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
-	echo "</table><br><br>";
+	echo "<tr><td height='10' colspan='4'>&nbsp;</td></tr>\n";
+  	echo "<tr height='1'><td colspan='4' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>\n";
+	echo "</table>\n<br><br>\n";
 }
 
 function phpAds_ShowSettings_Break($item)
 {
 	if (!isset($item['size']) || $item['size'] == '' || $item['size'] == 'small')
 	{
-	  	echo "<tr><td width='30'><img src='images/spacer.gif' height='1' width='100%'></td>";
-	    echo "<td width='200'><img src='images/break-l.gif' height='1' width='200' vspace='10'></td>";
-	    echo "<td width='100%'>&nbsp;</td><td width='30'><img src='images/spacer.gif' height='1' width='100%'></tr>";
+	  	echo "<tr><td width='30'><img src='images/spacer.gif' height='1' width='100%'></td>\n";
+	    echo "<td width='200'><img src='images/break-l.gif' height='1' width='200' vspace='10'></td>\n";
+	    echo "<td width='100%'>&nbsp;</td><td width='30'><img src='images/spacer.gif' height='1' width='100%'></tr>\n";
 	}
 	elseif ($item['size'] == 'large')
 	{
-	  	echo "<tr><td width='30'><img src='images/spacer.gif' height='1' width='100%'></td>";
-	    echo "<td width='100%' colspan='3'><img src='images/break-l.gif' height='1' width='100%' vspace='10'></td></tr>";
+	  	echo "<tr><td width='30'><img src='images/spacer.gif' height='1' width='100%'></td>\n";
+	    echo "<td width='100%' colspan='3'><img src='images/break-l.gif' height='1' width='100%' vspace='10'></td></tr>\n";
 	}
 	elseif ($item['size'] == 'full')
 	{
-		echo "<tr><td width='100%' colspan='4'><img src='images/break.gif' height='1' width='100%' vspace='16'></td></tr>";
+		echo "<tr><td width='100%' colspan='4'><img src='images/break.gif' height='1' width='100%' vspace='16'></td></tr>\n";
 	}
 	elseif ($item['size'] == 'empty')
 	{
-		echo "<tr><td width='30'><img src='images/spacer.gif' height='1' width='100%'></td>";
-	    echo "<td width='200'><img src='images/spacer.gif' height='1' width='200' vspace='10'></td>";
-	    echo "<td width='100%'>&nbsp;</td><td width='30'><img src='images/spacer.gif' height='1' width='100%'></tr>";
+		echo "<tr><td width='30'><img src='images/spacer.gif' height='1' width='100%'></td>\n";
+	    echo "<td width='200'><img src='images/spacer.gif' height='1' width='200' vspace='10'></td>\n";
+	    echo "<td width='100%'>&nbsp;</td><td width='30'><img src='images/spacer.gif' height='1' width='100%'></tr>\n";
 	}
 }
 
@@ -369,16 +376,16 @@ function phpAds_ShowSettings_Checkbox($item, $value)
 {
 	global $phpAds_config, $tabindex;
 	
-	echo "<tr onMouseOver=\"setHelp('".$item['name']."')\"><td width='30'>&nbsp;</td>";
-    echo "<td id='cell_".$item['name']."' class='".($item['enabled'] ? 'celldisabled' : 'cellenabled')."' colspan='2' width='100%'>";
+	echo "<tr onMouseOver=\"setHelp('".$item['name']."')\"><td width='30'>&nbsp;</td>\n";
+    echo "<td id='cell_".$item['name']."' class='".($item['enabled'] ? 'celldisabled' : 'cellenabled')."' colspan='2' width='100%'>\n";
 	
 	if (isset($item['indent']) && $item['indent'])
-		echo "<img src='images/indent.gif'>";
+		echo "<img src='images/indent.gif'>\n";
 	
 	echo "<input type='checkbox' name='".$item['name']."' value='true'".($value == true ? ' checked' : '').($item['enabled'] ? ' disabled' : '');
 	echo " onClick=\"phpAds_refreshEnabled();\" onFocus=\"setHelp('".$item['name']."')\" tabindex='".($tabindex++)."'>".$item['text'];
 	
-	echo "</td><td width='30'>".phpAds_ShowSettings_PadLock($item)."</td></tr>";
+	echo "</td><td width='30'>".phpAds_ShowSettings_PadLock($item)."</td></tr>\n";
 }
 
 function phpAds_ShowSettings_Text($item, $value)
@@ -387,14 +394,14 @@ function phpAds_ShowSettings_Text($item, $value)
 	
 	if (!isset($item['size'])) $item['size'] = 25;
 	
- 	echo "<tr onMouseOver=\"setHelp('".$item['name']."')\"><td width='30'>&nbsp;</td>";
-    echo "<td id='cell_".$item['name']."' class='".($item['enabled'] ? 'celldisabled' : 'cellenabled')."' width='200' valign='top'>".$item['text']."</td>";
+ 	echo "<tr onMouseOver=\"setHelp('".$item['name']."')\"><td width='30'>&nbsp;</td>\n";
+    echo "<td id='cell_".$item['name']."' class='".($item['enabled'] ? 'celldisabled' : 'cellenabled')."' width='200' valign='top'>".$item['text']."</td>\n";
     echo "<td width='100%' valign='top'>";
 	
 	echo "<input onBlur='phpAds_refreshEnabled(); phpAds_formUpdate(this);' class='flat' type='text' name='".$item['name']."'".($item['enabled'] ? ' disabled' : '')." ";
 	echo "size='".$item['size']."' value=\"".htmlspecialchars($value)."\" onFocus=\"setHelp('".$item['name']."')\" tabindex='".($tabindex++)."'>";
 	
-	echo "</td><td width='30'>".phpAds_ShowSettings_PadLock($item)."</td></tr>";
+	echo "</td><td width='30'>".phpAds_ShowSettings_PadLock($item)."</td></tr>\n";
 }
 
 function phpAds_ShowSettings_Textarea($item, $value)
@@ -403,14 +410,14 @@ function phpAds_ShowSettings_Textarea($item, $value)
 	
 	if (!isset($item['rows'])) $item['rows'] = 5;
 	
- 	echo "<tr onMouseOver=\"setHelp('".$item['name']."')\"><td width='30'>&nbsp;</td>";
+ 	echo "<tr onMouseOver=\"setHelp('".$item['name']."')\"><td width='30'>&nbsp;</td>\n";
     echo "<td id='cell_".$item['name']."' class='".($item['enabled'] ? 'celldisabled' : 'cellenabled')."' width='200' valign='top'>".$item['text']."</td>";
-    echo "<td width='100%' valign='top'>";
+    echo "<td width='100%' valign='top'>\n";
 	
 	echo "<textarea onBlur='phpAds_refreshEnabled(); phpAds_formUpdate(this);' class='flat' name='".$item['name']."' rows='".$item['rows']."'".($item['enabled'] ? ' disabled' : '')." ";
 	echo "style='width: 350px;' onFocus=\"setHelp('".$item['name']."')\" tabindex='".($tabindex++)."'>".htmlspecialchars($value)."</textarea>";
 	
-	echo "</td><td width='30'>".phpAds_ShowSettings_PadLock($item)."</td></tr>";
+	echo "</td><td width='30'>".phpAds_ShowSettings_PadLock($item)."</td></tr>\n";
 }
 
 function phpAds_ShowSettings_Password($item, $value)
@@ -422,14 +429,14 @@ function phpAds_ShowSettings_Password($item, $value)
 	// Hide value
 	$value = str_repeat('*', strlen($value));
 	
- 	echo "<tr onMouseOver=\"setHelp('".$item['name']."')\"><td width='30'>&nbsp;</td>";
-    echo "<td id='cell_".$item['name']."' class='".($item['enabled'] ? 'celldisabled' : 'cellenabled')."' width='200' valign='top'>".$item['text']."</td>";
-    echo "<td width='100%' valign='top'>";
+ 	echo "<tr onMouseOver=\"setHelp('".$item['name']."')\"><td width='30'>&nbsp;</td>\n";
+    echo "<td id='cell_".$item['name']."' class='".($item['enabled'] ? 'celldisabled' : 'cellenabled')."' width='200' valign='top'>".$item['text']."</td>\n";
+    echo "<td width='100%' valign='top'>\n";
 	
 	echo "<input onBlur='phpAds_refreshEnabled(); phpAds_formUpdate(this);' class='flat' type='password' name='".$item['name']."'".($item['enabled'] ? ' disabled' : '')." ";
 	echo "value='".$value."' size='".$item['size']."' onFocus=\"setHelp('".$item['name']."')\" tabindex='".($tabindex++)."'>";
 	
-	echo "</td><td width='30'>".phpAds_ShowSettings_PadLock($item)."</td></tr>";
+	echo "</td><td width='30'>".phpAds_ShowSettings_PadLock($item)."</td></tr>\n";
 }
 
 function phpAds_ShowSettings_Select($item, $value)
@@ -438,12 +445,12 @@ function phpAds_ShowSettings_Select($item, $value)
 	
 	if (isset($item['items']))
 	{
-		echo "<tr onMouseOver=\"setHelp('".$item['name']."')\"><td width='30'>&nbsp;</td>";
-    	echo "<td id='cell_".$item['name']."' class='".($item['enabled'] ? 'celldisabled' : 'cellenabled')."' width='200'>".$item['text']."</td>";
-    	echo "<td width='100%'>";
+		echo "<tr onMouseOver=\"setHelp('".$item['name']."')\"><td width='30'>&nbsp;</td>\n";
+    	echo "<td id='cell_".$item['name']."' class='".($item['enabled'] ? 'celldisabled' : 'cellenabled')."' width='200'>".$item['text']."</td>\n";
+    	echo "<td width='100%'>\n";
 		
 		echo "<select name='".$item['name']."' onChange=\"phpAds_refreshEnabled();\"";
-		echo ($item['enabled'] ? ' disabled' : '')." onFocus=\"setHelp('".$item['name']."')\" tabindex='".($tabindex++)."'>";
+		echo ($item['enabled'] ? ' disabled' : '')." onFocus=\"setHelp('".$item['name']."')\" tabindex='".($tabindex++)."'>\n";
 		
 		while (list($k, $v) = each($item['items']))
 		{
@@ -453,7 +460,7 @@ function phpAds_ShowSettings_Select($item, $value)
 		}
 		
 		echo "</select>";
-		echo "</td><td width='30'>".phpAds_ShowSettings_PadLock($item)."</td></tr>";
+		echo "</td><td width='30'>".phpAds_ShowSettings_PadLock($item)."</td></tr>\n";
 	}
 }
 

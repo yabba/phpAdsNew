@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -17,20 +17,35 @@
 // Include required files
 require ("config.php");
 require ("lib-statistics.inc.php");
+require ("lib-data-statistics.inc.php");
 
 
 // Register input variables
-phpAds_registerGlobal (
-	 'limit'
-	,'period'
-	,'source'
-	,'start'
-);
-
+phpAds_registerGlobal ('limit', 'period', 'start', 'hideinactive', 'listorder', 'orderdirection');
 
 // Security check
-phpAds_checkAccess(phpAds_Admin+phpAds_Client);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency + phpAds_Client);
 
+
+
+
+if (isset($Session['prefs']['stats-advertiser-history.php']['listorder']) && !isset($listorder))
+	$listorder = $Session['prefs']['stats-advertiser-history.php']['listorder'];
+	
+if (isset($Session['prefs']['stats-advertiser-history.php']['orderdirection']) && !isset($orderdirection))
+	$orderdirection = $Session['prefs']['stats-advertiser-history.php']['orderdirection'];
+
+if (isset($Session['prefs']['stats-advertiser-history.php']['hide']) && !isset($hideinactive))
+	$hideinactive = $Session['prefs']['stats-advertiser-history.php']['hide'];
+
+if (isset($Session['prefs']['stats-advertiser-history.php']['limit']) && !isset($limit))
+	$limit = $Session['prefs']['stats-advertiser-history.php']['limit'];
+
+if (isset($Session['prefs']['stats-advertiser-history.php']['period']) && !isset($period))
+	$period = $Session['prefs']['stats-advertiser-history.php']['period'];
+
+if (isset($Session['prefs']['stats-advertiser-history.php']['start']) && !isset($start))
+	$start = $Session['prefs']['stats-advertiser-history.php']['start'];
 
 
 /*********************************************************/
@@ -41,30 +56,47 @@ if (phpAds_isUser(phpAds_Client))
 {
 	$clientid = phpAds_getUserID();
 }
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	if (isset($clientid) && ($clientid != ''))
+	{
+		$query = "SELECT clientid".
+			" FROM ".$phpAds_config['tbl_clients'].
+			" WHERE clientid=".$clientid.
+			" AND agencyid=".phpAds_getUserID();
 
+		$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+		if (phpAds_dbNumRows($res) == 0)
+		{
+			phpAds_PageHeader("2");
+			phpAds_Die ($strAccessDenied, $strNotAdmin);
+		}
+	}
+}
 
 
 /*********************************************************/
 /* HTML framework                                        */
 /*********************************************************/
 
-if (phpAds_isUser(phpAds_Admin))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 {
-	if (isset($Session['prefs']['stats-global-advertiser.php']['listorder']))
-		$navorder = $Session['prefs']['stats-global-advertiser.php']['listorder'];
-	else
-		$navorder = '';
 	
-	if (isset($Session['prefs']['stats-global-advertiser.php']['orderdirection']))
-		$navdirection = $Session['prefs']['stats-global-advertiser.php']['orderdirection'];
-	else
-		$navdirection = '';
-	
-	$res = phpAds_dbQuery(
-		"SELECT *".
+	if (phpAds_isUser(phpAds_Admin))
+	{
+		$query = "SELECT clientid,clientname".
 		" FROM ".$phpAds_config['tbl_clients'].
-		phpAds_getClientListOrder ($navorder, $navdirection)
-	) or phpAds_sqlDie();
+			phpAds_getClientListOrder ($navorder, $navdirection);
+	}
+	elseif (phpAds_isUser(phpAds_Agency))
+	{
+		$query = "SELECT clientid,clientname".
+			" FROM ".$phpAds_config['tbl_clients'].
+			" WHERE agencyid=".phpAds_getUserID().
+			phpAds_getClientListOrder ($navorder, $navdirection);
+	}
+	$res= phpAds_dbQuery($query)
+		or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
 	{
@@ -77,13 +109,14 @@ if (phpAds_isUser(phpAds_Admin))
 	
 	phpAds_PageShortcut($strClientProperties, 'advertiser-edit.php?clientid='.$clientid, 'images/icon-advertiser.gif');
 	
-	
+	if (phpAds_isUser(phpAds_Admin)) {
 	$extra  = "<br><br><br>";
 	$extra .= "<b>$strMaintenance</b><br>";
 	$extra .= "<img src='images/break.gif' height='1' width='160' vspace='4'><br>";
 	$extra .= "<a href='stats-reset.php?clientid=$clientid'".phpAds_DelConfirm($strConfirmResetClientStats).">";
 	$extra .= "<img src='images/".$phpAds_TextDirection."/icon-undo.gif' align='absmiddle' border='0'>&nbsp;$strResetStats</a>";
 	$extra .= "<br><br>";
+	}
 	
 	phpAds_PageHeader("2.1.1", $extra);
 		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;<b>".phpAds_getClientName($clientid)."</b><br><br><br>";
@@ -114,22 +147,19 @@ if (phpAds_isUser(phpAds_Client))
 /* Main code                                             */
 /*********************************************************/
 
-$idresult = phpAds_dbQuery ("
-	SELECT
-		b.bannerid
-	FROM
-		".$phpAds_config['tbl_banners']." AS b,
-		".$phpAds_config['tbl_campaigns']." AS c
-	WHERE
-		c.clientid = $clientid AND
-		c.campaignid = b.campaignid
-");
+$idresult = phpAds_dbQuery (
+	"SELECT b.bannerid".
+	" FROM ".$phpAds_config['tbl_banners']." AS b".
+	",".$phpAds_config['tbl_campaigns']." AS c".
+	" WHERE c.clientid=".$clientid.
+	" AND c.campaignid=b.campaignid"
+) or phpAds_sqlDie();
 
 if (phpAds_dbNumRows($idresult) > 0)
 {
 	while ($row = phpAds_dbFetchArray($idresult))
 	{
-		$bannerids[] = "bannerid = ".$row['bannerid'];
+		$bannerids[] = "bannerid=".$row['bannerid'];
 	}
 	
 	$lib_history_where     = "(".implode(' OR ', $bannerids).")";
@@ -144,7 +174,7 @@ if (phpAds_dbNumRows($idresult) > 0)
 	/* Maintenance                                           */
 	/*********************************************************/
 	
-	if (phpAds_isUser(phpAds_Admin))
+	if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 	{
 		echo "<br><br><br>";
 		
@@ -223,6 +253,16 @@ else
 }
 
 
+/*********************************************************/
+/* Store preferences                                     */
+/*********************************************************/
+$Session['prefs']['stats-advertiser-history.php']['listorder'] 		= $listorder;
+$Session['prefs']['stats-advertiser-history.php']['orderdirection'] = $orderdirection;
+$Session['prefs']['stats-advertiser-history.php']['hide'] 			= $hideinactive;
+$Session['prefs']['stats-advertiser-history.php']['limit'] 			= $limit;
+$Session['prefs']['stats-advertiser-history.php']['start'] 			= $start;
+$Session['prefs']['stats-advertiser-history.php']['period'] 		= $period;
+phpAds_SessionDataStore();
 
 
 /*********************************************************/

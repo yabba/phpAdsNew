@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -32,7 +32,7 @@ phpAds_checkAccess(phpAds_Admin);
 /*********************************************************/
 
 phpAds_PageHeader("5.2");
-phpAds_ShowSections(array("5.1", "5.3", "5.4", "5.2"));
+phpAds_ShowSections(array("5.1", "5.3", "5.4", "5.2","5.5"));
 
 // Load translations
 @include (phpAds_path.'/language/english/userlog.lang.php');

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -22,6 +22,7 @@ require ("lib-sessions.inc.php");
 define ("phpAds_Admin", 1);
 define ("phpAds_Client", 2);
 define ("phpAds_Affiliate", 4);
+define ("phpAds_Agency", 8);
 
 
 // Define client permissions bitwise, so 1, 2, 4, 8, 16, etc.
@@ -30,7 +31,7 @@ define ("phpAds_ModifyBanner", 2);
 define ("phpAds_AddBanner", 4);
 define ("phpAds_DisableBanner", 8);
 define ("phpAds_ActivateBanner", 16);
-
+define ("phpAds_ViewTargetingStats", 32);
 
 // Define affiliate permissions bitwise, so 1, 2, 4, 8, 16, etc.
 define ("phpAds_LinkBanners", 2);
@@ -144,10 +145,15 @@ function phpAds_getUserID ()
 	return ($Session['userid']);
 }
 
+/*********************************************************/
+/* Get the ID of the current user                        */
+/*********************************************************/
 
-
-
-
+function phpAds_getAgencyID ()
+{
+	global $Session;
+	return ($Session['agencyid']);
+}
 
 
 
@@ -205,16 +211,49 @@ function phpAds_Login()
 			// User is Administrator
 			return (array ("usertype" 		=> phpAds_Admin,
 						   "loggedin" 		=> "t",
+						   "agencyid"		=> 0,
 						   "username" 		=> $username)
 			       );
 		}
 		else
 		{
+			// Check agency table
+			
+			$res = phpAds_dbQuery("
+				SELECT
+					agencyid,
+					permissions,
+					language
+				FROM
+					".$phpAds_config['tbl_agency']."
+				WHERE
+					username = '".$username."'
+					AND password = '".$md5digest."'
+			") or phpAds_sqlDie();
+			
+			
+			if (phpAds_dbNumRows($res) > 0)
+			{
+				// User found with correct password
+				$row = phpAds_dbFetchArray($res);
+				
+				return (array ("usertype" 		=> phpAds_Agency,
+							   "loggedin" 		=> "t",
+							   "username" 		=> $username,
+							   "userid" 		=> $row['agencyid'],
+							   "agencyid"		=> $row['agencyid'],
+							   "permissions" 	=> $row['permissions'],
+							   "language" 		=> $row['language'])
+				       );
+			}
+			else
+			{
 			// Check client table
 			
 			$res = phpAds_dbQuery("
 				SELECT
 					clientid,
+						agencyid,
 					permissions,
 					language
 				FROM
@@ -234,6 +273,7 @@ function phpAds_Login()
 							   "loggedin" 		=> "t",
 							   "username" 		=> $username,
 							   "userid" 		=> $row['clientid'],
+								   "agencyid"		=> $row['agencyid'],
 							   "permissions" 	=> $row['permissions'],
 							   "language" 		=> $row['language'])
 				       );
@@ -243,6 +283,7 @@ function phpAds_Login()
 				$res = phpAds_dbQuery("
 					SELECT
 						affiliateid,
+							agencyid,
 						permissions,
 						language
 					FROM
@@ -261,6 +302,7 @@ function phpAds_Login()
 								   "loggedin" 		=> "t",
 								   "username" 		=> $username,
 								   "userid" 		=> $row['affiliateid'],
+									   "agencyid"		=> $row['agencyid'],
 								   "permissions" 	=> $row['permissions'],
 								   "language" 		=> $row['language'])
 					       );
@@ -276,6 +318,7 @@ function phpAds_Login()
 			}
 		}
 	}
+	}
 	else
 	{
 		// User has not supplied credentials yet
@@ -285,6 +328,7 @@ function phpAds_Login()
 			// We are trying to install, grant access...
 			return (array ("usertype" 		=> phpAds_Admin,
 						   "loggedin" 		=> "t",
+						   "agencyid"		=> 0,
 						   "username" 		=> 'admin')
 			       );
 		}

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.12 $
+<?php // $Revision: 2.13 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -895,7 +895,6 @@ function phpAds_upgradeHTMLCache ()
 			$current['imageurl'] = "{url_prefix}/adimage.php?filename=".$current['filename']."&contenttype=".$current['contenttype'];
 		
 		if ($current['storagetype'] == 'web')
-			//$current['imageurl'] = $phpAds_config['type_web_url'].'/'.$current['filename'];
 			$current['imageurl'] = '{image_url_prefix}/'.$current['filename'];
 		
 		

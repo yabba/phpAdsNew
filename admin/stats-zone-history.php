@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -21,12 +21,11 @@ require ("lib-expiration.inc.php");
 
 
 // Register input variables
-phpAds_registerGlobal ('period', 'start', 'limit', 'source');
+phpAds_registerGlobal ('period', 'start', 'limit');
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin+phpAds_Affiliate);
-
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency + phpAds_Affiliate);
 
 
 /*********************************************************/
@@ -35,29 +34,34 @@ phpAds_checkAccess(phpAds_Admin+phpAds_Affiliate);
 
 if (phpAds_isUser(phpAds_Affiliate))
 {
-	if (isset($zoneid) && $zoneid > 0)
-	{
-		$result = phpAds_dbQuery("
-			SELECT
-				affiliateid
-			FROM
-				".$phpAds_config['tbl_zones']."
-			WHERE
-				zoneid = '$zoneid'
-			") or phpAds_sqlDie();
-		$row = phpAds_dbFetchArray($result);
+	$query = "SELECT affiliateid".
+		" FROM ".$phpAds_config['tbl_zones'].
+		" WHERE zoneid=".$zoneid.
+		" AND affiliateid=".phpAds_getUserID();
+			
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
 		
-		if ($row["affiliateid"] == '' || phpAds_getUserID() != $row["affiliateid"])
+	if (phpAds_dbNumRows($res) == 0)
 		{
 			phpAds_PageHeader("1");
 			phpAds_Die ($strAccessDenied, $strNotAdmin);
 		}
-		else
-		{
-			$affiliateid = phpAds_getUserID();
-		}
-	}
-	else
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	$query = "SELECT a.affiliateid AS affiliateid".
+		" FROM ".$phpAds_config['tbl_zones']." as z".
+		",".$phpAds_config['tbl_affiliates']." as a".
+		//" WHERE a.zoneid=z.zoneid".
+		" WHERE a.affiliateid=z.affiliateid".		
+		" AND z.zoneid=".$zoneid.
+		" AND a.agencyid=".phpAds_getUserID();
+			
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
+	
+	if (phpAds_dbNumRows($res) == 0)
 	{
 		phpAds_PageHeader("1");
 		phpAds_Die ($strAccessDenied, $strNotAdmin);
@@ -70,16 +74,14 @@ if (phpAds_isUser(phpAds_Affiliate))
 /* HTML framework                                        */
 /*********************************************************/
 
-if (phpAds_isUser(phpAds_Admin))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 {
-	$res = phpAds_dbQuery("
-		SELECT
-			*
-		FROM
-			".$phpAds_config['tbl_zones']."
-		WHERE
-			affiliateid = '".$affiliateid."'
-	") or phpAds_sqlDie();
+	$query = "SELECT zoneid,zonename".
+		" FROM ".$phpAds_config['tbl_zones'].
+		" WHERE affiliateid=".$affiliateid;
+
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
 	{

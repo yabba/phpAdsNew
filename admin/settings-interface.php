@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -23,13 +23,13 @@ phpAds_registerGlobal ('name', 'my_header', 'my_footer', 'client_welcome', 'clie
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency);
 
 
 $errormessage = array();
 $sql = array();
 
-if (isset($HTTP_POST_VARS) && count($HTTP_POST_VARS))
+if (isset($HTTP_POST_VARS['submit']) && $HTTP_POST_VARS['submit'] == 'true')
 {
 	if (isset($name))
 		phpAds_SettingsWriteAdd('name', $name);
@@ -61,12 +61,10 @@ if (isset($HTTP_POST_VARS) && count($HTTP_POST_VARS))
 	
 	if (!count($errormessage))
 	{
-		if (phpAds_SettingsWriteFlush())
-		{
+		phpAds_SettingsWriteFlush();
 			header("Location: settings-defaults.php");
 			exit;
 		}
-	}
 }
 
 
@@ -78,7 +76,14 @@ if (isset($HTTP_POST_VARS) && count($HTTP_POST_VARS))
 
 phpAds_PrepareHelp();
 phpAds_PageHeader("5.1");
-phpAds_ShowSections(array("5.1", "5.3", "5.4", "5.2"));
+if (phpAds_isUser(phpAds_Admin))
+{
+	phpAds_ShowSections(array("5.1", "5.3", "5.4", "5.2","5.5"));
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	phpAds_ShowSections(array("5.1"));
+}
 phpAds_SettingsSelection("interface");
 
 

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -26,17 +26,17 @@ function phpAds_getBannerTemplate($type)
 		$buffer .= "\t\tplugin = parseInt(plugin.description.substring(plugin.description.indexOf('.')-1)) >= {pluginversion};\n";
 		$buffer .= "\t}\n";
 		$buffer .= "\telse if (navigator.userAgent && navigator.userAgent.indexOf('MSIE')>=0 && (navigator.userAgent.indexOf('Windows 95')>=0 || navigator.userAgent.indexOf('Windows 98')>=0 || navigator.userAgent.indexOf('Windows NT')>=0)) {\n";
-		$buffer .= "\t\tdocument.write(\"<script language=VBScript\\>\");\n";
-		$buffer .= "\t\tdocument.write(\"on error resume next\");\n";
-		$buffer .= "\t\tdocument.write(\"plugin = ( IsObject(CreateObject('ShockwaveFlash.ShockwaveFlash.{pluginversion}')))\");\n";
-		$buffer .= "\t\tdocument.write(\"if ( plugin <= 0 ) then plugin = ( IsObject(CreateObject('ShockwaveFlash.ShockwaveFlash.{pluginversion}')))\");\n";
-		$buffer .= "\t\tdocument.write(\"<\\/script\>\");\n";
+		$buffer .= "\t\tdocument.writeln('<script language=\"VBScript\"\\>');\n";
+		$buffer .= "\t\tdocument.writeln('on error resume next');\n";
+		$buffer .= "\t\tdocument.writeln('plugin = ( IsObject(CreateObject(\"ShockwaveFlash.ShockwaveFlash.{pluginversion}\")))');\n";
+		$buffer .= "\t\tdocument.writeln('if ( plugin <= 0 ) then plugin = ( IsObject(CreateObject(\"ShockwaveFlash.ShockwaveFlash.{pluginversion}\")))');\n";
+		$buffer .= "\t\tdocument.writeln('<\\/script\>');\n";
 		$buffer .= "\t}\n";
 		$buffer .= "\tif ( plugin ) {\n";
 		$buffer .= "\t\tdocument.write(\"<object classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000' codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version={pluginversion:4,0,0,0}' width='{width}' HEIGHT='{height}'>\");\n";
 		$buffer .= "\t\tdocument.write(\"<param name='movie' value='{imageurl}{swf_con}{swf_param}'>\");\n";
 		$buffer .= "\t\tdocument.write(\"<param name='quality' value='high'>\");\n";
-		$buffer .= "\t\tdocument.write(\"<embed src='{imageurl}{swf_con}{swf_param}' quality='high' width='{width}' height='{height}' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash'></embed>\");\n";
+		//$buffer .= "\t\tdocument.write(\"<embed src='{imageurl}{swf_con}{swf_param}' quality='high' width='{width}' height='{height}' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash'></embed>\");\n";
 		$buffer .= "\t\tdocument.write(\"</object>\");\n";
 		$buffer .= "\t} else if (!(navigator.appName && navigator.appName.indexOf('Netscape')>=0 && navigator.appVersion.indexOf('2.')>=0)) {\n";
 		$buffer .= "\t\tdocument.write(\"<a href='{targeturl}' target='{target}'><img src='{alt_imageurl}' width='{width}' height='{height}' border='0'></a>\");\n";
@@ -146,7 +146,6 @@ function phpAds_getBannerCache($banner)
 	if ($banner['storagetype'] == 'network')
 		$buffer = phpAds_parseNetworkInfo ($buffer);
 	
-	
 	// Auto change HTML banner
 	if ($banner['storagetype'] == 'html' || $banner['storagetype'] == 'network')
 	{
@@ -179,7 +178,6 @@ function phpAds_getBannerCache($banner)
 				if ($linkpresent)
 				{
 					// Replace all links with adclick.php
-					
 					$newbanner	 = '';
 					$prevhrefpos = '';
 					
@@ -202,11 +200,10 @@ function phpAds_getBannerCache($banner)
 						$tag = substr($lowerbanner, $tagpos, $taglength);
 						
 						
-						// Do not convert href's inside of link tags
+						// Do not convert href's inside of LINK tags
 						// because if external css files are used an
 						// adclick is logged for every impression.
-						if ($tag != 'link' &&
-							$tag != 'base')
+						if ($tag != 'link' && $tag != 'base')
 						{
 							$hrefpos = $hrefpos + 5;
 							$doublequotepos = strpos($lowerbanner, '"', $hrefpos);
@@ -307,6 +304,39 @@ function phpAds_getBannerCache($banner)
 					$buffer = eregi_replace ("<a ", "<a target='{target}' ", $buffer);
 				}
 				
+				//changes for HTML banners going through DoubleClick
+				if ($banner['adserver'] == "doubleclick") {
+		
+					// replace [timestamp] with {random:10}
+					$pattern		= "/\[timestamp\]/i";
+					$replacement	= "{random:10}";
+					$buffer = preg_replace ($pattern, $replacement, $buffer);
+			
+			
+					// insert click0 string in hrefs
+					$pattern 		= "/(http:.*?;)(.*?)/i";
+					$replacement 	= "$1click0={url_prefix}/adclick.php?bannerid={bannerid}&zoneid={zoneid}&source={source}&dest=;$2";
+					$buffer = preg_replace ($pattern, $replacement, $buffer);		
+				}
+				
+				//changes for HTML banners going through Atlas
+				else if ($banner['adserver'] == "atlas") {
+	
+					// replace [timestamp] with {random:10}
+					$pattern		= "/\[timestamp\]/i";
+					$replacement	= "{random:10}";
+					//$buffer = preg_replace ($pattern, $replacement, $buffer);
+			
+			
+					// insert click0 and org string in hrefs
+					$pattern 		= "/(http:.*?direct\/01)?click=(.*?)/i";
+					$replacement 	= "$1click={url_prefix}/adclick.php?bannerid={bannerid}&zoneid={zoneid}&source={source}&ord={random:10}&dest=$2";
+					$buffer = preg_replace ($pattern, $replacement, $buffer);	
+				}
+				
+				
+			// End link processing
+				
 				if (!$formpresent && !$linkpresent && $banner['url'] != '')
 				{
 					// No link or form
@@ -346,10 +376,14 @@ function phpAds_getBannerCache($banner)
 				}
 				
 				$buffer = str_replace ($regs[0], '{url_prefix}/adclick.php?bannerid={bannerid}&amp;zoneid={zoneid}&amp;source='.$source.'&amp;dest='.urlencode($url).'&amp;ismap=', $buffer);
+				
+				$buffer = str_replace ('{targeturl=}', '{url_prefix}/adclick.php?bannerid={bannerid}&amp;zoneid={zoneid}&amp;source={source}&amp;dest=', $buffer);
+
 			}
-		}
 		
-		$buffer = str_replace ('{targeturl=}', '{url_prefix}/adclick.php?bannerid={bannerid}&amp;zoneid={zoneid}&amp;source={source}&amp;dest=', $buffer);
+		}
+		// end of autoChange HTML Banner
+		
 	}
 	
 	
@@ -469,7 +503,6 @@ function phpAds_getBannerCache($banner)
 	// Append
 	if (isset($banner['append']) && $banner['append'] != '')
 		$buffer .= $banner['append'];
-	
 	
 	return ($buffer);
 }

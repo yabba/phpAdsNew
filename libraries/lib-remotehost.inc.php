@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -12,7 +12,7 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-
+require_once('lib-io.inc.php');
 
 // Check for proxyserver
 if ($phpAds_config['proxy_lookup'])
@@ -62,18 +62,7 @@ if (!isset($HTTP_SERVER_VARS['REMOTE_HOST']) || $HTTP_SERVER_VARS['REMOTE_HOST']
 // Geotracking
 if ($phpAds_config['geotracking_type'] != '')
 {
-	if (isset($HTTP_COOKIE_VARS['phpAds_geoInfo']))
-	{
-		// Use cookie if available
-		$phpAds_geoRaw = explode('|', $HTTP_COOKIE_VARS['phpAds_geoInfo']);
-		
-		if (count($phpAds_geoRaw) == 3)
-		{
-			$phpAds_geo['country']   = $phpAds_geoRaw[0] != '' ? $phpAds_geoRaw[0] : false;
-			$phpAds_geo['continent'] = $phpAds_geoRaw[1] != '' ? $phpAds_geoRaw[1] : false;
-			$phpAds_geo['region']    = $phpAds_geoRaw[2] != '' ? $phpAds_geoRaw[2] : false;
-		}
-	}
+	$phpAds_geo = phpAds_getCachedGeoInformation();
 	
 	if (!isset($phpAds_geo))
 	{

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -20,7 +20,7 @@ require ("lib-banner.inc.php");
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency);
 
 
 
@@ -28,12 +28,22 @@ phpAds_checkAccess(phpAds_Admin);
 /* Main code                                             */
 /*********************************************************/
 
-$res = phpAds_dbQuery("
-	SELECT
-		*
-	FROM
-		".$phpAds_config['tbl_banners']."
-");
+if (phpAds_isUser(phpAds_Admin))
+{
+	$query = "SELECT *".
+		" FROM ".$phpAds_config['tbl_banners'];
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	$query = "SELECT *".
+		" FROM ".$phpAds_config['tbl_banners']." AS b".
+		",".$phpAds_config['tbl_campaigns']." AS m".
+		",".$phpAds_config['tbl_clients']." AS c".
+		" WHERE b.campaignid=m.campaignid".
+		" AND m.clientid=c.clientid".
+		" AND c.agencyid=".phpAds_getUserID();
+}
+$res = phpAds_dbQuery($query);
 
 while ($current = phpAds_dbFetchArray($res))
 {
@@ -42,7 +52,6 @@ while ($current = phpAds_dbFetchArray($res))
 		$current['imageurl'] = "{url_prefix}/adimage.php?filename=".$current['filename']."&amp;contenttype=".$current['contenttype'];
 	
 	if ($current['storagetype'] == 'web')
-		//$current['imageurl'] = $phpAds_config['type_web_url'].'/'.$current['filename'];
 		$current['imageurl'] = '{image_url_prefix}/'.$current['filename'];
 	
 	
@@ -55,15 +64,12 @@ while ($current = phpAds_dbFetchArray($res))
 	$current['htmltemplate'] = stripslashes($current['htmltemplate']);
 	$current['htmlcache']    = addslashes(phpAds_getBannerCache($current));
 	
-	phpAds_dbQuery("
-		UPDATE
-			".$phpAds_config['tbl_banners']."
-		SET
-			htmlcache = '".$current['htmlcache']."',
-			imageurl  = '".$current['imageurl']."'
-		WHERE
-			bannerid = ".$current['bannerid']."
-	");
+	phpAds_dbQuery(
+		"UPDATE ".$phpAds_config['tbl_banners'].
+		" SET htmlcache='".$current['htmlcache']."'".
+		",imageurl='".$current['imageurl']."'".
+		" WHERE bannerid=".$current['bannerid']
+	);
 }
 
 Header("Location: maintenance-banners.php");

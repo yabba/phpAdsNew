@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -31,7 +31,7 @@ phpAds_checkAccess(phpAds_Admin);
 $errormessage = array();
 $sql = array();
 
-if (isset($HTTP_POST_VARS) && count($HTTP_POST_VARS))
+if (isset($HTTP_POST_VARS['submit']) && $HTTP_POST_VARS['submit'] == 'true')
 {
 	if (isset($admin))
 	{
@@ -82,14 +82,12 @@ if (isset($HTTP_POST_VARS) && count($HTTP_POST_VARS))
 	phpAds_SettingsWriteAdd('userlog_priority', isset($userlog_priority));
 	phpAds_SettingsWriteAdd('userlog_autoclean', isset($userlog_autoclean));
 	
-	
 	if (!count($errormessage))
 	{
-		if (phpAds_SettingsWriteFlush())
-		{
+		phpAds_SettingsWriteFlush();
 			header("Location: settings-interface.php");
 			exit;
-		}
+		
 	}
 }
 
@@ -103,7 +101,14 @@ phpAds_PrepareHelp();
 if (isset($message))
 	phpAds_ShowMessage($message);
 phpAds_PageHeader("5.1");
-phpAds_ShowSections(array("5.1", "5.3", "5.4", "5.2"));
+if (phpAds_isUser(phpAds_Admin))
+{
+	phpAds_ShowSections(array("5.1", "5.3", "5.4", "5.2","5.5"));
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	phpAds_ShowSections(array("5.1"));
+}
 phpAds_SettingsSelection("admin");
 
 

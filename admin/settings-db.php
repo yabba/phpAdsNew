@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -31,8 +31,9 @@ phpAds_checkAccess(phpAds_Admin);
 $errormessage = array();
 $sql = array();
 
-if (isset($HTTP_POST_VARS) && count($HTTP_POST_VARS))
+if (isset($HTTP_POST_VARS['submit']) && $HTTP_POST_VARS['submit'] == 'true')
 {
+
 	if (isset($dbpassword) && ereg('^\*+$', $dbpassword))
 		$dbpassword = $phpAds_config['dbpassword'];
 	
@@ -69,12 +70,12 @@ if (isset($HTTP_POST_VARS) && count($HTTP_POST_VARS))
 	
 	if (!count($errormessage))
 	{
-		if (phpAds_SettingsWriteFlush())
-		{
+		phpAds_SettingsWriteFlush();
 			header("Location: settings-invocation.php");
 			exit;
+
 		}
-	}
+	
 }
 
 
@@ -85,7 +86,14 @@ if (isset($HTTP_POST_VARS) && count($HTTP_POST_VARS))
 
 phpAds_PrepareHelp();
 phpAds_PageHeader("5.1");
-phpAds_ShowSections(array("5.1", "5.3", "5.4", "5.2"));
+if (phpAds_isUser(phpAds_Admin))
+{
+	phpAds_ShowSections(array("5.1", "5.3", "5.4", "5.2","5.5"));
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	phpAds_ShowSections(array("5.1"));
+}
 phpAds_SettingsSelection("db");
 
 
@@ -98,12 +106,13 @@ $settings = array (
 
 array (
 	'text' 	  => $strDatabaseServer,
+	'visible' => phpAds_isUser(phpAds_Admin),
 	'items'	  => array (
 		array (
 			'type' 	  => 'text', 
 			'name' 	  => 'dbhost',
 			'text' 	  => $strDbHost,
-			'req'	  => true
+			'req'	  => true,
 		),
 		array (
 			'type'    => 'break'
@@ -112,7 +121,7 @@ array (
 			'type' 	  => 'text', 
 			'name' 	  => 'dbport',
 			'text' 	  => $strDbPort,
-			'req'	  => true
+			'req'	  => true,
 		),
 		array (
 			'type'    => 'break'
@@ -121,7 +130,7 @@ array (
 			'type' 	  => 'text', 
 			'name' 	  => 'dbuser',
 			'text' 	  => $strDbUser,
-			'req'	  => true
+			'req'	  => true,
 		),
 		array (
 			'type'    => 'break'
@@ -130,7 +139,7 @@ array (
 			'type' 	  => 'password', 
 			'name' 	  => 'dbpassword',
 			'text' 	  => $strDbPassword,
-			'req'	  => true
+			'req'	  => true,
 		),
 		array (
 			'type'    => 'break'
@@ -139,12 +148,13 @@ array (
 			'type' 	  => 'text', 
 			'name' 	  => 'dbname',
 			'text' 	  => $strDbName,
-			'req'	  => true
+			'req'	  => true,
 		)
 	)
 ),
 array (
 	'text' 	  => $strDatabaseOptimalisations,
+	'visible' => phpAds_isUser(phpAds_Admin),
 	'items'	  => array (
 		array (
 			'type'    => 'checkbox',
@@ -179,7 +189,6 @@ array (
 /*********************************************************/
 
 phpAds_ShowSettings($settings, $errormessage);
-
 
 
 /*********************************************************/

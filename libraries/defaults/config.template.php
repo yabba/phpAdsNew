@@ -26,6 +26,7 @@ $phpAds_config['tbl_adconversions'] = 'phpads_adconversions';
 $phpAds_config['tbl_adstats'] = 'phpads_adstats';
 $phpAds_config['tbl_adviews'] = 'phpads_adviews';
 $phpAds_config['tbl_affiliates'] = 'phpads_affiliates';
+$phpAds_config['tbl_agency'] = 'phpads_agency';
 $phpAds_config['tbl_banners'] = 'phpads_banners';
 $phpAds_config['tbl_cache'] = 'phpads_cache';
 $phpAds_config['tbl_campaigns'] = 'phpads_campaigns';
@@ -39,6 +40,8 @@ $phpAds_config['tbl_targetstats'] = 'phpads_targetstats';
 $phpAds_config['tbl_trackers'] = 'phpads_trackers';
 $phpAds_config['tbl_userlog'] = 'phpads_userlog';
 $phpAds_config['tbl_zones'] = 'phpads_zones';
+$phpAds_config['tbl_variables'] = 'phpads_variables';
+$phpAds_config['tbl_variablevalues'] = 'phpads_variablevalues';
 
 // Database table name prefix
 $phpAds_config['table_prefix'] = 'phpads_';
@@ -65,6 +68,9 @@ $phpAds_config['compatibility_mode'] = false;
 // The URL to your phpAds-installation
 $phpAds_config['url_prefix'] = 'http://www.your-url.com/phpAdsNew';
 
+// The URL to SSL banners
+$phpAds_config['ssl_url_prefix'] = 'https://www.your-url.com/phpAdsNew';
+
 // Is the admin interface enabled
 $phpAds_config['ui_enabled'] = true;
 
@@ -82,6 +88,9 @@ $phpAds_config['reverse_lookup'] = false;
 
 // Find the correct IP for users behind a proxy
 $phpAds_config['proxy_lookup'] = false;
+
+// Find the correct IP for users behind a proxy
+$phpAds_config['obfuscate'] = false;
 
 // Type of geotracking database
 // Possible options: geoip, ip2country, mod_geoip or an empty string
@@ -101,9 +110,6 @@ $phpAds_config['geotracking_cookie'] = false;
 /*********************************************************/
 /* Statistics and logging                                */
 /*********************************************************/
-
-// Use compact or verbose statistics
-$phpAds_config['compact_stats'] = true;
 
 // Enabled logging of adviews?
 $phpAds_config['log_adviews'] = true;
@@ -146,7 +152,7 @@ $phpAds_config['default_conversion_clickwindow'] = 0;
 
 // Window for logging of conversions for xx seconds after a view
 $phpAds_config['default_conversion_viewwindow'] = 0;
-
+/*
 // E-mail admin when views/clicks/conversions get low?
 $phpAds_config['warn_admin'] = true;
 
@@ -155,7 +161,7 @@ $phpAds_config['warn_client'] = true;
 
 // Minimum views/clicks/conversions before warning e-mail is sent
 $phpAds_config['warn_limit'] = 100; 
-
+*/
 
 
 /*********************************************************/
@@ -183,6 +189,9 @@ $phpAds_config['p3p_policy_location'] = '';
 // Possible options: none, db, file or shm
 $phpAds_config['delivery_caching'] = 'db';
 
+// Use keywords to select banners?
+$phpAds_config['use_keywords'] = true;
+
 // Use conditional keywords?
 $phpAds_config['con_key'] = true;
 
@@ -201,6 +210,9 @@ $phpAds_config['default_banner_target'] = '';
 
 // The URL to your web server banner type image directory
 $phpAds_config['type_web_url'] = '';
+
+// The URL to the web server for SSL images
+$phpAds_config['type_web_ssl_url'] = '';
 
 
 /*********************************************************/

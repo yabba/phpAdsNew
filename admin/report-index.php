@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -24,7 +24,7 @@ phpAds_registerGlobal ('selection');
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin+phpAds_Client+phpAds_Affiliate);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency + phpAds_Client + phpAds_Affiliate);
 
 
 // Load translations
@@ -81,22 +81,30 @@ function phpAds_getCampaignArray()
 {
 	global $phpAds_config;
 	
-	if (phpAds_isUser(phpAds_Client))
+	if (phpAds_isUser(phpAds_Admin))
 	{
-		$res = phpAds_dbQuery(
-			"SELECT *".
-			" FROM ".$phpAds_config['tbl_campaigns'].
-			" WHERE clientid=".phpAds_getUserID()
-		);
+		$query =
+			"SELECT campaignid,campaignname".
+			" FROM ".$phpAds_config['tbl_campaigns'];
 	}
-	else
+	elseif (phpAds_isUser(phpAds_Agency))
 	{
-		$res = phpAds_dbQuery(
-			"SELECT *".
-			" FROM ".$phpAds_config['tbl_campaigns']
-		);
+		$query =
+			"SELECT campaignid,campaignname".
+			" FROM ".$phpAds_config['tbl_campaigns']." AS m".
+			",".$phpAds_config['tbl_clients']." AS c".
+			" WHERE c.clientid=m.clientid".
+			" AND c.agencyid=".phpAds_getUserID();
+	}
+	elseif (phpAds_isUser(phpAds_Client))
+	{
+		$query =
+			"SELECT campaignid,campaignname".
+			" FROM ".$phpAds_config['tbl_campaigns'].
+			" WHERE clientid=".phpAds_getUserID();
 	}
 	
+	$res = phpAds_dbQuery($query);	
 	while ($row = phpAds_dbFetchArray($res))
 		$campaignArray[$row['campaignid']] = phpAds_buildName ($row['campaignid'], $row['campaignname']);
 	
@@ -107,10 +115,27 @@ function phpAds_getClientArray()
 {
 	global $phpAds_config;
 	
-	$res = phpAds_dbQuery(
-		"SELECT *".
-		" FROM ".$phpAds_config['tbl_clients']
-	);
+	if (phpAds_isUser(phpAds_Admin))
+	{
+		$query =
+			"SELECT clientid,clientname".
+			" FROM ".$phpAds_config['tbl_clients'];
+	}
+	elseif (phpAds_isUser(phpAds_Agency))
+	{
+		$query =
+			"SELECT clientid,clientname".
+			" FROM ".$phpAds_config['tbl_clients'].
+			" WHERE agencyid=".phpAds_getUserID();
+	}
+	elseif (phpAds_isUser(phpAds_Client))
+	{
+		$query =
+			"SELECT clientid,clientname".
+			" FROM ".$phpAds_config['tbl_clients'].
+			" WHERE clientid=".phpAds_getUserID();
+	}
+	$res = phpAds_dbQuery($query);
 	
 	while ($row = phpAds_dbFetchArray($res))
 		$clientArray[$row['clientid']] = phpAds_buildName ($row['clientid'], $row['clientname']);
@@ -122,26 +147,29 @@ function phpAds_getZoneArray()
 {
 	global $phpAds_config;
 	
-	if (phpAds_isUser(phpAds_Affiliate))
+	if (phpAds_isUser(phpAds_Admin))
 	{
-		$res = phpAds_dbQuery("
-			SELECT
-				*
-			FROM
-				".$phpAds_config['tbl_zones']."
-			WHERE
-				affiliateid = ".phpAds_getUserID()."
-		");
+		$query =
+			"SELECT zoneid,zonename".
+			" FROM ".$phpAds_config['tbl_zones'];
 	}
-	else
+	elseif (phpAds_isUser(phpAds_Agency))
 	{
-		$res = phpAds_dbQuery("
-			SELECT
-				*
-			FROM
-				".$phpAds_config['tbl_zones']."
-		");
+		$query =
+			"SELECT zoneid,zonename".
+			" FROM ".$phpAds_config['tbl_zones']." AS z".
+			",".$phpAds_config['tbl_affiliates']." AS a".
+			" WHERE a.affiliateid=z.affiliateid".
+			" AND a.agencyid=".phpAds_getUserID();
 	}
+	elseif (phpAds_isUser(phpAds_Client))
+	{
+		$query =
+			"SELECT zoneid,zonename".
+			" FROM ".$phpAds_config['tbl_zones'].
+			" WHERE affiliateid=".phpAds_getUserID();
+	}
+	$res = phpAds_dbQuery($query);
 	
 	while ($row = phpAds_dbFetchArray($res))
 		$zoneArray[$row['zoneid']] = phpAds_buildName ($row['zoneid'], $row['zonename']);
@@ -153,12 +181,27 @@ function phpAds_getAffiliateArray()
 {
 	global $phpAds_config;
 	
-	$res = phpAds_dbQuery("
-		SELECT
-			*
-		FROM
-			".$phpAds_config['tbl_affiliates']."
-	");
+	if (phpAds_isUser(phpAds_Admin))
+	{
+		$query =
+			"SELECT affiliateid,name".
+			" FROM ".$phpAds_config['tbl_affiliates'];
+	}
+	elseif (phpAds_isUser(phpAds_Agency))
+	{
+		$query =
+			"SELECT affiliateid,name".
+			" FROM ".$phpAds_config['tbl_affiliates'].
+			" WHERE agencyid=".phpAds_getUserID();
+	}
+	elseif (phpAds_isUser(phpAds_Client))
+	{
+		$query =
+			"SELECT affiliateid,name".
+			" FROM ".$phpAds_config['tbl_affiliates'].
+			" WHERE affiliateid=".phpAds_getUserID();
+	}
+	$res = phpAds_dbQuery($query);
 	
 	while ($row = phpAds_dbFetchArray($res))
 		$affiliateArray[$row['affiliateid']] = phpAds_buildAffiliateName ($row['affiliateid'], $row['name']);
@@ -167,7 +210,37 @@ function phpAds_getAffiliateArray()
 }
 
 
+function phpAds_getKeywordsArray()
+{
+	global $phpAds_config;
 
+	if (phpAds_isUser(phpAds_Admin))
+	{
+		$query =
+			"SELECT affiliateid,name".
+			" FROM ".$phpAds_config['tbl_affiliates'];
+	}
+	elseif (phpAds_isUser(phpAds_Agency))
+	{
+		$query =
+			"SELECT affiliateid,name".
+			" FROM ".$phpAds_config['tbl_affiliates'].
+			" WHERE agencyid=".phpAds_getUserID();
+	}
+	elseif (phpAds_isUser(phpAds_Client))
+	{
+		$query =
+			"SELECT affiliateid,name".
+			" FROM ".$phpAds_config['tbl_affiliates'].
+			" WHERE affiliateid=".phpAds_getUserID();
+	}
+	$res = phpAds_dbQuery($query);
+	
+	while ($row = phpAds_dbFetchArray($res))
+		$affiliateArray[$row['affiliateid']] = phpAds_buildAffiliateName ($row['affiliateid'], $row['name']);
+	
+	return ($affiliateArray);
+}
 /*********************************************************/
 /* Main code                                             */
 /*********************************************************/

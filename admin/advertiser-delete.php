@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -27,8 +27,21 @@ phpAds_registerGlobal ('returnurl');
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency);
 
+if (phpAds_isUser(phpAds_Agency))
+{
+	$query = "SELECT clientid".
+		" FROM ".$phpAds_config['tbl_clients'].
+		" WHERE clientid=".$clientid.
+		" AND agencyid=".phpAds_getUserID();
+	$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+	if (phpAds_dbNumRows($res) == 0)
+	{
+		phpAds_PageHeader("2");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
+	}
+}
 
 
 /*********************************************************/
@@ -37,14 +50,7 @@ phpAds_checkAccess(phpAds_Admin);
 
 if (isset($clientid) && $clientid != '')
 {
-	// Delete Client
-	$res = phpAds_dbQuery(
-		"DELETE FROM ".$phpAds_config['tbl_clients'].
-		" WHERE clientid=".$clientid
-	) or phpAds_sqlDie();
-	
-	
-	// Loop thourgh each campaign
+	// Loop through each campaign
 	$res_campaign = phpAds_dbQuery(
 		"SELECT campaignid".
 		" FROM ".$phpAds_config['tbl_campaigns'].
@@ -54,26 +60,16 @@ if (isset($clientid) && $clientid != '')
 	
 	while ($row_campaign = phpAds_dbFetchArray($res_campaign))
 	{
-		// Delete Campaign
-		$res = phpAds_dbQuery(
-			"DELETE FROM ".$phpAds_config['tbl_campaigns'].
-			" WHERE campaignid=".$row_campaign['campaignid']
-		) or phpAds_sqlDie();
-				
-		// Delete Tracker
-		$res = phpAds_dbQuery(
-			"DELETE FROM ".$phpAds_config['tbl_trackers'].
-			" WHERE trackerid=".$row_campaign['trackerid']
-		) or phpAds_sqlDie();
+		$campaignid = $row_campaign['campaignid'];
 				
 		// Delete Campaign/Tracker links
 		$res = phpAds_dbQuery("DELETE FROM ".$phpAds_config['tbl_campaigns_trackers'].
-			" WHERE campaignid=".$row_campaign['campaignid']
+			" WHERE campaignid=".$campaignid
 		) or phpAds_sqlDie();
 		
 		// Delete Conversions Logged to this Campaign
 		$res = phpAds_dbQuery("DELETE FROM ".$phpAds_config['tbl_conversionlog'].
-			" WHERE campaignid=".$row_campaign['campaignid']
+			" WHERE campaignid=".$campaignid
 		) or phpAds_sqlDie();
 		
 		// Loop through each banner
@@ -86,57 +82,67 @@ if (isset($clientid) && $clientid != '')
 			" WHERE campaignid=".$row_campaign['campaignid']."
 			") or phpAds_sqlDie();
 		
-		while ($row = phpAds_dbFetchArray($res_banners))
+		while ($row_banners = phpAds_dbFetchArray($res_banners))
 		{
-			// Cleanup stored images for each banner
-			if (($row['storagetype'] == 'web' || $row['storagetype'] == 'sql') && $row['filename'] != '')
-				phpAds_ImageDelete ($row['storagetype'], $row['filename']);
+			$bannerid = $row_banners['bannerid'];
 			
+			// Cleanup stored images for each banner
+			if (($row_banners['storagetype'] == 'web' || $row_banners['storagetype'] == 'sql') && $row_banners['filename'] != '')
+				phpAds_ImageDelete ($row_banners['storagetype'], $row_banners['filename']);
 			
 			// Delete Banner ACLs
 			phpAds_dbQuery(
 				"DELETE FROM ".$phpAds_config['tbl_acls'].
-				" WHERE bannerid = ".$row['bannerid']
+				" WHERE bannerid=".$bannerid
 			) or phpAds_sqlDie();
 			
-			
 			// Delete stats for each banner
-			phpAds_deleteStatsByBannerID($row['bannerid']);
+			phpAds_deleteStatsByBannerID($bannerid);
 		}
-		
 		
 		// Delete Banners
 		phpAds_dbQuery(
 			"DELETE FROM ".$phpAds_config['tbl_banners'].
-			" WHERE campaignid = ".$row_campaign['campaignid']
+			" WHERE campaignid=".$campaignid
 		) or phpAds_sqlDie();
 	}
 	
-	
-	// Loop thourgh each tracker
+	// Loop through each tracker
 	$res_tracker = phpAds_dbQuery(
 		"SELECT trackerid".
 		" FROM ".$phpAds_config['tbl_trackers'].
 		" WHERE clientid=".$clientid
 	) or phpAds_sqlDie();
 	
-	
 	while ($row_tracker = phpAds_dbFetchArray($res_tracker))
 	{
-		// Delete Tracker
-		$res = phpAds_dbQuery(
-			"DELETE FROM ".$phpAds_config['tbl_trackers'].
-			" WHERE trackerid=".$row_tracker['trackerid']
-		) or phpAds_sqlDie();
+		$trackerid = $row_tracker['trackerid'];
 				
 		// Delete Campaign/Tracker links
 		$res = phpAds_dbQuery("DELETE FROM ".$phpAds_config['tbl_campaigns_trackers'].
-			" WHERE trackerid=".$row_tracker['trackerid']
+			" WHERE trackerid=".$trackerid
 		) or phpAds_sqlDie();
 		
-		// Delete stats for each banner
-		phpAds_deleteStatsByTrackerID($row['trackerid']);
+		// Delete stats for each tracker
+		phpAds_deleteStatsByTrackerID($trackerid);
 	}
+	// Delete Clients
+	$res = phpAds_dbQuery(
+		"DELETE FROM ".$phpAds_config['tbl_clients'].
+		" WHERE clientid=".$clientid
+	) or phpAds_sqlDie();
+	
+	// Delete Campaigns
+	$res = phpAds_dbQuery(
+		"DELETE FROM ".$phpAds_config['tbl_campaigns'].
+		" WHERE clientid=".$clientid
+	) or phpAds_sqlDie();
+
+	// Delete Trackers
+	$res = phpAds_dbQuery(
+		"DELETE FROM ".$phpAds_config['tbl_trackers'].
+		" WHERE clientid=".$clientid
+	) or phpAds_sqlDie();
 }
 
 // Rebuild priorities

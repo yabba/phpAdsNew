@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -20,8 +20,7 @@ require ("lib-statistics.inc.php");
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin+phpAds_Affiliate);
-
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency + phpAds_Affiliate);
 
 
 /*********************************************************/
@@ -30,17 +29,33 @@ phpAds_checkAccess(phpAds_Admin+phpAds_Affiliate);
 
 if (phpAds_isUser(phpAds_Affiliate))
 {
-	$result = phpAds_dbQuery("
-		SELECT
-			affiliateid
-		FROM
-			".$phpAds_config['tbl_zones']."
-		WHERE
-			zoneid = '$zoneid'
-		") or phpAds_sqlDie();
-	$row = phpAds_dbFetchArray($result);
+	$query = "SELECT affiliateid".
+		" FROM ".$phpAds_config['tbl_zones'].
+		" WHERE zoneid=".$zoneid.
+		" AND affiliateid=".phpAds_getUserID();
+			
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
 	
-	if ($row["affiliateid"] == '' || phpAds_getUserID() != $row["affiliateid"])
+	if (phpAds_dbNumRows($res) == 0)
+	{
+		phpAds_PageHeader("1");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
+	}
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	$query = "SELECT a.affiliateid AS affiliateid".
+		" FROM ".$phpAds_config['tbl_zones']." as z".
+		",".$phpAds_config['tbl_affiliates']." as a".
+		" WHERE a.zoneid=z.zoneid".
+		" AND z.zoneid=".$zoneid.
+		" AND a.agencyid=".phpAds_getUserID();
+			
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
+	
+	if (phpAds_dbNumRows($res) == 0)
 	{
 		phpAds_PageHeader("1");
 		phpAds_Die ($strAccessDenied, $strNotAdmin);
@@ -77,7 +92,7 @@ while ($row = phpAds_dbFetchArray($res))
 	);
 }
 
-if (phpAds_isUser(phpAds_Admin))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 {
 	phpAds_PageShortcut($strAffiliateProperties, 'affiliate-edit.php?affiliateid='.$affiliateid, 'images/icon-affiliate.gif');	
 	phpAds_PageShortcut($strZoneProperties, 'zone-edit.php?affiliateid='.$affiliateid.'&zoneid='.$zoneid, 'images/icon-zone.gif');	
@@ -95,8 +110,7 @@ if (phpAds_isUser(phpAds_Admin))
 		if (!$phpAds_config['compact_stats']) $sections[] = "2.4.2.1.2";
 		phpAds_ShowSections($sections);
 }
-
-if (phpAds_isUser(phpAds_Affiliate))
+elseif (phpAds_isUser(phpAds_Affiliate))
 {
 	phpAds_PageHeader("1.1.1.1");
 		echo "<img src='images/icon-zone.gif' align='absmiddle'>&nbsp;<b>".phpAds_getZoneName($zoneid);

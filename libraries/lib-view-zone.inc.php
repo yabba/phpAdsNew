@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -23,7 +23,7 @@ define ('LIBVIEWZONE_INCLUDED', true);
 
 function phpAds_fetchBannerZone($remaining, $clientid, $campaignid, $context = 0, $source = '', $richmedia = true)
 {
-	global $phpAds_config, $HTTP_COOKIE_VARS;
+	global $phpAds_config;
 	global $phpAds_followedChain;
 	
 	// Get first part, store second part
@@ -195,40 +195,30 @@ function phpAds_fetchBannerZone($remaining, $clientid, $campaignid, $context = 0
 						$postconditionSucces = false;
 					
 					// Excludelist campaigns
-					if ($postconditionSucces == true &&
-						isset($excludeCampaignID[$rows[$i]['campaignid']]))
+					elseif (isset($excludeCampaignID[$rows[$i]['campaignid']]))
 						$postconditionSucces = false;
 					
 					// Includelist banners
-					if ($postconditionSucces == true &&
-						sizeof($includeBannerID) &&
+					elseif (sizeof($includeBannerID) &&
 					    !isset ($includeBannerID[$rows[$i]['bannerid']]))
 						$postconditionSucces = false;
 					
 					// Includelist campaigns
-					if ($postconditionSucces == true &&
-						sizeof($includeCampaignID) &&
+					elseif (sizeof($includeCampaignID) &&
 					    !isset ($includeCampaignID[$rows[$i]['campaignid']]))
 						$postconditionSucces = false;
 					
 					// HTML or Flash banners
-					if ($postconditionSucces == true &&
-					    $richmedia == false &&
+					elseif ($richmedia == false &&
 					    ($rows[$i]['contenttype'] != 'jpeg' && $rows[$i]['contenttype'] != 'gif' && $rows[$i]['contenttype'] != 'png'))
 						$postconditionSucces = false;
 					
 					// Blocked
-					if ($postconditionSucces == true &&
-						$rows[$i]['block'] > 0 &&
-						isset($HTTP_COOKIE_VARS['phpAds_blockAd'][$rows[$i]['bannerid']]) &&
-						$HTTP_COOKIE_VARS['phpAds_blockAd'][$rows[$i]['bannerid']] > time())
+					elseif (phpAds_isAdBlocked($rows[$i]['bannerid'], $rows[$i]['block']))
 						$postconditionSucces = false;
 					
 					// Capped
-					if ($postconditionSucces == true &&
-						$rows[$i]['capping'] > 0 &&
-						isset($HTTP_COOKIE_VARS['phpAds_capAd'][$rows[$i]['bannerid']]) &&
-						$HTTP_COOKIE_VARS['phpAds_capAd'][$rows[$i]['bannerid']] >= $rows[$i]['capping'])
+					elseif (phpAds_isAdCapped($rows[$i]['bannerid'], $rows[$i]['capping'], $rows[$i]['session_capping']))
 						$postconditionSucces = false;
 					
 					

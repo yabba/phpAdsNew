@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -20,11 +20,11 @@ require ("lib-statistics.inc.php");
 
 
 // Register input variables
-phpAds_registerGlobal ('period', 'start', 'limit', 'source');
+phpAds_registerGlobal ('period', 'start', 'limit');
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin+phpAds_Client);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency + phpAds_Client);
 
 
 
@@ -32,7 +32,7 @@ phpAds_checkAccess(phpAds_Admin+phpAds_Client);
 /* HTML framework                                        */
 /*********************************************************/
 
-if (phpAds_isUser(phpAds_Admin))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 {
 	phpAds_PageHeader("2.2");
 	phpAds_ShowSections(array("2.1", "2.4", "2.2", "2.5"));

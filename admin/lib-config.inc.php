@@ -1,4 +1,4 @@
-<?php // $Revision: 2.6 $
+<?php // $Revision: 2.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -75,23 +75,27 @@ function phpAds_SettingsWriteFlush()
 		{
 			if ($k_type == 'boolean')
 				$v = $v ? true : false;
+			
 			elseif ($k_type != 'array')
 				$v = stripslashes($v);
 			
-			$config_inc[] = array($k,
-				$v,
-				$k_type);
+			$config_inc[] = array($k, $v, $k_type);
 		}
 	}
 	
 	if (count($sql))
 	{
-		$query = "UPDATE ".$phpAds_config['tbl_config']." SET ".join(", ", $sql);
+		if (phpAds_isUser(phpAds_Agency))
+			$agencyid = phpAds_getUserID();
+		else
+			$agencyid = 0;
+			
+		$query = "UPDATE ".$phpAds_config['tbl_config']." SET ".join(", ", $sql)." WHERE agencyid=".$agencyid;
 		$res = @phpAds_dbQuery($query);
 		
 		if (@phpAds_dbAffectedRows() < 1)
 		{
-			$query = "INSERT INTO ".$phpAds_config['tbl_config']." SET ".join(", ", $sql);
+			$query = "INSERT INTO ".$phpAds_config['tbl_config']." SET ".join(", ", $sql).",agencyid=".$agencyid;
 			@phpAds_dbQuery($query);
 		}
 	}
@@ -243,6 +247,7 @@ function phpAds_ConfigFileUpdatePrepare ()
 					if ($regs[1] == 'type_web_dir' && $regs[2] == '/home/myname/www/ads')	$regs[2] = ' = ""';
 					if ($regs[1] == 'type_web_ftp' && $regs[2] == 'ftp://user:password@ftp.myname.com/ads')	$regs[2] = ' = ""';
 					if ($regs[1] == 'type_web_url' && $regs[2] == 'http://www.myname.com/ads')	$regs[2] = ' = ""';
+					if ($regs[1] == 'type_web_ssl_url' && $regs[2] == 'https://www.myname.com/ads')	$regs[2] = ' = ""';
 					
 					
 					// Don't trust url prefix, because the update might
@@ -440,7 +445,7 @@ function phpAds_ConfigFileFlush ()
 {
 	global $phpAds_configBuffer, $phpAds_configFilepath;
 	
-	if ($phpAds_configBuffer != '')
+	if ($phpAds_configBuffer != '' && phpAds_isConfigWritable)
 	{
 		if ($confighandle = @fopen($phpAds_configFilepath,'w'))
 		{

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -16,6 +16,7 @@
 
 // Invocation Types
 $GLOBALS['strInvocationRemote']			= "Remote Invocation";
+$GLOBALS['strInvocationRemoteNoCookies']	= "Remote Invocation - no cookies";
 $GLOBALS['strInvocationJS']			= "Remote Invocation for Javascript";
 $GLOBALS['strInvocationIframes']		= "Remote Invocation for Frames";
 $GLOBALS['strInvocationXmlRpc']			= "Remote Invocation using XML-RPC";
@@ -44,7 +45,7 @@ $GLOBALS['strInvocationWithText']		= "Show text below banner";
 $GLOBALS['strInvocationDontShowAgain']		= "Don't show the banner again on the same page";
 $GLOBALS['strInvocationDontShowAgainCampaign']		= "Don't show a banner from the same campaign again on the same page";
 $GLOBALS['strInvocationTemplate'] 		= "Store the banner inside a variable so it can be used in a template";
-
+$GLOBALS['strInvocationBannerID']					= "Banner ID";
 
 // Iframe
 $GLOBALS['strIFrameRefreshAfter']		= "Refresh after";

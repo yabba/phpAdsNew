@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -26,8 +26,7 @@ phpAds_registerGlobal ('expand', 'collapse', 'listorder', 'orderdirection');
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin);
-
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency);
 
 
 /*********************************************************/
@@ -71,14 +70,21 @@ else
 /*********************************************************/
 
 // Get affiliates and build the tree
-$res_affiliates = phpAds_dbQuery("
-	SELECT 
-		affiliateid, name
-	FROM 
-		".$phpAds_config['tbl_affiliates']."
-	".phpAds_getAffiliateListOrder ($listorder, $orderdirection)."
-	") or phpAds_sqlDie();
-
+if (phpAds_isUser(phpAds_Admin))
+{
+	$query = "SELECT affiliateid,name".
+		" FROM ".$phpAds_config['tbl_affiliates'].
+		phpAds_getAffiliateListOrder ($listorder, $orderdirection);
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	$query = "SELECT affiliateid,name".
+		" FROM ".$phpAds_config['tbl_affiliates'].
+		" WHERE agencyid=".phpAds_getUserID().
+		phpAds_getAffiliateListOrder ($listorder, $orderdirection);
+}
+$res_affiliates = phpAds_dbQuery($query)
+	or phpAds_sqlDie();
 
 while ($row_affiliates = phpAds_dbFetchArray($res_affiliates))
 {
@@ -88,13 +94,23 @@ while ($row_affiliates = phpAds_dbFetchArray($res_affiliates))
 }
 
 // Get the zones for each affiliate
-$res_zones = phpAds_dbQuery("
-	SELECT 
-		zoneid, affiliateid, zonename, delivery
-	FROM 
-		".$phpAds_config['tbl_zones']."
-		".phpAds_getZoneListOrder ($listorder, $orderdirection)."
-	") or phpAds_sqlDie();
+if (phpAds_isUser(phpAds_Admin))
+{
+	$query = "SELECT zoneid,affiliateid,zonename,delivery".
+		" FROM ".$phpAds_config['tbl_zones'].
+		phpAds_getZoneListOrder ($listorder, $orderdirection);
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	$query = "SELECT z.zoneid as zoneid,z.affiliateid as affiliateid,z.zonename as zonename,z.delivery as delivery".
+		" FROM ".$phpAds_config['tbl_zones']." AS z".
+		",".$phpAds_config['tbl_affiliates']." AS a".
+		" WHERE z.affiliateid=a.affiliateid".
+		phpAds_getZoneListOrder ($listorder, $orderdirection);
+}
+
+$res_zones = phpAds_dbQuery($query)
+	or phpAds_sqlDie();
 
 while ($row_zones = phpAds_dbFetchArray($res_zones))
 {
@@ -110,16 +126,28 @@ while ($row_zones = phpAds_dbFetchArray($res_zones))
 
 
 // Get the adviews/clicks for each banner
-$res_stats = phpAds_dbQuery("
-	SELECT
-		zoneid,
-		sum(views) as views,
-		sum(clicks) as clicks
-	FROM 
-		".$phpAds_config['tbl_adstats']."
-	GROUP BY
-		zoneid
-	") or phpAds_sqlDie();
+
+if (phpAds_isUser(phpAds_Admin))
+{
+	$query = "SELECT zoneid,sum(views) as views,sum(clicks) as clicks".
+		" FROM ".$phpAds_config['tbl_adstats'].
+		" GROUP BY zoneid";
+}
+if (phpAds_isUser(phpAds_Agency))
+{
+	$query = "SELECT s.zoneid as zoneid,sum(s.views) as views,sum(s.clicks) as clicks".
+		" FROM ".$phpAds_config['tbl_adstats']." AS s".
+		",".$phpAds_config['tbl_zones']." AS z".
+		",".$phpAds_config['tbl_affiliates']." AS a".
+		" WHERE s.zoneid=z.zoneid".
+		" AND z.affiliateid=a.affiliateid".
+		" AND a.agencyid=".phpAds_getUserID().
+		" GROUP BY zoneid";
+}
+
+$res_stats = phpAds_dbQuery($query)
+	or phpAds_sqlDie();
+
 
 while ($row_stats = phpAds_dbFetchArray($res_stats))
 {

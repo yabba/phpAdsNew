@@ -1,4 +1,4 @@
-<?php // $Revision: 2.20 $
+<?php // $Revision: 2.21 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -30,9 +30,9 @@ require ("../config.inc.php");
 
 
 // Register input variables
-require ("../libraries/lib-io.inc.php");
+require_once ("../libraries/lib-io.inc.php");
 phpAds_registerGlobal ('installvars', 'language', 'phase', 'dbhost', 'dbport', 'dbuser', 'dbpassword', 'dbname', 'table_prefix', 
-					   'table_type', 'admin', 'admin_pw', 'admin_pw2', 'url_prefix');
+					   'table_type', 'admin', 'admin_pw', 'admin_pw2', 'url_prefix', 'ssl_url_prefix');
 
 
 // Set URL prefix
@@ -45,6 +45,8 @@ $phpAds_config['url_prefix'] = strtolower(eregi_replace("^([a-z]+)/.*$", "\\1://
 	$HTTP_SERVER_VARS['SERVER_PROTOCOL'])).$host.
 	ereg_replace("/admin/install.php(\?.*)?$", "", $HTTP_SERVER_VARS['PHP_SELF']);
 
+// Set SSL URL prefix
+$phpAds_config['ssl_url_prefix'] = str_replace('http://','https://', $phpAds_config['url_prefix']);
 
 // Overwrite settings with install vars
 if (isset($installvars) && is_array($installvars))
@@ -251,6 +253,7 @@ if (phpAds_isUser(phpAds_Admin))
 				$phpAds_config['tbl_adstats']				= $installvars['tbl_adstats']				= $table_prefix.'adstats';
 				$phpAds_config['tbl_adviews']				= $installvars['tbl_adviews']				= $table_prefix.'adviews';
 				$phpAds_config['tbl_affiliates']			= $installvars['tbl_affiliates']			= $table_prefix.'affiliates';
+				$phpAds_config['tbl_agency']				= $installvars['tbl_agency']				= $table_prefix.'agency';
 				$phpAds_config['tbl_banners']				= $installvars['tbl_banners']				= $table_prefix.'banners';
 				$phpAds_config['tbl_cache']					= $installvars['tbl_cache']					= $table_prefix.'cache';
 				$phpAds_config['tbl_campaigns']				= $installvars['tbl_campaigns']				= $table_prefix.'campaigns';
@@ -264,6 +267,8 @@ if (phpAds_isUser(phpAds_Admin))
 				$phpAds_config['tbl_trackers']				= $installvars['tbl_trackers']				= $table_prefix.'trackers';
 				$phpAds_config['tbl_userlog']				= $installvars['tbl_userlog']				= $table_prefix.'userlog';
 				$phpAds_config['tbl_zones']					= $installvars['tbl_zones']					= $table_prefix.'zones';
+				$phpAds_config['tbl_variables']				= $installvars['tbl_variables']				= $table_prefix.'variables';
+				$phpAds_config['tbl_variablevalues']		= $installvars['tbl_variablevalues']		= $table_prefix.'variablevalues';
 				
 				if (phpAds_checkDatabaseExists())
 				{
@@ -295,6 +300,7 @@ if (phpAds_isUser(phpAds_Admin))
 				$installvars['admin'] 		 = $admin;
 				$installvars['admin_pw'] 	 = md5($admin_pw);
 				$installvars['url_prefix']   = $url_prefix;
+				$installvars['ssl_url_prefix'] = $ssl_url_prefix;
 				
 				if (phpAds_isConfigWritable())
 				{
@@ -318,6 +324,7 @@ if (phpAds_isUser(phpAds_Admin))
 							phpAds_SettingsWriteAdd('tbl_acls', $installvars['tbl_acls']);
 							phpAds_SettingsWriteAdd('tbl_adclicks', $installvars['tbl_adclicks']);
 							phpAds_SettingsWriteAdd('tbl_adconversions', $installvars['tbl_adconversions']);
+							phpAds_SettingsWriteAdd('tbl_agency', $installvars['tbl_agency']);							
 							phpAds_SettingsWriteAdd('tbl_adstats', $installvars['tbl_adstats']);
 							phpAds_SettingsWriteAdd('tbl_adviews', $installvars['tbl_adviews']);
 							phpAds_SettingsWriteAdd('tbl_affiliates', $installvars['tbl_affiliates']);
@@ -334,10 +341,13 @@ if (phpAds_isUser(phpAds_Admin))
 							phpAds_SettingsWriteAdd('tbl_trackers', $installvars['tbl_trackers']);
 							phpAds_SettingsWriteAdd('tbl_userlog', $installvars['tbl_userlog']);
 							phpAds_SettingsWriteAdd('tbl_zones', $installvars['tbl_zones']);
+							phpAds_SettingsWriteAdd('tbl_variables', $installvars['tbl_variables']);
+							phpAds_SettingsWriteAdd('tbl_variablevalues', $installvars['tbl_variablevalues']);							
 							
 							phpAds_SettingsWriteAdd('admin', $installvars['admin']);
 							phpAds_SettingsWriteAdd('admin_pw', $installvars['admin_pw']);
 							phpAds_SettingsWriteAdd('url_prefix', $installvars['url_prefix']);
+							phpAds_SettingsWriteAdd('ssl_url_prefix', $installvars['ssl_url_prefix']);
 							
 							phpAds_ConfigFileClear();
 							
@@ -581,6 +591,17 @@ if (phpAds_isUser(phpAds_Admin))
 							'type' 	  => 'text', 
 							'name' 	  => 'url_prefix',
 							'text' 	  => $strUrlPrefix,
+							'size'	  => 35,
+							'check'	  => 'url',
+							'req'	  => true
+						),
+						array (
+							'type'    => 'break'
+						),
+						array (
+							'type' 	  => 'text', 
+							'name' 	  => 'ssl_url_prefix',
+							'text' 	  => $strSslUrlPrefix,
 							'size'	  => 35,
 							'check'	  => 'url',
 							'req'	  => true

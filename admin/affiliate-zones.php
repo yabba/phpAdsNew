@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -26,7 +26,11 @@ phpAds_registerGlobal ('listorder', 'orderdirection');
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin+phpAds_Affiliate);
+
+// removed affiliate permissions
+//phpAds_checkAccess(phpAds_Admin + phpAds_Agency + phpAds_Affiliate); 
+
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency);
 
 
 
@@ -37,6 +41,16 @@ phpAds_checkAccess(phpAds_Admin+phpAds_Affiliate);
 if (phpAds_isUser(phpAds_Affiliate))
 {
 	$affiliateid = phpAds_getUserID();
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	$query = "SELECT affiliateid FROM ".$phpAds_config['tbl_affiliates']." WHERE affiliateid=".$affiliateid." AND agencyid=".phpAds_getUserID();
+	$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+	if (phpAds_dbNumRows($res) == 0)
+	{
+		phpAds_PageHeader("2");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
+	}
 }
 
 
@@ -67,7 +81,7 @@ if (!isset($orderdirection))
 /* HTML framework                                        */
 /*********************************************************/
 
-if (phpAds_isUser(phpAds_Admin))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 {
 	if (isset($Session['prefs']['affiliate-index.php']['listorder']))
 		$navorder = $Session['prefs']['affiliate-index.php']['listorder'];
@@ -135,7 +149,7 @@ $res_zones = phpAds_dbQuery("
 
 
 
-if (phpAds_isUser(phpAds_Admin) || phpAds_isAllowed(phpAds_AddZone))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency) || phpAds_isAllowed(phpAds_AddZone))
 {
 	echo "<img src='images/icon-zone-new.gif' border='0' align='absmiddle'>&nbsp;";
 	echo "<a href='zone-edit.php?affiliateid=".$affiliateid."' accesskey='".$keyAddNew."'>".$strAddNewZone_Key."</a>&nbsp;&nbsp;";
@@ -249,7 +263,7 @@ while ($row_zones = phpAds_dbFetchArray($res_zones))
 			echo "<img src='images/icon-textzone-d.gif' align='absmiddle'>&nbsp;";
 	}
 	
-	if (phpAds_isUser(phpAds_Admin) || phpAds_isAllowed(phpAds_EditZone))
+	if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency) || phpAds_isAllowed(phpAds_EditZone))
 		echo "<a href='zone-edit.php?affiliateid=".$affiliateid."&zoneid=".$row_zones['zoneid']."'>".$row_zones['zonename']."</a>";
 	else
 		echo $row_zones['zonename'];
@@ -293,10 +307,10 @@ while ($row_zones = phpAds_dbFetchArray($res_zones))
 	
 	// Button 1, 2 & 3
 	echo "<td height='25' colspan='3'>";
-	if (phpAds_isUser(phpAds_Admin) || phpAds_isAllowed(phpAds_LinkBanners)) echo "<a href='zone-include.php?affiliateid=".$affiliateid."&zoneid=".$row_zones['zoneid']."'><img src='images/icon-zone-linked.gif' border='0' align='absmiddle' alt='$strIncludedBanners'>&nbsp;$strIncludedBanners</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+	if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency) || phpAds_isAllowed(phpAds_LinkBanners)) echo "<a href='zone-include.php?affiliateid=".$affiliateid."&zoneid=".$row_zones['zoneid']."'><img src='images/icon-zone-linked.gif' border='0' align='absmiddle' alt='$strIncludedBanners'>&nbsp;$strIncludedBanners</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 	echo "<a href='zone-probability.php?affiliateid=".$affiliateid."&zoneid=".$row_zones['zoneid']."'><img src='images/icon-zone-probability.gif' border='0' align='absmiddle' alt='$strProbability'>&nbsp;$strProbability</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 	echo "<a href='zone-invocation.php?affiliateid=".$affiliateid."&zoneid=".$row_zones['zoneid']."'><img src='images/icon-generatecode.gif' border='0' align='absmiddle' alt='$strInvocationcode'>&nbsp;$strInvocationcode</a>&nbsp;&nbsp;&nbsp;&nbsp;";
-	if (phpAds_isUser(phpAds_Admin) || phpAds_isAllowed(phpAds_DeleteZone)) echo "<a href='zone-delete.php?affiliateid=".$affiliateid."&zoneid=".$row_zones['zoneid']."&returnurl=affiliate-zones.php'".phpAds_DelConfirm($strConfirmDeleteZone)."><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+	if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency) || phpAds_isAllowed(phpAds_DeleteZone)) echo "<a href='zone-delete.php?affiliateid=".$affiliateid."&zoneid=".$row_zones['zoneid']."&returnurl=affiliate-zones.php'".phpAds_DelConfirm($strConfirmDeleteZone)."><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 	echo "</td></tr>";
 	
 	$i++;

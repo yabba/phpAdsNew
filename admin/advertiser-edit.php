@@ -1,4 +1,4 @@
-<?php // $Revision: 1.5 $
+<?php // $Revision: 1.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -40,12 +40,12 @@ phpAds_registerGlobal (
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin+phpAds_Client);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency + phpAds_Client);
 
 
 
 /*********************************************************/
-/* Client interface security                             */
+/* Interface security                                    */
 /*********************************************************/
 
 if (phpAds_isUser(phpAds_Client))
@@ -58,6 +58,24 @@ if (phpAds_isUser(phpAds_Client))
 	
 	$clientid = phpAds_getUserID();
 }
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	if (isset($clientid) && ($clientid != ''))
+	{
+		$query = "SELECT clientid".
+			" FROM ".$phpAds_config['tbl_clients'].
+			" WHERE clientid=".$clientid.
+			" AND agencyid=".phpAds_getUserID();
+
+		$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+		if (phpAds_dbNumRows($res) == 0)
+		{
+			phpAds_PageHeader("2");
+			phpAds_Die ($strAccessDenied, $strNotAdmin);
+		}
+	}
+}
+
 
 
 
@@ -87,7 +105,7 @@ if (isset($submit))
 	
 	
 	// Name
-	if (phpAds_isUser(phpAds_Admin))
+	if ( phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency) )
 		$client['clientname'] = trim($clientname);
 	
 	// Default fields
@@ -109,7 +127,7 @@ if (isset($submit))
 	
 	
 	
-	if (phpAds_isUser(phpAds_Admin))
+	if ( phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency) )
 	{
 		// Password
 		if (isset($clientpassword))
@@ -182,6 +200,12 @@ if (isset($submit))
 			{
 				$client['permissions'] += $clientpermissions[$i];
 			}
+		}
+		
+		// Agency
+		if (phpAds_isUser(phpAds_Agency))
+		{
+			$client['agencyid'] = phpAds_getUserID();
 		}
 	}
 	else
@@ -286,7 +310,7 @@ if (isset($submit))
 
 if ($clientid != "")
 {
-	if (phpAds_isUser(phpAds_Admin))
+	if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 	{
 		if (isset($Session['prefs']['advertiser-index.php']['listorder']))
 			$navorder = $Session['prefs']['advertiser-index.php']['listorder'];
@@ -299,12 +323,22 @@ if ($clientid != "")
 			$navdirection = '';
 		
 		
-		// Get other clients
-		$res = phpAds_dbQuery(
-			"SELECT *".
+		if (phpAds_isUser(phpAds_Admin))
+		{
+			$query = "SELECT *".
 			" FROM ".$phpAds_config['tbl_clients'].
-			phpAds_getClientListOrder ($navorder, $navdirection)
-		) or phpAds_sqlDie();
+				phpAds_getClientListOrder($navorder, $navdirection);
+		}
+		elseif (phpAds_isUser(phpAds_Agency))
+		{
+			$query = "SELECT *".
+				" FROM ".$phpAds_config['tbl_clients'].
+				" WHERE agencyid=".$Session['userid'].
+				phpAds_getClientListOrder($navorder, $navdirection);
+		}
+		// Get other clients
+		$res = phpAds_dbQuery($query)
+			or phpAds_sqlDie();
 		
 		while ($row = phpAds_dbFetchArray($res))
 		{
@@ -331,14 +365,8 @@ if ($clientid != "")
 	// is the result of an error message
 	if (!isset($client))
 	{
-		$res = phpAds_dbQuery("
-			SELECT
-				*
-			FROM
-				".$phpAds_config['tbl_clients']."
-			WHERE
-				clientid = '".$clientid."'
-			") or phpAds_sqlDie();
+		$res = phpAds_dbQuery("SELECT * FROM ".$phpAds_config['tbl_clients']." WHERE clientid=".$clientid)
+			or phpAds_sqlDie();
 		
 		if (phpAds_dbNumRows($res))
 		{
@@ -398,7 +426,7 @@ echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>";
 // Clientname
 echo "<tr><td width='30'>&nbsp;</td><td width='200'>".$strName."</td>";
 
-if (phpAds_isUser(phpAds_Admin))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 	echo "<td><input onBlur='phpAds_formUpdate(this);' class='flat' type='text' name='clientname' size='25' value='".phpAds_htmlQuotes($client['clientname'])."' style='width: 350px;' tabindex='".($tabindex++)."'></td>";
 else 
 	echo "<td>".(isset($client['clientname']) ? $client['clientname'] : '')."</td>";
@@ -513,7 +541,7 @@ if (isset($errormessage) && count($errormessage))
 
 echo "<tr><td width='30'>&nbsp;</td><td width='200'>".$strUsername."</td>";
 
-if (phpAds_isUser(phpAds_Admin))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 	echo "<td><input onBlur='phpAds_formUpdate(this);' class='flat' type='text' name='clientusername' size='25' value='".phpAds_htmlQuotes($client['clientusername'])."' tabindex='".($tabindex++)."'></td>";
 else 
 	echo "<td>".(isset($client['clientusername']) ? $client['clientusername'] : '')."</td>";
@@ -523,7 +551,7 @@ echo "<td colspan='2'><img src='images/break-l.gif' height='1' width='200' vspac
 
 
 // Password
-if (phpAds_isUser(phpAds_Admin))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 {
 	echo "<tr><td width='30'>&nbsp;</td><td width='200'>".$strPassword."</td>";
 	echo "<td width='370'><input class='flat' type='password' name='clientpassword' size='25' value='".$client['clientpassword']."' tabindex='".($tabindex++)."'></td>";
@@ -547,7 +575,7 @@ else
 }
 
 // Permissions
-if (phpAds_isUser(phpAds_Admin))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 {
 	echo "<tr height='1'><td colspan='3' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
 	echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>";
@@ -557,23 +585,27 @@ if (phpAds_isUser(phpAds_Admin))
 	echo $strAllowClientModifyInfo;
 	echo "</td></tr>";
 	
-	/*
-	  Deactivated for now because of security reasons -- Niels
-	  
 	  echo "<tr><td width='30'>&nbsp;</td><td colspan='2'>";
 	  echo "<input type='checkbox' name='clientpermissions[]' value='".phpAds_ModifyBanner."'".(phpAds_ModifyBanner & $client['permissions'] ? ' CHECKED' : '')." tabindex='".($tabindex++)."'>&nbsp;";
 	  echo $strAllowClientModifyBanner;
 	  echo "</td></tr>";
-	*/
 	
+	// Allow this user to deactivate his own banners
 	echo "<tr><td width='30'>&nbsp;</td><td colspan='2'>";
 	echo "<input type='checkbox' name='clientpermissions[]' value='".phpAds_DisableBanner."'".(phpAds_DisableBanner & $client['permissions'] ? ' CHECKED' : '')." tabindex='".($tabindex++)."'>&nbsp;";
 	echo $strAllowClientDisableBanner;
 	echo "</td></tr>";
 	
+	// Allow this user to activate his own banners
 	echo "<tr><td width='30'>&nbsp;</td><td colspan='2'>";
 	echo "<input type='checkbox' name='clientpermissions[]' value='".phpAds_ActivateBanner."'".(phpAds_ActivateBanner & $client['permissions'] ? ' CHECKED' : '')." tabindex='".($tabindex++)."'>&nbsp;";
 	echo $strAllowClientActivateBanner;
+	echo "</td></tr>";
+	
+	// Allow this user to view targeting statistics
+	echo "<tr><td width='30'>&nbsp;</td><td colspan='2'>";
+	echo "<input type='checkbox' name='clientpermissions[]' value='".phpAds_ViewTargetingStats."'".(phpAds_ViewTargetingStats & $client['permissions'] ? ' CHECKED' : '')." tabindex='".($tabindex++)."'>&nbsp;";
+	echo $strAllowClientViewTargetingStats;
 	echo "</td></tr>";
 }
 

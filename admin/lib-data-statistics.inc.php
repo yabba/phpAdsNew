@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -212,16 +212,13 @@ function phpAds_getSourceStatsByCampaignIDBannerIDsHours($campaignid, $bannerids
 	}
 	
 	$query =
-		"SELECT".
-		" source".
-		",SUM(views) AS views".
+		"SELECT ".
+		"SUM(views) AS views".
 		",SUM(clicks) AS clicks".
 		",SUM(conversions) AS conversions".
 		" FROM ".$phpAds_config['tbl_adstats'].
 		$banner_sql.
-		$hour_sql.
-		" GROUP BY source"
-	;
+		$hour_sql;
 	
 	$sources = phpAds_getSourceStats($query, $name, $omit_arr);
 
@@ -330,6 +327,17 @@ function phpAds_sortSources(&$sources, $column=0, $ascending=true)
 			phpAds_sortSources($sources['children'][$i], $column, $ascending);
 		}
 	}
+}
+
+function phpAds_sortArray(&$array, $column=0, $ascending=TRUE)
+{
+	
+	for ($i=0; $i<sizeof($array); $i++)
+		if (isset($array[$i]['children']) && is_array($array[$i]['children']))
+			phpAds_sortArray($array[$i]['children'], $column, $ascending);
+	
+	phpAds_qsort($array, $column, $ascending);
+
 }
 
 function phpAds_qsort(&$array, $column=0, $ascending=true, $first=0, $last=0)

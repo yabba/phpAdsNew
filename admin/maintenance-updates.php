@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -40,7 +40,7 @@ if (isset($Session['update_check']) && $Session['update_check'])
 }
 
 phpAds_PageHeader("5.4");
-phpAds_ShowSections(array("5.1", "5.3", "5.4", "5.2"));
+phpAds_ShowSections(array("5.1", "5.3", "5.4", "5.2","5.5"));
 
 
 

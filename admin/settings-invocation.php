@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -19,22 +19,37 @@ include ("lib-settings.inc.php");
 
 
 // Register input variables
-phpAds_registerGlobal ('allow_invocation_plain', 'allow_invocation_js', 'allow_invocation_frame', 
-					   'allow_invocation_xmlrpc', 'allow_invocation_local', 'allow_invocation_interstitial', 
-					   'allow_invocation_popup', 'con_key', 'mult_key', 'acl', 'delivery_caching', 
-					   'p3p_policies', 'p3p_compact_policy', 'p3p_policy_location');
+phpAds_registerGlobal (
+	 'acl'
+	,'allow_invocation_frame'
+	,'allow_invocation_interstitial'
+	,'allow_invocation_js'
+	,'allow_invocation_local'
+	,'allow_invocation_plain'
+	,'allow_invocation_plain_nocookies'
+	,'allow_invocation_popup'
+	,'allow_invocation_xmlrpc'
+	,'con_key'
+	,'delivery_caching'
+	,'mult_key'
+	,'p3p_compact_policy'
+	,'p3p_policies'
+	,'p3p_policy_location'
+	,'use_keywords'
+);
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency);
 
 
 $errormessage = array();
 $sql = array();
 
-if (isset($HTTP_POST_VARS) && count($HTTP_POST_VARS))
+if (isset($HTTP_POST_VARS['submit']) && $HTTP_POST_VARS['submit'] == 'true')
 {
 	phpAds_SettingsWriteAdd('allow_invocation_plain', isset($allow_invocation_plain));
+	phpAds_SettingsWriteAdd('allow_invocation_plain_nocookies', isset($allow_invocation_plain_nocookies));
 	phpAds_SettingsWriteAdd('allow_invocation_js', isset($allow_invocation_js));
 	phpAds_SettingsWriteAdd('allow_invocation_frame', isset($allow_invocation_frame));
 	phpAds_SettingsWriteAdd('allow_invocation_xmlrpc', isset($allow_invocation_xmlrpc));
@@ -44,6 +59,7 @@ if (isset($HTTP_POST_VARS) && count($HTTP_POST_VARS))
 	
 	if (isset($delivery_caching)) phpAds_SettingsWriteAdd('delivery_caching', $delivery_caching);
 	phpAds_SettingsWriteAdd('acl', isset($acl));
+	phpAds_SettingsWriteAdd('use_keywords', isset($use_keywords));
 	phpAds_SettingsWriteAdd('con_key', isset($con_key));
 	phpAds_SettingsWriteAdd('mult_key', isset($mult_key));
 	
@@ -53,12 +69,10 @@ if (isset($HTTP_POST_VARS) && count($HTTP_POST_VARS))
 	
 	if (!count($errormessage))
 	{
-		if (phpAds_SettingsWriteFlush())
-		{
+		phpAds_SettingsWriteFlush();
 			header("Location: settings-host.php");
 			exit;
 		}
-	}
 }
 
 
@@ -69,7 +83,14 @@ if (isset($HTTP_POST_VARS) && count($HTTP_POST_VARS))
 
 phpAds_PrepareHelp();
 phpAds_PageHeader("5.1");
-phpAds_ShowSections(array("5.1", "5.3", "5.4", "5.2"));
+if (phpAds_isUser(phpAds_Admin))
+{
+	phpAds_ShowSections(array("5.1", "5.3", "5.4", "5.2","5.5"));
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	phpAds_ShowSections(array("5.1"));
+}
 phpAds_SettingsSelection("invocation");
 
 
@@ -101,6 +122,7 @@ $settings = array (
 
 array (
 	'text' 	  => $strDeliverySettings,
+	'visible' => phpAds_isUser(phpAds_Admin),
 	'items'	  => array (
 		array (
 			'type' 	  => 'select', 
@@ -121,13 +143,20 @@ array (
 		),
 		array (
 			'type'    => 'checkbox',
+			'name'    => 'use_keywords',
+			'text'	  => $strUseKeywords
+		),
+		array (
+			'type'    => 'checkbox',
 			'name'    => 'con_key',
-			'text'	  => $strUseConditionalKeys
+			'text'	  => $strUseConditionalKeys,
+			'depends' => 'use_keywords==true'
 		),
 		array (
 			'type'    => 'checkbox',
 			'name'    => 'mult_key',
-			'text'	  => $strUseMultipleKeys
+			'text'	  => $strUseMultipleKeys,
+			'depends' => 'use_keywords==true'
 		)
 	)
 ),
@@ -138,6 +167,11 @@ array (
 			'type'    => 'checkbox',
 			'name'    => 'allow_invocation_plain',
 			'text'	  => $strAllowRemoteInvocation
+		),
+		array (
+			'type'    => 'checkbox',
+			'name'    => 'allow_invocation_plain_nocookies',
+			'text'	  => $strAllowRemoteInvocationNoCookies
 		),
 		array (
 			'type'    => 'checkbox',
@@ -179,6 +213,7 @@ array (
 ),
 array (
 	'text' 	  => $strP3PSettings,
+	'visible' => phpAds_isUser(phpAds_Admin),
 	'items'	  => array (
 		array (
 			'type'    => 'checkbox',

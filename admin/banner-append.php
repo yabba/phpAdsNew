@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -29,8 +29,29 @@ phpAds_registerGlobal ('appendtype', 'appendid', 'appenddelivery', 'appendsave')
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency);
 
+if (phpAds_isUser(phpAds_Agency))
+{
+	$query = "SELECT ".
+		$phpAds_config['tbl_banners'].".bannerid as bannerid".
+		" FROM ".$phpAds_config['tbl_clients'].
+		",".$phpAds_config['tbl_campaigns'].
+		",".$phpAds_config['tbl_banners'].
+		" WHERE ".$phpAds_config['tbl_campaigns'].".clientid=".$clientid.
+		" AND ".$phpAds_config['tbl_banners'].".campaignid=".$campaignid.
+		" AND ".$phpAds_config['tbl_banners'].".bannerid=".$bannerid.
+		" AND ".$phpAds_config['tbl_banners'].".campaignid=".$phpAds_config['tbl_campaigns'].".campaignid".
+		" AND ".$phpAds_config['tbl_campaigns'].".clientid=".$phpAds_config['tbl_clients'].".clientid".
+		" AND ".$phpAds_config['tbl_clients'].".agencyid=".phpAds_getUserID();
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
+	if (phpAds_dbNumRows($res) == 0)
+	{
+		phpAds_PageHeader("2");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
+	}
+}
 
 
 /*********************************************************/
@@ -164,11 +185,24 @@ $extra .= "<img src='images/spacer.gif' height='1' width='160' vspace='2'><br>";
 $extra .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 $extra .= "<select name='moveto' style='width: 110;'>";
 
-$res = phpAds_dbQuery(
-	"SELECT *".
+if (phpAds_isUser(phpAds_Admin))
+{
+	$query = "SELECT campaignid,campaignname".
 	" FROM ".$phpAds_config['tbl_campaigns'].
-	" WHERE campaignid != '".$campaignid."'"
-) or phpAds_sqlDie();
+		" WHERE campaignid!=".$campaignid;
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	$query = "SELECT m.campaignid AS campaignid".
+		",m.campaignname AS campaignname".
+		" FROM ".$phpAds_config['tbl_campaigns']." AS m".
+		",".$phpAds_config['tbl_clients']." AS c".
+		" WHERE m.clientid=c.clientid".
+		" AND m.campaignid!=".$campaignid.
+		" AND c.agencyid=".phpAds_getAgencyID();
+}
+$res = phpAds_dbQuery($query)
+	or phpAds_sqlDie();
 
 while ($row = phpAds_dbFetchArray($res))
 	$extra .= "<option value='".$row['campaignid']."'>".phpAds_buildName($row['campaignid'], $row['campaignname'])."</option>";
@@ -180,9 +214,9 @@ $extra .= "</form>";
 
 
 
-$sections = array ("4.1.3.4.2", "4.1.3.4.3", "4.1.3.4.6", "4.1.3.4.4");
+$sections = array ("4.1.3.3.2", "4.1.3.3.3", "4.1.3.3.6", "4.1.3.3.4");
 
-phpAds_PageHeader("4.1.3.4.6", $extra);
+phpAds_PageHeader("4.1.3.3.6", $extra);
 	echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentClientName($campaignid);
 	echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 	echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;".phpAds_getCampaignName($campaignid);

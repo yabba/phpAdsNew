@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -22,7 +22,7 @@ require ("lib-zones.inc.php");
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin+phpAds_Affiliate);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency + phpAds_Affiliate);
 
 
 
@@ -50,6 +50,23 @@ if (phpAds_isUser(phpAds_Affiliate))
 	else
 	{
 		$affiliateid = $row["affiliateid"];
+	}
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	$query = "SELECT z.zoneid as zoneid".
+		" FROM ".$phpAds_config['tbl_affiliates']." AS a".
+		",".$phpAds_config['tbl_zones']." AS z".
+		" WHERE z.affiliateid=".$affiliateid.
+		" AND z.zoneid=".$zoneid.
+		" AND z.affiliateid=a.affiliateid".
+		" AND a.agencyid=".phpAds_getUserID();
+	
+	$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+	if (phpAds_dbNumRows($res) == 0)
+	{
+		phpAds_PageHeader("2");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
 	}
 }
 
@@ -90,7 +107,7 @@ while ($row = phpAds_dbFetchArray($res))
 	);
 }
 
-if (phpAds_isUser(phpAds_Admin))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 {
 	phpAds_PageShortcut($strAffiliateProperties, 'affiliate-edit.php?affiliateid='.$affiliateid, 'images/icon-affiliate.gif');
 	phpAds_PageShortcut($strZoneHistory, 'stats-zone-history.php?affiliateid='.$affiliateid.'&zoneid='.$zoneid, 'images/icon-statistics.gif');
@@ -109,7 +126,22 @@ if (phpAds_isUser(phpAds_Admin))
 	$extra .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	$extra .= "<select name='moveto' style='width: 110;'>";
 	
-	$res = phpAds_dbQuery("SELECT * FROM ".$phpAds_config['tbl_affiliates']." WHERE affiliateid != ".$affiliateid) or phpAds_sqlDie();
+	if (phpAds_isUser(phpAds_Admin))
+	{
+		$query = "SELECT affiliateid,name".
+			" FROM ".$phpAds_config['tbl_affiliates'].
+			" WHERE affiliateid != ".$affiliateid;
+	}
+	elseif (phpAds_isUser(phpAds_Agency))
+	{
+		$query = "SELECT affiliateid,name".
+			" FROM ".$phpAds_config['tbl_affiliates'].
+			" WHERE affiliateid != ".$affiliateid.
+			" AND agencyid=".phpAds_getUserID();
+	}
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
+	
 	while ($row = phpAds_dbFetchArray($res))
 		$extra .= "<option value='".$row['affiliateid']."'>".phpAds_buildAffiliateName($row['affiliateid'], $row['name'])."</option>";
 	
@@ -148,11 +180,11 @@ else
 
 $res = phpAds_dbQuery("
 	SELECT
-		*
+		affiliateid,width,height,delivery
 	FROM
 		".$phpAds_config['tbl_zones']."
 	WHERE
-		zoneid = '$zoneid'
+		zoneid=$zoneid
 	") or phpAds_sqlDie();
 
 if (phpAds_dbNumRows($res))
@@ -162,11 +194,11 @@ if (phpAds_dbNumRows($res))
 	
 	$res = phpAds_dbQuery("
 		SELECT
-			*
+			website
 		FROM
 			".$phpAds_config['tbl_affiliates']."
 		WHERE
-			affiliateid = ".$zone['affiliateid']."
+			affiliateid=".$zone['affiliateid']."
 		") or phpAds_sqlDie();
 	
 	if (phpAds_dbNumRows($res))

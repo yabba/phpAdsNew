@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -12,20 +12,25 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
-
-
 // Include required files
 require ("config.php");
 require ("lib-statistics.inc.php");
-
+require ("lib-data-statistics.inc.php");
 
 // Register input variables
-phpAds_registerGlobal ('expand', 'collapse', 'hideinactive', 'listorder', 'orderdirection');
+phpAds_registerGlobal (
+	 '_id_'
+	,'expand'
+	,'campaignshidden'
+	,'collapse'
+	,'hideinactive'
+	,'listorder'
+	,'orderdirection'
+);
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin+phpAds_Client);
-
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency + phpAds_Client);
 
 
 /*********************************************************/
@@ -36,46 +41,90 @@ if (phpAds_isUser(phpAds_Client))
 {
 	$clientid = phpAds_getUserID();
 }
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	if (isset($clientid) && ($clientid != ''))
+	{
+		$query = "SELECT clientid".
+			" FROM ".$phpAds_config['tbl_clients'].
+			" WHERE clientid=".$clientid.
+			" AND agencyid=".phpAds_getUserID();
 
+		$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+		if (phpAds_dbNumRows($res) == 0)
+		{
+			phpAds_PageHeader("2");
+			phpAds_Die ($strAccessDenied, $strNotAdmin);
+		}
+	}
+}
 
 
 /*********************************************************/
 /* HTML framework                                        */
 /*********************************************************/
 
+if (isset($Session['prefs']['stats-advertiser-campaigns.php']['listorder']) && !isset($listorder))
+	$listorder = $Session['prefs']['stats-advertiser-campaigns.php']['listorder'];
+//else
+	//$listorder = '';
+	
+if (isset($Session['prefs']['stats-advertiser-campaigns.php']['orderdirection']) && !isset($orderdirection))
+	$orderdirection = $Session['prefs']['stats-advertiser-campaigns.php']['orderdirection'];
+//else
+	//$orderdirection = '';
+	
+if (isset($Session['prefs']['stats-advertiser-campaigns.php']['results']))
+	$array = $Session['prefs']['stats-advertiser-campaigns.php']['results'];
+	
+if (isset($Session['prefs']['stats-advertiser-campaigns.php']['hide']) && !isset($hideinactive))
+	$hideinactive = $Session['prefs']['stats-advertiser-campaigns.php']['hide'];
+
+
 if (phpAds_isUser(phpAds_Admin))
 {
-	if (isset($Session['prefs']['stats-global-advertiser.php']['listorder']))
-		$navorder = $Session['prefs']['stats-global-advertiser.php']['listorder'];
-	else
-		$navorder = '';
+	$query = "SELECT clientid,clientname FROM ".$phpAds_config['tbl_clients'];
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	$query = "SELECT clientid,clientname FROM ".$phpAds_config['tbl_clients']." WHERE agencyid=".phpAds_getUserID();
+}
+elseif (phpAds_isUser(phpAds_Client))
+{
+	$query = "SELECT clientid,clientname FROM ".$phpAds_config['tbl_clients']." WHERE clientid=".phpAds_getUserID();
+}
+$res = phpAds_dbQuery($query)
+	or phpAds_sqlDie();
 	
-	if (isset($Session['prefs']['stats-global-advertiser.php']['orderdirection']))
-		$navdirection = $Session['prefs']['stats-global-advertiser.php']['orderdirection'];
-	else
-		$navdirection = '';
-	
-	$res = phpAds_dbQuery(
-		"SELECT *".
-		" FROM ".$phpAds_config['tbl_clients'].
-		phpAds_getClientListOrder ($navorder, $navdirection)
-	) or phpAds_sqlDie();
-	
-	while ($row = phpAds_dbFetchArray($res))
-	{
+while ($row = phpAds_dbFetchArray($res))
+{
 		phpAds_PageContext (
 			phpAds_buildName ($row['clientid'], $row['clientname']),
 			"stats-advertiser-campaigns.php?clientid=".$row['clientid'],
 			$clientid == $row['clientid']
 		);
-	}
+}
+
+
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
+{
 	
 	phpAds_PageShortcut($strClientProperties, 'advertiser-edit.php?clientid='.$clientid, 'images/icon-advertiser.gif');
 	
-	phpAds_PageHeader("2.1.2");
+	if (phpAds_isUser(phpAds_Admin)) {
+		$extra  = "<br><br><br>";
+		$extra .= "<b>$strMaintenance</b><br>";
+		$extra .= "<img src='images/break.gif' height='1' width='160' vspace='4'><br>";
+		$extra .= "<a href='stats-reset.php?clientid=$clientid'".phpAds_DelConfirm($strConfirmResetClientStats).">";
+		$extra .= "<img src='images/".$phpAds_TextDirection."/icon-undo.gif' align='absmiddle' border='0'>&nbsp;$strResetStats</a>";
+		$extra .= "<br><br>";
+	}	
+	
+	phpAds_PageHeader("2.1.2", $extra);
 		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;<b>".phpAds_getClientName($clientid)."</b><br><br><br>";
 		phpAds_ShowSections(array("2.1.1", "2.1.2"));
 }
+
 
 if (phpAds_isUser(phpAds_Client))
 {
@@ -96,366 +145,348 @@ if (phpAds_isUser(phpAds_Client))
 }
 
 
-
-/*********************************************************/
-/* Get preferences                                       */
-/*********************************************************/
-
-if (!isset($hideinactive))
-{
-	if (isset($Session['prefs']['stats-advertiser-campaigns.php']['hideinactive']))
-		$hideinactive = $Session['prefs']['stats-advertiser-campaigns.php']['hideinactive'];
-	else
-		$hideinactive = ($phpAds_config['gui_hide_inactive'] == 't');
-}
-
-if (!isset($listorder))
-{
-	if (isset($Session['prefs']['stats-advertiser-campaigns.php']['listorder']))
-		$listorder = $Session['prefs']['stats-advertiser-campaigns.php']['listorder'];
-	else
-		$listorder = '';
-}
-
-if (!isset($orderdirection))
-{
-	if (isset($Session['prefs']['stats-advertiser-campaigns.php']['orderdirection']))
-		$orderdirection = $Session['prefs']['stats-advertiser-campaigns.php']['orderdirection'];
-	else
-		$orderdirection = '';
-}
-
-if (isset($Session['prefs']['stats-advertiser-campaigns.php']['nodes']))
-	$node_array = explode (",", $Session['prefs']['stats-advertiser-campaigns.php']['nodes']);
-else
-	$node_array = array();
-
-
-
 /*********************************************************/
 /* Main code                                             */
 /*********************************************************/
-
-$res_campaigns = phpAds_dbQuery(
-	"SELECT *".
-	" FROM ".$phpAds_config['tbl_campaigns'].
-	" WHERE clientid=".$clientid.
-	phpAds_getCampaignListOrder ($listorder, $orderdirection)
-) or phpAds_sqlDie();
-
-while ($row_campaigns = phpAds_dbFetchArray($res_campaigns))
+if (!isset($array) || $Session['prefs']['stats-affiliate-zones.php']['clientid'] != $clientid)
+//if (true)
 {
-	$campaigns[$row_campaigns['campaignid']] = $row_campaigns;
-	$campaigns[$row_campaigns['campaignid']]['expand'] = 0;
-	$campaigns[$row_campaigns['campaignid']]['count'] = 0;
-}
+	$res_campaigns = phpAds_dbQuery(
+		"SELECT 
+			campaignid as id,
+			campaignname as name,
+			clientid,
+			views,
+			clicks,
+			conversions,
+			active,
+			anonymous
+		FROM "
+			.$phpAds_config['tbl_campaigns'].
+		" WHERE "
+			."clientid=".$clientid
+	) or phpAds_sqlDie();
 
-
-// Get the banners for each campaign
-$res_banners = phpAds_dbQuery("
-	SELECT 
-		bannerid,
-		campaignid,
-		alt,
-		description,
-		active,
-		storagetype
-	FROM 
-		".$phpAds_config['tbl_banners']."
-		".phpAds_getBannerListOrder ($listorder, $orderdirection)."
-	") or phpAds_sqlDie();
-
-while ($row_banners = phpAds_dbFetchArray($res_banners))
-{
-	if (isset($campaigns[$row_banners['campaignid']]))
+	$campaign_index = 0;
+	$array = array();
+	while ($row_campaigns = phpAds_dbFetchArray($res_campaigns))
 	{
-		$banners[$row_banners['bannerid']] = $row_banners;
-		$banners[$row_banners['bannerid']]['clicks'] = 0;
-		$banners[$row_banners['bannerid']]['views'] = 0;
-		$campaigns[$row_banners['campaignid']]['count']++;
+		$array[$campaign_index] 			= $row_campaigns;
+		$array[$campaign_index]['expand'] 	= FALSE;
+		$array[$campaign_index]['count'] 	= 0;
+		$array[$campaign_index]['kind'] 	= 'campaign';
+
+		$campaign_index++;
 	}
-}
 
 
+	// Get the banners for each campaign
+	$res_banners = phpAds_dbQuery("
+	SELECT 
+			b.bannerid as id,
+			b.campaignid as campaignid,
+			b.alt as alt,
+			b.description as description,
+			b.active as active,
+			b.storagetype as storagetype
+		FROM ".
+		$phpAds_config['tbl_banners']." AS b,".
+		$phpAds_config['tbl_campaigns']." AS c".
+		" WHERE b.campaignid=c.campaignid".
+		" AND c.clientid=".$clientid
+	) or phpAds_sqlDie();
 
-// Get the adviews/clicks for each banner
-$res_stats = phpAds_dbQuery("
+	while ($row_banners = phpAds_dbFetchArray($res_banners))
+	{
+		foreach ($array as $ckey=>$_array_)
+		{
+			if ($_array_['id'] == $row_banners['campaignid'])
+	{
+
+				$banner_index = isset($array[$ckey]['children']) ?  sizeof($array[$ckey]['children']) : 0;
+				
+				$array[$ckey]['children'][$banner_index] 					= $row_banners;
+				$array[$ckey]['children'][$banner_index]['name'] 			= $array[$ckey]['children'][$banner_index]['id'];
+				$array[$ckey]['children'][$banner_index]['clicks'] 			= 0;
+				$array[$ckey]['children'][$banner_index]['views'] 			= 0;			
+				$array[$ckey]['children'][$banner_index]['conversions'] 	= 0;
+				$array[$ckey]['children'][$banner_index]['kind']			= 'banner';
+				$array[$ckey]['count']++;
+			}
+		}
+	}
+
+
+	// Get the adviews/clicks for each banner
+	$res_stats = phpAds_dbQuery("
 	SELECT
 		s.bannerid as bannerid,
 		b.campaignid as campaignid,
 		sum(s.views) as views,
-		sum(s.clicks) as clicks
+			sum(s.clicks) as clicks,
+			sum(s.conversions) as conversions
 	FROM 
 		".$phpAds_config['tbl_adstats']." as s,
-		".$phpAds_config['tbl_banners']." as b
+			".$phpAds_config['tbl_banners']." as b,
+			".$phpAds_config['tbl_campaigns']." as c
 	WHERE
 		b.bannerid = s.bannerid
+		AND b.campaignid=c.campaignid
+		AND c.clientid=".$clientid."
+			
 	GROUP BY
 		s.bannerid
 	") or phpAds_sqlDie();
 
-while ($row_stats = phpAds_dbFetchArray($res_stats))
-{
-	if (isset($banners[$row_stats['bannerid']]))
+	while ($row_stats = phpAds_dbFetchArray($res_stats))
 	{
-		$banners[$row_stats['bannerid']]['clicks'] = $row_stats['clicks'];
-		$banners[$row_stats['bannerid']]['views'] = $row_stats['views'];
-	}
-}
-
-// Add ID found in expand to expanded nodes
-if (isset($expand) && $expand != '')
-{
-	switch ($expand)
+		foreach ($array as $ckey=>$campaigns)
 	{
-		case 'all' :	$node_array   = array();
-						if (isset($campaigns)) while (list($key,) = each($campaigns)) $node_array[] = $key;
-						break;
-						
-		case 'none':	$node_array   = array();
-						break;
-						
-		default:		$node_array[] = $expand;
-						break;
-	}
-}
-
-
-$node_array_size = sizeof($node_array);
-for ($i=0; $i < $node_array_size;$i++)
-{
-	if (isset($collapse) && $collapse == $node_array[$i])
-		unset ($node_array[$i]);
-	else
-	{
-		if (isset($campaigns[$node_array[$i]]))
-			$campaigns[$node_array[$i]]['expand'] = 1;
-	}
-}
-
-
-
-// Build Tree
-$campaignshidden = 0;
-
-if (isset($banners) && is_array($banners) && count($banners) > 0)
-{
-	// Add banner to campaigns
-	reset ($banners);
-	while (list ($bkey, $banner) = each ($banners))
-		if ($hideinactive == false || $banner['active'] == 't')
-			$campaigns[$banner['campaignid']]['banners'][$bkey] = $banner;
 	
-	unset ($banners);
-}
-
-if (isset($campaigns) && is_array($campaigns) && count($campaigns) > 0)
-{
-	reset ($campaigns);
-	while (list ($key, $campaign) = each ($campaigns))
-	{
-		if (!isset($campaign['banners']))
-			$campaign['banners'] = array();
-		
-		if ($hideinactive == true && ($campaign['active'] == 'f' || $campaign['active'] == 't' && 
-			count($campaign['banners']) == 0 && count($campaign['banners']) < $campaign['count']))
-		{
-			$campaignshidden++;
-			unset($campaigns[$key]);
+			if (isset($campaigns['children']))
+			{
+				foreach($campaigns['children'] as $bkey=>$banners)
+				{
+					if ($banners['id'] == $row_stats['bannerid'])
+					{
+						$array[$ckey]['children'][$bkey]['clicks']		= $row_stats['clicks'];
+						$array[$ckey]['children'][$bkey]['views']		= $row_stats['views'];
+						$array[$ckey]['children'][$bkey]['conversions']	= $row_stats['conversions'];
+					}
+				}
+			}			
 		}
 	}
 }
+//-----------------------------------------------------------------------------------------------------------------------
+// Handle expanding and collapsing of nodes
+//-----------------------------------------------------------------------------------------------------------------------
 
+if (isset($expand) && isset($_id_)) {
+
+	$ids = explode('-', $_id_);
+	
+	foreach($array as $zkey=>$zone) {
+		if ($zone['id'] == $ids[0])	{
+			$array[$zkey]['expand'] = TRUE;
+		
+			if (isset($ids[1]))
+				foreach($array[$zkey]['children'] as $ckey=>$campaign)
+					if ($array[$zkey]['children'][$ckey]['id'] == $ids[1])
+						$array[$zkey]['children'][$ckey]['expand'] = TRUE;
+						break;
+		}
+	}
+} else if (isset($collapse) && isset($_id_)) {
+
+	$ids = explode('-', $_id_);
+
+	foreach($array as $zkey=>$zone)	{
+		if ($zone['id'] == $ids[0]) {
+			if (isset($ids[1]))	{
+				foreach($array[$zkey]['children'] as $ckey=>$campaign)
+					if ($array[$zkey]['children'][$ckey]['id'] == $ids[1])
+						$array[$zkey]['children'][$ckey]['expand'] = FALSE;
+			} else 
+				$array[$zkey]['expand'] = FALSE;
+						
+						break;
+		}
+	}
+} else if (isset($expand)) {
+
+	switch($expand)	{
+		case 'all' :	foreach($array as $zkey=>$zone)	{
+							$array[$zkey]['expand'] = TRUE;
+
+							if (isset($array[$zkey]['children']))
+								foreach($array[$zkey]['children'] as $ckey=>$campaign)
+									$array[$zkey]['children'][$ckey]['expand'] = TRUE;
+						}
+						
+						break;
+						
+		case 'none':	foreach($array as $zkey=>$zone)	{
+							$array[$zkey]['expand'] = FALSE;
+
+							if (isset($array[$zkey]['children']))
+								foreach($array[$zkey]['children'] as $ckey=>$campaign)
+									$array[$zkey]['children'][$ckey]['expand'] = FALSE;
+	}
+
+						break;
+
+		default:		break;
+	}
+}
+
+//-----------------------------------------------------------------------------------------------------------------------
+// Sort array according to selected column and direction
+//-----------------------------------------------------------------------------------------------------------------------
+switch ($listorder)
+{
+	case 'name': 		phpAds_sortArray($array,'name',($orderdirection == 'up' ? TRUE : FALSE));
+						break;
+
+	case 'id': 			phpAds_sortArray($array,'id',($orderdirection == 'up' ? TRUE : FALSE));
+						break;
+
+	case 'views': 		phpAds_sortArray($array,'views',($orderdirection == 'up' ? TRUE : FALSE));
+						break;
+
+	
+	case 'clicks': 		phpAds_sortArray($array,'clicks',($orderdirection == 'up' ? TRUE : FALSE));
+						break;
+
+		
+	case 'CTR': 		phpAds_sortArray($array,'CTR',($orderdirection == 'up' ? TRUE : FALSE));
+						break;
+					
+					
+	case 'conversions': phpAds_sortArray($array,'conversions',($orderdirection == 'up' ? TRUE : FALSE));
+						break;
+
+
+	case 'CNVR': 		phpAds_sortArray($array,'CNVR',($orderdirection == 'up' ? TRUE : FALSE));
+						break;
+						
+					
+	default:	break;
+
+}
+//-----------------------------------------------------------------------------------------------------------------------
+// Sort array according to selected column and direction END
+//-----------------------------------------------------------------------------------------------------------------------
 
 $totalviews = 0;
 $totalclicks = 0;
+$totalconversions 	= 0;
 
-if (isset($campaigns) && is_array($campaigns) && sizeof ($campaigns) > 0)
+if (isset($array) && is_array($array) && sizeof ($array) > 0)
 {
 	// Calculate statistics for campaigns
-	for (reset($campaigns);$ckey=key($campaigns);next($campaigns))
+	foreach($array as $ckey=>$campaign)
 	{
 		$campaignviews = 0;
 		$campaignclicks = 0;
+		$campaignconversions = 0;
 		
-		if (isset($campaigns[$ckey]['banners']) && sizeof ($campaigns[$ckey]['banners']) > 0)
+		if ($hideinactive == true && $campaign['active'] == 'f') 
+			isset($campaignshidden) ? $campaignshidden++ : $campaignshidden = 1;
+		else
 		{
-			$banners = $campaigns[$ckey]['banners'];
-			for (reset($banners);$bkey=key($banners);next($banners))
+			if (isset($campaign['children']) && sizeof ($campaign['children']) > 0)
+		{
+				foreach($campaign['children'] as $bkey=>$banner)
 			{
-				$campaignviews += $banners[$bkey]['views'];
-				$campaignclicks += $banners[$bkey]['clicks'];
+					$campaignviews 			+= $banner['views'];
+					$campaignclicks 		+= $banner['clicks'];
+					$campaignconversions 	+= $banner['conversions'];
 			}
 		}
 		
 		$totalviews += $campaignviews;
 		$totalclicks += $campaignclicks;
-		
-		$campaigns[$ckey]['views'] = $campaignviews;
-		$campaigns[$ckey]['clicks'] = $campaignclicks;
+			$totalconversions += $campaignconversions;
 	}
 	
-	unset ($banners);
+		$array[$ckey]['views'] = $campaignviews;
+		$array[$ckey]['clicks'] = $campaignclicks;
+		$array[$ckey]['conversions'] = $campaignconversions;
+	}
 }
-
 
 if ($campaignshidden > 0 || $totalviews > 0 || $totalclicks > 0)
 {
 	echo "<br><br>";
 	echo "<table border='0' width='100%' cellpadding='0' cellspacing='0'>";	
 	
-	echo "<tr height='25'>";
-	echo '<td height="25" width="40%"><b>&nbsp;&nbsp;<a href="stats-advertiser-campaigns.php?clientid='.$clientid.'&listorder=name">'.$GLOBALS['strName'].'</a>';
-	if (($listorder == "name") || ($listorder == ""))
-	{
-		if  (($orderdirection == "") || ($orderdirection == "down"))
-		{
-			echo ' <a href="stats-advertiser-campaigns.php?clientid='.$clientid.'&orderdirection=up">';
-			echo '<img src="images/caret-ds.gif" border="0" alt="" title="">';
-		}
-		else
-		{
-			echo ' <a href="stats-advertiser-campaigns.php?clientid='.$clientid.'&orderdirection=down">';
-			echo '<img src="images/caret-u.gif" border="0" alt="" title="">';
-		}
-		echo '</a>';
-	}
-	echo '</b></td>';
-	echo '<td height="25"><b><a href="stats-advertiser-campaigns.php?clientid='.$clientid.'&listorder=id">'.$GLOBALS['strID'].'</a>';
-	if ($listorder == "id")
-	{
-		if  (($orderdirection == "") || ($orderdirection == "down"))
-		{
-			echo ' <a href="stats-advertiser-campaigns.php?clientid='.$clientid.'&orderdirection=up">';
-			echo '<img src="images/caret-ds.gif" border="0" alt="" title="">';
-		}
-		else
-		{
-			echo ' <a href="stats-advertiser-campaigns.php?clientid='.$clientid.'&orderdirection=down">';
-			echo '<img src="images/caret-u.gif" border="0" alt="" title="">';
-		}
-		echo '</a>';
-	}
-	echo '</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>';
-	echo "<td height='25' align='".$phpAds_TextAlignRight."'><b>".$GLOBALS['strViews']."</b></td>";
-	echo "<td height='25' align='".$phpAds_TextAlignRight."'><b>".$GLOBALS['strClicks']."</b></td>";
-	echo "<td height='25' align='".$phpAds_TextAlignRight."'><b>".$GLOBALS['strCTRShort']."</b>&nbsp;&nbsp;</td>";
-	echo "</tr>";
-	
-	echo "<tr height='1'><td colspan='5' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
-	
-	$i=0;
-	for (reset($campaigns);$ckey=key($campaigns);next($campaigns))
-	{
-		// Icon & name
-		echo "<tr height='25' ".($i % 2 == 0 ? "bgcolor='#F6F6F6'" : "")."><td height='25'>";
-		echo "&nbsp;";
+//-----------------------------------------------------------------------------------------------------------------------
+//Column headers
+//-----------------------------------------------------------------------------------------------------------------------
+// Column delimiters. Prevents columns from randomly changing width
+echo '<tr height="25">';
+echo '<td><img src="images/spacer.gif" width="200" height="1" border="0" alt="" title=""></td>';
+echo '<td><img src="images/spacer.gif" width="80" height="1" border="0" alt="" title=""></td>';
+echo '<td><img src="images/spacer.gif" width="80" height="1" border="0" alt="" title=""></td>';
+echo '<td><img src="images/spacer.gif" width="80" height="1" border="0" alt="" title=""></td>';
+echo '<td><img src="images/spacer.gif" width="80" height="1" border="0" alt="" title=""></td>';
+echo '<td><img src="images/spacer.gif" width="80" height="1" border="0" alt="" title=""></td>';
+echo '<td><img src="images/spacer.gif" width="80" height="1" border="0" alt="" title=""></td>';
+echo '</tr>';
+
+echo '<tr height="25">';
+// Name column
+echo '<td height="25"><b>&nbsp;&nbsp;<a href="'.$HTTP_SERVER_VARS['PHP_SELF'].'?clientid='.$clientid.'&listorder=name">'.$GLOBALS['strName'].'</a>';
+if ($listorder == "name" || $listorder == "")
+	echo $orderdirection == "up" 
+		? ('<a href="'.$HTTP_SERVER_VARS['PHP_SELF'].'?clientid='.$clientid.'&orderdirection=down"><img src="images/caret-u.gif" border="0" alt="" title=""></a>')
+		: ('<a href="'.$HTTP_SERVER_VARS['PHP_SELF'].'?clientid='.$clientid.'&orderdirection=up"><img src="images/caret-ds.gif" border="0" alt="" title=""></a>');
+echo '</b></td>';
+// ID column
+echo '<td height="25"><b><a href="'.$HTTP_SERVER_VARS['PHP_SELF'].'?clientid='.$clientid.'&listorder=id">'.$GLOBALS['strID'].'</a>';
+if ($listorder == "id")
+	echo $orderdirection == "up" 
+		? ('<a href="'.$HTTP_SERVER_VARS['PHP_SELF'].'?clientid='.$clientid.'&orderdirection=down"><img src="images/caret-u.gif" border="0" alt="" title=""></a>')
+		: ('<a href="'.$HTTP_SERVER_VARS['PHP_SELF'].'?clientid='.$clientid.'&orderdirection=up"><img src="images/caret-ds.gif" border="0" alt="" title=""></a>');
+echo '</b></td>';
+// Views column
+echo "<td height='25' align='".$phpAds_TextAlignRight."'><b><a href='".$HTTP_SERVER_VARS['PHP_SELF']."?clientid=".$clientid."&listorder=views'>".$GLOBALS['strViews'].'</a>';
+if ($listorder == "views")
+	echo $orderdirection == "up" 
+		? ('<a href="'.$HTTP_SERVER_VARS['PHP_SELF'].'?clientid='.$clientid.'&orderdirection=down"><img src="images/caret-u.gif" border="0" alt="" title=""></a>')
+		: ('<a href="'.$HTTP_SERVER_VARS['PHP_SELF'].'?clientid='.$clientid.'&orderdirection=up"><img src="images/caret-ds.gif" border="0" alt="" title=""></a>');
+echo '</b></td>';
+// Clicks column
+echo "<td height='25' align='".$phpAds_TextAlignRight."'><b><a href='".$HTTP_SERVER_VARS['PHP_SELF']."?clientid=".$clientid."&listorder=clicks'>".$GLOBALS['strClicks'].'</a>';
+if ($listorder == "clicks")
+	echo $orderdirection == "up" 
+		? ('<a href="'.$HTTP_SERVER_VARS['PHP_SELF'].'?clientid='.$clientid.'&orderdirection=down"><img src="images/caret-u.gif" border="0" alt="" title=""></a>')
+		: ('<a href="'.$HTTP_SERVER_VARS['PHP_SELF'].'?clientid='.$clientid.'&orderdirection=up"><img src="images/caret-ds.gif" border="0" alt="" title=""></a>');
+echo '</b></td>';
+// CTR column
+echo "<td height='25' align='".$phpAds_TextAlignRight."'><b><a href='".$HTTP_SERVER_VARS['PHP_SELF']."?clientid=".$clientid."&listorder=ctr'>".$GLOBALS['strCTRShort'].'</a>';
+if ($listorder == "ctr")
+	echo $orderdirection == "up" 
+		? ('<a href="'.$HTTP_SERVER_VARS['PHP_SELF'].'?clientid='.$clientid.'&orderdirection=down"><img src="images/caret-u.gif" border="0" alt="" title=""></a>')
+		: ('<a href="'.$HTTP_SERVER_VARS['PHP_SELF'].'?clientid='.$clientid.'&orderdirection=up"><img src="images/caret-ds.gif" border="0" alt="" title=""></a>');
+echo '</b></td>';
+// Conversion column
+echo "<td height='25' align='".$phpAds_TextAlignRight."'><b><a href='".$HTTP_SERVER_VARS['PHP_SELF']."?clientid=".$clientid."&listorder=conversions'>".$GLOBALS['strConversions'].'</a>';
+if ($listorder == "conversions")
+	echo $orderdirection == "up" 
+		? ('<a href="'.$HTTP_SERVER_VARS['PHP_SELF'].'?clientid='.$clientid.'&orderdirection=down"><img src="images/caret-u.gif" border="0" alt="" title=""></a>')
+		: ('<a href="'.$HTTP_SERVER_VARS['PHP_SELF'].'?clientid='.$clientid.'&orderdirection=up"><img src="images/caret-ds.gif" border="0" alt="" title=""></a>');
+echo '</b></td>';
+// Sales Ration colum
+echo "<td height='25' align='".$phpAds_TextAlignRight."'><b><a href='".$HTTP_SERVER_VARS['PHP_SELF']."?clientid=".$clientid."&listorder=CNVR'>".$GLOBALS['strCNVRShort'].'</a>&nbsp;&nbsp;';
+if ($listorder == "CNVR")
+	echo $orderdirection == "up" 
+		? ('<a href="'.$HTTP_SERVER_VARS['PHP_SELF'].'?clientid='.$clientid.'&orderdirection=down"><img src="images/caret-u.gif" border="0" alt="" title=""></a>')
+		: ('<a href="'.$HTTP_SERVER_VARS['PHP_SELF'].'?clientid='.$clientid.'&orderdirection=up"><img src="images/caret-ds.gif" border="0" alt="" title=""></a>');
+echo '</b></td>';
+echo "</tr>";
+//-----------------------------------------------------------------------------------------------------------------------
+//Column headers END
+//-----------------------------------------------------------------------------------------------------------------------
 		
-		if (isset($campaigns[$ckey]['banners']))
-		{
-			if ($campaigns[$ckey]['expand'] == '1')
-				echo "<a href='stats-advertiser-campaigns.php?clientid=".$clientid."&collapse=".$campaigns[$ckey]['clientid']."'><img src='images/triangle-d.gif' align='absmiddle' border='0'></a>&nbsp;";
-			else
-				echo "<a href='stats-advertiser-campaigns.php?clientid=".$clientid."&expand=".$campaigns[$ckey]['clientid']."'><img src='images/".$phpAds_TextDirection."/triangle-l.gif' align='absmiddle' border='0'></a>&nbsp;";
-		}
-		else
-			echo "<img src='images/spacer.gif' height='16' width='16'>&nbsp;";
-		
-		
-		if ($campaigns[$ckey]['active'] == 't')
-			echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;";
-		else
-			echo "<img src='images/icon-campaign-d.gif' align='absmiddle'>&nbsp;";
-		
-		echo "<a href='stats-campaign-history.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['campaignid']."'>".$campaigns[$ckey]['campaignname']."</td>";
-		echo "</td>";
-		
-		// ID
-		echo "<td height='25'>".$campaigns[$ckey]['clientid']."</td>";
-		
-		// Button 1
-		echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($campaigns[$ckey]['views'])."</td>";
-		
-		// Button 2
-		echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($campaigns[$ckey]['clicks'])."</td>";
-		
-		// Button 3
-		echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_buildCTR($campaigns[$ckey]['views'], $campaigns[$ckey]['clicks'])."&nbsp;&nbsp;</td>";
+echo "<tr height='1'><td colspan='7' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
 		
 		
-		
-		if ($campaigns[$ckey]['expand'] == '1' && isset($campaigns[$ckey]['banners']))
-		{
-			$banners = $campaigns[$ckey]['banners'];
-			for (reset($banners);$bkey=key($banners);next($banners))
-			{
-				$name = $strUntitled;
-				if (isset($banners[$bkey]['alt']) && $banners[$bkey]['alt'] != '') $name = $banners[$bkey]['alt'];
-				if (isset($banners[$bkey]['description']) && $banners[$bkey]['description'] != '') $name = $banners[$bkey]['description'];
+	$i = 0;
+	rowPresenter($array, $i++, 0, '', true, $clientid,'');
 				
-				$name = phpAds_breakString ($name, '30');
-				
-				// Divider
-				echo "<tr height='1'>";
-				echo "<td ".($i%2==0?"bgcolor='#F6F6F6'":"")."><img src='images/spacer.gif' width='1' height='1'></td>";
-				echo "<td colspan='4' bgcolor='#888888'><img src='images/break-l.gif' height='1' width='100%'></td>";
-				echo "</tr>";
-				
-				// Icon & name
-				echo "<tr height='25' ".($i%2==0?"bgcolor='#F6F6F6'":"").">";
-				echo "<td height='25'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-				
-				if ($banners[$bkey]['active'] == 't' && $campaigns[$ckey]['active'] == 't')
-				{
-					if ($banners[$bkey]['storagetype'] == 'html')
-						echo "<img src='images/icon-banner-html.gif' align='absmiddle'>";
-					elseif ($banners[$bkey]['storagetype'] == 'txt')
-						echo "<img src='images/icon-banner-text.gif' align='absmiddle'>";
-					elseif ($banners[$bkey]['storagetype'] == 'url')
-						echo "<img src='images/icon-banner-url.gif' align='absmiddle'>";
-					else
-						echo "<img src='images/icon-banner-stored.gif' align='absmiddle'>";
-				}
-				else
-				{
-					if ($banners[$bkey]['storagetype'] == 'html')
-						echo "<img src='images/icon-banner-html-d.gif' align='absmiddle'>";
-					elseif ($banners[$bkey]['storagetype'] == 'txt')
-						echo "<img src='images/icon-banner-text-d.gif' align='absmiddle'>";
-					elseif ($banners[$bkey]['storagetype'] == 'url')
-						echo "<img src='images/icon-banner-url-d.gif' align='absmiddle'>";
-					else
-						echo "<img src='images/icon-banner-stored-d.gif' align='absmiddle'>";
-				}
-				
-				echo "&nbsp;<a href='stats-banner-history.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['clientid']."&bannerid=".$banners[$bkey]['bannerid']."'>".$name."</a></td>";
-				
-				// ID
-				echo "<td height='25'>".$banners[$bkey]['bannerid']."</td>";
-				
-				// Empty
-				echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($banners[$bkey]['views'])."</td>";
-				
-				// Button 2
-				echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($banners[$bkey]['clicks'])."</td>";
-				
-				// Button 1
-				echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_buildCTR($banners[$bkey]['views'], $banners[$bkey]['clicks'])."&nbsp;&nbsp;</td>";
-			}
-		}
-		
-		echo "<tr height='1'><td colspan='5' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
-		$i++;
-	}
 	
 	// Total
 	echo "<tr height='25' ".($i % 2 == 0 ? "bgcolor='#F6F6F6'" : "")."><td height='25'>&nbsp;&nbsp;<b>".$strTotal."</b></td>";
 	echo "<td height='25'>&nbsp;</td>";
 	echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($totalviews)."</td>";
 	echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($totalclicks)."</td>";
-	echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_buildCTR($totalviews, $totalclicks)."&nbsp;&nbsp;</td>";
+	echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_buildCTR($totalviews, $totalclicks)."</td>";
+	echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($totalconversions)."</td>";
+	echo "<td height='25' align='".$phpAds_TextAlignRight."'>".number_format(($totalclicks ? $totalconversions / $totalclicks * 100 : 0), $phpAds_config['percentage_decimals'], $phpAds_DecimalPoint, $phpAds_ThousandsSeperator)."%&nbsp;&nbsp;</td>";
 	echo "</tr>";
-	echo "<tr height='1'><td colspan='5' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
+	echo "<tr height='1'><td colspan='7' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
 	
 	echo "<tr height='25'><td colspan='2' height='25' align='".$phpAds_TextAlignLeft."' nowrap>";
 	
@@ -472,7 +503,7 @@ if ($campaignshidden > 0 || $totalviews > 0 || $totalclicks > 0)
 	}
 	
 	echo "</td>";
-	echo "<td colspan='3' height='25' align='".$phpAds_TextAlignRight."' nowrap>";
+	echo "<td colspan='5' height='25' align='".$phpAds_TextAlignRight."' nowrap>";
 	echo "<img src='images/triangle-d.gif' align='absmiddle' border='0'>";
 	echo "&nbsp;<a href='stats-advertiser-campaigns.php?clientid=".$clientid."&expand=all' accesskey='".$keyExpandAll."'>".$strExpandAll."</a>";
 	echo "&nbsp;&nbsp;|&nbsp;&nbsp;";
@@ -491,20 +522,16 @@ else
 	echo $strNoStats.'</div>';
 }
 
-
-
 /*********************************************************/
 /* Store preferences                                     */
 /*********************************************************/
-
-$Session['prefs']['stats-advertiser-campaigns.php']['hideinactive'] = $hideinactive;
 $Session['prefs']['stats-advertiser-campaigns.php']['listorder'] = $listorder;
 $Session['prefs']['stats-advertiser-campaigns.php']['orderdirection'] = $orderdirection;
-$Session['prefs']['stats-advertiser-campaigns.php']['nodes'] = implode (",", $node_array);
+//$Session['prefs']['stats-advertiser-campaigns.php']['results'] 			= $array;
+$Session['prefs']['stats-advertiser-campaigns.php']['hide'] 			= $hideinactive;
+$Session['prefs']['stats-affiliate-zones.php']['clientid']				= $clientid;
 
 phpAds_SessionDataStore();
-
-
 
 /*********************************************************/
 /* HTML framework                                        */

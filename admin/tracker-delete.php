@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -27,8 +27,25 @@ phpAds_registerGlobal ('returnurl');
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency);
 
+if (phpAds_isUser(phpAds_Agency))
+{
+	$res = phpAds_dbQuery(
+		"SELECT clientid".
+		" FROM ".$phpAds_config['tbl_clients']." AS c".
+		",".$phpAds_config['tbl_trackers']." AS t".
+		" WHERE t.trackerid=c.trackterid".
+		" AND t.trackerid=".$trackerid.
+		" AND c.agencyid=".phpAds_getUserID()
+	) or phpAds_sqlDie();
+	
+	if (phpAds_dbNumRows($res) == 0)
+	{
+		phpAds_PageHeader("1");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
+	}
+}
 
 
 /*********************************************************/

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.11 $
+<?php // $Revision: 2.12 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -31,6 +31,7 @@ phpAds_registerGlobal (
 	,'asource'
 	,'atar'
 	,'autohtml'
+	,'adserver'
 	,'banner'
 	,'bannertext'
 	,'campaignid'
@@ -55,8 +56,41 @@ phpAds_registerGlobal (
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin+phpAds_Client);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency + phpAds_Client);
 
+if (phpAds_isUser(phpAds_Agency))
+{
+	if (isset($bannerid) && ($bannerid != ''))
+	{
+		$query = "SELECT b.bannerid as bannerid".
+			" FROM ".$phpAds_config['tbl_clients']." AS c".
+			",".$phpAds_config['tbl_campaigns']." AS m".
+			",".$phpAds_config['tbl_banners']." AS b".
+			" WHERE c.clientid=".$clientid.
+			" AND m.campaignid=".$campaignid.
+			" AND b.bannerid=".$bannerid.
+			" AND b.campaignid=m.campaignid".
+			" AND m.clientid=c.clientid".
+			" AND c.agencyid=".phpAds_getUserID();
+	}
+	else 
+	{
+		$query = "SELECT m.campaignid as campaignid".
+			" FROM ".$phpAds_config['tbl_clients']." AS c".
+			",".$phpAds_config['tbl_campaigns']." AS m".
+			" WHERE c.clientid=".$clientid.
+			" AND m.campaignid=".$campaignid.
+			" AND m.clientid=c.clientid".
+			" AND c.agencyid=".phpAds_getUserID();
+	}
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
+	if (phpAds_dbNumRows($res) == 0)
+	{
+		phpAds_PageHeader("2");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
+	}
+}
 
 
 /*********************************************************/
@@ -587,6 +621,7 @@ if (isset($submit))
 			$final['width'] 	  = $width;
 			$final['height'] 	  = $height;
 			$final['autohtml'] 	  = isset($autohtml) ? 't' : 'f';
+			$final['adserver']	  = $adserver;
 			$final['url'] 		  = $url;
 			$final['target'] 	  = $target;
 			$final['contenttype'] = 'html';
@@ -665,7 +700,7 @@ if (isset($submit))
 	$final['append'] = isset($final['append']) ? addslashes($final['append']) : '';
 	
 	
-	if (phpAds_isUser(phpAds_Admin)) 
+	if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency)) 
 	{
 		if (isset($keyword) && $keyword != '')
 		{
@@ -821,7 +856,7 @@ if ($bannerid != '')
 		);
 	}
 	
-	if (phpAds_isUser(phpAds_Admin))
+	if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 	{
 		phpAds_PageShortcut($strClientProperties, 'advertiser-edit.php?clientid='.$clientid, 'images/icon-advertiser.gif');
 		phpAds_PageShortcut($strCampaignProperties, 'campaign-edit.php?clientid='.$clientid.'&campaignid='.$campaignid, 'images/icon-campaign.gif');
@@ -844,7 +879,21 @@ if ($bannerid != '')
 		$extra .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 		$extra .= "<select name='moveto' style='width: 110;'>";
 		
-		$res = phpAds_dbQuery("SELECT * FROM ".$phpAds_config['tbl_campaigns']." WHERE campaignid != '".$campaignid."'") or phpAds_sqlDie();
+		if (phpAds_isUser(phpAds_Admin))
+		{
+			$query = "SELECT campaignid,campaignname FROM ".$phpAds_config['tbl_campaigns']." WHERE campaignid !=".$campaignid;
+		}
+		elseif (phpAds_isUser(phpAds_Agency))
+		{
+			$query = "SELECT campaignid,campaignname".
+				" FROM ".$phpAds_config['tbl_campaigns'].
+				",".$phpAds_config['tbl_clients'].
+				" WHERE ".$phpAds_config['tbl_clients'].".clientid=".$phpAds_config['tbl_campaigns'].".clientid".
+				" AND agencyid=".phpAds_getUserID().
+				" AND campaignid !=".$campaignid;
+		}
+		$res = phpAds_dbQuery($query)
+			or phpAds_sqlDie();
 		while ($others = phpAds_dbFetchArray($res))
 			$extra .= "<option value='".$others['campaignid']."'>".phpAds_buildName($others['campaignid'], $others['campaignname'])."</option>";
 		
@@ -854,14 +903,14 @@ if ($bannerid != '')
 		$extra .= "</form>";
 		
 		
-		phpAds_PageHeader("4.1.3.4.2", $extra);
+		phpAds_PageHeader("4.1.3.3.2", $extra);
 			echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentClientName($campaignid);
 			echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 			echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;".phpAds_getCampaignName($campaignid);
 			echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 			echo "<img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;<b>".phpAds_getBannerName($bannerid)."</b><br><br>";
 			echo phpAds_buildBannerCode($bannerid)."<br><br><br><br>";
-			phpAds_ShowSections(array("4.1.3.4.2", "4.1.3.4.3", "4.1.3.4.6", "4.1.3.4.4"));
+			phpAds_ShowSections(array("4.1.3.3.2", "4.1.3.3.3", "4.1.3.3.6", "4.1.3.3.4"));
 	}
 	else
 	{
@@ -909,13 +958,13 @@ if ($bannerid != '')
 }
 else
 {
-	phpAds_PageHeader("4.1.3.4.1");
+	phpAds_PageHeader("4.1.3.3.1");
 		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentClientName($campaignid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;".phpAds_getCampaignName($campaignid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 		echo "<img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;<b>".$strUntitled."</b><br><br><br>";
-		phpAds_ShowSections(array("4.1.3.4.1"));
+		phpAds_ShowSections(array("4.1.3.3.1"));
 	
 	// Set default values for new banner
 	$row['alt'] 		 = '';
@@ -1066,6 +1115,16 @@ if (!isset($bannerid) || $bannerid == '')
 		// Check upload option
 		if (editbanner.replaceimage[1])
 			editbanner.replaceimage[1].checked = true;
+	}
+	
+	function alterHtmlCheckbox() {
+	
+		if (editbanner.autohtml.checked) {
+			editbanner.adserver.disabled = false;
+		} else {
+			editbanner.adserver.disabled = true;		
+		}
+	
 	}
 	
 //-->
@@ -1514,8 +1573,25 @@ if ($storagetype == 'html')
 	echo "<tr><td width='30'>&nbsp;</td>";
 	echo "<td colspan='2'><textarea class='code' cols='45' rows='10' name='banner' wrap='off' dir='ltr' style='width:550px;";
 	echo "' tabindex='".($tabindex++)."'>".htmlentities($row['htmltemplate'])."</textarea></td></tr>";
+	
+	// checkbox and dropdown list allowing user to choose whether to alter the html so it can be tracked by other ad servers
 	echo "<tr><td width='30'>&nbsp;</td>";
-	echo "<td colspan='2'><input type='checkbox' name='autohtml' value='t'".(!isset($row["autohtml"]) || $row["autohtml"] == 't' ? ' checked' : '')." tabindex='".($tabindex++)."'> ".$strAutoChangeHTML."</td></tr>";
+	echo "<td colspan='2'>";
+	echo "<table><tr>";
+	echo "<td><img src='admin/images/spacer.gif' height='1' width='250'></td>";
+	echo "<td><img src='admin/images/spacer.gif' height='1' width='280'></td>";
+	echo "</tr>";
+	echo "<tr>";
+	echo "<td><input type='checkbox' onClick='alterHtmlCheckbox()' name='autohtml' value='t'".(!isset($row["autohtml"]) || $row["autohtml"] == 't' ? ' checked' : '')." tabindex='".($tabindex++)."'> ".$strAutoChangeHTML."</td>";
+	echo "<td align='right'><select name='adserver'>";
+	echo "<option value='' " . ($row["adserver"] == '' ? 'selected' : '') . " >Non-Rich Media</option>";	
+	echo "<option value='doubleclick' " . ($row["adserver"] == 'doubleclick' ? 'selected' : '') . " >Rich Media - DoubleClick</option>";
+	echo "<option value='atlas' " . ($row["adserver"] == 'atlas' ? 'selected' : '') . " >Rich Media - Atlas</option>";
+	echo "</select></td>";
+	echo "</tr></table>";
+	echo "</td>";
+	echo "</tr>";
+	// end of modified section
 	
 	echo "<tr><td height='20' colspan='3'>&nbsp;</td></tr>";
 	echo "<tr><td height='1' colspan='3' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
@@ -1640,16 +1716,19 @@ if ($storagetype == 'network')
 	echo "</table>";
 }
 
-if (phpAds_isUser(phpAds_Admin))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 {
 	echo "<table border='0' width='100%' cellpadding='0' cellspacing='0'>";
 	echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>";
 	
+	if ($phpAds_config['use_keywords'])
+	{
 	echo "<tr><td width='30'>&nbsp;</td>";
 	echo "<td width='200'>".$strKeyword."</td>";
     echo "<td><input class='flat' size='35' type='text' name='keyword' style='width:350px;' value='".phpAds_htmlQuotes($row["keyword"])."' tabindex='".($tabindex++)."'></td></tr>";
 	echo "<tr><td><img src='images/spacer.gif' height='1' width='100%'></td>";
 	echo "<td colspan='2'><img src='images/break-l.gif' height='1' width='200' vspace='6'></td></tr>";
+	}
 	
 	echo "<tr><td width='30'>&nbsp;</td>";
 	echo "<td width='200'>".$strDescription."</td>";

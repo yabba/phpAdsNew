@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -39,7 +39,7 @@ phpAds_registerGlobal (
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin+phpAds_Affiliate);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency + phpAds_Affiliate);
 
 
 
@@ -82,6 +82,23 @@ if (phpAds_isUser(phpAds_Affiliate))
 			phpAds_PageHeader("1");
 			phpAds_Die ($strAccessDenied, $strNotAdmin);
 		}
+	}
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	$query = "SELECT z.zoneid as zoneid".
+		" FROM ".$phpAds_config['tbl_affiliates']." AS a".
+		",".$phpAds_config['tbl_zones']." AS z".
+		" WHERE z.affiliateid=".$affiliateid.
+		" AND z.zoneid=".$zoneid.
+		" AND z.affiliateid=a.affiliateid".
+		" AND a.agencyid=".phpAds_getUserID();
+	
+	$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+	if (phpAds_dbNumRows($res) == 0)
+	{
+		phpAds_PageHeader("2");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
 	}
 }
 
@@ -201,7 +218,7 @@ $res = phpAds_dbQuery("
 	FROM
 		".$phpAds_config['tbl_zones']."
 	WHERE
-		affiliateid = '".$affiliateid."'
+		affiliateid=".$affiliateid."
 		".phpAds_getZoneListOrder ($navorder, $navdirection)."
 ");
 
@@ -214,7 +231,7 @@ while ($row = phpAds_dbFetchArray($res))
 	);
 }
 
-if (phpAds_isUser(phpAds_Admin))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 {
 	phpAds_PageShortcut($strAffiliateProperties, 'affiliate-edit.php?affiliateid='.$affiliateid, 'images/icon-affiliate.gif');
 	phpAds_PageShortcut($strZoneHistory, 'stats-zone-history.php?affiliateid='.$affiliateid.'&zoneid='.$zoneid, 'images/icon-statistics.gif');
@@ -233,7 +250,22 @@ if (phpAds_isUser(phpAds_Admin))
 	$extra .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	$extra .= "<select name='moveto' style='width: 110;'>";
 	
-	$res = phpAds_dbQuery("SELECT * FROM ".$phpAds_config['tbl_affiliates']." WHERE affiliateid != ".$affiliateid) or phpAds_sqlDie();
+	if (phpAds_isUser(phpAds_Admin))
+	{
+		$query = "SELECT affiliateid,name".
+			" FROM ".$phpAds_config['tbl_affiliates'].
+			" WHERE affiliateid != ".$affiliateid;
+	}
+	elseif (phpAds_isUser(phpAds_Agency))
+	{
+		$query = "SELECT affiliateid,name".
+			" FROM ".$phpAds_config['tbl_affiliates'].
+			" WHERE affiliateid != ".$affiliateid.
+			" AND agencyid=".phpAds_getUserID();
+	}
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
+	
 	while ($row = phpAds_dbFetchArray($res))
 		$extra .= "<option value='".$row['affiliateid']."'>".phpAds_buildAffiliateName($row['affiliateid'], $row['name'])."</option>";
 	
@@ -276,7 +308,7 @@ $res = phpAds_dbQuery("
 	FROM
 		".$phpAds_config['tbl_zones']."
 	WHERE
-		zoneid = '".$zoneid."'
+		zoneid=".$zoneid."
 ") or phpAds_sqlDie();
 
 if (phpAds_dbNumRows($res))
@@ -321,8 +353,24 @@ echo "&nbsp;&nbsp;<select name='chainzone' style='width: 200;' onchange='phpAds_
 	$available = array();
 	
 	// Get list of public publishers
-	$res = phpAds_dbQuery("SELECT * FROM ".$phpAds_config['tbl_affiliates']." WHERE ".
-						  "publiczones = 't' OR affiliateid = '".$affiliateid."'");
+	if (phpAds_isUser(phpAds_Admin))
+	{
+		$query = "SELECT affiliateid".
+			" FROM ".$phpAds_config['tbl_affiliates'].
+			" WHERE publiczones = 't'".
+			" OR affiliateid=".$affiliateid;
+	}
+	elseif (phpAds_isUser(phpAds_Agency))
+	{
+		$query = "SELECT affiliateid".
+			" FROM ".$phpAds_config['tbl_affiliates'].
+			" WHERE (publiczones = 't'".
+			" OR affiliateid=".$affiliateid.")".
+			" AND agencyid=".phpAds_getUserID();
+	}
+	
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
 		$available[] = "affiliateid = '".$row['affiliateid']."'";
@@ -344,13 +392,16 @@ echo "&nbsp;&nbsp;<select name='chainzone' style='width: 200;' onchange='phpAds_
 			echo "<option value='".$row['zoneid']."'>".phpAds_buildZoneName($row['zoneid'], $row['zonename'])."</option>";
 
 echo "</select></td></tr>";
-echo "<tr><td colspan='2'><img src='images/break-l.gif' height='1' width='100%' align='absmiddle' vspace='8'></td></tr>";
 
-echo "<tr><td><input type='radio' name='chaintype' value='2'".($zone['chain'] != '' && $chainzone == '' ? ' CHECKED' : '')." tabindex='".($tabindex++)."'>&nbsp;</td><td>";
-echo $strZoneUseKeywords.":</td></tr>";
-echo "<tr><td>&nbsp;</td><td width='100%'><img src='images/spacer.gif' height='1' width='100%' align='absmiddle' vspace='1'>";
-echo "<img src='images/icon-edit.gif' align='top'>&nbsp;&nbsp;<textarea name='chainwhat' rows='3' cols='55' style='width: 200;' onkeydown='phpAds_formEditWhat()' tabindex='".($tabindex++)."'>".($chainzone == '' ? htmlspecialchars($zone['chain']) : '')."</textarea>";
-echo "</td></tr></table></td></tr>";
+if ($phpAds_config['use_keywords'])
+{
+	echo "<tr><td colspan='2'><img src='images/break-l.gif' height='1' width='100%' align='absmiddle' vspace='8'></td></tr>";
+	echo "<tr><td><input type='radio' name='chaintype' value='2'".($zone['chain'] != '' && $chainzone == '' ? ' CHECKED' : '')." tabindex='".($tabindex++)."'>&nbsp;</td><td>";
+	echo $strZoneUseKeywords.":</td></tr>";
+	echo "<tr><td>&nbsp;</td><td width='100%'><img src='images/spacer.gif' height='1' width='100%' align='absmiddle' vspace='1'>";
+	echo "<img src='images/icon-edit.gif' align='top'>&nbsp;&nbsp;<textarea name='chainwhat' rows='3' cols='55' style='width: 200;' onkeydown='phpAds_formEditWhat()' tabindex='".($tabindex++)."'>".($chainzone == '' ? htmlspecialchars($zone['chain']) : '')."</textarea>";
+	echo "</td></tr></table></td></tr>";
+}
 
 echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>";
 echo "<tr height='1'><td colspan='3' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
@@ -373,7 +424,24 @@ if ($zone['delivery'] == phpAds_ZoneBanner)
 		
 		
 		// Get list of public publishers
-		$res = phpAds_dbQuery("SELECT * FROM ".$phpAds_config['tbl_affiliates']." WHERE publiczones = 't' OR affiliateid = '".$affiliateid."'");
+		if (phpAds_isUser(phpAds_Admin))
+		{
+			$query = "SELECT affiliateid".
+				" FROM ".$phpAds_config['tbl_affiliates'].
+				" WHERE publiczones = 't'".
+				" OR affiliateid=".$affiliateid;
+		}
+		elseif (phpAds_isUser(phpAds_Agency))
+		{
+			$query = "SELECT affiliateid".
+				" FROM ".$phpAds_config['tbl_affiliates'].
+				" WHERE (publiczones = 't'".
+				" OR affiliateid=".$affiliateid.")".
+				" AND agencyid=".phpAds_getUserID();
+		}
+		$res = phpAds_dbQuery($query)
+			or phpAds_sqlDie();
+
 		while ($row = phpAds_dbFetchArray($res))
 			$available[] = "affiliateid = '".$row['affiliateid']."'";
 		

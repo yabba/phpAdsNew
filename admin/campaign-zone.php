@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -31,8 +31,47 @@ phpAds_registerGlobal (
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency);
 
+if (phpAds_isUser(phpAds_Agency))
+{
+	if (isset($campaignid) && $campaignid != '')
+	{
+		$query = "SELECT c.clientid".
+			" FROM ".$phpAds_config['tbl_clients']." AS c".
+			",".$phpAds_config['tbl_campaigns']." AS m".
+			" WHERE c.clientid=m.clientid".
+			" AND c.clientid=".$clientid.
+			" AND m.campaignid=".$campaignid.
+			" AND agencyid=".phpAds_getUserID();
+	}
+	else
+	{
+		$query = "SELECT c.clientid".
+			" FROM ".$phpAds_config['tbl_clients']." AS c".
+			" WHERE c.clientid=".$clientid.
+			" AND agencyid=".phpAds_getUserID();
+	}
+	$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+	if (phpAds_dbNumRows($res) == 0)
+	{
+		phpAds_PageHeader("2");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
+	}
+}
+
+// Determine AgencyID...
+if (phpAds_isUser(phpAds_Admin))
+{
+	$agencyid = 0;
+	$res = phpAds_dbQuery("SELECT agencyid FROM ".$phpAds_config['tbl_clients']." WHERE clientid=".$clientid);
+	if ($row = phpAds_dbFetchArray($res))
+		$agencyid = $row['agencyid'];
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	$agencyid = phpAds_getUserID();
+}
 
 
 /*********************************************************/
@@ -43,13 +82,15 @@ if (isset($submit))
 {
 	$previouszone = array();
 	
-	// Get all zones
 	$res = phpAds_dbQuery(
 		"SELECT".
-		" zoneid".
-		",what".
-		" FROM ".$phpAds_config['tbl_zones'].
-		" WHERE zonetype = ".phpAds_ZoneCampaign
+		" z.zoneid AS zoneid".
+		",z.what AS what".
+		" FROM ".$phpAds_config['tbl_zones']." AS z".
+		",".$phpAds_config['tbl_affiliates']." AS a".
+		" WHERE z.affiliateid=a.affiliateid".
+		" AND z.zonetype=".phpAds_ZoneCampaign.
+		" AND a.agencyid=".$agencyid
 	) or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
@@ -110,7 +151,7 @@ else
 
 // Get other campaigns
 $res = phpAds_dbQuery(
-	"SELECT *".
+	"SELECT campaignid,campaignname".
 	" FROM ".$phpAds_config['tbl_campaigns'].
 	" WHERE clientid = ".$clientid.
 	phpAds_getCampaignListOrder ($navorder, $navdirection)
@@ -142,11 +183,21 @@ $extra .= "<img src='images/spacer.gif' height='1' width='160' vspace='2'><br>";
 $extra .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 $extra .= "<select name='moveto' style='width: 110;'>";
 
-$res = phpAds_dbQuery(
-	"SELECT *".
+if (phpAds_isUser(phpAds_Admin))
+{
+	$query = "SELECT clientid,clientname".
 	" FROM ".$phpAds_config['tbl_clients'].
-	" WHERE clientid!=".phpAds_getCampaignParentClientID ($campaignid)
-) or phpAds_sqlDie();
+		" WHERE clientid!=".$clientid;
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	$query = "SELECT clientid,clientname".
+		" FROM ".$phpAds_config['tbl_clients'].
+		" WHERE clientid!=".$clientid.
+		" AND agencyid=".phpAds_getUserID();
+}
+$res = phpAds_dbQuery($query)
+	or phpAds_sqlDie();
 
 while ($row = phpAds_dbFetchArray($res))
 	$extra .= "<option value='".$row['clientid']."'>".phpAds_buildName($row['clientid'], $row['clientname'])."</option>";
@@ -170,14 +221,12 @@ phpAds_PageHeader("4.1.3.4", $extra);
 /* Main code                                             */
 /*********************************************************/
 
-$res = phpAds_dbQuery ("
-	SELECT
-		affiliateid,
-		name
-	FROM
-		".$phpAds_config['tbl_affiliates']."
-	".phpAds_getAffiliateListOrder ($listorder, $orderdirection)."
-") or phpAds_sqlDie();
+$res = phpAds_dbQuery (
+	"SELECT affiliateid,name".
+	" FROM ".$phpAds_config['tbl_affiliates'].
+	" WHERE agencyid=".$agencyid.
+	phpAds_getAffiliateListOrder ($listorder, $orderdirection)
+) or phpAds_sqlDie();
 
 $affiliate_count = phpAds_dbNumRows($res);
 while ($row = phpAds_dbFetchArray($res))
@@ -185,23 +234,15 @@ while ($row = phpAds_dbFetchArray($res))
 	$affiliates[$row['affiliateid']] = $row;
 }
 
-
-$res = phpAds_dbQuery("
-	SELECT 
-		zoneid,
-		affiliateid,
-		zonename,
-		description,
-		width,
-		height,
-		what,
-		delivery
-	FROM 
-		".$phpAds_config['tbl_zones']."
-	WHERE
-		zonetype = ".phpAds_ZoneCampaign."
-	".phpAds_getZoneListOrder ($listorder, $orderdirection)."
-") or phpAds_sqlDie();
+$res = phpAds_dbQuery(
+	"SELECT z.zoneid,z.affiliateid,z.zonename,z.description,z.width,z.height,z.what,z.delivery".
+	" FROM ".$phpAds_config['tbl_zones']." AS z".
+	",".$phpAds_config['tbl_affiliates']." AS a".
+	" WHERE z.affiliateid=a.affiliateid".
+	" AND agencyid=".$agencyid.
+	" AND zonetype=".phpAds_ZoneCampaign.
+	phpAds_getZoneListOrder ($listorder, $orderdirection)
+) or phpAds_sqlDie();
 
 $zone_count = phpAds_dbNumRows($res);
 while ($row = phpAds_dbFetchArray($res))

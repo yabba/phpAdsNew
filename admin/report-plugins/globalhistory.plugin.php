@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -27,7 +27,7 @@ function Plugin_GlobalhistoryInfo()
 		"plugin-description"	=> $strPluginGlobal,
 		"plugin-author"			=> "Niels Leenheer",
 		"plugin-export"			=> "csv",
-		"plugin-authorize"		=> phpAds_Admin,
+		"plugin-authorize"		=> phpAds_Admin+phpAds_Agency,
 		"plugin-execute"		=> "Plugin_GlobalhistoryExecute",
 		"plugin-import"			=> array (
 			"delimiter"		=> array (
@@ -53,7 +53,8 @@ function Plugin_GlobalhistoryExecute($delimiter=",")
 	
 	header ("Content-type: application/csv\nContent-Disposition: \"inline; filename=globalhistory.csv\"");
 	
-	
+	if(phpAds_isUser(phpAds_Admin))
+	{
 	$res_query = "
 		SELECT
 			DATE_FORMAT(day, '".$date_format."') as day,
@@ -65,6 +66,28 @@ function Plugin_GlobalhistoryExecute($delimiter=",")
 			day
 	";
 	
+	}
+	else
+	{
+		$res_query = "SELECT
+						DATE_FORMAT(s.day, '".$date_format."') as day,
+						SUM(s.views) AS adviews,
+						SUM(s.clicks) AS adclicks
+					FROM
+						".$phpAds_config['tbl_adstats']." 	as s,
+						".$phpAds_config['tbl_banners']." 	as b,
+						".$phpAds_config['tbl_campaigns']." as m,
+						".$phpAds_config['tbl_clients']." 	as c
+					WHERE
+						s.bannerid 		= b.bannerid AND
+						b.campaignid 	= m.campaignid AND
+						m.clientid 		= c.clientid AND
+						c.agencyid 		= " . phpAds_getUserID() ."
+					GROUP BY
+						day";
+	}
+
+	
 	$res_banners = phpAds_dbQuery($res_query) or phpAds_sqlDie();
 	
 	while ($row_banners = phpAds_dbFetchArray($res_banners))
@@ -74,6 +97,7 @@ function Plugin_GlobalhistoryExecute($delimiter=",")
 	}
 	
 	echo $strGlobalHistory."\n\n";
+	
 	echo $strDay.$delimiter.$strViews.$delimiter.$strClicks.$delimiter.$strCTRShort."\n";
 	
 	$totalclicks = 0;
@@ -84,6 +108,8 @@ function Plugin_GlobalhistoryExecute($delimiter=",")
 		for (reset($stats);$key=key($stats);next($stats))
 		{
 			$row = array();
+			
+			//$key = implode('/',array_reverse(split('[-]',$key)));
 			
 			$row[] = $key;
 			$row[] = $stats[$key]['views'];

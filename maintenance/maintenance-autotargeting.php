@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -67,7 +67,7 @@ if (phpAds_dbNumRows($res))
 		phpAds_dbQuery(
 			"UPDATE ".$phpAds_config['tbl_config'].
 			" SET autotarget_factor = ".$phpAds_config['autotarget_factor'].
-			" WHERE configid = 0"
+			" WHERE agencyid = 0"
 		);
 	}
 	elseif (!phpAds_AutoTargetingProfileSum($profile))

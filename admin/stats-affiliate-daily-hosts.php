@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -20,7 +20,7 @@ require ("lib-statistics.inc.php");
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin+phpAds_Affiliate);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency + phpAds_Affiliate);
 
 
 
@@ -31,6 +31,23 @@ phpAds_checkAccess(phpAds_Admin+phpAds_Affiliate);
 if (phpAds_isUser(phpAds_Affiliate))
 {
 	$affiliateid = phpAds_getUserID();
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	if (isset($affiliateid) && ($affiliateid != ''))
+	{
+		$query = "SELECT affiliateid".
+			" FROM ".$phpAds_config['tbl_affiliates'].
+			" WHERE affiliateid=".$affiliateid.
+			" AND agencyid=".phpAds_getUserID();
+
+		$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+		if (phpAds_dbNumRows($res) == 0)
+		{
+			phpAds_PageHeader("2");
+			phpAds_Die ($strAccessDenied, $strNotAdmin);
+		}
+	}
 }
 
 

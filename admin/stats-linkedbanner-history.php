@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -21,11 +21,11 @@ require ("lib-expiration.inc.php");
 
 
 // Register input variables
-phpAds_registerGlobal ('period', 'start', 'limit', 'source');
+phpAds_registerGlobal ('period', 'start', 'limit');
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin+phpAds_Affiliate);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency + phpAds_Affiliate);
 
 
 
@@ -63,6 +63,32 @@ if (phpAds_isUser(phpAds_Affiliate))
 		phpAds_Die ($strAccessDenied, $strNotAdmin);
 	}
 }
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	if (isset($zoneid) && $zoneid > 0)
+	{
+		$result = phpAds_dbQuery(
+			"SELECT z.affiliateid AS affiliateid".
+			" FROM ".$phpAds_config['tbl_zones']." AS z".
+			",".$phpAds_config['tbl_affiliates']." AS a".
+			" WHERE zoneid='$zoneid'".
+			" AND a.affiliateid=z.affiliateid".
+			" AND a.agencyid=".phpAds_getUserID()
+		) or phpAds_sqlDie();
+		$row = phpAds_dbFetchArray($result);
+		
+		if ($row["affiliateid"] == '')
+		{
+			phpAds_PageHeader("1");
+			phpAds_Die ($strAccessDenied, $strNotAdmin);
+		}
+	}
+	else
+	{
+		phpAds_PageHeader("1");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
+	}
+}
 
 
 
@@ -70,7 +96,7 @@ if (phpAds_isUser(phpAds_Affiliate))
 /* HTML framework                                        */
 /*********************************************************/
 
-if (phpAds_isUser(phpAds_Admin))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 {
 	$res = phpAds_dbQuery("
 		SELECT
@@ -78,7 +104,7 @@ if (phpAds_isUser(phpAds_Admin))
 		FROM
 			".$phpAds_config['tbl_adstats']."
 		WHERE
-			zoneid = '".$zoneid."'
+			zoneid=".$zoneid."
 	") or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
@@ -90,6 +116,26 @@ if (phpAds_isUser(phpAds_Admin))
 		);
 	}
 	
+		// Get the adviews/clicks for each banner
+		$res_anonymous = phpAds_dbQuery("
+			SELECT
+				b.bannerid,
+				b.campaignid,
+				c.campaignid,
+				anonymous
+			FROM 
+				".$phpAds_config['tbl_banners']." as b,
+				".$phpAds_config['tbl_campaigns']." as c
+			WHERE
+				b.bannerid = ".$bannerid." AND
+				b.campaignid = c.campaignid
+			") or phpAds_sqlDie();
+		
+		$row_anonymous = phpAds_dbFetchArray($res_anonymous);
+		
+		$anonymous 	= $row_anonymous['anonymous'];
+
+
 	phpAds_PageShortcut($strAffiliateProperties, 'affiliate-edit.php?affiliateid='.$affiliateid, 'images/icon-affiliate.gif');	
 	phpAds_PageShortcut($strZoneProperties, 'zone-edit.php?affiliateid='.$affiliateid.'&zoneid='.$zoneid, 'images/icon-zone.gif');	
 	phpAds_PageShortcut($strIncludedBanners, 'zone-include.php?affiliateid='.$affiliateid.'&zoneid='.$zoneid, 'images/icon-zone-linked.gif');	
@@ -100,15 +146,34 @@ if (phpAds_isUser(phpAds_Admin))
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 		echo "<img src='images/icon-zone.gif' align='absmiddle'>&nbsp;".phpAds_getZoneName($zoneid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
-		echo "<img src='images/icon-zone-linked.gif' align='absmiddle'>&nbsp;<b>".phpAds_getBannerName($bannerid)."</b><br><br><br>";
+		echo "<img src='images/icon-zone-linked.gif' align='absmiddle'>&nbsp;<b>" . phpAds_getBannerName($bannerid) . ($anonymous == 't' ? " - This is a blind campaign!" : "") . "</b><br><br><br>";
 		phpAds_ShowSections(array("2.4.2.2.1"));
 }
 else
 {
+		// Get the adviews/clicks for each banner
+		$res_anonymous = phpAds_dbQuery("
+			SELECT
+				b.bannerid,
+				b.campaignid,
+				c.campaignid,
+				anonymous
+			FROM 
+				".$phpAds_config['tbl_banners']." as b,
+				".$phpAds_config['tbl_campaigns']." as c
+			WHERE
+				b.bannerid = ".$bannerid." AND
+				b.campaignid = c.campaignid
+			") or phpAds_sqlDie();
+		
+		$row_anonymous = phpAds_dbFetchArray($res_anonymous);
+		
+		$anonymous 	= $row_anonymous['anonymous'];
+
 	phpAds_PageHeader("1.1.2.1");
 		echo "<img src='images/icon-zone.gif' align='absmiddle'>&nbsp;".phpAds_getZoneName($zoneid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
-		echo "<img src='images/icon-zone-linked.gif' align='absmiddle'>&nbsp;<b>".phpAds_getBannerName($bannerid)."</b><br><br><br>";
+		echo "<img src='images/icon-zone-linked.gif' align='absmiddle'>&nbsp;<b>".($anonymous == "f" ? phpAds_getBannerName($bannerid) : "(Hidden Banner)")."</b><br><br><br>";
 		phpAds_ShowSections(array("1.1.2.1"));
 }
 

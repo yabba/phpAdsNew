@@ -1,4 +1,4 @@
-<?php // $Revision: 2.10 $
+<?php // $Revision: 2.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -43,18 +43,19 @@ phpAds_registerGlobal (
 	,'qmail_patch'
 	,'warn_admin'
 	,'warn_client'
+	,'warn_agency'
 	,'warn_limit'
 );
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency);
 
 
 $errormessage = array();
 $sql = array();
 
-if (isset($HTTP_POST_VARS) && count($HTTP_POST_VARS))
+if (isset($HTTP_POST_VARS['submit']) && $HTTP_POST_VARS['submit'] == 'true')
 {
 	if (isset($compact_stats))
 		phpAds_SettingsWriteAdd('compact_stats', ($compact_stats == '1'));
@@ -100,6 +101,7 @@ if (isset($HTTP_POST_VARS) && count($HTTP_POST_VARS))
 	
 	phpAds_SettingsWriteAdd('warn_admin', isset($warn_admin));
 	phpAds_SettingsWriteAdd('warn_client', isset($warn_client));
+	phpAds_SettingsWriteAdd('warn_agency', isset($warn_agency));
 	
 	if (isset($warn_limit))
 	{
@@ -140,12 +142,10 @@ if (isset($HTTP_POST_VARS) && count($HTTP_POST_VARS))
 	
 	if (!count($errormessage))
 	{
-		if (phpAds_SettingsWriteFlush())
-		{
+		phpAds_SettingsWriteFlush();
 			header("Location: settings-banner.php");
 			exit;
 		}
-	}
 }
 
 
@@ -156,7 +156,14 @@ if (isset($HTTP_POST_VARS) && count($HTTP_POST_VARS))
 
 phpAds_PrepareHelp();
 phpAds_PageHeader("5.1");
-phpAds_ShowSections(array("5.1", "5.3", "5.4", "5.2"));
+if (phpAds_isUser(phpAds_Admin))
+{
+	phpAds_ShowSections(array("5.1", "5.3", "5.4", "5.2","5.5"));
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	phpAds_ShowSections(array("5.1"));
+}
 phpAds_SettingsSelection("stats");
 
 
@@ -207,7 +214,7 @@ array (
 			'type'    => 'checkbox',
 			'name'    => 'log_source',
 			'text'	  => $strLogSource,
-			'depends' => 'log_adclicks==true || log_adviews==true'
+			'depends' => '(log_adclicks==true || log_adviews==true) && compact_stats==0'
 		),
 		array (
 			'type'    => 'checkbox',
@@ -324,6 +331,11 @@ array (
 		),
 		array (
 			'type'    => 'checkbox',
+			'name'    => 'warn_agency',
+			'text'	  => $strWarnAgency
+		),
+		array (
+			'type'    => 'checkbox',
 			'name'    => 'warn_client',
 			'text'	  => $strWarnClient
 		),
@@ -335,8 +347,8 @@ array (
 			'name' 	  => 'warn_limit',
 			'text' 	  => $strWarnLimit,
 			'size'    => 12,
-			'depends' => 'warn_client==true || warn_admin==true',
-			'check'	  => 'number+20',
+			'depends' => 'warn_client==true || warn_admin==true || warn_agency==true',
+			//'check'	  => '',
 			'req'	  => true
 		),
 		array (

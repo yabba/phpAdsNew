@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -19,7 +19,7 @@ require	("config.inc.php");
 
 // Redirect to the admin interface
 if (defined('phpAds_installed') && phpAds_installed)
-	Header("Location: ".$phpAds_config['url_prefix']."/admin/index.php");
+	Header("Location: ".$phpAds_config['admin_url_prefix']."/admin/index.php");
 else
 	Header("Location: admin/index.php");
 

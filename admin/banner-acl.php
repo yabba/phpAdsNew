@@ -1,4 +1,4 @@
-<?php // $Revision: 2.12 $
+<?php // $Revision: 2.13 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -30,12 +30,33 @@ require (phpAds_path."/libraries/resources/res-continent.inc.php");
 
 
 // Register input variables
-phpAds_registerGlobal ('submit', 'action', 'acl', 'type', 'time', 'cap');
+phpAds_registerGlobal ('submit', 'action', 'acl', 'type', 'time', 'cap', 'session_capping');
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency);
 
+if (phpAds_isUser(phpAds_Agency))
+{
+	$query = "SELECT ".
+		$phpAds_config['tbl_banners'].".bannerid as bannerid".
+		" FROM ".$phpAds_config['tbl_clients'].
+		",".$phpAds_config['tbl_campaigns'].
+		",".$phpAds_config['tbl_banners'].
+		" WHERE ".$phpAds_config['tbl_campaigns'].".clientid=".$clientid.
+		" AND ".$phpAds_config['tbl_banners'].".campaignid=".$campaignid.
+		" AND ".$phpAds_config['tbl_banners'].".bannerid=".$bannerid.
+		" AND ".$phpAds_config['tbl_banners'].".campaignid=".$phpAds_config['tbl_campaigns'].".campaignid".
+		" AND ".$phpAds_config['tbl_campaigns'].".clientid=".$phpAds_config['tbl_clients'].".clientid".
+		" AND ".$phpAds_config['tbl_clients'].".agencyid=".phpAds_getUserID();
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
+	if (phpAds_dbNumRows($res) == 0)
+	{
+		phpAds_PageHeader("2");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
+	}
+}
 
 // Define variable types
 $type_list['weekday']   = $strWeekDay;
@@ -275,18 +296,23 @@ elseif (isset($submit))
 		$block = 0;
 	
 	
-	// Set capping
+	// Set capping and session capping
 	if (isset($cap) && $cap != '-')
 		$cap = (int)$cap;
 	else
 		$cap = 0;
 	
 	
+	if (isset($session_capping) && $session_capping != '-')
+		$session_capping = (int)$session_capping;
+	else
+		$session_capping = 0;
+	
 	$res = phpAds_dbQuery("
 		UPDATE
 			".$phpAds_config['tbl_banners']."
 		SET
-			block='".$block."', capping='".$cap."'
+			block='".$block."', capping='".$cap."', session_capping='".$session_capping."'
 		WHERE
 			bannerid='".$bannerid."'
 	") or phpAds_sqlDie();
@@ -360,7 +386,25 @@ $extra .= "<img src='images/spacer.gif' height='1' width='160' vspace='2'><br>";
 $extra .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 $extra .= "<select name='moveto' style='width: 110;'>";
 
-$res = phpAds_dbQuery("SELECT * FROM ".$phpAds_config['tbl_campaigns']." WHERE campaignid != '".$campaignid."'") or phpAds_sqlDie();
+if (phpAds_isUser(phpAds_Admin))
+{
+	$query = "SELECT campaignid,campaignname".
+		" FROM ".$phpAds_config['tbl_campaigns'].
+		" WHERE campaignid!=".$campaignid;
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	$query = "SELECT m.campaignid AS campaignid".
+		",m.campaignname AS campaignname".
+		" FROM ".$phpAds_config['tbl_campaigns']." AS m".
+		",".$phpAds_config['tbl_clients']." AS c".
+		" WHERE m.clientid=c.clientid".
+		" AND m.campaignid!=".$campaignid.
+		" AND c.agencyid=".phpAds_getAgencyID();
+}
+$res = phpAds_dbQuery($query)
+	or phpAds_sqlDie();
+
 while ($row = phpAds_dbFetchArray($res))
 	$extra .= "<option value='".$row['campaignid']."'>".phpAds_buildName($row['campaignid'], $row['campaignname'])."</option>";
 
@@ -382,14 +426,14 @@ $extra .= "</form>";
 
 
 
-phpAds_PageHeader("4.1.3.4.3", $extra);
+phpAds_PageHeader("4.1.3.3.3", $extra);
 	echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentClientName($campaignid);
 	echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 	echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;".phpAds_getCampaignName($campaignid);
 	echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 	echo "<img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;<b>".phpAds_getBannerName($bannerid)."</b><br><br>";
 	echo phpAds_buildBannerCode($bannerid)."<br><br><br><br>";
-	phpAds_ShowSections(array("4.1.3.4.2", "4.1.3.4.3", "4.1.3.4.6", "4.1.3.4.4"));
+	phpAds_ShowSections(array("4.1.3.3.2", "4.1.3.3.3", "4.1.3.3.6", "4.1.3.3.4"));
 
 
 
@@ -493,11 +537,15 @@ if (!isset($acl) && $phpAds_config['acl'])
 	}
 }
 
-if (!isset($time) || !isset($cap))
+
+
+if (!isset($time) || !isset($cap) || !isset($session_capping))
 {
 	$res = phpAds_dbQuery("
 		SELECT
-			*
+			block,
+			capping,
+			session_capping
 		FROM
 			".$phpAds_config['tbl_banners']."
 		WHERE
@@ -520,9 +568,11 @@ if (!isset($time) || !isset($cap))
 		}
 		
 		if (!isset($cap))
-		{
 			$cap = $row['capping'];
-		}
+
+		if (!isset($session_capping))
+			$session_capping = $row['session_capping'];
+
 	}
 }
 
@@ -530,6 +580,7 @@ if ($time['hour'] == 0 && $time['minute'] == 0 && $time['second'] == 0) $time['s
 if ($time['hour'] == 0 && $time['minute'] == 0) $time['minute'] = '-'; 
 if ($time['hour'] == 0) $time['hour'] = '-';
 if ($cap == 0) $cap = '-';
+if ($session_capping == 0) $session_capping = '-';
 
 $tabindex = 1;
 
@@ -879,8 +930,18 @@ echo "<td valign='top'>";
 echo "<input class='flat' type='text' size='3' name='cap' value='".$cap."' onBlur=\"phpAds_formCapBlur(this);\" tabindex='".($tabindex++)."'> ".$strTimes;
 echo "</td></tr>";
 
+echo "<tr><td><img src='images/spacer.gif' height='1' width='100%'></td>";
+echo "<td colspan='2'><img src='images/break-l.gif' height='1' width='200' vspace='6'></td></tr>";
+
+echo "<tr><td width='30'>&nbsp;</td>";
+echo "<td width='200'>".$strImpressionCappingSession."</td>";
+echo "<td valign='top'>";
+echo "<input class='flat' type='text' size='3' name='session_capping' value='".$session_capping."' onBlur=\"phpAds_formCapBlur(this);\" tabindex='".($tabindex++)."'> ".$strTimes;
+echo "</td></tr>";
+
 echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>";
 echo "<tr><td height='1' colspan='3' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
+
 echo "</table>";
 
 

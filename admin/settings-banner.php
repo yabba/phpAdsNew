@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -20,18 +20,18 @@ include ("lib-settings.inc.php");
 
 // Register input variables
 phpAds_registerGlobal ('default_banner_url', 'default_banner_target', 'type_sql_allow', 'type_web_allow', 'type_url_allow',
-					   'type_html_allow', 'type_txt_allow', 'type_web_mode', 'type_web_url', 'type_web_dir', 'type_web_ftp_user',
+					   'type_html_allow', 'type_txt_allow', 'type_web_mode', 'type_web_url', 'type_web_ssl_url', 'type_web_dir', 'type_web_ftp_user',
 					   'type_web_ftp_password', 'type_web_ftp_host', 'type_web_ftp_path', 'type_html_auto', 'type_html_php');
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency);
 
 
 $errormessage = array();
 $sql = array();
 
-if (isset($HTTP_POST_VARS) && count($HTTP_POST_VARS))
+if (isset($HTTP_POST_VARS['submit']) && $HTTP_POST_VARS['submit'] == 'true')
 {
 	if (isset($default_banner_url))
 		phpAds_SettingsWriteAdd('default_banner_url', $default_banner_url);
@@ -50,6 +50,8 @@ if (isset($HTTP_POST_VARS) && count($HTTP_POST_VARS))
 		phpAds_SettingsWriteAdd('type_web_mode', $type_web_mode);
 	if (isset($type_web_url))
 		phpAds_SettingsWriteAdd('type_web_url', $type_web_url);
+	if (isset($type_web_ssl_url))
+		phpAds_SettingsWriteAdd('type_web_ssl_url', $type_web_ssl_url);
 	
 	
 	if (isset($type_web_dir))
@@ -111,11 +113,14 @@ if (isset($HTTP_POST_VARS) && count($HTTP_POST_VARS))
 	
 	if (!count($errormessage))
 	{
-		if (phpAds_SettingsWriteFlush())
-		{
+		phpAds_SettingsWriteFlush();
+		
+		if (phpAds_isUser(phpAds_Admin))
 			header("Location: settings-admin.php");
+		else
+			header("Location: settings-interface.php");
 			exit;
-		}
+		
 	}
 }
 
@@ -127,7 +132,14 @@ if (isset($HTTP_POST_VARS) && count($HTTP_POST_VARS))
 
 phpAds_PrepareHelp();
 phpAds_PageHeader("5.1");
-phpAds_ShowSections(array("5.1", "5.3", "5.4", "5.2"));
+if (phpAds_isUser(phpAds_Admin))
+{
+	phpAds_ShowSections(array("5.1", "5.3", "5.4", "5.2","5.5"));
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	phpAds_ShowSections(array("5.1"));
+}
 phpAds_SettingsSelection("banner");
 
 
@@ -211,6 +223,7 @@ array (
 ),
 array (
 	'text' 	  => $strTypeWebSettings,
+	'visible' => phpAds_isUser(phpAds_Admin),
 	'items'	  => array (
 		array (
 			'type' 	  => 'select', 
@@ -226,6 +239,17 @@ array (
 			'type' 	  => 'text', 
 			'name' 	  => 'type_web_url',
 			'text' 	  => $strTypeWebUrl,
+			'size'	  => 35,
+			'check'	  => 'url',
+			'depends' => 'type_web_allow==true'
+		),
+		array (
+			'type'    => 'break'
+		),
+		array (
+			'type' 	  => 'text', 
+			'name' 	  => 'type_web_ssl_url',
+			'text' 	  => $strTypeWebSslUrl,
 			'size'	  => 35,
 			'check'	  => 'url',
 			'depends' => 'type_web_allow==true'

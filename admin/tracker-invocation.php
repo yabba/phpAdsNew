@@ -1,4 +1,4 @@
-<?php // $Revision: 1.2 $
+<?php // $Revision: 1.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -26,12 +26,34 @@ phpAds_registerGlobal (
 	,'description'
 	,'move'
 	,'submit'
+	,'invtype'
+	,'trackerid'
+	,'clientid'
 );
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency);
 
+if (phpAds_isUser(phpAds_Agency))
+{
+	$query = "SELECT c.clientid as clientid".
+		" FROM ".$phpAds_config['tbl_clients']." AS c".
+		",".$phpAds_config['tbl_trackers']." AS t".
+		" WHERE t.clientid=c.clientid".
+		" AND c.clientid=".$clientid.
+		" AND t.trackerid=".$trackerid.
+		" AND c.agencyid=".phpAds_getUserID();
+
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
+	
+	if (phpAds_dbNumRows($res) == 0)
+	{
+		phpAds_PageHeader("1");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
+	}
+}
 
 
 /*********************************************************/
@@ -125,7 +147,7 @@ if ($trackerid != "")
 	//phpAds_PageShortcut($strTrackerHistory, 'stats-tracker-history.php?clientid='.$clientid.'&trackerid='.$trackerid, 'images/icon-statistics.gif');
 	
 	
-	$extra  = "\t\t\t\t<form action='tracker-modify.php'>"."\n";
+	$extra  = "\t\t\t\t<form name='modif' action='tracker-modify.php'>"."\n";
 	$extra .= "\t\t\t\t<input type='hidden' name='trackerid' value='$trackerid'>"."\n";
 	$extra .= "\t\t\t\t<input type='hidden' name='clientid' value='$clientid'>"."\n";
 	$extra .= "\t\t\t\t<input type='hidden' name='returnurl' value='tracker-invocation.php'>"."\n";
@@ -139,11 +161,21 @@ if ($trackerid != "")
 	$extra .= "\t\t\t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"."\n";
 	$extra .= "\t\t\t\t<select name='moveto' style='width: 110;'>"."\n";
 	
-	$res = phpAds_dbQuery(
-		"SELECT *".
+	if (phpAds_isUser(phpAds_Admin))
+	{
+		$query = "SELECT clientid,clientname".
 		" FROM ".$phpAds_config['tbl_clients'].
-		" WHERE clientid != ".$clientid
-	) or phpAds_sqlDie();
+			" WHERE clientid!=".$clientid;
+	}
+	elseif (phpAds_isUser(phpAds_Agency))
+	{
+		$query = "SELECT clientid,clientname".
+			" FROM ".$phpAds_config['tbl_clients'].
+			" WHERE clientid!=".$clientid.
+			" AND agencyid=".phpAds_getAgencyID();
+	}
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
 		$extra .= "\t\t\t\t\t<option value='".$row['clientid']."'>".phpAds_buildName($row['clientid'], $row['clientname'])."</option>\n";
@@ -160,7 +192,7 @@ if ($trackerid != "")
 		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getClientName(phpAds_getTrackerParentClientID($trackerid));
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 		echo "<img src='images/icon-tracker.gif' align='absmiddle'>&nbsp;<b>".phpAds_getTrackerName($trackerid)."</b><br><br><br>";
-		phpAds_ShowSections(array("4.1.4.2", "4.1.4.3", "4.1.4.4"));
+		phpAds_ShowSections(array("4.1.4.2", "4.1.4.3", "4.1.4.5", "4.1.4.4"));
 }
 else
 {
@@ -222,6 +254,14 @@ else
 	$row["trackername"] .= $strDefault;
 }
 
+if (isset($invtype))
+{
+	if ($invtype == "img")
+		$tracker_code = phpAds_generateTrackerCode();
+	else if($invtype == "js")
+		$tracker_code = phpAds_GenerateJavascriptTrackerCode();
+
+} else $tracker_code = phpAds_generateTrackerCode();
 
 
 /*********************************************************/
@@ -230,12 +270,27 @@ else
 
 $tabindex = 1;
 
-echo "<br><br>";
-echo "<input type='hidden' name='move' value='".(isset($move) ? $move : '')."'>"."\n";
+echo "<br>";
+//echo "<input type='hidden' name='move' value='".(isset($move) ? $move : '')."'>"."\n";
 
 echo "<table border='0' width='100%' cellpadding='0' cellspacing='0'>"."\n";
 // START CODE
 echo "<table border='0' width='550' cellpadding='0' cellspacing='0'>";
+echo "<tr><td height='25' colspan='2'><b>".$GLOBALS['strChooseInvocationType']."</b></td></tr>\n";
+echo "<tr><td height='35'>";
+echo "<form name='invform' action='".$HTTP_SERVER_VARS['PHP_SELF']."' method='POST'>\n";
+echo "<input type='hidden' name='trackerid' value='".$trackerid."'>\n";
+echo "<input type='hidden' name='clientid' value='".$clientid."'>\n";
+echo "<select name='invtype' onChange=\"this.form.submit()\">\n";
+echo "<option value='img' ". ($invtype == 'img' ? 'selected' : '')." >Image Tag</option>\n";
+echo "<option value='js' ". ($invtype == 'js' ? 'selected' : '')." >Javascript Tag&nbsp;</option>\n";
+echo "</select>\n";
+echo "&nbsp;<input type='image' src='images/".$phpAds_TextDirection."/go_blue.gif' border='0'>\n";
+echo "</form>\n";
+echo "</td></tr>\n";
+phpAds_ShowBreak();
+echo "<br>";
+
 echo "<tr><td height='25'><img src='images/icon-generatecode.gif' align='absmiddle'>&nbsp;<b>".$GLOBALS['strTrackercode']."</b></td>";
 
 // Show clipboard button only on IE
@@ -249,7 +304,7 @@ else
 	echo "<td>&nbsp;</td>";
 
 echo "<tr height='1'><td colspan='2' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
-echo "<tr><td colspan='2'><textarea name='bannercode' class='code-gray' rows='6' cols='55' style='width:550;' readonly>".htmlspecialchars(phpAds_GenerateTrackerCode())."</textarea></td></tr>";
+echo "<tr><td colspan='2'><textarea name='bannercode' class='code-gray' rows='6' cols='55' style='width:550;' readonly>".htmlspecialchars($tracker_code)."</textarea></td></tr>";
 echo "</table><br>";
 //phpAds_ShowBreak();
 echo "<br>";

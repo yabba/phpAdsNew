@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -13,9 +13,18 @@
 /************************************************************************/
 
 
+// Include required files
+require	("config.php");
 
 // Redirect to admin settings page
-header("Location: settings-db.php");
+if (phpAds_isUser(phpAds_Admin))
+{
+	header("Location: settings-db.php");
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	header("Location: settings-invocation.php");
+}
 exit;
 
 ?>

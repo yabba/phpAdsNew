@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -19,7 +19,7 @@ require ("config.php");
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin+phpAds_Client+phpAds_Affiliate);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency + phpAds_Client + phpAds_Affiliate);
 
 
 
@@ -29,19 +29,25 @@ phpAds_checkAccess(phpAds_Admin+phpAds_Client+phpAds_Affiliate);
 
 if (phpAds_isUser(phpAds_Admin))
 {
-	Header("Location: ".$phpAds_config['url_prefix']."/admin/advertiser-index.php");
+	Header("Location: ".$phpAds_config['admin_url_prefix']."/admin/advertiser-index.php");
+	exit;
+}
+
+if (phpAds_isUser(phpAds_Agency))
+{
+	Header("Location: ".$phpAds_config['admin_url_prefix']."/admin/advertiser-index.php");
 	exit;
 }
 
 if (phpAds_isUser(phpAds_Client))
 {
-	Header("Location: ".$phpAds_config['url_prefix']."/admin/stats-advertiser-history.php?clientid=".phpAds_getUserID());
+	Header("Location: ".$phpAds_config['admin_url_prefix']."/admin/stats-advertiser-history.php?clientid=".phpAds_getUserID());
 	exit;
 }
 
 if (phpAds_isUser(phpAds_Affiliate))
 {
-	Header("Location: ".$phpAds_config['url_prefix']."/admin/stats-affiliate-zones.php?affiliateid=".phpAds_getUserID());
+	Header("Location: ".$phpAds_config['admin_url_prefix']."/admin/stats-affiliate-zones.php?affiliateid=".phpAds_getUserID());
 	exit;
 }
 

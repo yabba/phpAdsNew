@@ -1,4 +1,4 @@
-<?php // $Revision: 1.5 $
+<?php // $Revision: 1.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -23,7 +23,7 @@ phpAds_registerGlobal ('listorder', 'orderdirection');
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin+phpAds_Advertiser);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency + phpAds_Client);
 
 
 
@@ -31,9 +31,19 @@ phpAds_checkAccess(phpAds_Admin+phpAds_Advertiser);
 /* Advertiser interface security                          */
 /*********************************************************/
 
-if (phpAds_isUser(phpAds_Advertiser))
+if (phpAds_isUser(phpAds_Client))
 {
 	$clientid = phpAds_getUserID();
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	$query = "SELECT clientid FROM ".$phpAds_config['tbl_clients']." WHERE clientid=".$clientid." AND agencyid=".phpAds_getUserID();
+	$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+	if (phpAds_dbNumRows($res) == 0)
+	{
+		phpAds_PageHeader("2");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
+	}
 }
 
 
@@ -63,7 +73,7 @@ if (!isset($orderdirection))
 /* HTML framework                                        */
 /*********************************************************/
 
-if (phpAds_isUser(phpAds_Admin))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 {
 	if (isset($Session['prefs']['advertiser-index.php']['listorder']))
 		$navorder = $Session['prefs']['advertiser-index.php']['listorder'];
@@ -77,11 +87,16 @@ if (phpAds_isUser(phpAds_Admin))
 	
 	
 	// Get other advertisers
-	$res = phpAds_dbQuery(
-		"SELECT *".
-		" FROM ".$phpAds_config['tbl_clients'].
-		phpAds_getClientListOrder ($navorder, $navdirection)
-	) or phpAds_sqlDie();
+	if (phpAds_isUser(phpAds_Admin))
+	{
+		$query = "SELECT * FROM ".$phpAds_config['tbl_clients'].phpAds_getClientListOrder($navorder,$navdirection);
+	}
+	elseif (phpAds_isUser(phpAds_Agency))
+	{
+		$query = "SELECT * FROM ".$phpAds_config['tbl_clients']." WHERE agencyid=".$Session['userid'].phpAds_getClientListOrder($navorder,$navdirection);
+	}
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
 	{
@@ -116,7 +131,7 @@ $res_trackers = phpAds_dbQuery(
 
 
 
-if (phpAds_isUser(phpAds_Admin) || phpAds_isAllowed(phpAds_AddTracker))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency) || phpAds_isAllowed(phpAds_AddTracker))
 {
 	echo "\t\t\t\t<img src='images/icon-tracker-new.gif' border='0' align='absmiddle'>\n";
 	echo "\t\t\t\t<a href='tracker-edit.php?clientid=".$clientid."' accesskey='".$keyAddNew."'>".$strAddTracker_Key."</a>&nbsp;&nbsp;\n";
@@ -205,7 +220,7 @@ while ($row_trackers = phpAds_dbFetchArray($res_trackers))
 	echo "\t\t\t\t\t<td height='25'>";
 	echo "&nbsp;&nbsp;<img src='images/icon-tracker.gif' align='absmiddle'>&nbsp;";
 
-	if (phpAds_isUser(phpAds_Admin) || phpAds_isAllowed(phpAds_EditTracker))
+	if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency) || phpAds_isAllowed(phpAds_EditTracker))
 		echo "<a href='tracker-edit.php?clientid=".$clientid."&trackerid=".$row_trackers['trackerid']."'>".$row_trackers['trackername']."</a>";
 	else
 		echo $row_trackers['trackername'];
@@ -218,14 +233,14 @@ while ($row_trackers = phpAds_dbFetchArray($res_trackers))
 	
 	// Button 1, 2 & 3
 	echo "\t\t\t\t\t<td height='25'>";
-	if (phpAds_isUser(phpAds_Admin) || phpAds_isAllowed(phpAds_LinkCampaigns))
+	if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency) || phpAds_isAllowed(phpAds_LinkCampaigns))
 		echo "<a href='tracker-campaigns.php?clientid=".$clientid."&trackerid=".$row_trackers['trackerid']."'><img src='images/icon-zone-linked.gif' border='0' align='absmiddle'>&nbsp;$strLinkedCampaigns</a>";
 	else
 		echo "&nbsp;";
 	echo "</td>\n";
 	
 	echo "\t\t\t\t\t<td height='25'>";
-	if (phpAds_isUser(phpAds_Admin) || phpAds_isAllowed(phpAds_DeleteTracker))
+	if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency) || phpAds_isAllowed(phpAds_DeleteTracker))
 		echo "<a href='tracker-delete.php?clientid=".$clientid."&trackerid=".$row_trackers['trackerid']."&returnurl=advertiser-trackers.php'".phpAds_DelConfirm($strConfirmDeleteTracker)."><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>";
 	else
 		echo "&nbsp;";

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.7 $
+<?php // $Revision: 2.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -26,8 +26,18 @@ phpAds_registerGlobal ('expand', 'collapse', 'listorder', 'orderdirection');
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin);
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency);
 
+if (phpAds_isUser(phpAds_Agency))
+{
+	$query = "SELECT clientid FROM ".$phpAds_config['tbl_clients']." WHERE clientid=".$clientid." AND agencyid=".phpAds_getUserID();
+	$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+	if (phpAds_dbNumRows($res) == 0)
+	{
+		phpAds_PageHeader("2");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
+	}
+}
 
 
 /*********************************************************/
@@ -82,11 +92,21 @@ $extra .= "\t\t\t\t<img src='images/spacer.gif' height='1' width='160' vspace='2
 $extra .= "\t\t\t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n";
 $extra .= "\t\t\t\t<select name='moveto' style='width: 110;'>\n";
 
-$res = phpAds_dbQuery(
-	"SELECT *".
+if (phpAds_isUser(phpAds_Admin))
+{
+	$query = "SELECT clientid,clientname".
 	" FROM ".$phpAds_config['tbl_clients'].
-	" WHERE clientid!=".phpAds_getCampaignParentClientID($campaignid)
-) or phpAds_sqlDie();
+		" WHERE clientid!=".$clientid;
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	$query = "SELECT clientid,clientname".
+		" FROM ".$phpAds_config['tbl_clients'].
+		" WHERE clientid!=".$clientid;
+		" AND agencyid=".phpAds_getUserID();
+}
+$res = phpAds_dbQuery($query)
+	or phpAds_sqlDie();
 
 while ($row = phpAds_dbFetchArray($res))
 	$extra .= "\t\t\t\t\t<option value='".$row['clientid']."'>".phpAds_buildName($row['clientid'], $row['clientname'])."</option>\n";
@@ -344,6 +364,8 @@ else
 			echo "<table width='100%' cellpadding='0' cellspacing='0' border='0'>";
 			
 			echo "<tr height='25'><td colspan='2'>".($banners[$bkey]['url'] != '' ? $banners[$bkey]['url'] : '-')."</td></tr>";
+			
+			if ($phpAds_config['use_keywords'])
 			echo "<tr height='15'><td colspan='2'>".$strKeyword.": ".($banners[$bkey]['keyword'] != '' ? $banners[$bkey]['keyword'] : '-')."</td></tr>";
 			
 			if ($banners[$bkey]['storagetype'] == 'txt')

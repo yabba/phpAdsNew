@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -20,8 +20,7 @@ require ("lib-statistics.inc.php");
 
 
 // Security check
-phpAds_checkAccess(phpAds_Admin+phpAds_Client);
-
+phpAds_checkAccess(phpAds_Admin + phpAds_Agency + phpAds_Client);
 
 
 /*********************************************************/
@@ -30,7 +29,37 @@ phpAds_checkAccess(phpAds_Admin+phpAds_Client);
 
 if (phpAds_isUser(phpAds_Client))
 {
-	if (phpAds_getUserID() != phpAds_getCampaignParentClientID ($campaignid))
+	$clientid = phpAds_getUserID();
+	
+	$query = "SELECT campaignid".
+		" FROM ".$phpAds_config['tbl_campaigns'].
+		" WHERE clientid=".$clientid.
+		" AND campaignid=".$campaignid;
+
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
+	
+	if (phpAds_dbNumRows($res) == 0)
+	{
+		phpAds_PageHeader("1");
+		phpAds_Die ($strAccessDenied, $strNotAdmin);
+	}
+}
+elseif (phpAds_isUser(phpAds_Agency))
+{
+	$clientid = phpAds_getUserID();
+	
+	$query = "SELECT campaignid".
+		" FROM ".$phpAds_config['tbl_campaigns'].
+		",".$phpAds_config['tbl_clients'].
+		" WHERE clientid=".$clientid.
+		" AND campaignid=".$campaignid.
+		" AND agencyid=".phpAds_getUserID();
+
+	$res = phpAds_dbQuery($query)
+		or phpAds_sqlDie();
+	
+	if (phpAds_dbNumRows($res) == 0)
 	{
 		phpAds_PageHeader("1");
 		phpAds_Die ($strAccessDenied, $strNotAdmin);
@@ -83,7 +112,7 @@ while ($row = phpAds_dbFetchArray($res))
 	);
 }
 
-if (phpAds_isUser(phpAds_Admin))
+if (phpAds_isUser(phpAds_Admin) || phpAds_isUser(phpAds_Agency))
 {
 	phpAds_PageShortcut($strClientProperties, 'advertiser-edit.php?clientid='.$clientid, 'images/icon-advertiser.gif');
 	phpAds_PageShortcut($strCampaignProperties, 'campaign-edit.php?clientid='.$clientid.'&campaignid='.$campaignid, 'images/icon-campaign.gif');
