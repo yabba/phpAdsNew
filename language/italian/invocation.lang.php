@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -106,11 +106,16 @@ $GLOBALS['strLeftMargin']			= "Margine sinistro";
 $GLOBALS['strRightMargin']			= "Margine destro";
 $GLOBALS['strTransparentBackground']		= "Sfondo trasparente";
 
+$GLOBALS['strSmoothMovement']		= "Movimento fluido";
+$GLOBALS['strHideNotMoving']		= "Nascondi il banner quando il puntatore &egrave; fermo";
+$GLOBALS['strHideDelay']			= "Nascondi dopo";
+$GLOBALS['strHideTransparancy']		= "Trasparenza del banner nascosto";
+
 
 $GLOBALS['strAdLayerStyleName']	= array(
 	'geocities'		=> "Geocities",
 	'simple'		=> "Semplice",
-	'cursor'		=> "Cursore",
+	'cursor'		=> "Puntatore",
 	'floater'		=> "Banner volante"
 );
 
