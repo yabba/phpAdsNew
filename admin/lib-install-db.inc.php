@@ -1,4 +1,4 @@
-<?php // $Revision: 1.12 $
+<?php // $Revision: 1.13 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -595,7 +595,7 @@ function phpAds_upgradeSplitBanners ()
 					// Get the contenttype
 					$banners[$i]['contenttype']  = 'html';
 					
-					$banners[$i]['htmltemplate'] = $banners[$i]['banner'];
+					$banners[$i]['htmltemplate'] = stripslashes($banners[$i]['banner']);
 					$banners[$i]['htmlcache']    = addslashes(phpAds_getBannerCache($banners[$i]));
 					$banners[$i]['htmltemplate'] = addslashes($banners[$i]['htmltemplate']);
 					
