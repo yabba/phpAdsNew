@@ -1,4 +1,4 @@
-<?php // $Revision: 2.9 $
+<?php // $Revision: 2.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -104,10 +104,10 @@ function phpAds_getOrderDirection ($ThisOrderDirection)
 	switch ($ThisOrderDirection)
 	{
 		case 'down':
-			$sqlOrderDirection .= ' ASC';
+			$sqlOrderDirection .= ' DESC';
 			break;
 		case 'up':
-			$sqlOrderDirection .= ' DESC';
+			$sqlOrderDirection .= ' ASC';
 			break;
 		default:
 			$sqlOrderDirection .= ' ASC';
@@ -183,14 +183,59 @@ function phpAds_getBannerListOrder ($ListOrder, $OrderDirection)
 		case 'id':
 			$sqlTableOrder = ' ORDER BY bannerid';
 			break;
-		case 'adview':
+		case 'views':
+			$sqlTableOrder = ' ORDER BY views';
 			break;
-		case 'adclick':
+		case 'clicks':
+			$sqlTableOrder = ' ORDER BY clicks';
+			break;
+		case 'conversions':
+			$sqlTableOrder = ' ORDER BY conversions';
 			break;
 		case 'ctr':
+			$sqlTableOrder = ' ORDER BY ctr';
+			break;
+		case 'cnvr':
+			$sqlTableOrder = ' ORDER BY cnvr';
 			break;
 		default:
-			$sqlTableOrder = ' ORDER BY description';
+			$sqlTableOrder = ' ORDER BY description,bannerid';
+	}
+	if 	($sqlTableOrder != '')
+	{
+		$sqlTableOrder .= phpAds_getOrderDirection($OrderDirection);
+	}
+	return ($sqlTableOrder);
+}
+
+function phpAds_getHourListOrder ($ListOrder, $OrderDirection)
+{
+	$sqlTableOrder = '';
+	switch ($ListOrder)
+	{
+		case 'name':
+			$sqlTableOrder = ' ORDER BY hour';
+			break;
+		case 'id':
+			$sqlTableOrder = ' ORDER BY hour';
+			break;
+		case 'views':
+			$sqlTableOrder = ' ORDER BY views';
+			break;
+		case 'clicks':
+			$sqlTableOrder = ' ORDER BY clicks';
+			break;
+		case 'conversions':
+			$sqlTableOrder = ' ORDER BY conversions';
+			break;
+		case 'ctr':
+			$sqlTableOrder = ' ORDER BY ctr';
+			break;
+		case 'cnvr':
+			$sqlTableOrder = ' ORDER BY cnvr';
+			break;
+		default:
+			$sqlTableOrder = ' ORDER BY hour';
 	}
 	if 	($sqlTableOrder != '')
 	{
@@ -311,7 +356,7 @@ function phpAds_getParentClientName ($campaignid)
 /* Build the banner name from ID, Description and Alt    */
 /*********************************************************/
 
-function phpAds_buildBannerName ($bannerid, $description = '', $alt = '', $limit = 30)
+function phpAds_buildBannerName ($bannerid, $description = '', $alt = '', $limit = 30, $use_html = true)
 {
 	global $strUntitled;
 	
@@ -329,7 +374,7 @@ function phpAds_buildBannerName ($bannerid, $description = '', $alt = '', $limit
 		$name = phpAds_breakString ($name, $limit);
 	
 	if ($bannerid != '')
-		$name = "<span dir='".$GLOBALS['phpAds_TextDirection']."'>[id$bannerid]</span> ".$name;
+		$name = $use_html ? "<span dir='".$GLOBALS['phpAds_TextDirection']."'>[id$bannerid]</span> ".$name : "[id$bannerid] ".$name;
 	
 	return ($name);
 }
@@ -733,10 +778,13 @@ function phpAds_buildRatio($numerator, $denominator)
 	return ($denominator == 0 ? 0 : $numerator/$denominator);
 }
 
-function phpAds_formatPercentage($number)
+function phpAds_formatPercentage($number, $decimals=-1)
 {
 	global $phpAds_config, $phpAds_DecimalPoint, $phpAds_ThousandsSeperator;
-	return number_format($number*100, $phpAds_config['percentage_decimals'], $phpAds_DecimalPoint, $phpAds_ThousandsSeperator).'%';
+	if ($decimals < 0)
+		$decimals = $phpAds_config['percentage_decimals'];
+		
+	return number_format($number*100, $decimals, $phpAds_DecimalPoint, $phpAds_ThousandsSeperator).'%';
 }
 
 function phpAds_formatNumber ($number)
