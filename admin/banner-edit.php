@@ -1,4 +1,4 @@
-<?php // $Revision: 1.50 $
+<?php // $Revision: 1.51 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -319,6 +319,14 @@ if (isset($submit))
 			@unlink ($uploaded['tmp_name']);
 	}
 	
+	
+	
+	// Recalculate priorities
+	if ($previousweight != $weight)
+	{
+		require ("../lib-priority.inc.php");
+		phpAds_PriorityCalculate ();
+	}
 	
 	
 	
@@ -883,7 +891,8 @@ if (!isset($type))
 	<tr>
 		<td width='30'>&nbsp;</td>	
 		<td width='200'><?php echo $strWeight;?></td>
-    	<td><input size="6" type="text" name="weight" value="<?php if(isset($row["weight"])){echo $row["weight"];}else{print $phpAds_config['default_banner_weight'];}?>"></td>
+    	<td><input size="6" type="text" name="weight" value="<?php if(isset($row["weight"])){echo $row["weight"];}else{print $phpAds_config['default_banner_weight'];}?>">
+		    <input type='hidden' name='previousweight' value="<?php if(isset($row["weight"])){echo $row["weight"];}else{print '';}?>"></td>
 	</tr>
 	<tr><td height='10' colspan='3'>&nbsp;</td></tr>
 	<tr><td height='1' colspan='3' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>
