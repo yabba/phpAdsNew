@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -40,6 +40,8 @@ require	(phpAds_path."/libraries/resources/res-continent.inc.php");
 /*********************************************************/
 /* Show hourly statistics                                */
 /*********************************************************/
+
+$gethostbyaddr = array();
 
 if (!$phpAds_config['compact_stats']) 
 {
@@ -203,7 +205,9 @@ if (!$phpAds_config['compact_stats'])
 	
 	phpAds_PageFooter();
 	
-	?>
+	if (count($gethostbyaddr))
+	{
+		?>
 	
 	<script language='JavaScript'>
 	<!--
@@ -215,7 +219,8 @@ if (!$phpAds_config['compact_stats'])
 	//-->
 	</script>
 	
-	<?php
+		<?php
+	}
 	
 	exit;
 }

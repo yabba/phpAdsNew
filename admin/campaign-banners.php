@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -184,7 +184,7 @@ for ($i=0; $i < $node_array_size;$i++)
 
 
 
-echo "<img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;";
+echo "<img src='images/icon-banner-new.gif' align='absmiddle'>&nbsp;";
 echo "<a href='banner-edit.php?clientid=".$clientid."&campaignid=".$campaignid."' accesskey='".$keyAddNew."'>".$strAddBanner_Key."</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 phpAds_ShowBreak();
 
