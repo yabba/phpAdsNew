@@ -1,4 +1,4 @@
-<?php // $Revision: 1.58 $
+<?php // $Revision: 1.59 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -274,7 +274,7 @@ function get_banner($what, $clientID, $context=0, $source='', $allowhtml=true)
 		$precondition .= " AND ($phpAds_tbl_clients.clientID = $clientID OR $phpAds_tbl_clients.parent = $clientID) ";
 	
 	if ($allowhtml == false)
-		$precondition .= " AND $phpAds_tbl_banners.format != 'html' ";
+		$precondition .= " AND $phpAds_tbl_banners.format != 'html' AND $phpAds_tbl_banners.format != 'swf' ";
 	
 	
 	
@@ -849,10 +849,26 @@ function view_raw($what, $clientID=0, $target='', $source='', $withtext=0, $cont
 					$randomstring = "";
 				}
 				
-				if (empty($row['url']))
-					$outputbuffer .= '<img src=\''.$row['banner'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\''.$status.'>';
+				if (eregi("swf$", $row['banner']))
+				{
+					$outputbuffer  = "<object classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000' ";
+					$outputbuffer .= "codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/";
+					$outputbuffer .= "swflash.cab#version=5,0,0,0' width='".$row['width']."' height='".$row['height']."'>";
+					$outputbuffer .= "<param name='movie' value='".$row['banner'].(empty($row['url']) ? '' : '?targeturl='.urlencode($phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].$randomstring))."'>";
+					$outputbuffer .= "<param name='quality' value='high'>";
+					$outputbuffer .= "<param name='bgcolor' value='#FFFFFF'>";
+					$outputbuffer .= "<embed src='".$row['banner'].(empty($row['url']) ? '' : '?targeturl='.urlencode($phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].$randomstring))."' quality=high ";
+					$outputbuffer .= "bgcolor='#FFFFFF' width='".$row['width']."' height='".$row['height']."' type='application/x-shockwave-flash' ";
+					$outputbuffer .= "pluginspace='http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash'></embed>";
+					$outputbuffer .= "</object>";
+				}
 				else
-					$outputbuffer .= '<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].$randomstring.'\''.$targettag.$status.'><img src=\''.$row['banner'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\'></a>';
+				{
+					if (empty($row['url']))
+						$outputbuffer .= '<img src=\''.$row['banner'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\''.$status.'>';
+					else
+						$outputbuffer .= '<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].$randomstring.'\''.$targettag.$status.'><img src=\''.$row['banner'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\'></a>';
+				}
 				
 				if ($withtext && !empty($row['bannertext']))
 					$outputbuffer .= '<br><a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.$status.'>'.$row['bannertext'].'</a>';
@@ -861,10 +877,26 @@ function view_raw($what, $clientID=0, $target='', $source='', $withtext=0, $cont
 			{
 				// Banner stored on webserver
 				
-				if (empty($row['url']))
-					$outputbuffer .= '<img src=\''.$row['banner'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\''.$status.'>';
+				if (eregi("swf$", $row['banner']))
+				{
+					$outputbuffer  = "<object classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000' ";
+					$outputbuffer .= "codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/";
+					$outputbuffer .= "swflash.cab#version=5,0,0,0' width='".$row['width']."' height='".$row['height']."'>";
+					$outputbuffer .= "<param name='movie' value='".$row['banner'].(empty($row['url']) ? '' : '?targeturl='.urlencode($phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID']))."'>";
+					$outputbuffer .= "<param name='quality' value='high'>";
+					$outputbuffer .= "<param name='bgcolor' value='#FFFFFF'>";
+					$outputbuffer .= "<embed src='".$row['banner'].(empty($row['url']) ? '' : '?targeturl='.urlencode($phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID']))."' quality=high ";
+					$outputbuffer .= "bgcolor='#FFFFFF' width='".$row['width']."' height='".$row['height']."' type='application/x-shockwave-flash' ";
+					$outputbuffer .= "pluginspace='http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash'></embed>";
+					$outputbuffer .= "</object>";
+				}
 				else
-					$outputbuffer .= '<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.$status.'><img src=\''.$row['banner'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\'></a>';
+				{
+					if (empty($row['url']))
+						$outputbuffer .= '<img src=\''.$row['banner'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\''.$status.'>';
+					else
+						$outputbuffer .= '<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.$status.'><img src=\''.$row['banner'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\'></a>';
+				}
 				
 				if ($withtext && !empty($row['bannertext']))
 					$outputbuffer .= '<br><a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.$status.'>'.$row['bannertext'].'</a>';
@@ -873,10 +905,26 @@ function view_raw($what, $clientID=0, $target='', $source='', $withtext=0, $cont
 			{
 				// Banner stored in MySQL
 				
-				if (empty($row['url']))
-					$outputbuffer .= '<img src=\''.$phpAds_url_prefix.'/adview.php?bannerID='.$row['bannerID'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\''.$status.'>';
+				if ($row['format'] == 'swf')
+				{
+					$outputbuffer  = "<object classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000' ";
+					$outputbuffer .= "codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/";
+					$outputbuffer .= "swflash.cab#version=5,0,0,0' width='".$row['width']."' height='".$row['height']."'>";
+					$outputbuffer .= "<param name='movie' value='".$phpAds_url_prefix."/adview.php?bannerID=".$row['bannerID'].(empty($row['url']) ? '' : '&targeturl='.urlencode($phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID']))."'>";
+					$outputbuffer .= "<param name='quality' value='high'>";
+					$outputbuffer .= "<param name='bgcolor' value='#FFFFFF'>";
+					$outputbuffer .= "<embed src='".$phpAds_url_prefix."/adview.php?bannerID=".$row['bannerID'].(empty($row['url']) ? '' : '&targeturl='.urlencode($phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID']))."' quality=high ";
+					$outputbuffer .= "bgcolor='#FFFFFF' width='".$row['width']."' height='".$row['height']."' type='application/x-shockwave-flash' ";
+					$outputbuffer .= "pluginspace='http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash'></embed>";
+					$outputbuffer .= "</object>";
+				}
 				else
-					$outputbuffer .= '<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.$status.'><img src=\''.$phpAds_url_prefix.'/adview.php?bannerID='.$row['bannerID'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\'></a>';
+				{
+					if (empty($row['url']))
+						$outputbuffer .= '<img src=\''.$phpAds_url_prefix.'/adview.php?bannerID='.$row['bannerID'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\''.$status.'>';
+					else
+						$outputbuffer .= '<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.$status.'><img src=\''.$phpAds_url_prefix.'/adview.php?bannerID='.$row['bannerID'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\'></a>';
+				}
 				
 				if ($withtext && !empty($row['bannertext']))
 					$outputbuffer .= '<br><a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.$status.'>'.$row['bannertext'].'</a>';

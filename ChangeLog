@@ -6,6 +6,8 @@ CVS			+ Added search capabilities  (Niels and Tobi Schulz)
 			+ Added ability to specify a browser-status text for each banner  (Niels)
 			+ Removed cURL and fopen-wrapper support for storing banners, added a 
 			  ftp emulation library provided by TOMO <groove@spencernetwork.org>  (Niels)
+			+ Added native support for flash banners, based on code of the 
+			  phpAdsPlus project by Dandra  (Niels)
 
 			+ ACLs
 			  The ACL routines have been rewritten. This is a very big change and possibly

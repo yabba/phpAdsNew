@@ -54,20 +54,31 @@ CREATE TABLE phpads_adviews (
 #
 
 CREATE TABLE phpads_banners (
+   imageid mediumint(9) NOT NULL auto_increment,
+   contenttype varchar(255),
+   image blob NOT NULL
+);
+   
+# --------------------------------------------------------
+#
+# Table structure for table 'phpads_banners'
+#
+
+CREATE TABLE phpads_banners (
    bannerID mediumint(9) NOT NULL auto_increment,
    clientID mediumint(9) DEFAULT '0' NOT NULL,
+   active enum('true','false') NOT NULL,
+   weight tinyint(4) default '1' NOT NULL,
+   seq tinyint(4) default '0' NOT NULL,
    banner blob NOT NULL,
    width smallint(6) DEFAULT '0' NOT NULL,
    height smallint(6) DEFAULT '0' NOT NULL,
-   format enum('gif','jpeg','png','html','url','web') DEFAULT 'gif' NOT NULL,
+   format enum('gif','jpeg','png','html','url','web','swf') DEFAULT 'gif' NOT NULL,
    url varchar(255) NOT NULL,
    alt varchar(255) NOT NULL,
    status varchar(255) NOT NULL,
    keyword varchar(255) NOT NULL,
    bannertext varchar(255) NOT NULL,
-   active enum('true','false') NOT NULL,
-   weight tinyint(4) default '1' NOT NULL,
-   seq tinyint(4) default '0' NOT NULL,
    target varchar(8) default '' NOT NULL,
    description varchar(255) DEFAULT '' NOT NULL,
    autohtml enum('true','false') DEFAULT 'true' NOT NULL,   
