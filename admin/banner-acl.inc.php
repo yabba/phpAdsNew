@@ -1,4 +1,4 @@
-<?php // $Revision: 1.8 $
+<?php // $Revision: 1.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -16,13 +16,14 @@
 
 // Define variable types
 $acl_types = array(
-		'none'	   => '',
-		'clientip' => $strClientIP,
-		'useragent' => $strUserAgent,
-		'weekday'  => $strWeekDay,
-		'domain'  => $strDomain,
-		'source'  => $strSource,
-		'time'    => $strTime
+		'none'		=> '',
+		'clientip'	=> $strClientIP,
+		'useragent'	=> $strUserAgent,
+		'weekday'	=> $strWeekDay,
+		'domain'	=> $strDomain,
+		'source'	=> $strSource,
+		'time'		=> $strTime,
+		'language'	=> $strLanguage
 	);
 
 $aclad_types = array(

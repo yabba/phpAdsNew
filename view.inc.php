@@ -1,4 +1,4 @@
-<?php // $Revision: 1.55 $
+<?php // $Revision: 1.56 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -24,7 +24,7 @@ mt_srand((double) microtime() * 1000000);
 
 
 /*********************************************************/
-/* Get a banner						                     */
+/* Build the query needed to fetch banners               */
 /*********************************************************/
 
 function phpAds_buildQuery ($part, $numberofparts, $precondition)
@@ -218,9 +218,9 @@ function phpAds_buildQuery ($part, $numberofparts, $precondition)
 		
 		// Add global keyword
 		if ($numberofparts == 1 && $onlykeywords == true)
-        {
-        	$conditions .= "OR $phpAds_tbl_banners.keyword = 'global' ";
-   	  	}
+		{
+			$conditions .= "OR $phpAds_tbl_banners.keyword = 'global' ";
+		}
 		
 		// Add conditions to select
 		if ($conditions != '') $select .= ' AND ('.$conditions.') ';
@@ -232,12 +232,12 @@ function phpAds_buildQuery ($part, $numberofparts, $precondition)
 
 
 /*********************************************************/
-/* Get a banner						                     */
+/* Get a banner                                          */
 /*********************************************************/
 
 function get_banner($what, $clientID, $context=0, $source='', $allowhtml=true)
 {
-	global $REMOTE_HOST, $REMOTE_ADDR, $HTTP_USER_AGENT;
+	global $REMOTE_HOST, $REMOTE_ADDR, $HTTP_USER_AGENT, $HTTP_ACCEPT_LANGUAGE;
 	global $phpAds_tbl_banners, $phpAds_tbl_clients, $phpAds_tbl_zones;
 	global $phpAds_random_retrieve, $phpAds_zone_cache_limit, $phpAds_zone_cache;
 	global $phpAds_zone_used;
@@ -301,9 +301,9 @@ function get_banner($what, $clientID, $context=0, $source='', $allowhtml=true)
 		
 		
 		if (isset($zone) &&
-		   $phpAds_zone_cache && 
-		   time() - $zone['cachetimestamp'] < $phpAds_zone_cache_limit && 
-		   $zone['cachecontents'] != '')
+			$phpAds_zone_cache && 
+			time() - $zone['cachetimestamp'] < $phpAds_zone_cache_limit && 
+			$zone['cachecontents'] != '')
 		{
 			// If zone is found and cache is not expired
 			// and cache exists use it.
@@ -322,10 +322,10 @@ function get_banner($what, $clientID, $context=0, $source='', $allowhtml=true)
 			$weightsum = 0;
 			while ($tmprow = @mysql_fetch_array($res))
 			{
-		        // weight of 0 disables the banner
-		        if ($tmprow['weight'])
-		        {
-		            if ($tmprow['format'] == 'gif' ||
+				// weight of 0 disables the banner
+				if ($tmprow['weight'])
+				{
+					if ($tmprow['format'] == 'gif' ||
 						$tmprow['format'] == 'jpeg' ||
 						$tmprow['format'] == 'png')
 					{
@@ -333,13 +333,13 @@ function get_banner($what, $clientID, $context=0, $source='', $allowhtml=true)
 					}
 					
 					$weightsum += ($tmprow['weight'] * $tmprow['clientweight']);
-				    $rows[] = $tmprow; 
-			    }
-		    }
+					$rows[] = $tmprow; 
+				}
+			}
 			
 			if ($phpAds_zone_cache && isset($zone) &&
-			    ($zone['cachecontents'] == '' ||
-				 time() - $zone['cachetimestamp'] >= $phpAds_zone_cache_limit))
+				($zone['cachecontents'] == '' ||
+				time() - $zone['cachetimestamp'] >= $phpAds_zone_cache_limit))
 			{
 				// If exists and cache is empty or expired
 				// Store the rows which were just build in the cache
@@ -425,13 +425,13 @@ function get_banner($what, $clientID, $context=0, $source='', $allowhtml=true)
 		$weightsum = 0;
 		while ($tmprow = @mysql_fetch_array($res))
 		{
-	        // weight of 0 disables the banner
-	        if ($tmprow['weight'])
-	        {
-	            $weightsum += ($tmprow['weight'] * $tmprow['clientweight']);
-			    $rows[] = $tmprow; 
-		    }
-	    }
+			// weight of 0 disables the banner
+			if ($tmprow['weight'])
+			{
+				$weightsum += ($tmprow['weight'] * $tmprow['clientweight']);
+				$rows[] = $tmprow; 
+			}
+		}
 		
 		$phpAds_zone_used = false;
 	}
@@ -440,57 +440,58 @@ function get_banner($what, $clientID, $context=0, $source='', $allowhtml=true)
 	
 	$date = getdate(time());
 	$request = array(
-		'remote_host'	=>	$REMOTE_ADDR,
-		'user_agent'	=>	$HTTP_USER_AGENT,
-		'weekday'	=>	$date['wday'],
-		'source'	=>	$source,
-		'time'		=>	$date['hours']);
+		'remote_host'		=>	$REMOTE_ADDR,
+		'user_agent'		=>	$HTTP_USER_AGENT,
+		'accept-language'	=>	$HTTP_ACCEPT_LANGUAGE,
+		'weekday'			=>	$date['wday'],
+		'source'			=>	$source,
+		'time'				=>	$date['hours']);
 	
 	$maxindex = sizeof($rows);
 
-    while ($weightsum && sizeof($rows))
-    {
-        $low = 0;
-        $high = 0;
-        $ranweight = ($weightsum > 1) ? mt_rand(0, $weightsum - 1) : 0;
+	while ($weightsum && sizeof($rows))
+	{
+		$low = 0;
+		$high = 0;
+		$ranweight = ($weightsum > 1) ? mt_rand(0, $weightsum - 1) : 0;
 		
-        for ($i=0; $i<$maxindex; $i++)
-        {
-            $low = $high;
-            $high += ($rows[$i]['weight'] * $rows[$i]['clientweight']);
-            
+		for ($i=0; $i<$maxindex; $i++)
+		{
+			$low = $high;
+			$high += ($rows[$i]['weight'] * $rows[$i]['clientweight']);
+			
 			if ($high > $ranweight && $low <= $ranweight)
-            {
+			{
 				if ($phpAds_acl = '1')
 				{
-	                if (acl_check($request, $rows[$i]))
-	                    return ($rows[$i]);
-	                
-	                // Matched, but acl_check failed.
+					if (acl_check($request, $rows[$i]))
+						return ($rows[$i]);
+					
+					// Matched, but acl_check failed.
 					// No more posibilities left, exit!
-	                if (sizeof($rows) == 1)
-	                    return false;
+					if (sizeof($rows) == 1)
+						return false;
 					
 					// Delete this row and adjust $weightsum
-	                $weightsum -= ($rows[$i]['weight'] * $rows[$i]['clientweight']);
+					$weightsum -= ($rows[$i]['weight'] * $rows[$i]['clientweight']);
 					unset($rows[$i]);
 					
 					// Break out of the for loop to try again
-	                break;
+					break;
 				}
 				else
 				{
 					return ($row[$i]);
 				}
-            }
-        }
-    }
+			}
+		}
+	}
 }
 
 
 
 /*********************************************************/
-/* Log an adview for the banner with $bannerID			 */
+/* Log an adview for the banner with $bannerID           */
 /*********************************************************/
 
 function log_adview ($bannerID, $clientID)
@@ -518,22 +519,22 @@ function log_adview ($bannerID, $clientID)
 
 
 /*********************************************************/
-/* Java-encodes text									 */
+/* Java-encodes text                                     */
 /*********************************************************/
 
 function enjavanate ($str, $limit = 60)
 {
-    $str   = str_replace("\r", '', $str);
+	$str   = str_replace("\r", '', $str);
 	
 	while (strlen($str) > 0)
 	{
 		$line = substr ($str, 0, $limit);
 		$str  = substr ($str, $limit);
 		
-        $line = str_replace('\'', "\\'", $line);
-        $line = str_replace("\n", "\\n", $line);
+		$line = str_replace('\'', "\\'", $line);
+		$line = str_replace("\n", "\\n", $line);
 		
-        print "document.write('$line');\n";
+		print "document.write('$line');\n";
 	}
 }
 
@@ -574,7 +575,7 @@ function phpAds_ParseHTMLExpressions ($parser_html)
 
 
 /*********************************************************/
-/* Parse the HTML entered in order to log clicks		 */
+/* Parse the HTML entered in order to log clicks         */
 /*********************************************************/
 
 function phpAds_ParseHTMLAutoLog ($html, $bannerID, $url, $target)
@@ -674,7 +675,7 @@ function phpAds_ParseHTMLAutoLog ($html, $bannerID, $url, $target)
 					$endpos = $spacepos;
 				else
 					$endpos = $endtagpos;
-		 		
+				
 				if (substr($html, $hrefpos, 10) != '{targeturl')
 				{
 					$newbanner = $newbanner . 
@@ -722,12 +723,12 @@ function phpAds_ParseHTMLAutoLog ($html, $bannerID, $url, $target)
 
 
 /*********************************************************/
-/* Create the HTML needed to display the banner			 */
+/* Create the HTML needed to display the banner          */
 /*********************************************************/
 
 function view_raw($what, $clientID=0, $target='', $source='', $withtext=0, $context=0)
 {
-    global $phpAds_db, $REMOTE_HOST, $phpAds_url_prefix;
+	global $phpAds_db, $REMOTE_HOST, $phpAds_url_prefix;
 	global $phpAds_default_banner_url, $phpAds_default_banner_target;
 	global $phpAds_type_html_auto, $phpAds_type_html_php;
 	
@@ -738,7 +739,7 @@ function view_raw($what, $clientID=0, $target='', $source='', $withtext=0, $cont
 	}
 	
 	db_connect();
-    $row = get_banner($what, $clientID, $context, $source);
+	$row = get_banner($what, $clientID, $context, $source);
 	
 	$outputbuffer = "";
 	
@@ -910,7 +911,7 @@ function view_raw($what, $clientID=0, $target='', $source='', $withtext=0, $cont
 
 
 /*********************************************************/
-/* Display a banner										 */
+/* Display a banner                                      */
 /*********************************************************/
 
 function view($what, $clientID=0, $target='', $source='', $withtext=0, $context=0)
@@ -923,7 +924,7 @@ function view($what, $clientID=0, $target='', $source='', $withtext=0, $context=
 
 
 /*********************************************************/
-/* Create the Javascript to display a banner			 */
+/* Create the Javascript to display a banner             */
 /*********************************************************/
 
 function view_js($what, $clientID=0, $target='', $source='', $withtext=0, $context=0)

@@ -10,8 +10,9 @@ CVS			+ Added search capabilities  (Niels and Tobi Schulz)
 			  upgrading!!! The changes include:
 			  - Ability to select multiple weekdays per ACL  (Niels)
 			  - Ability to select multiple hours per ACL  (Niels)
+			  - Added new ACL for accept-language headers  (Niels)
 			  - Added boolean operators to ACLs  (Niels)
-			  - Changed IP check, it is not possible to use * instead of a mask  (Niels)
+			  - Changed IP check, it is now possible to use * instead of a mask  (Niels)
 
 			+ Added P3P Privacy Policies support
 			  - Sending Policy location using P3P header  (Niels)
@@ -56,6 +57,7 @@ CVS			+ Added search capabilities  (Niels and Tobi Schulz)
 			+ Misc bugfixes
 			  - Fixed quote problem with banner-text, alt and description fields  (Niels)
 			  - Fixed HTML layout problem with large description and/or alt-text  (Niels)
+			  - Fixed error in client edit when client permissions were left empty (Thanks to Scott Delap)	
 
 
 

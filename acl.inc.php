@@ -1,4 +1,4 @@
-<?php // $Revision: 1.6 $
+<?php // $Revision: 1.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -15,7 +15,7 @@
 
 
 /*********************************************************/
-/* Check if the ACL is valid					         */
+/* Check if the ACL is valid                             */
 /*********************************************************/
 
 function acl_check($request, $row) 
@@ -49,6 +49,9 @@ function acl_check($request, $row)
 			case 'useragent':
 				$result = acl_check_useragent($request, $aclrow);
 				break;
+			case 'language':
+				$result = acl_check_language($request, $aclrow);
+				break;
 			case 'weekday':
 				$result = acl_check_weekday($request, $aclrow);
 				break;
@@ -65,7 +68,7 @@ function acl_check($request, $row)
 				return(0);
 		}
 		
- 		if ($i == 0)
+		if ($i == 0)
 			$expression .= ($result == true ? 'true' : 'false').' ';
 		else
 			$expression .= $aclrow['acl_con'].' '.($result == true ? 'true' : 'false').' ';
@@ -81,7 +84,7 @@ function acl_check($request, $row)
 
 
 /*********************************************************/
-/* Check if the Weekday ACL is valid					 */
+/* Check if the Weekday ACL is valid                     */
 /*********************************************************/
 
 function acl_check_weekday($request, $aclrow) 
@@ -97,7 +100,7 @@ function acl_check_weekday($request, $aclrow)
 
 
 /*********************************************************/
-/* Check if the Useragent ACL is valid					 */
+/* Check if the Useragent ACL is valid                   */
 /*********************************************************/
 
 function acl_check_useragent($request, $aclrow) 
@@ -113,7 +116,7 @@ function acl_check_useragent($request, $aclrow)
 
 
 /*********************************************************/
-/* Check if the Client IP ACL is valid					 */
+/* Check if the Client IP ACL is valid                   */
 /*********************************************************/
 
 function acl_check_clientip($request, $aclrow) 
@@ -160,7 +163,7 @@ function acl_check_clientip($request, $aclrow)
 
 
 /*********************************************************/
-/* Check if the Domain ACL is valid					 	 */
+/* Check if the Domain ACL is valid                      */
 /*********************************************************/
 
 function acl_check_domain($request, $aclrow) 
@@ -181,7 +184,23 @@ function acl_check_domain($request, $aclrow)
 
 
 /*********************************************************/
-/* Check if the Source ACL is valid					 	 */
+/* Check if the Language ACL is valid                    */
+/*********************************************************/
+
+function acl_check_language($request, $aclrow) 
+{
+	$data = $aclrow['acl_data'];
+	$source = $request['accept-language'];
+	
+	$expression = ($data == "*" || eregi("^".$data, $source));
+	$operator   = $aclrow['acl_ad'] == 'allow';
+	return ($expression == $operator);
+}
+
+
+
+/*********************************************************/
+/* Check if the Source ACL is valid                      */
 /*********************************************************/
 
 function acl_check_source($request, $aclrow) 
@@ -197,7 +216,7 @@ function acl_check_source($request, $aclrow)
 
 
 /*********************************************************/
-/* Check if the Time ACL is valid					 	 */
+/* Check if the Time ACL is valid                        */
 /*********************************************************/
 
 function acl_check_time($request, $aclrow) 
