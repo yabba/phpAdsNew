@@ -1,4 +1,4 @@
-<?php // $Revision: 1.32 $
+<?php // $Revision: 1.33 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -625,7 +625,7 @@ if (!isset($type))
 	<?php } else {?>
 		<tr><td height='25' colspan='3' bgcolor='#FFFFFF'>
 		<input type='radio' name='bannertype' value='web'<?php if ($type == "web") echo " checked";?>>
-		<b>Banner stored on the webserver</b></td></tr>
+		<b><?php echo $strWebBanner;?></b></td></tr>
 	<?php }?>
 	<tr><td height='1' colspan='3' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>
 	<tr><td height='10' colspan='3'>&nbsp;</td></tr>
