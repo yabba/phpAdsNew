@@ -1,0 +1,238 @@
+diff -Naur phpAdsNew/adclick.php /var/www/html/Awarez/phpAdsNew/adclick.php
+--- phpAdsNew/adclick.php	2003-01-30 14:06:39.000000000 +0000
++++ /var/www/html/Awarez/phpAdsNew/adclick.php	2003-03-13 14:00:30.000000000 +0000
+@@ -50,6 +50,8 @@
+ 
+ if (!isset($bannerid) && isset($bannerID)) $bannerid = $bannerID;
+ if (!isset($n)) $n = 'default';
++if (!isset($source)) $source = '';
++if ($source == '{derive}') $source = phpAds_deriveSource($source);
+ 
+ 
+ // Fetch BannerID
+@@ -109,8 +111,6 @@
+ 		
+ 		// If zoneid is not set, log it as a regular banner
+ 		if (!isset($zoneid)) $zoneid = 0;
+-		if (!isset($source)) $source = '';
+-		
+ 		
+ 		// Log clicks
+ 		if ($phpAds_config['block_adclicks'] == 0 ||
+diff -Naur phpAdsNew/adframe.php /var/www/html/Awarez/phpAdsNew/adframe.php
+--- phpAdsNew/adframe.php	2003-02-11 16:16:01.000000000 +0000
++++ /var/www/html/Awarez/phpAdsNew/adframe.php	2003-03-13 13:58:44.000000000 +0000
+@@ -63,9 +63,10 @@
+ if (!isset($what)) 		$what = '';
+ if (!isset($clientid)) 	$clientid = 0;
+ if (!isset($target)) 	$target = '_top';
+-if (!isset($source)) 	$source = '';
+ if (!isset($withtext)) 	$withtext = '';
+ if (!isset($context)) 	$context = '';
++if (!isset($source))	$source = '';
++if ($source == '{derive}') $source = phpAds_deriveSource($source);
+ 
+ // Remove referer, to be sure it doesn't cause problems with limitations
+ if (isset($HTTP_SERVER_VARS['HTTP_REFERER'])) unset($HTTP_SERVER_VARS['HTTP_REFERER']);
+diff -Naur phpAdsNew/adjs.php /var/www/html/Awarez/phpAdsNew/adjs.php
+--- phpAdsNew/adjs.php	2003-02-11 14:09:07.000000000 +0000
++++ /var/www/html/Awarez/phpAdsNew/adjs.php	2003-03-12 17:14:53.000000000 +0000
+@@ -93,9 +93,10 @@
+ if (!isset($what)) 		$what = '';
+ if (!isset($clientid)) 	$clientid = 0;
+ if (!isset($target)) 	$target = '';
+-if (!isset($source)) 	$source = '';
+ if (!isset($withtext)) 	$withtext = '';
+ if (!isset($context)) 	$context = '';
++if (!isset($source)) $source = '';
++if ($source == '{derive}') $source = phpAds_deriveSource($source);
+ 
+ if (isset($exclude) && $exclude != '')
+ {
+diff -Naur phpAdsNew/adlayer.php /var/www/html/Awarez/phpAdsNew/adlayer.php
+--- phpAdsNew/adlayer.php	2003-02-11 16:16:03.000000000 +0000
++++ /var/www/html/Awarez/phpAdsNew/adlayer.php	2003-03-12 17:15:44.000000000 +0000
+@@ -163,9 +163,10 @@
+ if (!isset($what)) $what = '';
+ if (!isset($clientid)) $clientid = 0;
+ if (!isset($target)) $target = '';
+-if (!isset($source)) $source = '';
+ if (!isset($withtext)) $withtext = '';
+ if (!isset($context)) $context = '';
++if (!isset($source)) $source = '';
++if ($source == '{derive}') $source = phpAds_deriveSource($source);
+ 
+ // Remove referer, to be sure it doesn't cause problems with limitations
+ if (isset($HTTP_SERVER_VARS['HTTP_REFERER'])) unset($HTTP_SERVER_VARS['HTTP_REFERER']);
+diff -Naur phpAdsNew/adlog.php /var/www/html/Awarez/phpAdsNew/adlog.php
+--- phpAdsNew/adlog.php	2003-02-18 09:50:22.000000000 +0000
++++ /var/www/html/Awarez/phpAdsNew/adlog.php	2003-03-12 17:24:02.000000000 +0000
+@@ -48,6 +48,7 @@
+ if (isset($bannerid) && isset($clientid) && isset($zoneid))
+ {
+ 	if (!isset($source)) $source = '';
++	if ($source == '{derive}') $source = phpAds_deriveSource($source);
+ 	
+ 	if ($phpAds_config['block_adviews'] == 0 ||
+ 	   ($phpAds_config['block_adviews'] > 0 && 
+diff -Naur phpAdsNew/adpopup.php /var/www/html/Awarez/phpAdsNew/adpopup.php
+--- phpAdsNew/adpopup.php	2003-02-11 16:16:03.000000000 +0000
++++ /var/www/html/Awarez/phpAdsNew/adpopup.php	2003-03-12 17:18:30.000000000 +0000
+@@ -148,9 +148,10 @@
+ if (!isset($what)) 		$what = '';
+ if (!isset($clientid)) 	$clientid = 0;
+ if (!isset($target)) 	$target = '_new';
+-if (!isset($source)) 	$source = '';
+ if (!isset($withtext)) 	$withtext = '';
+ if (!isset($context)) 	$context = '';
++if (!isset($source)) $source = '';
++if ($source == '{derive}') $source = phpAds_deriveSource($source);
+ 
+ // Remove referer, to be sure it doesn't cause problems with limitations
+ if (isset($HTTP_SERVER_VARS['HTTP_REFERER'])) unset($HTTP_SERVER_VARS['HTTP_REFERER']);
+diff -Naur phpAdsNew/adview.php /var/www/html/Awarez/phpAdsNew/adview.php
+--- phpAdsNew/adview.php	2003-02-18 09:50:22.000000000 +0000
++++ /var/www/html/Awarez/phpAdsNew/adview.php	2003-03-12 17:19:37.000000000 +0000
+@@ -61,8 +61,9 @@
+ if (isset($clientID) && !isset($clientid)) $clientid = $clientID;
+ if (!isset($clientid)) $clientid = 0;
+ if (!isset($what)) $what = '';
+-if (!isset($source)) $source = '';
+ if (!isset($n)) $n = 'default';
++if (!isset($source)) $source = '';
++if ($source == '{derive}') $source = phpAds_deriveSource($source);
+ 
+ // Remove referer, to be sure it doesn't cause problems with limitations
+ if (isset($HTTP_SERVER_VARS['HTTP_REFERER'])) unset($HTTP_SERVER_VARS['HTTP_REFERER']);
+diff -Naur phpAdsNew/libraries/CVS/Entries /var/www/html/Awarez/phpAdsNew/libraries/CVS/Entries
+--- phpAdsNew/libraries/CVS/Entries	2003-03-13 14:25:17.000000000 +0000
++++ /var/www/html/Awarez/phpAdsNew/libraries/CVS/Entries	2003-03-12 20:23:58.000000000 +0000
+@@ -18,4 +18,8 @@
+ /lib-warnings.inc.php/2.0/Tue Oct 29 21:07:47 2002//
+ /lib-xmlrpc.inc.php/2.0/Tue Oct 29 21:07:47 2002//
+ /lib-xmlrpcs.inc.php/2.0/Tue Oct 29 21:07:48 2002//
+-D
++D/defaults////
++D/deliverycache////
++D/geotargeting////
++D/layerstyles////
++D/resources////
+diff -Naur phpAdsNew/libraries/CVS/Entries.Log /var/www/html/Awarez/phpAdsNew/libraries/CVS/Entries.Log
+--- phpAdsNew/libraries/CVS/Entries.Log	2003-03-13 14:25:21.000000000 +0000
++++ /var/www/html/Awarez/phpAdsNew/libraries/CVS/Entries.Log	1970-01-01 01:00:00.000000000 +0100
+@@ -1,5 +0,0 @@
+-A D/defaults////
+-A D/deliverycache////
+-A D/geotargeting////
+-A D/layerstyles////
+-A D/resources////
+diff -Naur phpAdsNew/libraries/geotargeting/geo-mod_geoip.inc.php /var/www/html/Awarez/phpAdsNew/libraries/geotargeting/geo-mod_geoip.inc.php
+--- phpAdsNew/libraries/geotargeting/geo-mod_geoip.inc.php	2003-02-18 09:50:23.000000000 +0000
++++ /var/www/html/Awarez/phpAdsNew/libraries/geotargeting/geo-mod_geoip.inc.php	2003-03-12 17:22:54.000000000 +0000
+@@ -33,7 +33,7 @@
+ {
+ 	// $addr and $db parameter is ignored and is here for API consistency only
+ 	
+-	$country = @apache_note('GEOIP_COUNTRY_CODE');
++	$country = $HTTP_SERVER_VARS['GEOIP_COUNTRY_CODE'];
+ 	
+ 	if ($country != '' && $country != '--')
+ 	{
+diff -Naur phpAdsNew/libraries/lib-io.inc.php /var/www/html/Awarez/phpAdsNew/libraries/lib-io.inc.php
+--- phpAdsNew/libraries/lib-io.inc.php	2003-01-16 08:58:18.000000000 +0000
++++ /var/www/html/Awarez/phpAdsNew/libraries/lib-io.inc.php	2003-03-12 17:25:04.000000000 +0000
+@@ -44,6 +44,94 @@
+ 	}
+ }
+ 
++function phpAds_deriveSource ($str)
++{
++	global $HTTP_SERVER_VARS, $phpAds_config;
++
++	$qs = array();
++	$path = array();
++		
++	// Break down the referer...
++	if (isset($HTTP_SERVER_VARS['HTTP_REFERER']))
++	{
++		$referer = parse_url(strtolower($HTTP_SERVER_VARS['HTTP_REFERER']));
++		if (isset($referer['host']))
++		{
++			$host = $referer['host'];
++			$domains = array_reverse( explode(".", $host) );
++		}
++		else
++		{
++			$host = '';
++			$domains = array();  //empty array
++		}
++			
++		if (isset($referer['path']))
++		{
++			$path = '';
++			if ( substr_count($referer['path'], '/') > 1)
++				$path = substr($referer['path'], 1, strrpos($referer['path'], "/") - 1 );
++			$dirs = explode("/", $path);
++		}
++		else
++		{
++			$path = '';
++			$dirs = array();
++		}
++		
++		if (isset($referer['query']))
++		{
++			$tmpqs = explode("&", $referer['query']);
++			if ( is_array($tmpqs) )
++			{
++				foreach ( $tmpqs as $value )
++				{
++					$tmparg = strtok( $value, "=" );
++					$qs[$tmparg] = strtok('');
++				}
++			}
++		}
++		else
++			$qs = array();
++
++		// Initially, hard code the 'rules' for determining the source.
++		// Ebookers Rules...
++		if (preg_match('#ebookers|hoteldiscounts|interhome#i', $host) )  //Ebookers Rules
++		{
++			$source = 'ebookersfr';
++			if (preg_match('#hoteldiscounts#i', $host) )
++			{
++				$path = 'hoteldiscounts';
++			}
++			elseif (preg_match('#interhome#i', $host) )
++			{
++				$path = 'locations';
++			}
++			if (strlen($path) > 0)
++				$source = $source.'/'.$path;
++		}
++		elseif (preg_match('#ticketmaster#i', $host) ) //Ticketmaster Rules
++		{
++			$source = 'ticketmaster';
++			if (strlen($qs['category']) > 0)
++			{
++				$source = $source.'/'.$qs['category'];
++				if (strlen($qs['minorname']) > 0)
++					$source = $source.'/'.$qs['minorname'];
++			}
++		}
++		else
++		{
++			$source = $host;
++			if (strlen($path) > 0)
++				$source = $source.'/'.$path;
++		}
++		
++		return $source;
++	}
++
++	return $str;
++}
+ 
+ /*********************************************************/
+ /* Recursive add slashes to an array                     */

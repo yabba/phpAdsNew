@@ -1,0 +1,1405 @@
+diff -Naur phpAdsNew-rc2/adclick.php phpadsnew_live/adclick.php
+--- phpAdsNew-rc2/adclick.php	2002-10-29 22:01:14.000000000 +0000
++++ phpadsnew_live/adclick.php	2003-03-10 12:44:28.000000000 +0000
+@@ -50,7 +50,8 @@
+ 
+ if (!isset($bannerid) && isset($bannerID)) $bannerid = $bannerID;
+ if (!isset($n)) $n = 'default';
+-
++if (!isset($source)) $source='';
++$source = phpAds_determineSource($source);
+ 
+ // Fetch BannerID
+ if (!isset($bannerid))
+@@ -191,4 +192,4 @@
+ if ($phpAds_config['default_banner_target'] != '')
+ 	header ("Location: ".$phpAds_config['default_banner_target']);
+ 
+-?>
+\ No newline at end of file
++?>
+diff -Naur phpAdsNew-rc2/adframe.php phpadsnew_live/adframe.php
+--- phpAdsNew-rc2/adframe.php	2002-10-29 22:01:14.000000000 +0000
++++ phpadsnew_live/adframe.php	2003-03-10 10:49:57.000000000 +0000
+@@ -63,10 +63,10 @@
+ if (!isset($what)) 		$what = '';
+ if (!isset($clientid)) 	$clientid = 0;
+ if (!isset($target)) 	$target = '_top';
+-if (!isset($source)) 	$source = '';
+ if (!isset($withtext)) 	$withtext = '';
+ if (!isset($context)) 	$context = '';
+-
++if (!isset($source))	$source = '';
++$source = phpAds_determineSource($source);
+ 
+ // Get the banner
+ $banner = view_raw ($what, $clientid, $target, $source, $withtext, $context);
+@@ -110,4 +110,4 @@
+ 
+ echo "</html>\n";
+ 
+-?>
+\ No newline at end of file
++?>
+diff -Naur phpAdsNew-rc2/adjs.php phpadsnew_live/adjs.php
+--- phpAdsNew-rc2/adjs.php	2002-11-22 00:28:28.000000000 +0000
++++ phpadsnew_live/adjs.php	2003-03-10 12:16:20.000000000 +0000
+@@ -93,9 +93,10 @@
+ if (!isset($what)) 		$what = '';
+ if (!isset($clientid)) 	$clientid = 0;
+ if (!isset($target)) 	$target = '';
+-if (!isset($source)) 	$source = '';
+ if (!isset($withtext)) 	$withtext = '';
+ if (!isset($context)) 	$context = '';
++if (!isset($source))	$source = '';
++$source = phpAds_determineSource($source);
+ 
+ if (isset($exclude) && $exclude != '')
+ {
+@@ -123,4 +124,4 @@
+ if (isset($blockcampaign) && $blockcampaign != '' && $blockcampaign != '0' && $output['campaignid'])
+ 	print ("\nif (document.phpAds_used) document.phpAds_used += 'campaignid:".$output['campaignid'].",';\n");
+ 
+-?>
+\ No newline at end of file
++?>
+diff -Naur phpAdsNew-rc2/adlayer.php phpadsnew_live/adlayer.php
+--- phpAdsNew-rc2/adlayer.php	2002-11-10 03:27:20.000000000 +0000
++++ phpadsnew_live/adlayer.php	2003-03-10 10:53:01.000000000 +0000
+@@ -158,9 +158,10 @@
+ if (!isset($what)) $what = '';
+ if (!isset($clientid)) $clientid = 0;
+ if (!isset($target)) $target = '';
+-if (!isset($source)) $source = '';
+ if (!isset($withtext)) $withtext = '';
+ if (!isset($context)) $context = '';
++if (!isset($source)) $source = '';
++$source = phpAds_determineSource($source);
+ 
+ if (!isset($layerstyle) || empty($layerstyle)) $layerstyle = 'geocities';
+ 
+@@ -182,4 +183,4 @@
+ 	phpAds_putLayerJS($output, $uniqid);
+ }
+ 
+-?>
+\ No newline at end of file
++?>
+diff -Naur phpAdsNew-rc2/adlog.php phpadsnew_live/adlog.php
+--- phpAdsNew-rc2/adlog.php	2003-01-02 18:49:48.000000000 +0000
++++ phpadsnew_live/adlog.php	2003-03-10 13:40:28.000000000 +0000
+@@ -17,6 +17,10 @@
+ // Figure out our location
+ define ('phpAds_path', '.');
+ 
++// Start Timer
++require (phpAds_path.'/classes/PageTimer.php');
++$awrz_PageTimer = new PageTimer( 'adlog.php' );
++$awrz_PageTimer->start();
+ 
+ 
+ /*********************************************************/
+@@ -48,6 +52,7 @@
+ if (isset($bannerid) && isset($clientid) && isset($zoneid))
+ {
+ 	if (!isset($source)) $source = '';
++	$source = phpAds_determineSource($source);
+ 	
+ 	if ($phpAds_config['block_adviews'] == 0 ||
+ 	   ($phpAds_config['block_adviews'] > 0 && 
+@@ -108,4 +113,6 @@
+      chr(0x01).chr(0x00).chr(0x01).chr(0x00).chr(0x00).chr(0x02).chr(0x02).chr(0x44).
+      chr(0x01).chr(0x00).chr(0x3B);
+ 
+-?>
+\ No newline at end of file
++$awrz_PageTimer->stop();
++$awrz_PageTimer->log();
++?>
+diff -Naur phpAdsNew-rc2/admin/stats-global-client.php phpadsnew_live/admin/stats-global-client.php
+--- phpAdsNew-rc2/admin/stats-global-client.php	2003-01-03 00:26:00.000000000 +0000
++++ phpadsnew_live/admin/stats-global-client.php	2003-03-09 00:16:56.000000000 +0000
+@@ -18,6 +18,10 @@
+ require ("config.php");
+ require ("lib-statistics.inc.php");
+ 
++// Start Timer
++require (phpAds_path.'/classes/PageTimer.php');
++$awrz_PageTimer = new PageTimer( 'stats-global-client.php' );
++$awrz_PageTimer->start();
+ 
+ // Register input variables
+ phpAds_registerGlobal ('expand', 'collapse', 'hideinactive', 'listorder', 'orderdirection');
+@@ -685,4 +689,8 @@
+ 
+ phpAds_PageFooter();
+ 
+-?>
+\ No newline at end of file
++// Stop Timer
++$awrz_PageTimer->stop();
++$awrz_PageTimer->log();
++
++?>
+diff -Naur phpAdsNew-rc2/adpopup.php phpadsnew_live/adpopup.php
+--- phpAdsNew-rc2/adpopup.php	2003-01-03 23:45:30.000000000 +0000
++++ phpadsnew_live/adpopup.php	2003-03-10 10:54:50.000000000 +0000
+@@ -148,10 +148,10 @@
+ if (!isset($what)) 		$what = '';
+ if (!isset($clientid)) 	$clientid = 0;
+ if (!isset($target)) 	$target = '_new';
+-if (!isset($source)) 	$source = '';
+ if (!isset($withtext)) 	$withtext = '';
+ if (!isset($context)) 	$context = '';
+-
++if (!isset($source))	$source = '';
++$source = phpAds_determineSource($source);
+ 
+ // Get the banner
+ $output = view_raw ($what, $clientid, $target, $source, $withtext, $context);
+@@ -250,4 +250,4 @@
+ 
+ <?php echo $windowid; ?>_pop();
+ 
+-<?php } ?>
+\ No newline at end of file
++<?php } ?>
+diff -Naur phpAdsNew-rc2/adview.php phpadsnew_live/adview.php
+--- phpAdsNew-rc2/adview.php	2002-12-10 18:54:50.000000000 +0000
++++ phpadsnew_live/adview.php	2003-03-10 10:55:55.000000000 +0000
+@@ -61,9 +61,9 @@
+ if (isset($clientID) && !isset($clientid)) $clientid = $clientID;
+ if (!isset($clientid)) $clientid = 0;
+ if (!isset($what)) $what = '';
+-if (!isset($source)) $source = '';
+ if (!isset($n)) $n = 'default';
+-
++if (!isset($source)) $source = '';
++$source = phpAds_determineSource($source);
+ 
+ if (phpAds_dbConnect())
+ {
+@@ -275,4 +275,4 @@
+ 
+ phpAds_dbClose();
+ 
+-?>
+\ No newline at end of file
++?>
+diff -Naur phpAdsNew-rc2/awrz_config.inc.php phpadsnew_live/awrz_config.inc.php
+--- phpAdsNew-rc2/awrz_config.inc.php	1970-01-01 01:00:00.000000000 +0100
++++ phpadsnew_live/awrz_config.inc.php	2003-03-09 00:28:21.000000000 +0000
+@@ -0,0 +1,10 @@
++<?php
++
++/*********************************************************/
++/* Database configuration                                */
++/*********************************************************/
++
++// Database table names
++$awrz_config['tbl_performance'] = 'awrz_performance';
++
++?>
+\ No newline at end of file
+diff -Naur phpAdsNew-rc2/cache/cache-6d23b6e62ecd4cb53ca4f136f32630b0.php phpadsnew_live/cache/cache-6d23b6e62ecd4cb53ca4f136f32630b0.php
+--- phpAdsNew-rc2/cache/cache-6d23b6e62ecd4cb53ca4f136f32630b0.php	1970-01-01 01:00:00.000000000 +0100
++++ phpadsnew_live/cache/cache-6d23b6e62ecd4cb53ca4f136f32630b0.php	2003-03-10 12:30:10.000000000 +0000
+@@ -0,0 +1,40 @@
++<?php
++
++$cache_contents = array (
++  0 => '9',
++  1 => 
++  array (
++    0 => 
++    array (
++      'bannerid' => '3',
++      'clientid' => '6',
++      'priority' => '6',
++      'clientweight' => '1',
++      'contenttype' => 'gif',
++      'storagetype' => 'sql',
++      'filename' => 'tkgk0243en.gif',
++      'imageurl' => '{url_prefix}/adimage.php?filename=tkgk0243en.gif&amp;contenttype=gif',
++      'url' => 'http://www.switzer.org/thinkgeek',
++      'htmlcache' => '<a href=\'{url_prefix}/adclick.php?bannerid={bannerid}&amp;zoneid={zoneid}&amp;source={source}&amp;dest=http%3A%2F%2Fwww.switzer.org%2Fthinkgeek\' target=\'{target}\' ><img src=\'{url_prefix}/adimage.php?filename=tkgk0243en.gif&amp;contenttype=gif\' width=\'468\' height=\'60\' alt=\'\' title=\'\' border=\'0\'></a>',
++      'width' => '468',
++      'height' => '60',
++      'weight' => '1',
++      'seq' => '0',
++      'target' => '',
++      'alt' => '',
++      'block' => '0',
++      'capping' => '0',
++      'compiledlimitation' => 'true',
++    ),
++  ),
++  2 => 'clientid:6',
++  3 => 6,
++  4 => '',
++  5 => '',
++  6 => '',
++);
++
++$cache_name     = 'what=zone:9';
++$cache_complete = true;
++
++?>
+\ No newline at end of file
+diff -Naur phpAdsNew-rc2/cache/timer-adlog.php.dat phpadsnew_live/cache/timer-adlog.php.dat
+--- phpAdsNew-rc2/cache/timer-adlog.php.dat	1970-01-01 01:00:00.000000000 +0100
++++ phpadsnew_live/cache/timer-adlog.php.dat	2003-03-10 15:01:48.000000000 +0000
+@@ -0,0 +1,36 @@
++1047190400.4583|0.040464997291565
++1047190436.5991|0.035053968429565
++1047234097.2137|0.0382000207901
++1047235139.8964|0.03709888458252
++1047235179.954|0.030592918395996
++1047235193.1142|0.031031966209412
++1047270333.1741|0.033942937850952
++1047285887.1897|0.043587923049927
++1047285924.4798|0.036337018013
++1047286052.1634|0.034182906150818
++1047287068.0165|0.035594940185547
++1047287095.5036|0.034402966499329
++1047289217.4412|0.03485107421875
++1047289289.5728|0.030866026878357
++1047289315.9117|0.034922003746033
++1047289347.2567|0.031798958778381
++1047289383.8077|0.035557985305786
++1047299415.4849|0.49956297874451
++1047299906.1922|0.47309195995331
++1047300113.0219|121.16335201263
++1047300163.782|28.853760957718
++1047300197.5292|0.47359097003937
++1047302049.4104|0.0083450078964233
++1047302064.338|0.0080150365829468
++1047302074.1913|0.0082679986953735
++1047302119.8965|0.0089180469512939
++1047302377.855|0.0074830055236816
++1047302553.2561|0.009647011756897
++1047302946.2731|0.0079219341278076
++1047303035.1247|0.0079289674758911
++1047303125.9156|0.0092480182647705
++1047303496.2887|0.47534799575806
++1047303583.2541|22.310206055641
++1047303667.412|0.47740709781647
++1047304821.5573|1017.750655055
++1047308508.5351|0.0088880062103271
+diff -Naur phpAdsNew-rc2/cache/timer-stats-global-client.php.dat phpadsnew_live/cache/timer-stats-global-client.php.dat
+--- phpAdsNew-rc2/cache/timer-stats-global-client.php.dat	1970-01-01 01:00:00.000000000 +0100
++++ phpadsnew_live/cache/timer-stats-global-client.php.dat	2003-03-09 18:37:59.000000000 +0000
+@@ -0,0 +1,3 @@
++1047235024.5856|19.31251001358
++1047235053.3131|19.723550081253
++1047235079.1382|19.243904948235
+diff -Naur phpAdsNew-rc2/cache/timer-vitalstats_gen.php.dat phpadsnew_live/cache/timer-vitalstats_gen.php.dat
+--- phpAdsNew-rc2/cache/timer-vitalstats_gen.php.dat	1970-01-01 01:00:00.000000000 +0100
++++ phpadsnew_live/cache/timer-vitalstats_gen.php.dat	2003-03-10 11:05:15.000000000 +0000
+@@ -0,0 +1,206 @@
++1047171316.7315|15.907505989075
++1047171914.3865|14.275542974472
++1047172516.3722|15.665795087814
++1047173116.5|15.836398005486
++1047173715.167|14.351273059845
++1047174314.9423|14.450222969055
++1047174916.1351|15.83486199379
++1047175514.8938|14.401744008064
++1047176114.6469|14.442292094231
++1047176716.8239|15.883146047592
++1047177315.6101|15.481862068176
++1047177915.2617|14.359606981277
++1047178514.6348|14.040426015854
++1047179115.5618|15.515758991241
++1047179716.1502|15.273452043533
++1047180316.1536|15.673617959023
++1047180914.8679|14.41161608696
++1047181515.9505|15.751779913902
++1047182115.69|15.438410997391
++1047182715.2327|14.230226993561
++1047183314.8343|14.294635057449
++1047183917.456|16.627540946007
++1047184515.7466|14.971613049507
++1047185114.2679|14.225491046906
++1047185716.5043|15.879015088081
++1047186316.7359|15.723815083504
++1047186916.5757|16.523291945457
++1047187515.2246|14.331909894943
++1047188116.3062|15.76815199852
++1047188714.8401|14.212300896645
++1047189314.6103|14.452893972397
++1047189915.2115|14.261296033859
++1047190514.8915|14.360316991806
++1047191116.9624|16.757946014404
++1047191717.0023|16.706743001938
++1047192316.0796|15.745438933372
++1047192914.7485|14.343032002449
++1047193514.8908|14.756662011147
++1047194116.188|15.985337972641
++1047194714.74|14.24697804451
++1047195315.6715|15.641330957413
++1047195915.2431|14.254492998123
++1047196515.0253|14.451603055
++1047197114.8679|14.377527952194
++1047197715.8982|15.699766039848
++1047198314.3862|14.175242066383
++1047198916.5577|15.864408016205
++1047199515.1027|14.2388869524
++1047200114.5741|14.164606928825
++1047200715.1783|14.21110701561
++1047201316.2958|15.820990085602
++1047201914.7939|14.189072012901
++1047202514.3358|14.223396897316
++1047203114.8958|14.230530023575
++1047203714.5394|14.326127052307
++1047204315.6389|14.774410963058
++1047204915.114|14.162343978882
++1047205514.7473|14.321510910988
++1047206114.2059|14.130161046982
++1047206714.68|14.180546045303
++1047207316.7986|15.81128692627
++1047207914.3906|14.235038995743
++1047208514.9633|14.192160964012
++1047209116.1409|15.889722943306
++1047209716.3856|15.919076919556
++1047210316.5908|15.898291945457
++1047210915.1243|14.199203968048
++1047211517.1377|16.63650405407
++1047212114.8607|14.398530960083
++1047212714.5221|14.342272043228
++1047213315.166|14.328627943993
++1047213915.6395|15.156035900116
++1047214515.1501|14.189904928207
++1047215116.369|15.830785989761
++1047215716.5758|15.904440045357
++1047216315.0505|14.153194069862
++1047216916.9726|16.594470977783
++1047217516.0603|15.754477977753
++1047218116.9467|16.57653594017
++1047218715.9356|15.647425055504
++1047219314.5962|14.244765043259
++1047219915.1682|14.268402099609
++1047220516.4058|15.911118984222
++1047221115.0695|14.333660006523
++1047221714.739|14.36775803566
++1047222314.255|14.169450998306
++1047222914.8996|14.322489023209
++1047223516.8985|16.673809051514
++1047224114.5877|14.38021504879
++1047224715.1347|14.240904092789
++1047225314.7249|14.245576024055
++1047225914.4056|14.301317095757
++1047226516.9479|16.207223057747
++1047227114.5777|14.316560983658
++1047227715.2676|14.354027986526
++1047228314.7651|14.185417056084
++1047228916.7485|16.651917934418
++1047229514.3798|14.253350019455
++1047230115.0623|14.369274973869
++1047230714.6235|14.245049953461
++1047231316.859|15.923378944397
++1047231914.3639|14.187097072601
++1047232514.958|14.249778032303
++1047233114.6476|14.29493200779
++1047233715.1943|14.208186984062
++1047234317.2072|16.699387073517
++1047234914.8126|14.286972045898
++1047235514.3959|14.280590057373
++1047236116.512|15.806131958961
++1047236716.7398|15.840250015259
++1047237315.4363|15.365473985672
++1047237915.1235|14.350430965424
++1047238514.8179|14.373997926712
++1047239114.457|14.319169998169
++1047239716.6869|15.896286964417
++1047240315.2501|15.135355949402
++1047240917.3548|16.765506982803
++1047241516.4665|15.714653968811
++1047242117.4467|16.687075972557
++1047242716.6064|15.832327961922
++1047243317.665|16.747609972954
++1047243915.7886|15.761518001556
++1047244516.0213|15.930477976799
++1047245114.5393|14.214663982391
++1047245716.8108|15.85212290287
++1047246314.4938|14.360119104385
++1047246916.6606|15.817535996437
++1047247515.9261|15.814579963684
++1047248114.5969|14.353832960129
++1047248716.8054|15.884510993958
++1047249315.8638|15.750664949417
++1047249914.5466|14.36780500412
++1047250516.6265|15.776077032089
++1047251115.884|15.865061044693
++1047251715.9708|15.760280966759
++1047252314.5583|14.278554916382
++1047252915.2441|14.362079977989
++1047253516.3878|15.843186974525
++1047254117.4562|16.73715698719
++1047254716.4001|15.801479935646
++1047255314.9872|14.25167298317
++1047255914.7387|14.415572047234
++1047256515.7743|15.724465966225
++1047257115.932|15.83745098114
++1047257715.5775|15.345127940178
++1047258315.3274|14.384379029274
++1047258915.9475|15.281535983086
++1047259516.1066|15.861253976822
++1047260115.7075|15.280297994614
++1047260715.819|15.798550009727
++1047261315.8718|15.731716036797
++1047261916.074|15.817142009735
++1047262514.6627|14.264591932297
++1047263115.3125|14.340335965157
++1047263716.6058|15.908663988113
++1047264315.1288|14.198306083679
++1047264916.2948|15.830734014511
++1047265516.0024|15.300018906593
++1047266116.2088|15.880933046341
++1047266715.7819|15.262547016144
++1047267315.987|15.887876987457
++1047267916.2291|15.901957988739
++1047268514.6462|14.115229964256
++1047269116.3266|15.816751003265
++1047269715.9211|15.295958042145
++1047270316.0628|15.824271917343
++1047270916.2287|15.848392009735
++1047271516.215|15.66212105751
++1047272116.2234|15.677867054939
++1047272716.3637|15.722750902176
++1047273316.486|15.799603104591
++1047273916.676|15.872146010399
++1047274515.8505|15.768249034882
++1047275114.5822|14.415547013283
++1047275715.2017|14.298442959785
++1047276316.3491|15.747079014778
++1047276916.4433|15.762359023094
++1047277516.4367|15.680659890175
++1047278116.0347|15.269899010658
++1047278716.2166|15.878967046738
++1047279314.8126|14.258775949478
++1047279915.9798|15.750238895416
++1047280516.1417|15.838256001472
++1047281116.3484|15.89578306675
++1047281716.5111|15.835240960121
++1047282315.1674|14.328866958618
++1047282916.4013|15.933839082718
++1047283515.1111|14.318623900414
++1047284115.7097|15.287521958351
++1047284715.6734|15.641139984131
++1047285316.8064|15.820984005928
++1047285914.4335|14.231413960457
++1047286516.5263|15.755956888199
++1047287116.621|15.72466802597
++1047287716.9155|15.9771900177
++1047288315.3602|15.109403014183
++1047288916.3688|15.688259005547
++1047289516.539|15.851838946342
++1047290115.1475|14.30843603611
++1047290714.9733|14.468902945518
++1047291314.6128|14.303524017334
++1047291915.2471|14.328943967819
++1047292515.8698|15.305328965187
++1047293115.5972|15.427195072174
++1047293715.4351|14.505492091179
++1047294315.1261|14.275151014328
+diff -Naur phpAdsNew-rc2/classes/PageTimer.php phpadsnew_live/classes/PageTimer.php
+--- phpAdsNew-rc2/classes/PageTimer.php	1970-01-01 01:00:00.000000000 +0100
++++ phpadsnew_live/classes/PageTimer.php	2003-03-09 00:10:33.000000000 +0000
+@@ -0,0 +1,92 @@
++<?PHP
++// Timer class
++// Allows timing of various files to see how fast they really are...
++
++// Set define to prevent duplicate include
++define ('LIBTIMER_INCLUDED', true);
++
++class PageTimer
++{
++	var $maxCount;
++	var $startTime;
++	var $stopTime;
++	var $elapsedTime;
++	var $fileName;
++	var $delay;
++	
++	function PageTimer($name)
++	{
++		// The file name which will be written to
++		$this->fileName = phpAds_path.'/cache/timer-'.$name.'.dat';
++		
++		// The maximum number of entries that the file should have
++		$this->maxCount = 10;  //NOT IMPLEMENTED
++
++		// The delay in seconds that the timer should wait before adding another entry
++		$this->delay = 10;
++
++		$this->reset();
++	}
++
++	// Resets the timer.
++	function reset()
++	{
++		$this-> startTime = -1;
++		$this-> stopTime = -1;
++		$this-> elapsedTime = 0;
++	}
++	
++	// Starts the timer, and resets the stop time
++	function start()
++	{
++		$this -> startTime = $this -> getCurrentTime();
++		$this -> stopTime = -1;
++	}
++	
++	// Stops the timer.
++	function stop()
++	{
++		// Make sure the timer started properly
++		if ( ($this->startTime > -1) && ($this->stopTime == -1) )
++		{
++			$this->stopTime = $this->getCurrentTime();
++			$this->elapsedTime += ($this->stopTime - $this->startTime);
++		}
++		else
++			$this->stopTime = -1;
++	}
++	
++	function getCurrentTime()
++	{
++		list($usec, $sec) = explode(' ', microtime());
++		return ( (float) $usec + (float) $sec );
++	}
++	
++	// Store the page times in a cache
++
++	function log()
++	{
++		$time = $this->stopTime;  // In the log, the timing will be attached to the stoptime of the timer
++		$value = $this->elapsedTime;  // The elapsed time for this timer instance.
++		$filename = $this->fileName;  // The name of the file that we are writing to.
++		$log = false;
++		if (file_exists( $filename ) )
++		{
++			$modTime = filemtime( $filename );  // The time in which the file was last modified.
++
++			// We need to check to make sure that we have not written in the past ($delay) seconds.
++			if ($modTime + $this->delay < $time )
++				$log = true;
++		}
++		else
++			$log = true;
++		
++		if ($log)
++		{
++			if ( $fd = fopen( $filename, "a" ) )
++				$fout = fwrite( $fd, $time."|".$value."\n" );
++
++			fclose( $fd );
++		}
++	}
++}
+\ No newline at end of file
+diff -Naur phpAdsNew-rc2/config.inc.php phpadsnew_live/config.inc.php
+--- phpAdsNew-rc2/config.inc.php	2003-01-03 22:36:26.000000000 +0000
++++ phpadsnew_live/config.inc.php	2003-03-10 11:35:49.000000000 +0000
+@@ -8,41 +8,41 @@
+ $phpAds_config['dbhost'] = 'localhost';
+ 
+ // Database port
+-$phpAds_config['dbport'] = '3306';
++$phpAds_config['dbport'] = 3306;
+ 
+ // Database username
+-$phpAds_config['dbuser'] = '';
++$phpAds_config['dbuser'] = 'phpadsnew';
+ 
+ // Database password
+-$phpAds_config['dbpassword'] = '';
++$phpAds_config['dbpassword'] = 'buckyball';
+ 
+ // Database name
+-$phpAds_config['dbname'] = '';
++$phpAds_config['dbname'] = 'phpadsnew';
+ 
+ // Database table names
+-$phpAds_config['tbl_adclicks'] = 'phpads_adclicks';
+-$phpAds_config['tbl_adviews'] = 'phpads_adviews';
+-$phpAds_config['tbl_adstats'] = 'phpads_adstats';
+-$phpAds_config['tbl_banners'] = 'phpads_banners';
+-$phpAds_config['tbl_clients'] = 'phpads_clients';
+-$phpAds_config['tbl_session'] = 'phpads_session';
+-$phpAds_config['tbl_acls'] = 'phpads_acls';
+-$phpAds_config['tbl_zones'] = 'phpads_zones';
+-$phpAds_config['tbl_config'] = 'phpads_config';
+-$phpAds_config['tbl_affiliates'] = 'phpads_affiliates';
+-$phpAds_config['tbl_images'] = 'phpads_images';
+-$phpAds_config['tbl_userlog'] = 'phpads_userlog';
+-$phpAds_config['tbl_cache'] = 'phpads_cache';
+-$phpAds_config['tbl_targetstats'] = 'tbl_targetstats';
++$phpAds_config['tbl_adclicks'] = 'phpadsrc2_adclicks';
++$phpAds_config['tbl_adviews'] = 'phpadsrc2_adviews';
++$phpAds_config['tbl_adstats'] = 'phpadsrc2_adstats';
++$phpAds_config['tbl_banners'] = 'phpadsrc2_banners';
++$phpAds_config['tbl_clients'] = 'phpadsrc2_clients';
++$phpAds_config['tbl_session'] = 'phpadsrc2_session';
++$phpAds_config['tbl_acls'] = 'phpadsrc2_acls';
++$phpAds_config['tbl_zones'] = 'phpadsrc2_zones';
++$phpAds_config['tbl_config'] = 'phpadsrc2_config';
++$phpAds_config['tbl_affiliates'] = 'phpadsrc2_affiliates';
++$phpAds_config['tbl_images'] = 'phpadsrc2_images';
++$phpAds_config['tbl_userlog'] = 'phpadsrc2_userlog';
++$phpAds_config['tbl_cache'] = 'phpadsrc2_cache';
++$phpAds_config['tbl_targetstats'] = 'phpadsrc2_targetstats';
+ 
+ // Database table name prefix
+-$phpAds_config['table_prefix'] = 'phpads_';
++$phpAds_config['table_prefix'] = 'phpadsrc2_';
+ 
+ // Database table type
+-$phpAds_config['table_type'] = 'MYISAM';
++$phpAds_config['table_type'] = 'INNODB';
+ 
+ // Use persistent connections to the database
+-$phpAds_config['persistent_connections'] = false;
++$phpAds_config['persistent_connections'] = true;
+ 
+ // Use INSERT DELAYED in logging functions?
+ $phpAds_config['insert_delayed'] = false;
+@@ -58,11 +58,7 @@
+ /*********************************************************/
+ 
+ // The URL to your phpAds-installation
+-$phpAds_config['url_prefix'] = 'http://www.your-url.com/phpAdsNew';
+-
+-// The Language of the Interface (eg. english, german, spanish) 
+-// for the right string look for the directory name in the language subdirectory
+-$phpAds_config['language'] = 'english';
++$phpAds_config['url_prefix'] = 'http://10.20.40.5/Awarez/phpadsnew_live';
+ 
+ // Is the admin interface enabled
+ $phpAds_config['ui_enabled'] = true;
+@@ -105,7 +101,7 @@
+ /*********************************************************/
+ 
+ // Use compact or verbose statistics
+-$phpAds_config['compact_stats'] = true;
++$phpAds_config['compact_stats'] = false;
+ 
+ // Enabled logging of adviews?
+ $phpAds_config['log_adviews'] = true;
+@@ -120,7 +116,7 @@
+ $phpAds_config['log_hostname'] = true;
+ 
+ // Log only the IP address even if a hostname is available
+-$phpAds_config['log_iponly'] = true;
++$phpAds_config['log_iponly'] = false;
+ 
+ // Use beacons to log adviews
+ $phpAds_config['log_beacon'] = true;
+@@ -159,7 +155,7 @@
+ 
+ // Policy file location
+ // For example:
+-// $phpAds_config['p3p_policy_location'] = 'http://www.your-url.com/w3c/p3p.xml';
++// $phpAds_config['p3p_policy_location'] = '';
+ $phpAds_config['p3p_policy_location'] = '';
+ 
+ 
+@@ -170,7 +166,7 @@
+ 
+ // Delivery caching type?
+ // Possible options: none, db, file or shm
+-$phpAds_config['delivery_caching'] = 'db';
++$phpAds_config['delivery_caching'] = 'file';
+ 
+ // Use conditional keywords?
+ $phpAds_config['con_key'] = true;
+@@ -207,14 +203,13 @@
+ 
+ 
+ 
+-
+ /*********************************************************/
+ /* phpAdsNew self configuration code - don't change      */
+ /*********************************************************/
+ 
+-define('phpAds_installed', false);
++define('phpAds_installed', true);
+ 
+ // Disable magic_quotes_runtime
+ set_magic_quotes_runtime(0);
+ 
+-?>
+\ No newline at end of file
++?>
+diff -Naur phpAdsNew-rc2/libraries/geotargeting/geo-mod_geoip.inc.php phpadsnew_live/libraries/geotargeting/geo-mod_geoip.inc.php
+--- phpAdsNew-rc2/libraries/geotargeting/geo-mod_geoip.inc.php	2002-10-29 22:07:52.000000000 +0000
++++ phpadsnew_live/libraries/geotargeting/geo-mod_geoip.inc.php	2003-03-09 00:19:03.000000000 +0000
+@@ -16,13 +16,13 @@
+ function phpAds_countryCodeByAddr($addr)
+ {
+ 	// $addr parameter is ignored and is here for API consistency only
+-	
+-	$result = @apache_note('GEOIP_COUNTRY_CODE');
+-	
++	global $HTTP_SERVER_VARS;
++	$result = $HTTP_SERVER_VARS['GEOIP_COUNTRY_CODE'];	
++//	$result = @apache_note('GEOIP_COUNTRY_CODE');
+ 	if ($result != '' && $result != '--')
+ 		return ($result);
+ 	else
+ 		return (false);
+ }
+ 
+-?>
+\ No newline at end of file
++?>
+diff -Naur phpAdsNew-rc2/libraries/lib-io.inc.php phpadsnew_live/libraries/lib-io.inc.php
+--- phpAdsNew-rc2/libraries/lib-io.inc.php	2002-10-29 22:07:42.000000000 +0000
++++ phpadsnew_live/libraries/lib-io.inc.php	2003-03-10 15:23:15.000000000 +0000
+@@ -13,7 +13,6 @@
+ /************************************************************************/
+ 
+ 
+-
+ /*********************************************************/
+ /* Register globals                                      */
+ /*********************************************************/
+@@ -48,6 +47,94 @@
+ 	}
+ }
+ 
++function phpAds_determineSource ($str)
++{
++	global $HTTP_SERVER_VARS, $phpAds_config;
++
++	$qs = array();
++	$path = array();
++		
++	// Break down the referer...
++	if (isset($HTTP_SERVER_VARS['HTTP_REFERER']))
++	{
++		$referer = parse_url(strtolower($HTTP_SERVER_VARS['HTTP_REFERER']));
++		if (isset($referer['host']))
++		{
++			$host = $referer['host'];
++			$domains = array_reverse( explode(".", $host) );
++		}
++		else
++		{
++			$host = '';
++			$domains = array();  //empty array
++		}
++			
++		if (isset($referer['path']))
++		{
++			$path = '';
++			if ( substr_count($referer['path'], '/') > 1)
++				$path = substr($referer['path'], 1, strrpos($referer['path'], "/") - 1 );
++			$dirs = explode("/", $path);
++		}
++		else
++		{
++			$path = '';
++			$dirs = array();
++		}
++		
++		if (isset($referer['query']))
++		{
++			$tmpqs = explode("&", $referer['query']);
++			if ( is_array($tmpqs) )
++			{
++				foreach ( $tmpqs as $value )
++				{
++					$tmparg = strtok( $value, "=" );
++					$qs[$tmparg] = strtok('');
++				}
++			}
++		}
++		else
++			$qs = array();
++
++		// Initially, hard code the 'rules' for determining the source.
++		// Ebookers Rules...
++		if (preg_match('#ebookers|hoteldiscounts|interhome#i', $host) )  //Ebookers Rules
++		{
++			$source = 'ebookersfr';
++			if (preg_match('#hoteldiscounts#i', $host) )
++			{
++				$path = 'hoteldiscounts';
++			}
++			elseif (preg_match('#interhome#i', $host) )
++			{
++				$path = 'locations';
++			}
++			if (strlen($path) > 0)
++				$source = $source.'/'.$path;
++		}
++		elseif (preg_match('#ticketmaster#i', $host) ) //Ticketmaster Rules
++		{
++			$source = 'ticketmaster';
++			if (strlen($qs['category']) > 0)
++			{
++				$source = $source.'/'.$qs['category'];
++				if (strlen($qs['minorname']) > 0)
++					$source = $source.'/'.$qs['minorname'];
++			}
++		}
++		else
++		{
++			$source = $host;
++			if (strlen($path) > 0)
++				$source = $source.'/'.$path;
++		}
++		
++		return $source;
++	}
++
++	return $str;
++}
+ 
+ /*********************************************************/
+ /* Recursive add slashes to an array                     */
+@@ -124,4 +211,4 @@
+ 	}
+ }
+ 
+-?>
+\ No newline at end of file
++?>
+diff -Naur phpAdsNew-rc2/libraries/lib-limitations.inc.php phpadsnew_live/libraries/lib-limitations.inc.php
+--- phpAdsNew-rc2/libraries/lib-limitations.inc.php	2002-11-10 03:31:56.000000000 +0000
++++ phpadsnew_live/libraries/lib-limitations.inc.php	2003-03-09 08:36:53.000000000 +0000
+@@ -177,7 +177,7 @@
+ 		return (true);
+ 	
+ 	$expression = ($data == "*" || strtolower($source) == strtolower($data) || 
+-				   preg_match('#^'.str_replace('*', '[a-z0-9]*', $data).'$#i', $source));
++				   preg_match('#^'.str_replace('*', '[a-zA-Z0-9\/]*', $data).'$#i', $source));
+ 	$operator   = $ad == '==';
+ 	return ($expression == $operator);
+ }
+@@ -330,4 +330,4 @@
+ 	return ($expression == $operator);
+ }
+ 
+-?>
+\ No newline at end of file
++?>
+diff -Naur phpAdsNew-rc2/libraries/lib-utilities-date.inc.php phpadsnew_live/libraries/lib-utilities-date.inc.php
+--- phpAdsNew-rc2/libraries/lib-utilities-date.inc.php	1970-01-01 01:00:00.000000000 +0100
++++ phpadsnew_live/libraries/lib-utilities-date.inc.php	2003-03-09 00:12:20.000000000 +0000
+@@ -0,0 +1,115 @@
++<?PHP
++
++// Takes in a Unix Timestamp, and offsets it by the number of days, months, years, etc..
++function offsetUnixTimestamp($time, $num, $scope)
++{
++	$dtm = getdate($time);
++	$year = ( $scope == "year" ? $dtm["year"] + $num : $dtm["year"] );
++	$month = ( $scope == "quarter" ? $dtm["mon"] + ($num*3) : $dtm["mon"] );
++	$month = ( $scope == "month" ? $month + $num : $month );
++	$day = ( $scope == "day" ? $dtm["mday"] + $num : $dtm["mday"] );
++	$hour = ( $scope == "hour" ? $dtm["hours"] + $num : $dtm["hours"] );
++	$minute = ( $scope == "minute" ? $dtm["minutes"] + $num : $dtm["minutes"] );
++	$second = ( $scope == "second" ? $dtm["seconds"] + $num : $dtm["seconds"] );
++
++	$newtime = mktime( $hour, $minute, $second, $month, $day, $year );
++
++	return $newtime;
++}
++// Gets the Unix Timestamp format from a Mysql Timestamp
++function getUnixTimestamp($time)
++{
++	$year = substr($time, 0, 4);
++	$month = substr($time, 4, 2);
++	$day = substr($time, 6, 2);
++	$hour = substr($time, 8, 2);
++	$minute = substr($time, 10, 2);
++	$second = substr($time, 12, 2);
++
++	$newtime = mktime( $hour, $minute, $second, $month, $day, $year );
++	
++	return $newtime;
++}
++
++// Gets the Mysql Timestamp format from a Unix Timestamp
++function getMysqlTimestamp($time)
++{
++	return date("YmdHis", $time);
++}
++
++// Resets the time (if years is true, it resets to the beginning of the year of $time)
++function resetUnixTimestamp($time, $scope)
++{
++	$nscope = 0;
++	if ( $scope == "year" ) $nscope = 1;
++	if ( $scope =="month" ) $nscope = 2;
++	if ( $scope =="quarter" ) $nscope = 2;
++	if ( $scope == "day" ) $nscope = 3;
++	if ( $scope == "hour" ) $nscope = 4;
++	if ( $scope == "minute" ) $nscope = 5;
++	if ( $scope == "second" ) $nscope = 6;
++	
++	$dtm = getdate($time);
++	
++	$year = $nscope > 0 ? $dtm["year"] : 0;
++	$month = $nscope > 1 ? $dtm["mon"] : 1;
++	$day = $nscope > 2 ? $dtm["mday"] : 1;
++	$hour = $nscope > 3 ? $dtm["hours"] : 0;
++	$minute = $nscope > 4 ? $dtm["minutes"] : 0;
++	$second = $nscope > 5 ? $dtm["seconds"] : 0;
++
++	if ($scope == "quarter")
++	{
++		if ( ( $month == 2 ) || ( $month == 3 ) )
++			$month = 1;
++		elseif ( ( $month == 5 ) || ( $month == 6 ) )
++			$month = 4;
++		elseif ( ( $month == 8 ) || ( $month == 9 ) )
++			$month = 7;
++		elseif ( ( $month == 11 ) || ( $month == 12 ) )
++			$month = 10;
++	}
++			
++	$newtime = mktime( $hour, $minute, $second, $month, $day, $year );
++
++	return $newtime;
++}
++
++function isSameTimeframeUnix($date1, $date2, $scope)
++{
++	$same = false;
++	$date1_mysql = getMysqlTimestamp($date1);
++	$date2_mysql = getMysqlTimestamp($date2);
++
++	if ($scope == "year")
++		$same = (substr($date1_mysql, 0, 4) == substr($date2_mysql, 0, 4) );
++	elseif ($scope == "quarter")
++		$same = ( (substr($date1_mysql, 0, 4) == substr($date2_mysql, 0, 4) ) &&
++			( intval(substr($date1_mysql, 4, 2) / 3) == intval(substr($date2_mysql, 4, 2) / 3) ) );
++	elseif ($scope == "month")
++		$same = (substr($date1_mysql, 0, 6) == substr($date2_mysql, 0, 6) );
++	elseif ($scope == "day")
++		$same = (substr($date1_mysql, 0, 8) == substr($date2_mysql, 0, 8) );
++	elseif ($scope == "hour")
++		$same = (substr($date1_mysql, 0, 10) == substr($date2_mysql, 0, 10) );
++	elseif ($scope == "minute")
++		$same = (substr($date1_mysql, 0, 12) == substr($date2_mysql, 0, 12) );
++	elseif ($scope == "second")
++		$same = (substr($date1_mysql, 0, 14) == substr($date2_mysql, 0, 14) );
++	return $same;
++}
++
++function getSecondsThisTimeframe($date, $scope)
++{
++	$timeframe_begin = resetUnixTimestamp($date, $scope);
++	$timeframe_end = offsetUnixTimestamp($timeframe_begin, 1, $scope);
++	
++	return ( $timeframe_end - $timeframe_begin );
++}
++
++// Gets the number of seconds - cannot do months or years because of different # of days in a month and leap year.
++function getSeconds($days, $hours, $minutes, $seconds)
++{
++	return ( $seconds + ($minutes*60) + ($hours*60*60) + ($days*60*60*24) );
++}
++?>
+\ No newline at end of file
+diff -Naur phpAdsNew-rc2/vitalstats_gen.php phpadsnew_live/vitalstats_gen.php
+--- phpAdsNew-rc2/vitalstats_gen.php	1970-01-01 01:00:00.000000000 +0100
++++ phpadsnew_live/vitalstats_gen.php	2003-03-09 00:10:11.000000000 +0000
+@@ -0,0 +1,279 @@
++<?php // $Revision: 1.1 $
++
++/************************************************************************/
++/* phpAdsNew 2                                                          */
++/* ===========                                                          */
++/*                                                                      */
++/* Copyright (c) 2000-2002 by the phpAdsNew developers                  */
++/* For more information visit: http://www.phpadsnew.com                 */
++/*                                                                      */
++/* This program is free software. You can redistribute it and/or modify */
++/* it under the terms of the GNU General Public License as published by */
++/* the Free Software Foundation; either version 2 of the License.       */
++/************************************************************************/
++
++// Figure out our location
++define ('awrz_path', '.');
++define ('phpAds_path', '.');
++
++// Start Timer
++require (phpAds_path.'/classes/PageTimer.php');
++$awrz_PageTimer = new PageTimer( 'vitalstats_gen.php' );
++$awrz_PageTimer->start();
++
++/*********************************************************/
++/* Include required files                                */
++/*********************************************************/
++
++require	(phpAds_path."/config.inc.php");
++require (phpAds_path."/libraries/lib-io.inc.php");
++require (phpAds_path."/libraries/lib-db.inc.php");
++
++require (awrz_path."/awrz_config.inc.php");
++require (awrz_path."/libraries/lib-utilities-date.inc.php");
++
++if (phpAds_dbConnect())
++{
++	// Some Hard Coded Values that are needed for calculations later.  This must be edited by hand.
++	// At some point, we could put this into the database...
++	
++	// The date and time that the service launched (MySQL Timestamp format)
++	$service_launch_date = 20030305033026;
++	
++	// Outage details (MySQLDate_TimeInSeconds)
++	$outage = array();
++	$outage[] = "20030305034243_".getSeconds(0,3,45,04);
++
++	// Forecast current and future Awarez prices
++	$prices = array();
++	$prices[] = "0.18_0";
++	$prices[] = "0.17_50000000";
++	$prices[] = "0.15_100000000";
++	$prices[] = "0.12_250000000";
++	$prices[] = "0.10_500000000";
++	$prices[] = "0.08_1000000000";
++	$prices[] = "0.07_99999999999";
++
++	// The current time...
++	$now_unix = time();
++	$service_launch_date_unix = getUnixTimestamp($service_launch_date);
++
++	// Get the number of ads per second.
++	$ad_delivery_second_current = computeDeliveryPerTimeframe($now_unix, "second");
++
++	// Get the number of ads this month.
++	$ad_delivery_month_current = computeDeliveryPerTimeframe($now_unix, "month");
++
++	// Get the number of ads last month.
++	$ad_delivery_month_last = computeDeliveryPerTimeframe( offsetUnixTimestamp($now_unix, -1, "month"), "month" );
++
++	// Forecast number of ads this month.
++	$ad_delivery_month_forecast = forecastDeliveryPerTimeframe($now_unix, $ad_delivery_month_current, getSeconds(7,0,0,0), "month");
++	
++	// Calculate availability total
++	$service_launch_uptime_total = computeUptimePerTimeframe($now_unix, $outage, $service_launch_date_unix);
++
++	// Calculate availability in the past year
++	$service_launch_uptime_year = computeUptimePerTimeframe($now_unix, $outage, $service_launch_date_unix, "year");
++
++	// Calculate availability in the past month
++	$service_launch_uptime_month = computeUptimePerTimeframe($now_unix, $outage, $service_launch_date_unix, "month");
++
++	// Get the last service outage date
++	getOutageData($now_unix, $outage, $service_outage_date_last_unix, $service_outage_length_last);
++	
++	// Get number of days since last outage
++	$service_uptime_days = intval( ($now_unix - $service_outage_date_last_unix + $service_outage_length_last ) / getSeconds(1, 0, 0, 0) );
++
++	// Get pricing information
++	getPricingInformation($ad_delivery_month_last, $prices, $ad_price_current, $ad_price_current_tier, $ad_price_next, $ad_price_next_tier);
++	
++	// Forecast the number of days until we hit the next tier
++	// Take the average increase in the amount of ads per day this month.
++	$ad_price_next_days = 9999;
++	if ($ad_delivery_month_forecast > $ad_delivery_month_last)
++	{
++		$thismonthbegin_unix = resetUnixTimestamp( $now_unix, "month" );
++		$nextmonthbegin_unix = offsetUnixTimestamp( $thismonthbegin_unix, 1, "month");
++		$days = ($nextmonthbegin_unix - $thismonthbegin_unix) / getSeconds(1,0,0,0);
++		$increase_per_day = ($ad_delivery_month_forecast - $ad_delivery_month_last) / $days;
++		$ad_price_next_days = ceil(($ad_price_next_tier - $ad_delivery_month_current) / $increase_per_day);
++	}
++	
++	if ($ad_price_next_days > 9999) $ad_price_next_days = 9999;
++	
++
++	// Determine page performances...
++	processFile(phpAds_path."/cache/timer-adlog.php.dat", $page_performance_ad);
++	processFile(phpAds_path."/cache/timer-stats-global-client.php.dat", $page_performance_admin);
++	processFile(phpAds_path."/cache/timer-report.php.dat", $page_performance_report);
++	processFile(phpAds_path."/cache/timer-vitalstats_gen.php.dat", $page_performance_vitalstatsgen);
++	
++
++	// Now, Update the database with the new calculated information
++	$query = "
++			INSERT INTO ".$awrz_config['tbl_performance']."
++				(timestamp, ad_delivery_second_current, ad_delivery_month_last, ad_delivery_month_current, ad_delivery_month_forecast, ad_price_current, ad_price_current_tier, ad_price_next, ad_price_next_tier, ad_price_next_days, service_launch_date, service_launch_uptime_total, service_launch_uptime_year, service_launch_uptime_month, service_outage_date_last, service_outage_length_last, service_uptime_days, page_performance_ad, page_performance_admin, page_performance_report, page_performance_vitalstatsgen)
++  			VALUES
++				(NOW(), ".$ad_delivery_second_current.", ".$ad_delivery_month_last.", ".$ad_delivery_month_current.", ".$ad_delivery_month_forecast.", ".$ad_price_current.", ".$ad_price_current_tier.", ".$ad_price_next.", ".$ad_price_next_tier.", ".$ad_price_next_days.", ".getMysqlTimestamp($service_launch_date_unix).", ".$service_launch_uptime_total.", ".$service_launch_uptime_year.", ".$service_launch_uptime_month.", ".getMysqlTimestamp($service_outage_date_last_unix).", ".$service_outage_length_last.", ".$service_uptime_days.", ".$page_performance_ad.", ".$page_performance_admin.", ".$page_performance_report.", ".$page_performance_vitalstatsgen.")
++	";
++	
++	phpAds_dbQuery($query);
++	
++	
++}
++else
++{
++	echo('DB Problem');
++}
++
++phpAds_dbClose();
++
++function getPricingInformation($num_delivered, $prices, &$ad_price_current, &$ad_price_current_tier, &$ad_price_next, &$ad_price_next_tier)
++{
++	$count = count($prices);
++	
++	for ($i = 0; $i < $count; $i++)
++	{
++		$index = strpos($prices[$i], "_");
++		$price = substr($prices[$i], 0, $index);
++		$tier = substr($prices[$i], $index + 1);
++		
++		if ($num_delivered < $tier)
++		{
++			$ad_price_current = $last_price;
++			$ad_price_current_tier = $last_tier;
++			$ad_price_next = $price;
++			$ad_price_next_tier = $tier;
++			break;
++		}
++		else
++		{
++			$last_price = $price;
++			$last_tier = $tier;
++		}
++	}
++}
++
++function computeDeliveryPerTimeframe($time_unix, $scope)
++{
++	global $phpAds_config;
++	
++	$thistimeframebegin_unix = resetUnixTimestamp($time_unix, $scope);
++	$nexttimeframebegin_unix = offsetUnixTimestamp( $thistimeframebegin_unix, 1, $scope);
++
++	$query =
++		"SELECT ".
++		"COUNT(*) AS cnt ".
++		"FROM ".$phpAds_config['tbl_adviews']." ".
++		"WHERE t_stamp >= '".getMysqlTimestamp($thistimeframebegin_unix)."' ".
++ 		"AND t_stamp < '".getMysqlTimestamp($nexttimeframebegin_unix)."'";
++ 	
++	$result = phpAds_dbQuery($query);
++	$row = phpAds_dbFetchArray($result);
++	
++	return $row['cnt'];
++}
++
++function forecastDeliveryPerTimeframe($time_unix, $ad_delivery_current, $seconds, $scope)
++{
++	global $phpAds_config;
++	
++	$offset_time_unix = offsetUnixTimestamp( $time_unix, -$seconds, "second");
++	
++	$query = 
++		"SELECT ".
++		"COUNT(*) AS cnt ".
++		"FROM ".$phpAds_config['tbl_adviews']." ".
++		"WHERE t_stamp >= '".getMysqlTimestamp($offset_time_unix)."' ".
++ 		"AND t_stamp < '".getMysqlTimestamp($time_unix)."'";
++
++ 	$result = phpAds_dbQuery($query);
++	$row = phpAds_dbFetchArray($result);
++	$offsetcount = $row['cnt'];
++
++	// Now, get the rate per second
++	$rate = $offsetcount / $seconds;
++
++	// Find out how many seconds are left in this timeframe
++	$nexttimeframebegin_unix = offsetUnixTimestamp(resetUnixTimestamp($time_unix, $scope), 1, $scope);
++	$seconds = $nexttimeframebegin_unix - $time_unix;
++
++	return ( $ad_delivery_current + intval($rate * $seconds) );
++}
++
++function computeUptimePerTimeframe($time_unix, $outage, $launch_date_unix, $scope="total")
++{
++	// Numer of seconds in this timeframe.
++	$end_time_unix = $time_unix;
++	$start_time_unix = ( $scope == "total" ? $launch_date_unix : offsetUnixTimestamp($time_unix, -1, $scope) );
++	if ($start_time_unix < $launch_date_unix) $start_time_unix = $launch_date_unix;
++	
++	$total_seconds = $end_time_unix - $start_time_unix;
++	$total_downtime_seconds = 0;
++	$downtime_date_unix = $launch_date_unix;
++	$downtime_seconds = 0;
++
++	$count = count($outage);
++	for ($i = 0; $i < $count; $i++)
++	{
++		$index = strpos($outage[$i], "_");
++		$downtime_date_unix = getUnixTimestamp(substr($outage[$i], 0, $index));
++		$downtime_seconds = substr($outage[$i], $index + 1);
++
++		if ( ($downtime_date_unix >= $start_time_unix) && ($downtime_date_unix < $end_time_unix) )
++			$total_downtime_seconds += $downtime_seconds;
++	}
++	
++	return ( ( $total_seconds - $total_downtime_seconds ) / $total_seconds );
++}
++
++// Gets the most recent outage date since the $time_unix
++function getOutageData($time_unix, $outage, &$date, &$length)
++{
++	$date = false;
++	$length = false;
++	$count = count($outage);
++	for ($i=0; $i<$count; $i++)
++	{
++		$outageItem = $outage[$count - $i - 1];
++		$index = strpos($outageItem, "_");
++		$downtime_date_unix = getUnixTimestamp(substr($outageItem, 0, $index));
++		$downtime_seconds = substr($outageItem, $index + 1);
++		
++		if ($downtime_date_unix < $time_unix)
++		{
++			$date = $downtime_date_unix;
++			$length = $downtime_seconds;
++			break;
++		}
++	}
++}
++	
++function processFile($filename, &$avg)
++{
++	$total = 0;
++	if (file_exists($filename))
++	{
++		$timings = file($filename);
++		$count = count($timings);
++		for ($i=0; $i<$count; $i++)
++		{
++			$index = strpos($timings[$i], "|");
++			$time = substr($timings[$i], $index + 1);
++			$total += $time;
++		}
++	}
++	else
++	{
++		touch($filename);
++	}
++	
++	$avg = $count > 0 ? $total / $count : $total;
++}
++
++// Stop Page Timer
++$awrz_PageTimer->stop();
++$awrz_PageTimer->log();
++
++?>
+diff -Naur phpAdsNew-rc2/vitalstats.php phpadsnew_live/vitalstats.php
+--- phpAdsNew-rc2/vitalstats.php	1970-01-01 01:00:00.000000000 +0100
++++ phpadsnew_live/vitalstats.php	2003-03-09 00:10:11.000000000 +0000
+@@ -0,0 +1,109 @@
++<?php // $Revision: 1.1 $
++
++/************************************************************************/
++/* phpAdsNew 2                                                          */
++/* ===========                                                          */
++/*                                                                      */
++/* Copyright (c) 2000-2002 by the phpAdsNew developers                  */
++/* For more information visit: http://www.phpadsnew.com                 */
++/*                                                                      */
++/* This program is free software. You can redistribute it and/or modify */
++/* it under the terms of the GNU General Public License as published by */
++/* the Free Software Foundation; either version 2 of the License.       */
++/************************************************************************/
++
++// Figure out our location
++define ('awrz_path', '.');
++define ('phpAds_path', '.');
++
++/*********************************************************/
++/* Include required files                                */
++/*********************************************************/
++
++require	(phpAds_path."/config.inc.php"); 
++require (phpAds_path."/libraries/lib-io.inc.php");
++require (phpAds_path."/libraries/lib-db.inc.php");
++
++require (awrz_path."/awrz_config.inc.php");
++require (awrz_path."/libraries/lib-utilities-date.inc.php");
++
++if (phpAds_dbConnect())
++{
++	$query = "SELECT * FROM ".$awrz_config['tbl_performance']." ORDER BY timestamp DESC LIMIT 1";
++  	$result = phpAds_dbQuery($query);
++  	$row = phpAds_dbFetchArray($result);
++  	echo('DB Success!');
++}
++else
++{
++	echo('DB Problem');
++}
++
++phpAds_dbClose();
++
++$data_date = $row['timestamp'];
++
++$ad_delivery_second_current = $row['ad_delivery_second_current'];
++$ad_delivery_month_current = $row['ad_delivery_month_current'];
++$ad_delivery_month_forecast = $row['ad_delivery_month_forecast'];
++$ad_delivery_month_last = $row['ad_delivery_month_last'];
++
++$ad_price_current = $row['ad_price_current'];
++$ad_price_current_tier = $row['ad_price_current_tier'];
++$ad_price_next = $row['ad_price_next'];
++$ad_price_next_tier = $row['ad_price_next_tier'];
++$ad_price_next_days = $row['ad_price_next_days'];
++
++$service_launch_date = $row['service_launch_date'];
++$service_launch_uptime_total = $row['service_launch_uptime_total'];
++$service_launch_uptime_year = $row['service_launch_uptime_year'];
++$service_launch_uptime_month = $row['service_launch_uptime_month'];
++$service_outage_date_last = $row['service_outage_date_last'];
++$service_outage_length_last = $row['service_outage_length_last'];
++$service_uptime_days = $row['service_uptime_days'];
++
++$page_performance_ad = $row['page_performance_ad'];
++$page_performance_admin = $row['page_performance_admin'];
++$page_performance_report = $row['page_performance_report'];
++$page_performance_vitalstatsgen = $row['page_performance_vitalstatsgen'];
++
++$unixTimestamp = getUnixTimestamp($data_date);
++$currentMonth = date("F, y", $unixTimestamp);
++$lastMonth = date("F, y", offsetUnixTimestamp($unixTimestamp, -1, "month"));
++?>
++
++<html>
++<body>
++<h1>Vital Statistics</h1>(Generated <?php echo(date("D M j G:i:s T Y", getUnixTimestamp($data_date))) ?>)
++<table border="1" cellpadding="3">
++	<tr><td colspan="2" align="center"><h2>Ad Delivery Statistics</h2></td></tr>
++	<tr><td align="right">Current ad delivery rate:</td><td align="right"><?php echo($ad_delivery_second_current) ?> per second</tr>
++	<tr><td align="right">Total ads delivered in <?php echo($lastMonth) ?>:</td><td align="right"><?php echo(number_format($ad_delivery_month_last)) ?></td></tr>
++	<tr><td align="right">Total ads delivered in <?php echo($currentMonth) ?> so far:</td><td align="right"><?php echo(number_format($ad_delivery_month_current)) ?></td></tr>
++	<tr><td align="right">Forecast ads delivered in <?php echo($currentMonth) ?>:</td><td align="right"><?php echo(number_format($ad_delivery_month_forecast)) ?></td></tr>
++
++	<tr><td colspan="2" align="center"><h2>Ad Pricing Information</h2></td></tr>
++	<tr><td align="right">Current ad delivery price:</td><td align="right">&pound;<?php echo($ad_price_current) ?></td></tr>
++	<tr><td align="right">Current ad delivery price tier:</td><td align="right"><?php echo(number_format($ad_price_current_tier)) ?></td></tr>
++	<tr><td align="right">Next tier for ad delivery price reduction:</td><td align="right"><?php echo(number_format($ad_price_next_tier)) ?></td></tr>
++	<tr><td align="right">Ad delivery price at that tier:</td><td align="right">&pound;<?php echo($ad_price_next) ?></td></tr>
++	<tr><td align="right">Forecast number of days to reach the next tier:</td><td align="right"><?php echo($ad_price_next_days) ?></td></tr>
++	
++	<tr><td colspan="2" align="center"><h2>Service Availability Information</h2></td></tr>
++	<tr><td align="right">Date/time Service Launched:</td><td align="right"><?php echo(date("D M j G:i:s T Y", getUnixTimestamp($service_launch_date))) ?></td></tr>
++	<tr><td align="right">Current uptime % since launch:</td><td align="right"><?php echo($service_launch_uptime_total*100) ?>%</td></tr>
++	<tr><td align="right">Current uptime % in the past year:</td><td align="right"><?php echo($service_launch_uptime_year*100) ?>%</td></tr>
++	<tr><td align="right">Current uptime % in the past month:</td><td align="right"><?php echo($service_launch_uptime_month*100) ?>%</td></tr>
++	<tr><td align="right">Date/time of last outage:</td><td align="right"><?php echo(date("D M j G:i:s T Y", getUnixTimestamp($service_outage_date_last))) ?></td></tr>
++	<tr><td align="right">Length of last outage:</td><td align="right"><?php echo($service_outage_length_last / getSeconds(0,1,0,0)) ?> hours</td></tr>
++	<tr><td align="right">Length of time since last outage:</td><td align="right"><?php echo($service_uptime_days) ?> days</td></tr>
++	
++	<tr><td colspan="2" align="center"><h2>Service Performance Information</h2></td></tr>
++	<tr><td align="right">Average Amount of time per ad delivery:</td><td align="right"><?php echo($page_performance_ad) ?> seconds</td></tr>
++	<tr><td align="right">Average amount of time per statistics summary page:</td><td align="right"><?php echo($page_performance_admin) ?> seconds</td></tr>
++	<tr><td align="right">Average amount of time per report:</td><td align="right"><?php echo($page_performance_report) ?> seconds</td></tr>
++	<tr><td align="right">Average amount of time to generate these stats:</td><td align="right"><?php echo($page_performance_vitalstatsgen) ?> seconds</td></tr>
++</table>
++
++</body>
++</html>
