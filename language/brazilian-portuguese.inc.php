@@ -1,4 +1,4 @@
-<?php // $Revision: 1.12 $
+<?php // $Revision: 1.13 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -236,5 +236,5 @@ $GLOBALS['strNoDaysBetweenReports']		= "Number of days between reports";
 $GLOBALS['strDays']						= "Days";
 $GLOBALS['strHistory']					= "History";
 $GLOBALS['strAverage']					= "Average";
-
+$GLOBALS['strDuplicateClientName']		= "The username you provided already exists, please enter a different username.";
 ?>

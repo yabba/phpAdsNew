@@ -1,4 +1,4 @@
-<?php // $Revision: 1.25 $
+<?php // $Revision: 1.26 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -242,4 +242,6 @@ $GLOBALS['strViewsClicksLow']			= "Verf&uuml;gbare AdViews oder AdClicks sehr ni
 $GLOBALS['strDays']						= "Days";
 $GLOBALS['strHistory']					= "History";
 $GLOBALS['strAverage']					= "Average";
+$GLOBALS['strDuplicateClientName']		= "The username you provided already exists, please enter a different username.";
+
 ?>
