@@ -1,4 +1,4 @@
-<?php // $Revision: 1.16 $
+<?php // $Revision: 1.17 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -246,6 +246,8 @@ function phpAds_GenerateInvocationCode()
 		$path = str_replace ('\\', '/', $path);
 		$root = getenv('DOCUMENT_ROOT');
 		$pos  = strpos ($path, $root);
+		
+		if (!isset($clientid) || $clientid == '') $clientid = 0;
 		
 		
 		if (is_int($pos) && $pos == 0)
