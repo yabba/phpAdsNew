@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -25,6 +25,8 @@ mt_srand(floor((isset($n) ? hexdec($n[0].$n[2].$n[3].$n[4].$n[5]): 1000000) * (d
 function view_raw($what, $clientid=0, $target='', $source='', $withtext=0, $context=0)
 {
 	global $phpAds_config;
+	
+	$outputbuffer = '';
 	
 	
 	// Include the need sub-libraries
@@ -59,8 +61,8 @@ function view_raw($what, $clientid=0, $target='', $source='', $withtext=0, $cont
 	
 	// Get one valid banner
 	$row = phpAds_fetchBanner($what, $clientid, $context, $source);
-	
-	
+
+
 	if (is_array($row) && $row['bannerid'] != '')
 	{
 		// Get HTML cache
