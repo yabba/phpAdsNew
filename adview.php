@@ -1,4 +1,4 @@
-<?php // $Revision: 1.32 $
+<?php // $Revision: 1.33 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -211,7 +211,7 @@ if ($found)
 				phpAds_setCookie ("phpAds_banner[".$n."]", serialize($cookie), 0);
 				phpAds_flushCookie ();
 				
-				header 	  ("Location: ".$row['imageurl']);
+				header 	  ("Location: ".str_replace('{url_prefix}', $phpAds_config['url_prefix'], $row['imageurl']));
 			}
 			else
 			{
