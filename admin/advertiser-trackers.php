@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -238,10 +238,23 @@ while ($row_trackers = phpAds_dbFetchArray($res_trackers))
 
 if (phpAds_dbNumRows($res_trackers) > 0)
 {
+//	echo "\t\t\t\t<tr height='1'>\n";
+//	echo "\t\t\t\t\t<td colspan='4' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td>\n";
+//	echo "\t\t\t\t</tr>\n";
+//}
+
+//if (isset($campaigns) && count($campaigns))
+//{
 	echo "\t\t\t\t<tr height='1'>\n";
-	echo "\t\t\t\t\t<td colspan='4' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td>\n";
+	echo "\t\t\t\t\t<td colspan='4' bgcolor='#888888'><img src='images/break-el.gif' height='1' width='100%'></td>\n";
+	echo "\t\t\t\t</tr>\n";
+	echo "\t\t\t\t<tr height='25'>\n";
+	echo "\t\t\t\t\t<td colspan='4' height='25' align='".$phpAds_TextAlignRight."'>";
+	echo "<img src='images/icon-recycle.gif' border='0' align='absmiddle'>&nbsp;<a href='tracker-delete.php?clientid=".$clientid."&returnurl=advertiser-trackers.php'".phpAds_DelConfirm($strConfirmDeleteAllTrackers).">$strDeleteAllTrackers</a>&nbsp;&nbsp;";
+	echo "</td>\n";
 	echo "\t\t\t\t</tr>\n";
 }
+
 
 echo "\t\t\t\t</table>\n";
 echo "\t\t\t\t<br><br>\n";

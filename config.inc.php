@@ -1,10 +1,5 @@
 <?php
 
-// IMPORTANT! DO NOT MANUALLY EDIT THIS FILE! 
-// IF YOU WANT TO INSTALL PHPADSNEW PLEASE FOLLOW 
-// THE INSTRUCTIONS IN THE ADMINISTRATOR GUIDE.
-
-
 /*********************************************************/
 /* Database configuration                                */
 /*********************************************************/
@@ -25,21 +20,26 @@ $phpAds_config['dbpassword'] = '';
 $phpAds_config['dbname'] = '';
 
 // Database table names
-$phpAds_config['tbl_adviews'] = 'phpads_adviews';
+$phpAds_config['tbl_acls'] = 'phpads_acls';
 $phpAds_config['tbl_adclicks'] = 'phpads_adclicks';
 $phpAds_config['tbl_adconversions'] = 'phpads_adconversions';
 $phpAds_config['tbl_adstats'] = 'phpads_adstats';
-$phpAds_config['tbl_banners'] = 'phpads_banners';
-$phpAds_config['tbl_clients'] = 'phpads_clients';
-$phpAds_config['tbl_session'] = 'phpads_session';
-$phpAds_config['tbl_acls'] = 'phpads_acls';
-$phpAds_config['tbl_zones'] = 'phpads_zones';
-$phpAds_config['tbl_config'] = 'phpads_config';
+$phpAds_config['tbl_adviews'] = 'phpads_adviews';
 $phpAds_config['tbl_affiliates'] = 'phpads_affiliates';
-$phpAds_config['tbl_images'] = 'phpads_images';
-$phpAds_config['tbl_userlog'] = 'phpads_userlog';
+$phpAds_config['tbl_banners'] = 'phpads_banners';
 $phpAds_config['tbl_cache'] = 'phpads_cache';
-$phpAds_config['tbl_targetstats'] = 'tbl_targetstats';
+$phpAds_config['tbl_campaigns'] = 'phpads_campaigns';
+$phpAds_config['tbl_campaigns_trackers'] = 'phpads_campaigns_trackers';
+$phpAds_config['tbl_clients'] = 'phpads_clients';
+$phpAds_config['tbl_config'] = 'phpads_config';
+$phpAds_config['tbl_conversionlog'] = 'phpads_conversionlog';
+$phpAds_config['tbl_conversionrules'] = 'phpads_conversionrules';
+$phpAds_config['tbl_images'] = 'phpads_images';
+$phpAds_config['tbl_session'] = 'phpads_session';
+$phpAds_config['tbl_targetstats'] = 'phpads_targetstats';
+$phpAds_config['tbl_trackers'] = 'phpads_trackers';
+$phpAds_config['tbl_userlog'] = 'phpads_userlog';
+$phpAds_config['tbl_zones'] = 'phpads_zones';
 
 // Database table name prefix
 $phpAds_config['table_prefix'] = 'phpads_';
@@ -65,10 +65,6 @@ $phpAds_config['compatibility_mode'] = false;
 
 // The URL to your phpAds-installation
 $phpAds_config['url_prefix'] = 'http://www.your-url.com/phpAdsNew';
-
-// The Language of the Interface (eg. english, german, spanish) 
-// for the right string look for the directory name in the language subdirectory
-$phpAds_config['language'] = 'english';
 
 // Is the admin interface enabled
 $phpAds_config['ui_enabled'] = true;
@@ -143,16 +139,16 @@ $phpAds_config['block_adviews'] = 0;
 $phpAds_config['block_adclicks'] = 0;
 
 // Block logging of conversions for xx seconds after the last entry
-// This is to prevent users from boosting the stats by refreshing page
+// This is to prevent users from boosting the stats by clicking multiple times
 $phpAds_config['block_adconversions'] = 0;
 
-// E-mail admin when clicks/views get low?
+// E-mail admin when views/clicks/conversions get low?
 $phpAds_config['warn_admin'] = true;
 
-// E-mail client when clicks/views get low?
+// E-mail client when views/clicks/conversions get low?
 $phpAds_config['warn_client'] = true;
 
-// Minimum clicks/views before warning e-mail is sent
+// Minimum views/clicks/conversions before warning e-mail is sent
 $phpAds_config['warn_limit'] = 100; 
 
 
@@ -211,7 +207,6 @@ $phpAds_config['type_html_auto'] = true;
 // Allow php expressions to be executed from within a 
 // HTML banner
 $phpAds_config['type_html_php'] = false;
-
 
 
 

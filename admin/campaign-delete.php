@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -41,7 +41,22 @@ function phpAds_DeleteCampaign($campaignid)
 	
 	// Delete Campaign
 	$res = phpAds_dbQuery("DELETE FROM ".$phpAds_config['tbl_campaigns'].
-		" WHERE campaignid = '".$campaignid."'"
+		" WHERE campaignid=".$campaignid
+	) or phpAds_sqlDie();
+	
+	// Delete Campaign/Tracker links
+	$res = phpAds_dbQuery("DELETE FROM ".$phpAds_config['tbl_campaigns_trackers'].
+		" WHERE campaignid=".$campaignid
+	) or phpAds_sqlDie();
+	
+	// Delete Conversions Logged to this Campaign
+	$res = phpAds_dbQuery("DELETE FROM ".$phpAds_config['tbl_conversionlog'].
+		" WHERE campaignid=".$campaignid
+	) or phpAds_sqlDie();
+	
+	// Delete any conversion rules to this Campaign
+	$res = phpAds_dbQuery("DELETE FROM ".$phpAds_config['tbl_conversionrules'].
+		" WHERE campaignid=".$campaignid
 	) or phpAds_sqlDie();
 	
 	
@@ -74,7 +89,7 @@ function phpAds_DeleteCampaign($campaignid)
 		
 		
 		// Delete stats for each banner
-		phpAds_deleteStats($row['bannerid']);
+		phpAds_deleteStatsByBannerID($row['bannerid']);
 	}
 	
 	

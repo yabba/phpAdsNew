@@ -1,4 +1,4 @@
-<?php // $Revision: 2.7 $
+<?php // $Revision: 2.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -340,7 +340,7 @@ function phpAds_buildBannerName ($bannerid, $description = '', $alt = '', $limit
 /* Fetch the banner name from the database               */
 /*********************************************************/
 
-function phpAds_getBannerName ($bannerid, $limit = 30, $id = true)
+function phpAds_getBannerName ($bannerid, $limit = 30, $id = true, $checkanonymous = false)
 {
 	global $phpAds_config;
 	global $bannerCache;
@@ -363,6 +363,28 @@ function phpAds_getBannerName ($bannerid, $limit = 30, $id = true)
 		$row = phpAds_dbFetchArray($res);
 		
 		$bannerCache[$bannerid] = $row;
+	}
+	
+	if ($checkanonymous)
+	{
+		if  (!isset($row['anonymous']) || $row['anonymous'] = '')
+		{
+			$anonres = phpAds_dbQuery(
+				"SELECT anonymous".
+				" FROM ".$phpAds_config['tbl_campaigns'].
+				",".$phpAds_config['tbl_banners'].
+				" WHERE ".$phpAds_config['tbl_campaigns'].".campaignid=".$phpAds_config['tbl_banners'].".campaignid".
+				" AND ".$phpAds_config['tbl_banners'].".bannerid=".$bannerid
+			);
+			
+			$anonrow = phpAds_dbFetchArray($anonres);
+			$anonymous = $anonrow['anonymous'];
+			$bannerCache[$bannerid]['anonymous'] = $anonymous;
+		}
+		else 
+			$anonymous = $row['anonymous'];
+		
+		
 	}
 	
 	if ($id)
@@ -717,15 +739,23 @@ function phpAds_buildCTR ($views, $clicks)
 /* Delete statistics							         */
 /*********************************************************/
 
-function phpAds_deleteStats($bannerid)
+function phpAds_deleteStatsByBannerID($bannerid)
 {
     global $phpAds_config;
 	
-    phpAds_dbQuery("DELETE FROM ".$phpAds_config['tbl_adviews']." WHERE bannerid = '$bannerid'") or phpAds_sqlDie();
-    phpAds_dbQuery("DELETE FROM ".$phpAds_config['tbl_adclicks']." WHERE bannerid = '$bannerid'") or phpAds_sqlDie();
-    phpAds_dbQuery("DELETE FROM ".$phpAds_config['tbl_adstats']." WHERE bannerid = '$bannerid'") or phpAds_sqlDie();
+    phpAds_dbQuery("DELETE FROM ".$phpAds_config['tbl_adclicks']." WHERE bannerid=".$bannerid) or phpAds_sqlDie();
+    phpAds_dbQuery("DELETE FROM ".$phpAds_config['tbl_adstats']." WHERE bannerid=".$bannerid) or phpAds_sqlDie();
+    phpAds_dbQuery("DELETE FROM ".$phpAds_config['tbl_adviews']." WHERE bannerid=".$bannerid) or phpAds_sqlDie();
+    phpAds_dbQuery("DELETE FROM ".$phpAds_config['tbl_conversionlog']." WHERE action_bannerid=".$bannerid) or phpAds_sqlDie();
 }
 
+function phpAds_deleteStatsByTrackerID($trackerid)
+{
+    global $phpAds_config;
+	
+    phpAds_dbQuery("DELETE FROM ".$phpAds_config['tbl_adconversions']." WHERE trackerid=".$trackerid) or phpAds_sqlDie();
+    phpAds_dbQuery("DELETE FROM ".$phpAds_config['tbl_conversionlog']." WHERE trackerid=".$trackerid) or phpAds_sqlDie();
+}
 
 /*********************************************************/
 /* Get overview statistics						         */

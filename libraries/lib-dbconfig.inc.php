@@ -1,4 +1,4 @@
-<?php // $Revision: 2.17 $
+<?php // $Revision: 2.18 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -18,8 +18,8 @@ define ('LIBDBCONFIG_INCLUDED', true);
 
 
 // Current phpAds version
-$phpAds_version = 200.163;
-$phpAds_version_readable = "2.0 RC 3";
+$phpAds_version = 200.164;
+$phpAds_version_readable = "2.1 Alpha 1";
 $phpAds_productname = "phpAdsNew";
 $phpAds_producturl = "www.phpadsnew.com";
 $phpAds_dbmsname = "MySQL";
@@ -44,6 +44,7 @@ $GLOBALS['phpAds_settings_information'] = array(
 	'tbl_clients' => 				array ('type' => 'string', 	'sql' => false),
 	'tbl_config' => 				array ('type' => 'string', 	'sql' => false),
 	'tbl_conversionlog' => 			array ('type' => 'string', 	'sql' => false),
+	'tbl_conversionrules' => 		array ('type' => 'string', 	'sql' => false),
 	'tbl_images' =>					array ('type' => 'string', 	'sql' => false),
 	'tbl_session' => 				array ('type' => 'string', 	'sql' => false),
 	'tbl_targetstats' => 			array ('type' => 'string', 	'sql' => false),

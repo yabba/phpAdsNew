@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -72,7 +72,7 @@ function phpAds_DeleteBanner($bannerid)
 		") or phpAds_sqlDie();
 	
 	// Delete statistics for this banner
-	phpAds_deleteStats($bannerid);
+	phpAds_deleteStatsByBannerID($bannerid);
 }
 
 if (isset($bannerid) && $bannerid != '')

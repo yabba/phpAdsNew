@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -36,7 +36,7 @@ phpAds_checkAccess(phpAds_Admin);
 if (isset($bannerid) && $bannerid != '')
 {
     // Delete stats for this banner
-	phpAds_deleteStats($bannerid);
+	phpAds_deleteStatsByBannerID($bannerid);
 	
 	// Return to campaign statistics
 	Header("Location: stats-campaign-banners.php?clientid=".$clientid."&campaignid=".$campaignid);
@@ -59,7 +59,7 @@ elseif (isset($campaignid) && $campaignid != '')
 	while ($row = phpAds_dbFetchArray($idresult))
 	{
 		// Delete stats for the banner
-		phpAds_deleteStats($row['bannerid']);
+		phpAds_deleteStatsByBannerID($row['bannerid']);
 	}
 	
 	// Return to campaign statistics
@@ -86,7 +86,7 @@ elseif (isset($clientid) && $clientid != '')
 	while ($row = phpAds_dbFetchArray($idresult))
 	{
 		// Delete stats for the banner
-		phpAds_deleteStats($row['bannerid']);
+		phpAds_deleteStatsByBannerID($row['bannerid']);
 	}
 	
 	// Return to campaign statistics

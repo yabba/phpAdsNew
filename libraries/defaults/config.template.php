@@ -33,6 +33,7 @@ $phpAds_config['tbl_campaigns_trackers'] = 'phpads_campaigns_trackers';
 $phpAds_config['tbl_clients'] = 'phpads_clients';
 $phpAds_config['tbl_config'] = 'phpads_config';
 $phpAds_config['tbl_conversionlog'] = 'phpads_conversionlog';
+$phpAds_config['tbl_conversionrules'] = 'phpads_conversionrules';
 $phpAds_config['tbl_images'] = 'phpads_images';
 $phpAds_config['tbl_session'] = 'phpads_session';
 $phpAds_config['tbl_targetstats'] = 'phpads_targetstats';

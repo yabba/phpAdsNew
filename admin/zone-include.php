@@ -1,4 +1,4 @@
-<?php // $Revision: 2.6 $
+<?php // $Revision: 2.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -1112,7 +1112,7 @@ function phpAds_showZoneBanners ($width, $height, $what, $zonetype, $delivery)
 						// Name
 						if (phpAds_isUser(phpAds_Admin))
 						{
-							echo "<a href='banner-edit.php?clientid=".$campaign['clientid']."&campaignid=".$campaign['campaign']."&bannerid=".$banner['bannerid']."'>"."\n";
+							echo "<a href='banner-edit.php?clientid=".$campaign['clientid']."&campaignid=".$campaign['campaignid']."&bannerid=".$banner['bannerid']."'>"."\n";
 							echo $name."</a></td>"."\n";
 						}
 						else

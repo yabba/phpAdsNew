@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -596,7 +596,7 @@ $unique_names = array();
 $res = phpAds_dbQuery(
 	"SELECT *".
 	" FROM ".$phpAds_config['tbl_clients'].
-	" WHERE clientid != ".$clientid.
+	" WHERE clientid != ".$clientid
 );
 
 while ($row = phpAds_dbFetchArray($res))

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.2 $
+<?php // $Revision: 1.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -85,7 +85,7 @@ if (isset($clientid) && $clientid != '')
 			
 			
 			// Delete stats for each banner
-			phpAds_deleteStats($row['bannerid']);
+			phpAds_deleteStatsByBannerID($row['bannerid']);
 		}
 		
 		

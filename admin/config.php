@@ -1,4 +1,4 @@
-<?php // $Revision: 2.8 $
+<?php // $Revision: 2.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -112,16 +112,25 @@ if ($phpAds_config['language'] != 'english' && file_exists(phpAds_path.'/languag
 
 
 // Register variables
-phpAds_registerGlobal ('bannerid', 'campaignid', 'clientid',
-					   'zoneid', 'affiliateid', 'userlogid', 'day');
+phpAds_registerGlobal (
+	 'affiliateid'
+	,'bannerid'
+	,'campaignid'
+	,'clientid'
+	,'day'
+	,'trackerid'
+	,'userlogid'
+	,'zoneid'
+);
 
-if (!isset($clientid))    $clientid = '';
-if (!isset($campaignid))  $campaignid = '';
-if (!isset($bannerid))    $bannerid = '';
-if (!isset($zoneid))   	  $zoneid = '';
-if (!isset($affiliateid)) $affiliateid = '';
-if (!isset($userlogid))   $userlogid = '';
-if (!isset($day))		  $day = '';
+if (!isset($affiliateid))	$affiliateid = '';
+if (!isset($bannerid))		$bannerid = '';
+if (!isset($campaignid))	$campaignid = '';
+if (!isset($clientid))		$clientid = '';
+if (!isset($day))			$day = '';
+if (!isset($trackerid))		$trackerid = '';
+if (!isset($userlogid))		$userlogid = '';
+if (!isset($zoneid))		$zoneid = '';
 
 
 // Setup navigation

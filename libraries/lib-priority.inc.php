@@ -1,4 +1,4 @@
-<?php // $Revision: 2.9 $
+<?php // $Revision: 2.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -1329,4 +1329,3 @@ function phpAds_PriorityGetGaussianProfile($days_running)
 
 
 ?>
-

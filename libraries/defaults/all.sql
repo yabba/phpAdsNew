@@ -13,24 +13,6 @@ CREATE TABLE phpads_acls (
 );
 
 
--- Table structure for table 'phpads_affiliates'
-
-
-CREATE TABLE phpads_affiliates (
-   affiliateid mediumint(9) NOT NULL AUTO_INCREMENT,
-   name varchar(255) NOT NULL,
-   contact varchar(255),
-   email varchar(64) NOT NULL,
-   website varchar(255),   
-   username varchar(64),
-   password varchar(64),
-   permissions mediumint(9),
-   language varchar(64),
-   publiczones enum('t','f') DEFAULT 'f' NOT NULL,
-   PRIMARY KEY (affiliateid)
-);
-
-
 -- Table structure for table 'phpads_adclicks'
 
 
@@ -95,6 +77,24 @@ CREATE TABLE phpads_adviews (
    KEY bannerid_date (bannerid,t_stamp),
    KEY date (t_stamp),
    KEY cookie (cookieid)
+);
+
+
+-- Table structure for table 'phpads_affiliates'
+
+
+CREATE TABLE phpads_affiliates (
+   affiliateid mediumint(9) NOT NULL AUTO_INCREMENT,
+   name varchar(255) NOT NULL,
+   contact varchar(255),
+   email varchar(64) NOT NULL,
+   website varchar(255),   
+   username varchar(64),
+   password varchar(64),
+   permissions mediumint(9),
+   language varchar(64),
+   publiczones enum('t','f') DEFAULT 'f' NOT NULL,
+   PRIMARY KEY (affiliateid)
 );
 
 
@@ -164,6 +164,8 @@ CREATE TABLE phpads_campaigns (
    target int(11) DEFAULT '0' NOT NULL,   
    optimise enum('t','f') DEFAULT 'f' NOT NULL,
    anonymous enum('t','f') DEFAULT 'f' NOT NULL,
+   statslastday date DEFAULT '0000-00-00' NOT NULL,
+   statslasthour tinyint(4) DEFAULT '0' NOT NULL,
    PRIMARY KEY (campaignid)
 );
 
@@ -267,6 +269,8 @@ CREATE TABLE phpads_config (
    auto_clean_tables_vacuum enum('t','f') DEFAULT 't',
    autotarget_factor float DEFAULT '-1',
    maintenance_timestamp int(11) DEFAULT '0',
+   statslastday date DEFAULT '0000-00-00' NOT NULL,
+   statslasthour tinyint(4) DEFAULT '0' NOT NULL,
    PRIMARY KEY (configid)
 );
 
@@ -275,12 +279,14 @@ CREATE TABLE phpads_config (
 
 
 CREATE TABLE phpads_conversionlog (
-   conversionlogid mediumint(9) NOT NULL DEFAULT 0,
+   conversionlogid mediumint(9) NOT NULL AUTO_INCREMENT,
    campaignid mediumint(9) DEFAULT '0' NOT NULL,
+   trackerid mediumint(9) DEFAULT '0' NOT NULL,
    cookieid varchar(32) NOT NULL,
    t_stamp timestamp(14),
    host varchar(255) NOT NULL,
    country char(2) NOT NULL,
+   conversiontype enum('active','passive') NULL,
    action enum('view','click') NULL,
    action_bannerid mediumint(9) DEFAULT '0' NOT NULL,
    action_zoneid mediumint(9) DEFAULT '0' NOT NULL,
@@ -288,6 +294,19 @@ CREATE TABLE phpads_conversionlog (
    action_host varchar(255) NOT NULL,
    action_source varchar(50) NOT NULL,
    action_country char(2) NOT NULL,
+);
+
+
+-- Table structure for table 'phpads_conversionrules'
+
+
+CREATE TABLE phpads_conversionrules (
+   conversionruleid mediumint(9) NOT NULL AUTO_INCREMENT,
+   campaignid mediumint(9) DEFAULT '0' NOT NULL,
+   conversiontype enum('active','passive') NULL,
+   action enum('view','click') NULL,
+   delay_seconds mediumint(9) DEFAULT '0' NOT NULL,
+   PRIMARY KEY (conversionruleid)
 );
 
 
