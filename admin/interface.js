@@ -1,4 +1,4 @@
-// $Revision: 1.5 $
+// $Revision: 1.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -99,6 +99,20 @@ function search_window(keyword, where)
 		SearchWindow.location.href = path;
 		SearchWindow.focus();
 	}
+}
+
+
+
+/*********************************************************/
+/* Focus the first field of the login screen             */
+/*********************************************************/
+
+function login_focus()
+{
+	if (document.login.phpAds_username.value == '')
+		document.login.phpAds_username.focus();
+	else
+		document.login.phpAds_password.focus();
 }
 
 
