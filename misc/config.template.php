@@ -151,7 +151,7 @@ $phpAds_config['type_html_php'] = false;
 /* phpPgAds self configuration code - don't change       */
 /*********************************************************/
 
-define('phpAds_installed', false);
+define('phpAds_installed', true);
 
 // Disable magic_quotes_runtime
 set_magic_quotes_runtime(0);
