@@ -1,4 +1,4 @@
-<?php // $Revision: 2.8 $
+<?php // $Revision: 2.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -95,14 +95,14 @@ $extra .= "\t\t\t\t<select name='moveto' style='width: 110;'>\n";
 if (phpAds_isUser(phpAds_Admin))
 {
 	$query = "SELECT clientid,clientname".
-	" FROM ".$phpAds_config['tbl_clients'].
+		" FROM ".$phpAds_config['tbl_clients'].
 		" WHERE clientid!=".$clientid;
 }
 elseif (phpAds_isUser(phpAds_Agency))
 {
 	$query = "SELECT clientid,clientname".
 		" FROM ".$phpAds_config['tbl_clients'].
-		" WHERE clientid!=".$clientid;
+		" WHERE clientid!=".$clientid.
 		" AND agencyid=".phpAds_getUserID();
 }
 $res = phpAds_dbQuery($query)
@@ -366,7 +366,7 @@ else
 			echo "<tr height='25'><td colspan='2'>".($banners[$bkey]['url'] != '' ? $banners[$bkey]['url'] : '-')."</td></tr>";
 			
 			if ($phpAds_config['use_keywords'])
-			echo "<tr height='15'><td colspan='2'>".$strKeyword.": ".($banners[$bkey]['keyword'] != '' ? $banners[$bkey]['keyword'] : '-')."</td></tr>";
+				echo "<tr height='15'><td colspan='2'>".$strKeyword.": ".($banners[$bkey]['keyword'] != '' ? $banners[$bkey]['keyword'] : '-')."</td></tr>";
 			
 			if ($banners[$bkey]['storagetype'] == 'txt')
 				echo "<tr height='25'><td width='50%'>".$strSize.": -</td>";
