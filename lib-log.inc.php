@@ -1,4 +1,4 @@
-<?php // $Revision: 1.15 $
+<?php // $Revision: 1.16 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -130,7 +130,7 @@ function phpads_logCheckHost()
 			return false;
 	}
 	
-	return $phpAds_config['reverse_lookup'] ? $REMOTE_HOST : $REMOTE_ADDR;
+	return $REMOTE_HOST;
 }
 
 
