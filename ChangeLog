@@ -7,6 +7,10 @@ CVS			+ Added P3P Privacy Policies support
 			+ Added expiration details to campaign index  (Niels)
 			+ Added URL prefix and scrolling=no  (Niels)
 			+ Added search capabilities  (Niels and Tobi Schulz)
+			+ Changed default names of tables, added prefix to 
+			  avoid conflicts with other products  (Niels)
+			+ Rearanged directory structure for the manual, to make room
+			  for the german translation provided by René Friedrich  (Niels)
 
 
 v 2.0beta5		+ Added override setting for automatic GD detection  (Niels)
