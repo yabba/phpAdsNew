@@ -1,4 +1,4 @@
-<?php // $Revision: 1.36 $
+<?php // $Revision: 1.37 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -176,7 +176,7 @@ if (isset($submit))
 			}
 			else
 			{
-				Header("Location: client-index.php");
+				Header("Location: client-campaigns.php?clientid=$clientid");
 				exit;
 			}
 		}
@@ -258,7 +258,7 @@ if ($clientid != "")
 		
 		phpAds_PageHeader("4.1.2");
 			echo "<img src='images/icon-client.gif' align='absmiddle'>&nbsp;<b>".phpAds_getClientName($clientid)."</b><br><br><br>";
-			phpAds_ShowSections(array("4.1.2"));
+			phpAds_ShowSections(array("4.1.2", "4.1.3"));
 	}
 	else
 	{

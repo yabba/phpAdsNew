@@ -1,4 +1,4 @@
-<?php // $Revision: 1.2 $
+<?php // $Revision: 1.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -42,6 +42,6 @@ if (isset($campaignid) && $campaignid != '')
 	}
 }
 
-Header ("Location: ".$returnurl."?campaignid=".$campaignid);
+Header ("Location: ".$returnurl."?clientid=".$moveto."&campaignid=".$campaignid);
 
 ?>
