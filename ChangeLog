@@ -4,6 +4,9 @@ CVS			+ Added P3P Privacy Policies support
 			  - Sending Policy location using P3P header  (Niels)
 			  - Sending Compact Policy using P3P header for cookie evaluation  (Niels)
 
+			+ Added expiration details to campaign index  (Niels)
+			+ Added URL prefix and scrolling=no  (Niels)
+
 
 v 2.0beta5		+ Added override setting for automatic GD detection  (Niels)
 			+ Added support for passing ISMAP click location  (Niels)
