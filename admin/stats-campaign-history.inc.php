@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -205,7 +205,7 @@ if ($totalviews > 0 || $totalclicks > 0)
 }
 
 echo "<tr>";
-echo "<form action='".$GLOBALS['PHP_SELF']."'>";
+echo "<form action='stats-campaign.php'>";
 echo "<td height='35' colspan='4' align='right'>";
 	echo $strHistory.":&nbsp;&nbsp;";
 	echo "<input type='hidden' name='campaignID' value='$campaignID'>";
