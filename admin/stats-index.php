@@ -1,4 +1,4 @@
-<?php // $Revision: 1.7 $
+<?php // $Revision: 1.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -367,7 +367,7 @@ if (isset($clients) && is_array($clients) && count($clients) > 0)
 			echo "&nbsp;<img src='images/spacer.gif' height='16' width='16'>&nbsp;";
 			
 		echo "<img src='images/icon-client.gif' align='absmiddle'>&nbsp;";
-		echo $client['clientname'];
+		echo "<a href='stats-client.php?clientID=".$client['clientID']."'>".$client['clientname']."</a>";
 		echo "</td>";
 		
 		// ID
@@ -599,8 +599,6 @@ if (isset($clients) && is_array($clients) && count($clients) > 0)
 <? } ?>
 
 <br><br>
-
-
 
 <?
 
