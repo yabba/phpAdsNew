@@ -1,4 +1,4 @@
-<?php // $Revision: 1.28 $
+<?php // $Revision: 1.29 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -154,7 +154,7 @@ if ($found)
 			$row['url']      = str_replace ('{timestamp}', time(), $row['url']);
 			
 			// Determine cachebuster
-			if (eregi ('\{random(:([1-9])){0,1}\}', $row['filename'], $matches))
+			if (eregi ('\{random(:([1-9])){0,1}\}', $row['imageurl'], $matches))
 			{
 				if ($matches[1] == "")
 					$randomdigits = 8;
