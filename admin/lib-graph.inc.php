@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -39,6 +39,7 @@ function legend($im, $x, $y, $text, $fillcolor, $outlinecolor, $textcolor)
 
 $i=0;
 $total=0;
+$total2=0;
 $max=0;
 
 $count=array();

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -15,8 +15,8 @@
 
 
 // Define constants
-define (phpAds_Clicks, 1);
-define (phpAds_Views, 2);
+define ("phpAds_Clicks", 1);
+define ("phpAds_Views", 2);
 
 
 

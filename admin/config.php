@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -31,6 +31,10 @@ phpAds_Start();
 
 // Load language strings
 require ("../language/$phpAds_language.inc.php");
+
+
+if (!isset($clientID)) $clientID='';
+if (!isset($bannerID)) $bannerID='';
 
 
 // Setup navigation
