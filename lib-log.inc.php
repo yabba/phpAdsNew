@@ -1,4 +1,4 @@
-<?php // $Revision: 1.18 $
+<?php // $Revision: 1.19 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -135,14 +135,18 @@ function phpads_logCheckHost()
 	if (count($phpAds_config['ignore_hosts']))
 	{
 		$hosts = "(".implode ('|',$phpAds_config['ignore_hosts']).")$";
-		$hosts = str_replace (".", '\.', $hosts);
-		$hosts = str_replace ("*", '[^.]+', $hosts);
 		
-		if (eregi($hosts, $REMOTE_ADDR))
-			return false;
-		
-		if (eregi($hosts, $REMOTE_HOST))
-			return false;
+		if ($hosts != '')
+		{
+			$hosts = str_replace (".", '\.', $hosts);
+			$hosts = str_replace ("*", '[^.]+', $hosts);
+			
+			if (eregi($hosts, $REMOTE_ADDR))
+				return false;
+			
+			if (eregi($hosts, $REMOTE_HOST))
+				return false;
+		}
 	}
 	
 	return $REMOTE_HOST;
