@@ -1,4 +1,4 @@
-<?php // $Revision: 1.14 $
+<?php // $Revision: 1.15 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -300,8 +300,8 @@ function phpAds_GenerateInvocationCode($zoneid)
 	// Popup
 	if ($codetype=='popup')
 	{
-		if (isset($popunder) && $popunder == 'true')
-			$parameters[] = "popunder=true";
+		if (isset($popunder) && $popunder == '1')
+			$parameters[] = "popunder=1";
 		
 		if (isset($left) && $left != '' && $left != '-')
 			$parameters[] = "left=".$left;
