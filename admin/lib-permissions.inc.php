@@ -1,11 +1,11 @@
-<?php // $Revision: 1.30 $
+<?php // $Revision: 1.31 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
 /* ===========                                                          */
 /*                                                                      */
-/* Copyright (c) 2001 by Niels Leenheer                                 */
-/* http://sourceforge.net/projects/phpadsnew                            */
+/* Copyright (c) 2000-2002 by the phpAdsNew developers                  */
+/* For more information visit: http://www.phpadsnew.com                 */
 /*                                                                      */
 /* This program is free software. You can redistribute it and/or modify */
 /* it under the terms of the GNU General Public License as published by */

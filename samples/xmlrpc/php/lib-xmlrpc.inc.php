@@ -1,15 +1,11 @@
-<?php // $Revision: 1.2 $
+<?php // $Revision: 1.3 $
 
 /************************************************************************/
 /* phpAdsNew                                                            */
 /* =========                                                            */
 /*                                                                      */
 /* Copyright (c) 1999,2000,2001 Edd Dumbill                             */
-/* http://sourceforge.net/projects/phpadsnew                            */
-/*                                                                      */
-/*                                                                      */
-/*                                                                      */
-/*                                                                      */
+/* For more information visit: http://www.phpadsnew.com                 */
 /************************************************************************/
 
 

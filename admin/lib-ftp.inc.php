@@ -1,15 +1,11 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
 /* ===========                                                          */
 /*                                                                      */
 /* Copyright (c) 2001 by TOMO <groove@spencernetwork.org>               */
-/* http://sourceforge.net/projects/phpadsnew                            */
-/*                                                                      */
-/*                                                                      */
-/*                                                                      */
-/*                                                                      */
+/* For more information visit: http://www.phpadsnew.com                 */
 /************************************************************************/
 
 
