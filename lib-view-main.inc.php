@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -110,7 +110,7 @@ function view_raw($what, $clientid=0, $target='', $source='', $withtext=0, $cont
 				else
 					$randomdigits = 8;
 				
-				if ($lastdigits == $randomdigits)
+				if (isset($lastdigits) && $lastdigits == $randomdigits)
 					$randomnumber = $lastrandom;
 				else
 				{
