@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -30,6 +30,6 @@ phpAds_checkAccess(phpAds_Admin);
 
 phpAds_RebuildZoneCache ();
 
-Header("Location: zone-index.php");
+Header("Location: affiliate-index.php");
 
 ?>
