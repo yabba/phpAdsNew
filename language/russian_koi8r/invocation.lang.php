@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -105,6 +105,11 @@ $GLOBALS['strLimited']				= "Ограничено";
 $GLOBALS['strLeftMargin']			= "Левое поле";
 $GLOBALS['strRightMargin']			= "Правое поле";
 $GLOBALS['strTransparentBackground']		= "Прозрачный фон";
+
+$GLOBALS['strSmoothMovement']           = "Плавное движение";
+$GLOBALS['strHideNotMoving']            = "Спрятать баннер когда курсор не движется";
+$GLOBALS['strHideDelay']                        = "Задержка перед сокрытием баннера";
+$GLOBALS['strHideTransparancy']         = "Прозрачность спрятанного баннера";
 
 
 $GLOBALS['strAdLayerStyleName']	= array(
