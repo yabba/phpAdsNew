@@ -1,4 +1,4 @@
-<?php // $Revision: 1.12 $
+<?php // $Revision: 1.13 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -105,6 +105,11 @@ $GLOBALS['strLimited']				= "Limited";
 $GLOBALS['strLeftMargin']			= "Left margin";
 $GLOBALS['strRightMargin']			= "Right margin";
 $GLOBALS['strTransparentBackground']		= "Transparent background";
+
+$GLOBALS['strSmoothMovement']		= "Smooth movement";
+$GLOBALS['strHideNotMoving']		= "Hide the banner when the cursor is not moving";
+$GLOBALS['strHideDelay']			= "Delay before banner is hidden";
+$GLOBALS['strHideTransparancy']		= "Transparancy of the hidden banner";
 
 
 $GLOBALS['strAdLayerStyleName']	= array(
