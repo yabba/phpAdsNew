@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -169,7 +169,7 @@ echo "<br><br>";
 echo "<table border='0' width='100%' cellpadding='0' cellspacing='0'>";	
 
 echo "<tr height='25'>";
-echo "<td height='25'><b>&nbsp;&nbsp;<a href='client-campaigns.php?clientid=".$clientid."&listorder=name'>".$GLOBALS['strName']."</a>";
+echo "<td height='25' width='40%'><b>&nbsp;&nbsp;<a href='client-campaigns.php?clientid=".$clientid."&listorder=name'>".$GLOBALS['strName']."</a>";
 
 if (($listorder == "name") || ($listorder == ""))
 {
@@ -255,7 +255,7 @@ else
 		echo "<td height='25'>".$campaigns[$ckey]['clientid']."</td>";
 		
 		// Button 1
-		echo "<td height='25'>";
+		echo "<td height='25' align='".$phpAds_TextAlignRight."'>";
 		if ($campaigns[$ckey]['expand'] == '1' || !isset($campaigns[$ckey]['banners']))
 			echo "<a href='banner-edit.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['clientid']."'><img src='images/icon-banner-stored.gif' border='0' align='absmiddle' alt='$strCreate'>&nbsp;$strCreate</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 		else
@@ -263,12 +263,12 @@ else
 		echo "</td>";
 		
 		// Button 2
-		echo "<td height='25'>";
-		echo "<a href='campaign-index.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['clientid']."'><img src='images/icon-overview.gif' border='0' align='absmiddle' alt='$strOverview'>&nbsp;$strOverview</a>&nbsp;&nbsp;";
+		echo "<td height='25' align='".$phpAds_TextAlignRight."'>";
+		echo "<a href='campaign-index.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['clientid']."'><img src='images/icon-overview.gif' border='0' align='absmiddle' alt='$strOverview'>&nbsp;$strOverview</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 		echo "</td>";
 		
 		// Button 3
-		echo "<td height='25'>";
+		echo "<td height='25' align='".$phpAds_TextAlignRight."'>";
 		echo "<a href='campaign-delete.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['clientid']."&returnurl=client-campaigns.php'".phpAds_DelConfirm($strConfirmDeleteCampaign)."><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 		echo "</td></tr>";
 		
@@ -333,7 +333,7 @@ else
 				echo "<td>&nbsp;</td>";
 				
 				// Button 2
-				echo "<td height='25'>";
+				echo "<td height='25' align='".$phpAds_TextAlignRight."'>";
 				if ($phpAds_config['acl'])
 					echo "<a href='banner-acl.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['clientid']."&bannerid=".$banners[$bkey]['bannerid']."'><img src='images/icon-acl.gif' border='0' align='absmiddle' alt='$strACL'>&nbsp;$strACL</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 				else
@@ -341,7 +341,7 @@ else
 				echo "</td>";
 				
 				// Button 3
-				echo "<td height='25'>";
+				echo "<td height='25' align='".$phpAds_TextAlignRight."'>";
 				echo "<a href='banner-delete.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['clientid']."&bannerid=".$banners[$bkey]['bannerid']."&returnurl=client-campaigns.php'".phpAds_DelConfirm($strConfirmDeleteBanner)."><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 				echo "</td></tr>";
 			}
@@ -378,9 +378,12 @@ else
 	}
 }
 
-echo "<tr height='25'><td colspan='3' height='25'>";
-echo "<img src='images/icon-recycle.gif' border='0' align='absmiddle'>&nbsp;<a href='campaign-delete.php?clientid=".$clientid."&returnurl=client-campaigns.php'".phpAds_DelConfirm($strConfirmDeleteAllCampaigns).">$strDeleteAllCampaigns</a>&nbsp;&nbsp;";
-echo "</td></tr>";
+if (count($campaigns))
+{
+	echo "<tr height='25'><td colspan='3' height='25'>";
+	echo "<img src='images/icon-recycle.gif' border='0' align='absmiddle'>&nbsp;<a href='campaign-delete.php?clientid=".$clientid."&returnurl=client-campaigns.php'".phpAds_DelConfirm($strConfirmDeleteAllCampaigns).">$strDeleteAllCampaigns</a>&nbsp;&nbsp;";
+	echo "</td></tr>";
+}
 
 echo "</table>";
 echo "<br><br>";
