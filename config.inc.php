@@ -60,6 +60,10 @@ $phpAds_name = "";
 // Company Name
 $phpAds_company_name = "mysite.com";
 
+// Override detected GD imageformat
+// If phpAdsNew fails to auto-detect the right imageformat you
+// can specify the right imageformat. Possible values are: none, png, jpeg, gif
+$phpAds_override_GD_imageformat = "";
 
 
 /*********************************************************/
