@@ -1,4 +1,4 @@
-<?php // $Revision: 2.16 $
+<?php // $Revision: 2.17 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -250,6 +250,7 @@ if (phpAds_isUser(phpAds_Admin))
 				$phpAds_config['tbl_adstats']    = $installvars['tbl_adstats']    = $table_prefix.'adstats';
 				$phpAds_config['tbl_adviews']    = $installvars['tbl_adviews']    = $table_prefix.'adviews';
 				$phpAds_config['tbl_adclicks']   = $installvars['tbl_adclicks']   = $table_prefix.'adclicks';
+				$phpAds_config['tbl_adconversions']   = $installvars['tbl_adconversions']   = $table_prefix.'adconversions';
 				$phpAds_config['tbl_acls'] 	     = $installvars['tbl_acls'] 	  = $table_prefix.'acls';
 				$phpAds_config['tbl_session']    = $installvars['tbl_session']    = $table_prefix.'session';
 				$phpAds_config['tbl_zones'] 	 = $installvars['tbl_zones'] 	  = $table_prefix.'zones';
@@ -315,6 +316,7 @@ if (phpAds_isUser(phpAds_Admin))
 							phpAds_SettingsWriteAdd('tbl_adstats', $installvars['tbl_adstats']);
 							phpAds_SettingsWriteAdd('tbl_adviews', $installvars['tbl_adviews']);
 							phpAds_SettingsWriteAdd('tbl_adclicks', $installvars['tbl_adclicks']);
+							phpAds_SettingsWriteAdd('tbl_adconversions', $installvars['tbl_adconversions']);
 							phpAds_SettingsWriteAdd('tbl_acls', $installvars['tbl_acls']);
 							phpAds_SettingsWriteAdd('tbl_session', $installvars['tbl_session']);
 							phpAds_SettingsWriteAdd('tbl_zones', $installvars['tbl_zones']);

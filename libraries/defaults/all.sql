@@ -66,11 +66,29 @@ CREATE TABLE phpads_zones (
 );
 
 
+-- Table structure for table 'phpads_adviews'
+
+
+CREATE TABLE phpads_adviews (
+   cookieid varchar(32) NOT NULL,
+   bannerid mediumint(9) DEFAULT '0' NOT NULL,
+   zoneid mediumint(9) DEFAULT '0' NOT NULL,
+   t_stamp timestamp(14),
+   host varchar(255) NOT NULL,
+   source varchar(50) NOT NULL,
+   country char(2) NOT NULL,
+   KEY bannerid_date (bannerid,t_stamp),
+   KEY date (t_stamp),
+   KEY cookie (cookieid)
+);
+
+
 
 -- Table structure for table 'phpads_adclicks'
 
 
 CREATE TABLE phpads_adclicks (
+   cookieid varchar(32) NOT NULL,
    bannerid mediumint(9) DEFAULT '0' NOT NULL,
    zoneid mediumint(9) DEFAULT '0' NOT NULL,
    t_stamp timestamp(14),
@@ -78,25 +96,26 @@ CREATE TABLE phpads_adclicks (
    source varchar(50) NOT NULL,
    country char(2) NOT NULL,
    KEY bannerid_date (bannerid,t_stamp),
-   KEY date (t_stamp)
+   KEY date (t_stamp),
+   KEY cookie (cookieid)
 );
 
 
+-- Table structure for table 'phpads_adconversions'
 
--- Table structure for table 'phpads_adviews'
 
-
-CREATE TABLE phpads_adviews (
-   bannerid mediumint(9) DEFAULT '0' NOT NULL,
+CREATE TABLE phpads_adconversions (
+   cookieid varchar(32) NOT NULL,
+   campaignid mediumint(9) DEFAULT '0' NOT NULL,
    zoneid mediumint(9) DEFAULT '0' NOT NULL,
    t_stamp timestamp(14),
    host varchar(255) NOT NULL,
    source varchar(50) NOT NULL,
    country char(2) NOT NULL,
-   KEY bannerid_date (bannerid,t_stamp),
-   KEY date (t_stamp)
+   KEY campaignid_date (campaignid,t_stamp),
+   KEY date (t_stamp),
+   KEY cookie (cookieid)
 );
-
 
 
 -- Table structure for table 'phpads_images'
