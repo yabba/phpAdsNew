@@ -1,4 +1,4 @@
-<?php // $Revision: 1.7 $
+<?php // $Revision: 1.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -36,7 +36,7 @@ phpAds_Start();
 
 
 // Load language strings
-require ("../language/$phpAds_language.inc.php");
+require ("../language/".strtolower($phpAds_language).".inc.php");
 
 
 if (!isset($clientID))   $clientID = '';
