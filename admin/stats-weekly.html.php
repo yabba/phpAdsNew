@@ -1,4 +1,4 @@
-<?php // $Revision: 1.16 $
+<?php // $Revision: 1.17 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -307,9 +307,9 @@ function stats()
 			$i++;
 		}
 		
-> 		if (!$ids)
-> 			$ids = '0';
-> 			
+		if (!$ids)
+			$ids = '0';
+			
 		if ($campaignid > 0) 
 			$where .= $ids.')';
 		
