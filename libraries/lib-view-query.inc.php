@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -204,13 +204,11 @@ function phpAds_buildQuery ($part, $lastpart, $precondition)
 					else
 					{
 						if ($operator == 'OR')
-							$conditions .= "OR ";
+							$conditions .= "OR CONCAT(' ',".$phpAds_config['tbl_banners'].".keyword,' ') LIKE '% $part_array[$k] %' ";
 						elseif ($operator == 'AND')
-							$conditions .= "AND ";
+							$conditions .= "AND CONCAT(' ',".$phpAds_config['tbl_banners'].".keyword,' ') LIKE '% $part_array[$k] %' ";
 						else
-							$conditions .= "AND NOT ";
-						
-						$conditions .= "CONCAT(' ',".$phpAds_config['tbl_banners'].".keyword,' ') LIKE '% $part_array[$k] %' ";
+							$conditions .= "AND CONCAT(' ',".$phpAds_config['tbl_banners'].".keyword,' ') NOT LIKE '% $part_array[$k] %' ";
 					}
 				}
 			}
