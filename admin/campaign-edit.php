@@ -1,4 +1,4 @@
-<?php // $Revision: 1.29 $
+<?php // $Revision: 1.30 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -168,11 +168,12 @@ if (isset($submit))
 			") or phpAds_sqlDie();
 	}
 	
-	if ($weight != $previousweight || $active != $previousactive)
-	{
-		require ("../lib-priority.inc.php");
-		phpAds_PriorityCalculate ();
-	}
+	
+	require ("../lib-priority.inc.php");
+	phpAds_PriorityCalculate ();
+	
+	require ("lib-zones.inc.php");
+	phpAds_RebuildZoneCache ();
 	
 	
 	Header("Location: campaign-zone.php?clientid=".$clientid."&campaignid=".$campaignid);
