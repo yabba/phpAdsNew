@@ -1,4 +1,4 @@
-<?php // $Revision: 1.48 $
+<?php // $Revision: 1.49 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -90,7 +90,7 @@ function get_banner($what, $clientID, $context=0, $source="", $allowhtml=true)
 				$phpAds_tbl_banners.clientID = $phpAds_tbl_clients.clientID";
 		
 		if($clientID != 0)
-			$select .= " AND $phpAds_tbl_banners.clientID = $clientID ";
+			$select .= " AND ($phpAds_tbl_clients.clientID = $clientID OR $phpAds_tbl_clients.parent = $clientID) ";
 		
 		if($allowhtml == false)
 			$select .= " AND $phpAds_tbl_banners.format != 'html' ";
@@ -193,11 +193,11 @@ function get_banner($what, $clientID, $context=0, $source="", $allowhtml=true)
 						if($what_array[$k]!="" && $what_array[$k]!=" ")
 						{
 							if ($operator == "OR")
-								$conditions .= "OR $phpAds_tbl_banners.clientID='".trim($what_array[$k])."' ";
+								$conditions .= "OR ($phpAds_tbl_clients.clientID='".trim($what_array[$k])."' OR $phpAds_tbl_clients.parent='".trim($what_array[$k])."') ";
 							elseif ($operator == "AND")
-								$conditions .= "AND $phpAds_tbl_banners.clientID='".trim($what_array[$k])."' ";
+								$conditions .= "AND ($phpAds_tbl_clients.clientID='".trim($what_array[$k])."' OR $phpAds_tbl_clients.parent='".trim($what_array[$k])."') ";
 							else
-								$conditions .= "AND $phpAds_tbl_banners.clientID!='".trim($what_array[$k])."' ";
+								$conditions .= "AND ($phpAds_tbl_clients.clientID!='".trim($what_array[$k])."' AND $phpAds_tbl_clients.parent!='".trim($what_array[$k])."') ";
 						}
 						
 						$onlykeywords = false;
@@ -283,20 +283,27 @@ function get_banner($what, $clientID, $context=0, $source="", $allowhtml=true)
 			if (@mysql_num_rows($res) == 0)
 			{
 				// No banner left, reset all banners in this category to 'unused', try again below
-				if (isset($conditions) && $conditions != "")
-					$del_select = "WHERE $conditions";
-				else
-					$del_select = "";
 				
-				if ($phpAds_random_retrieve == 2)
-					// Weight based sequential retrieval
-					$delete_select="UPDATE $phpAds_tbl_banners SET $phpAds_tbl_banners.seq=$phpAds_tbl_banners.weight ".$del_select;
-				else
-					// Normal sequential retrieval
-					$delete_select="UPDATE $phpAds_tbl_banners SET $phpAds_tbl_banners.seq=1 ".$del_select;
+				// Get all matching banners
+				$updateres = @db_query($select);
+				while ($update_row = @mysql_fetch_array($updateres))
+				{
+					if ($phpAds_random_retrieve == 2)
+					{
+						// Set banner seq to weight
+						$updateweight = $update_row['weight'] * $update_row['clientweight'];
+						$delete_select="UPDATE $phpAds_tbl_banners SET seq='$updateweight' WHERE bannerID='".$update_row['bannerID']."'";
+						@db_query($delete_select);
+					}
+					else
+					{
+						// Set banner seq to 1
+						$delete_select="UPDATE $phpAds_tbl_banners SET seq=1 WHERE bannerID='".$update_row['bannerID']."'";
+						@db_query($delete_select);
+					}
+				}
 				
-				@db_query($delete_select);
-				
+				// Set query to be used next to sequential banner retrieval
 				$select = $seq_select;
 			}
 			else
@@ -586,7 +593,7 @@ function view_raw($what, $clientID=0, $target="", $source="", $withtext=0, $cont
 				// Banner refered through URL
 				
 				// Determine cachebuster
-				if (eregi ("\{random(:([1-9])){0,1}\}", $row['banner'], $matches))
+				if (eregi ('\{random(:([1-9])){0,1}\}', $row['banner'], $matches))
 				{
 					if ($matches[1] == "")
 						$randomdigits = 8;
@@ -661,6 +668,10 @@ function view_raw($what, $clientID=0, $target="", $source="", $withtext=0, $cont
 			}
 			
 			$outputbuffer .= "<a href='$phpAds_default_banner_target'$target><img src='$phpAds_default_banner_url' border='0'></a>";
+			
+			return( array("html" => $outputbuffer, 
+						  "bannerID" => '')
+				  );
 		}
 	}
 	
