@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -351,7 +351,7 @@ if ($type == 'c')
 		
 		echo "<tr><td height='25' bgcolor='$bgcolor'>&nbsp;";
 
-		$flag = ($key == '' || $key == 'A1' || $ket == 'A2') 'unknown' : strtolower($key);
+		$flag = ($key == '' || $key == 'A1' || $ket == 'A2') ? 'unknown' : strtolower($key);
 		echo "<img src='images/flags/".$flag.".gif' width='19' height'11'>&nbsp;".($key != '' ? $phpAds_ISO3166[$key] : $strUnknown);
 
 		echo "</td>";
