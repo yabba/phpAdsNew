@@ -1,4 +1,4 @@
-<?php // $Revision: 1.27 $
+<?php // $Revision: 1.28 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -83,8 +83,6 @@ if (isset($message))
 	phpAds_ShowMessage($message);
 }
 
-echo "<br><br>";
-echo "<br><br>";
 echo "<br><br>";
 
 
