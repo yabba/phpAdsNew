@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -70,7 +70,7 @@ function phpAds_formUpdate(obj)
 		if ((val == '' || val == '-' || val == 'http://') && obj.validateReq == true)
 			err = true;
 		
-		if (err == false && val != '')
+		if (obj.validateCheck && err == false && val != '')
 		{
 			if (obj.validateCheck == 'url' &&
 				val.substr(0,7) != 'http://' && 

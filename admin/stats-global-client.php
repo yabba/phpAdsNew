@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -32,7 +32,14 @@ phpAds_checkAccess(phpAds_Admin);
 /* HTML framework                                        */
 /*********************************************************/
 
-phpAds_PageHeader("2.1");
+$extra  = "<br><br><br>";
+$extra .= "<b>$strMaintenance</b><br>";
+$extra .= "<img src='images/break.gif' height='1' width='160' vspace='4'><br>";
+$extra .= "<a href='stats-reset.php?all=true'".phpAds_DelConfirm($strConfirmResetStats).">";
+$extra .= "<img src='images/".$phpAds_TextDirection."/icon-undo.gif' align='absmiddle' border='0'>&nbsp;$strResetStats</a>";
+$extra .= "<br><br>";
+
+phpAds_PageHeader("2.1", $extra);
 phpAds_ShowSections(array("2.1", "2.4", "2.2", "2.5"));
 
 
@@ -283,6 +290,9 @@ if (isset($campaigns) && is_array($campaigns) && count($campaigns) > 0)
 	reset ($campaigns);
 	while (list ($ckey, $campaign) = each ($campaigns))
 	{
+		if (!isset($campaign['banners']))
+			$campaign['banners'] = array();
+		
 		if ($hideinactive == false || $campaign['active'] == 't' && 
 		   (count($campaign['banners']) != 0 || count($campaign['banners']) == $campaign['count']))
 			$clients[$campaign['parent']]['campaigns'][$ckey] = $campaign;
@@ -297,11 +307,16 @@ if (isset($clients) && is_array($clients) && count($clients) > 0)
 {
 	reset ($clients);
 	while (list ($key, $client) = each ($clients))
-		if (isset($client['campaigns']) && count($client['campaigns']) == 0 && $client['hideinactive'] > 0)
+	{
+		if (!isset($client['campaigns']))
+			$client['campaigns'] = array();
+		
+		if (count($client['campaigns']) == 0 && $client['hideinactive'] > 0)
 		{
 			$clientshidden++;
 			unset($clients[$key]);
 		}
+	}
 }
 
 
@@ -356,8 +371,7 @@ if (isset($clients) && is_array($clients) && count($clients) > 0)
 	unset ($banners);
 }
 
-
-if ($totalviews > 0 || $totalclicks > 0)
+if ($clientshidden > 0 || $totalviews > 0 || $totalclicks > 0)
 {
 	echo "<br><br>";
 	echo "<table border='0' width='100%' cellpadding='0' cellspacing='0'>";	
@@ -640,10 +654,6 @@ if ($totalviews > 0 || $totalclicks > 0)
 		echo "<td height='25' align='".$phpAds_TextAlignRight."'>".$ctr."&nbsp;&nbsp;</td></tr>";
 		echo "<tr height='1'><td colspan='5' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
 	
-	
-	echo "<tr height='25'><td colspan='5' height='25'>";
-	echo "&nbsp;&nbsp;<img src='images/".$phpAds_TextDirection."/icon-undo.gif' align='absmiddle'>&nbsp;<a href='stats-reset.php?all=true'".phpAds_DelConfirm($strConfirmResetStats).">$strResetStats</a>&nbsp;&nbsp;&nbsp;&nbsp;";
-	echo "</td></tr>";
 	echo "</table>";
 	echo "<br><br>";
 }

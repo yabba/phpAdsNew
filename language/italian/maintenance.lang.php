@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -59,6 +59,9 @@ $GLOBALS['strDeliveryCacheSharedMem']		= "
 ";
 $GLOBALS['strDeliveryCacheDatabase']		= "
 	Per memorizzare la cache di consegna &egrave; utilizzato il database.
+";
+$GLOBALS['strDeliveryCacheFiles']		= "
+	Per memorizzare la cache di consegna sono utilizzati dei file sul server.
 ";
 
 
