@@ -1,4 +1,4 @@
-<?php // $Revision: 1.26 $
+<?php // $Revision: 1.27 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -150,9 +150,7 @@ $extra .= "</form>";
 
 
 
-$sections = array ("4.1.3.4.2");
-if ($phpAds_config['acl']) $sections[] = "4.1.3.4.3";
-$sections[] = "4.1.3.4.4";
+$sections = array ("4.1.3.4.2", "4.1.3.4.3", "4.1.3.4.4");
 
 phpAds_PageHeader("4.1.3.4.4", $extra);
 	echo "<img src='images/icon-client.gif' align='absmiddle'>&nbsp;".phpAds_getParentName($campaignid);
