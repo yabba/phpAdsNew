@@ -1,4 +1,4 @@
-<?php // $Revision: 1.23 $
+<?php // $Revision: 1.24 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -174,7 +174,7 @@ $GLOBALS['strTrackerImage'] = "Tracker-Bild:";
 
 // New strings for version 2
 $GLOBALS['strNavigation'] 				= "Navigation";
-$GLOBALS['strShortcuts'] 				= "Shortcuts"; 	### Don't know any translation for this, so I just leaved it - Repsak
+$GLOBALS['strShortcuts'] 				= "Schnellnavigation";
 $GLOBALS['strDescription'] 				= "Beschreibung";
 $GLOBALS['strClients'] 					= "Kunden";
 $GLOBALS['strID']				 		= "ID";
@@ -201,41 +201,41 @@ $GLOBALS['strShowClientsInactive']		= "Kunden mit inaktiven Banner anzeigen";
 $GLOBALS['strSize']						= "Gr&ouml;&szlig;e";
 
 $GLOBALS['strMonth'] 					= array("Januar", "Februar", "M&auml;rz", "April", "Mai", "Juni", "July", "August", "September", "Oktober", "November", "Dezember");
-$GLOBALS['strDontExpire']				= "Diesen Kunden nicht an einem Ablaufdatum deaktivieren";
-$GLOBALS['strActivateNow'] 				= "Kunden sofort aktivieren";
+$GLOBALS['strDontExpire']				= "Diesen Kampagne nicht an einem Ablaufdatum deaktivieren";
+$GLOBALS['strActivateNow'] 				= "Kampagnen sofort aktivieren";
 $GLOBALS['strExpirationDate']			= "Ablaufdatum";
 $GLOBALS['strActivationDate']			= "Aktivierungsdatum";
 
 $GLOBALS['strMailClientDeactivated'] 	= "Ihr Banner wurden deaktiviert, weil";
 $GLOBALS['strMailNothingLeft'] 			= "Sollten Sie weiterhin auf unserer Website Werbung schalten möchten, dann kontaktieren Sie uns. Wir freuen uns darauf wieder von Ihnen zu hören.";
-$GLOBALS['strClientDeactivated']		= "Dieser Kunde ist zur Zeit nicht aktiviert, weil";
+$GLOBALS['strClientDeactivated']		= "Dieser Kampagne ist zur Zeit nicht aktiviert, weil";
 $GLOBALS['strBeforeActivate']			= "das Aktivierungsdatum noch nicht erreicht wurde";
 $GLOBALS['strAfterExpire']				= "das Ablaufdatum erreicht wurde";
 $GLOBALS['strNoMoreClicks']				= "die Zahl der gekauften AdClicks erreicht wurde";
 $GLOBALS['strNoMoreViews']				= "die Zahl der gekauften AdViews erreicht wurde";
 
-$GLOBALS['strBanners'] 					= "Banners";
-$GLOBALS['strCampaigns']				= "Campaigns";
-$GLOBALS['strCampaign']					= "Campaign";
+$GLOBALS['strBanners'] 					= "Banner";
+$GLOBALS['strCampaigns']				= "Kampagnen";
+$GLOBALS['strCampaign']					= "Kampagne";
 $GLOBALS['strName']						= "Name";
-$GLOBALS['strBannersWithoutCampaign']	= "Banners without a campaign";
-$GLOBALS['strMoveToNewCampaign']		= "Move to a new campaign";
-$GLOBALS['strCreateNewCampaign']		= "Create new campaign";
-$GLOBALS['strEditCampaign']				= "Edit campaign";
-$GLOBALS['strEdit']						= "Edit";
-$GLOBALS['strCreate']					= "Create";
-$GLOBALS['strUntitled']					= "Untitled";
+$GLOBALS['strBannersWithoutCampaign']	= "Banner ohne Kampagne";
+$GLOBALS['strMoveToNewCampaign']		= "Zu einer anderen Kampagne verschieben";
+$GLOBALS['strCreateNewCampaign']		= "Neue Kampagne erstellen";
+$GLOBALS['strEditCampaign']				= "Kampagne bearbeiten";
+$GLOBALS['strEdit']						= "Bearbeiten";
+$GLOBALS['strCreate']					= "Erstellen";
+$GLOBALS['strUntitled']					= "Unbenannt";
 
-$GLOBALS['strTotalCampaigns'] 			= "Total campaigns";
-$GLOBALS['strActiveCampaigns'] 			= "Active campaigns";
+$GLOBALS['strTotalCampaigns'] 			= "Gesamtzahl Kampagnen";
+$GLOBALS['strActiveCampaigns'] 			= "Aktive Kampagnen";
 
-$GLOBALS['strLinkedTo']					= "linked to";
-$GLOBALS['strNoViewLoggedInInterval']   = "No views were logged in the last {interval} days";
-$GLOBALS['strNoClickLoggedInInterval']  = "No clicks were logged in the last {interval} days";
-$GLOBALS['strSendAdvertisingReport']	= "Send an advertising report via e-mail";
-$GLOBALS['strNoDaysBetweenReports']		= "Number of days between reports";
-$GLOBALS['strSendDeactivationWarning']  = "Send a warning when a campaign is deactivated";
+$GLOBALS['strLinkedTo']					= "verkn&uuml;pft mit";
+$GLOBALS['strNoViewLoggedInInterval']   = "Es wurden keine AdViews in den letzten {interval} Tagen aufgezeichnet";
+$GLOBALS['strNoClickLoggedInInterval']  = "Es wurden keine AdClicks in den letzten {interval} Tagen aufgezeichnet";
+$GLOBALS['strSendAdvertisingReport']	= "Berichte über die Werbeaktivitäten per E-Mail versenden";
+$GLOBALS['strNoDaysBetweenReports']		= "Tage zwischen den Berichten";
+$GLOBALS['strSendDeactivationWarning']  = "Warnung senden, wenn eine Kampagne deaktiviert wird";
 
-$GLOBALS['strWarnClientTxt']			= "Click or View count is getting below {limit} for your banners. ";
-$GLOBALS['strViewsClicksLow']			= "Ad views/clicks are low";
+$GLOBALS['strWarnClientTxt']			= "Die Zahl der verf&uuml;gbaren AdClicks oder AdView für Ihre Banner ist unter {limit} gesunken. ";
+$GLOBALS['strViewsClicksLow']			= "Verf&uuml;gbare AdViews oder AdClicks sehr niedrig";
 ?>
