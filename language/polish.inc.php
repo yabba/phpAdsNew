@@ -1,4 +1,4 @@
-<?php // $Revision: 1.34 $
+<?php // $Revision: 1.35 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -316,4 +316,5 @@ $GLOBALS['strACL'] 						= "Ograniczenia";
 $GLOBALS['strNoMoveUp'] 				= "Nie mo¿na przesun¹æ w górê pierwszego rzêdu";
 $GLOBALS['strACLAdd'] 					= "Dodaj nowe ograniczenie";
 $GLOBALS['strNoLimitations']			= "Brak ograniczeñ";
+
 ?>

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -53,7 +53,6 @@ $GLOBALS['strSubmit'] = "Kirim Ad";
 $GLOBALS['strUsername'] = "Nama User";
 $GLOBALS['strPassword'] = "Kata Sandi";
 $GLOBALS['strBannerAdmin'] = "Administrasi Banner untuk";
-$GLOBALS['strBannerAdminAcl'] = "Administrasi Banner ACL untuk";
 $GLOBALS['strNoBanners'] = "Banner tidak ditemukan";
 $GLOBALS['strBanner'] = "Banner";
 $GLOBALS['strCurrentBanner'] = "Banner yang sedang ditampil";
