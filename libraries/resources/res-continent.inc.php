@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -113,5 +113,11 @@ $phpAds_continent['UM'] = 'NA';
 
 $phpAds_cont_name['AQ'] = 'Antartica';
 $phpAds_continent['AQ'] = 'AQ'; 
+
+
+
+// Load localized strings
+if (file_exists(phpAds_path.'/language/'.$phpAds_config['language'].'/res-continent.lang.php'))
+	@include(phpAds_path.'/language/'.$phpAds_config['language'].'/res-continent.lang.php');
 
 ?>
