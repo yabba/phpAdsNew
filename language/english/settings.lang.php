@@ -1,4 +1,4 @@
-<?php // $Revision: 1.19 $
+<?php // $Revision: 1.20 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -204,6 +204,14 @@ $GLOBALS['strBasicInformation']			= "Basic information";
 $GLOBALS['strAdminFullName']			= "Admin's full name";
 $GLOBALS['strAdminEmail']				= "Admin's email address";
 $GLOBALS['strCompanyName']				= "Company Name";
+
+$GLOBALS['strAdminCheckUpdates']		= "Check for updates";
+$GLOBALS['strAdminCheckEveryLogin']		= "Every login";
+$GLOBALS['strAdminCheckDaily']			= "Daily";
+$GLOBALS['strAdminCheckWeekly']			= "Weekly";
+$GLOBALS['strAdminCheckMonthly']		= "Monthly";
+$GLOBALS['strAdminCheckNever']			= "Never";
+
 
 $GLOBALS['strAdminNovice']				= "Admin's delete actions need confirmation for safety";
 $GLOBALS['strUserlogEmail']				= "Log all outgoing email messages";

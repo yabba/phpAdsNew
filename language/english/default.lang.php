@@ -1,4 +1,4 @@
-<?php // $Revision: 1.38 $
+<?php // $Revision: 1.39 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -456,6 +456,6 @@ $GLOBALS['strAdminSettings']				= "Administration settings";
 
 
 // Product Updates
-$GLOBALS['strProductUpdates']				= "Product Updates";
+$GLOBALS['strProductUpdates']				= "Product updates";
 
 ?>
