@@ -1,11 +1,11 @@
-<?php // $Id: default.lang.php,v 1.2 2001/11/06 00:13:10 ciaccia Exp $
+<?php // $Revision: 1.3 $
 
 /************************************************************************/
-/* phpPgAds                                                             */
-/* ========                                                             */
+/* phpAdsNew 2                                                          */
+/* ===========                                                          */
 /*                                                                      */
-/* Copyright (c) 2001 by the phpPgAds developers                        */
-/* http://sourceforge.net/projects/phppgads                             */
+/* Copyright (c) 2001 by the phpAdsNew developers                       */
+/* http://sourceforge.net/projects/phpadsnew                            */
 /*                                                                      */
 /* This program is free software. You can redistribute it and/or modify */
 /* it under the terms of the GNU General Public License as published by */
@@ -17,7 +17,7 @@
 $GLOBALS['strHome'] = "Hjem";
 $GLOBALS['date_format'] = "%d/%m/%Y";
 $GLOBALS['time_format'] = "%H:%i:%S";
-$GLOBALS['strPgSQLError'] = "PostgreSQL-Error:";
+$GLOBALS['strMySQLError'] = "MySQL-Error:";
 $GLOBALS['strAdminstration'] = "Administrasjon";
 $GLOBALS['strAddClient'] = "Legg til ny klient";
 $GLOBALS['strModifyClient'] = "Endre klient";
@@ -100,7 +100,7 @@ $GLOBALS['strLogErrorClicks'] = "[phpAds] En feil oppstod under henting av banne
 $GLOBALS['strLogErrorDisactivate'] = "[phpAds] En feil oppstod under deaktivering av banner.";
 $GLOBALS['strRatio'] = "GjennomKlikksForhold";
 $GLOBALS['strChooseBanner'] = "Vennligst velg type banner.";
-$GLOBALS['strPgSQLBanner'] = "Banner lagret i databasen (PostgreSQL)";
+$GLOBALS['strMySQLBanner'] = "Banner lagret i databasen (MySQL)";
 $GLOBALS['strWebBanner'] = "Banner lagret på webserver";
 $GLOBALS['strURLBanner'] = "Banner referert til via URL";
 $GLOBALS['strHTMLBanner'] = "HTML banner";
