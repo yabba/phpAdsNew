@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -43,6 +43,7 @@ function phpAds_showBanners ()
 	global $phpAds_config;
 	global $strUntitled, $strName, $strID, $strWeight;
 	global $strProbability, $strPriority, $strRecalculatePriority;
+	global $phpAds_TextDirection;
 	
 	
 	$res = phpAds_dbQuery("
