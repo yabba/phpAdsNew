@@ -1,4 +1,4 @@
-<?php // $Revision: 1.7 $
+<?php // $Revision: 1.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -58,7 +58,7 @@ if (isset($campaignid) && $campaignid != '')
 	{
 		// Cleanup webserver stored images for each banner
 		if ($row['format'] == 'web' && $row['banner'] != '')
-			phpAds_Cleanup (basename($row['banner']));		
+			phpAds_ImageDelete (basename($row['banner']));		
 		
 		
 		// Delete Banner ACLs

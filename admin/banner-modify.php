@@ -1,4 +1,4 @@
-<?php // $Revision: 1.5 $
+<?php // $Revision: 1.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -115,7 +115,7 @@ if (isset($bannerid) && $bannerid != '')
 			
 			// Duplicate webserver stored banner
 			if ($row['format'] == 'web')
-				$row['banner'] = phpAds_StoreDuplicate ($row['banner']);
+				$row['banner'] = phpAds_ImageDuplicate ($row['banner']);
 			
 			
 			// Clone banner
