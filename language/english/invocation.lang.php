@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -18,10 +18,10 @@
 $GLOBALS['strInvocationRemote']			= "Remote Invocation";
 $GLOBALS['strInvocationJS']				= "Remote Invocation for Javascript";
 $GLOBALS['strInvocationIframes']		= "Remote Invocation for iframes";
+$GLOBALS['strInvocationXmlRpc']			= "Remote Invocation using XML-RPC";
 $GLOBALS['strInvocationCombined']		= "Combined Remote Invocation";
 $GLOBALS['strInvocationPopUp']			= "Pop-up";
 $GLOBALS['strInvocationAdLayer']		= "AdLayer";
-$GLOBALS['strInvocationXmlRpc']			= "Remote invocation using XML-RPC";
 $GLOBALS['strInvocationLocal']			= "Local mode";
 
 
@@ -82,7 +82,7 @@ $GLOBALS['strVShift']					= "Vertical Shift";
 
 $GLOBALS['strAdLayerStyleName']				= array(
 	'geocities'		=> "Geocities",
-	'simple'		=> "Semplice"
+	'simple'		=> "Simple"
 );
 
 ?>
