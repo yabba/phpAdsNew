@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -44,6 +44,10 @@ while ($current = phpAds_dbFetchArray($res))
 	if ($current['storagetype'] == 'web')
 		$current['imageurl'] = $phpAds_config['type_web_url'].'/'.$current['filename'];
 	
+	
+	// Add slashes to status to prevent javascript errors
+	// NOTE: not needed in banner-edit because of magic_quotes_gpc
+	$current['status'] = addslashes($current['status']);
 	
 	
 	// Rebuild cache
