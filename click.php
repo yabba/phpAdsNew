@@ -1,4 +1,4 @@
-<?php // $Revision: 1.18 $
+<?php // $Revision: 1.20 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -49,15 +49,27 @@ if ($bannerID != "DEFAULT")
 	$clientID = mysql_result($res, 0, 1);
 	
 	
+	// If destination is a parameter don't use
+	// url from database
+	if (isset($dest) && $dest != '')
+	{
+		$url = urldecode($dest);
+	}
+	
+	
 	// Log clicks
 	if ($phpAds_log_adclicks)
 	{
 		if ($host = phpads_ignore_host())
 		{
-			db_log_click($bannerID, $host);
+			db_log_click($bannerID, "null", $host);
 			phpAds_expire ($clientID, phpAds_Clicks);
 		}
 	}
+	
+	
+	// Referer
+	$url = str_replace ("{referer}", urlencode($HTTP_REFERER), $url);
 	
 	
 	// Cache buster
@@ -80,6 +92,8 @@ if ($bannerID != "DEFAULT")
 }
 else
 {
+	// Banner displayed was the default banner, now 
+	// redirect to the default location
 	$url = $phpAds_default_banner_target;
 }
 
