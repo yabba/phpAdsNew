@@ -376,4 +376,23 @@ function php_die($title="Error", $message="Unkown error")
 	exit;
 }
 
+
+
+/*********************************************************/
+/* Show a confirm message for delete / reset actions	 */
+/*********************************************************/
+
+function phpAds_DelConfirm($msg)
+{
+	global $phpAds_admin_novice;
+	
+	if ($phpAds_admin_novice == true)
+		$str = " onClick=\"return confirm('" . $msg . "')\"";
+	else
+		$str = "";
+	
+	return $str;
+}
+
+
 ?>

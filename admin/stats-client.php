@@ -1,4 +1,4 @@
-<?php // $Revision: 1.8 $
+<?php // $Revision: 1.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -237,14 +237,7 @@ for ($d=0;$d<$limit;$d++)
 	
 	echo "<tr>";
 	
-	//if (!$phpAds_compact_stats && $available) 
-	//{
-	//	echo "<td height='25' bgcolor='$bgcolor'>&nbsp;";
-	//	echo "<a href='stats-daily.php?day=".urlencode($text)."&campaignID=".$campaignID."&bannerID=".$bannerID."'>";
-	//	echo $text."</a></td>";
-	//}
-	//else
-		echo "<td height='25' bgcolor='$bgcolor'>&nbsp;".$text."</td>";
+	echo "<td height='25' bgcolor='$bgcolor'>&nbsp;".$text."</td>";
 	
 	echo "<td height='25' bgcolor='$bgcolor'>".$views."</td>";
 	echo "<td height='25' bgcolor='$bgcolor'>".$clicks."</td>";
@@ -315,7 +308,7 @@ echo "</table>";
 if (phpAds_isUser(phpAds_Admin))
 {
 	echo "<br><br>";
-
+	
 	echo "<table width='100%' border='0' align='center' cellspacing='0' cellpadding='0'>";
 	echo "<tr><td height='25'><b>$strMaintenance</b></td></tr>";
   	echo "<tr><td height='1' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
@@ -383,7 +376,7 @@ if (phpAds_isUser(phpAds_Admin))
 	
 	// Reset statistics
 	echo "<tr><td height='25'>";
-	echo "<a href='stats-reset.php?clientID=$clientID'>";
+	echo "<a href='stats-reset.php?clientID=$clientID'".phpAds_DelConfirm($strConfirmResetClientStats).">";
 	echo "<img src='images/icon-undo.gif' align='absmiddle' border='0'>&nbsp;$strResetStats</a>";
 	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	echo "</td></tr>";

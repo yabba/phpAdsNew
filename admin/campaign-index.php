@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -200,7 +200,7 @@ else
 		
 		if ($phpAds_acl == '1')
 			echo "<img src='images/icon-acl.gif' align='absmiddle'>&nbsp;<a href='banner-acl.php?campaignID=$campaignID&bannerID=".$row["bannerID"]."'>$strModifyBannerAcl</a>&nbsp;&nbsp;&nbsp;&nbsp;";
-		echo "<img src='images/icon-recycle.gif' align='absmiddle'>&nbsp;<a href='banner-delete.php?campaignID=$campaignID&bannerID=".$row["bannerID"]."'>$strDelete</a>";
+		echo "<img src='images/icon-recycle.gif' align='absmiddle'>&nbsp;<a href='banner-delete.php?campaignID=$campaignID&bannerID=".$row["bannerID"]."'".phpAds_DelConfirm($strConfirmDeleteBanner).">$strDelete</a>";
 		
 		echo "</td></tr>";
 		
