@@ -1,4 +1,4 @@
-<?php // $Revision: 1.24 $
+<?php // $Revision: 1.25 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -247,12 +247,12 @@ $GLOBALS['strDuplicateClientName']		= "Указанное имя пользователя уже существует
 $GLOBALS['strAllowClientDisableBanner'] = "Разрешить этому пользователю деактивировать его баннеры";
 $GLOBALS['strAllowClientActivateBanner'] = "Разрешить этому пользователю активировать его баннеры";
 
-$GLOBALS['strGenerateBannercode']		= "Generate Bannercode";
-$GLOBALS['strChooseInvocationType']		= "Please choose the type of banner invocation";
-$GLOBALS['strGenerate']					= "Generate";
-$GLOBALS['strParameters']				= "Parameters";
-$GLOBALS['strUniqueidentifier']			= "Unique identifier";
-$GLOBALS['strFrameSize']				= "Frame size";
-$GLOBALS['strBannercode']				= "Bannercode";
+$GLOBALS['strGenerateBannercode']		= "Сгенерировать баннерный код";
+$GLOBALS['strChooseInvocationType']		= "Пожалуйста, выберите тип вызова баннера";
+$GLOBALS['strGenerate']					= "Сгенерировать";
+$GLOBALS['strParameters']				= "Параметры";
+$GLOBALS['strUniqueidentifier']			= "Уникальный идентификатор";
+$GLOBALS['strFrameSize']				= "Размер фрэйма";
+$GLOBALS['strBannercode']				= "Баннерный код";
 
 ?>
