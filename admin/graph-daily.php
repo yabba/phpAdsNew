@@ -1,4 +1,4 @@
-<?php // $Revision: 1.8 $
+<?php // $Revision: 1.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -40,6 +40,9 @@
 require ("../lib-cache.inc.php");
 require ("lib-gd.inc.php");
 
+
+// Register input variables
+phpAds_registerGlobal ('width', 'data');
 
 
 /*********************************************************/
@@ -140,7 +143,7 @@ while (list($key,$item) = each($items))
 	
 	// IE workaround: Turn off outputbuffering
 	// if zlib compression is turned on
-	if (strpos ($GLOBALS['HTTP_USER_AGENT'], 'MSIE') > 0 &&
+	if (strpos ($HTTP_SERVER_VARS['HTTP_USER_AGENT'], 'MSIE') > 0 &&
 		function_exists('ini_get') &&
 		ini_get ("zlib.output_compression"))
 		ob_end_clean ();

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.91 $
+<?php // $Revision: 1.92 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -21,6 +21,12 @@ require ("lib-storage.inc.php");
 require ("lib-swf.inc.php");
 require ("lib-banner.inc.php");
 require ("lib-zones.inc.php");
+
+
+// Register input variables
+phpAds_registerGlobal ('storagetype', 'network', 'replaceimage', 'upload', 'checkswf', 'url', 'target', 'alink', 
+					   'atar', 'alink_chosen', 'alt', 'status', 'bannertext', 'width', 'height', 'imageurl', 'banner', 
+					   'autohtml', 'keyword', 'description', 'weight', 'submit');
 
 
 // Security check
@@ -81,18 +87,6 @@ if (isset($submit))
 		if ($HTTP_POST_FILES['upload']['name'] != '' &&
 			$HTTP_POST_FILES['upload']['tmp_name'] != 'none')
 			$uploaded = $HTTP_POST_FILES['upload'];
-	}
-	else
-	{
-		if (!empty($upload) && $upload != "none")
-		{
-			$uploaded = array (
-				'name'		=> $upload_name,
-				'type'		=> $upload_type,
-				'size'		=> $upload_size,
-				'tmp_name'	=> $upload
-			);
-		}
 	}
 	
 	// Check if uploaded file is really uploaded
@@ -1253,7 +1247,6 @@ if ($storagetype == 'web')
 	echo "</table>";
 }
 
-
 if ($storagetype == 'url')
 {
 	echo "<br><br>";
@@ -1449,7 +1442,6 @@ if ($storagetype == 'network')
 	echo "<tr><td height='1' colspan='3' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
 	echo "</table>";
 }
-
 
 if (phpAds_isUser(phpAds_Admin))
 {

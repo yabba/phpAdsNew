@@ -1,4 +1,4 @@
-<?php // $Revision: 1.11 $
+<?php // $Revision: 1.12 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -19,6 +19,10 @@ require ("config.php");
 require ("lib-statistics.inc.php");
 require ("lib-expiration.inc.php");
 require ("lib-gd.inc.php");
+
+
+// Register input variables
+phpAds_registerGlobal ('view', 'compact', 'listorder', 'orderdirection');
 
 
 // Security check

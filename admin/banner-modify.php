@@ -1,4 +1,4 @@
-<?php // $Revision: 1.12 $
+<?php // $Revision: 1.13 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -20,6 +20,10 @@ require ("lib-storage.inc.php");
 require ("lib-zones.inc.php");
 require ("lib-statistics.inc.php");
 require ("../lib-priority.inc.php");
+
+
+// Register input variables
+phpAds_registerGlobal ('returnurl', 'duplicate', 'moveto_x', 'moveto', 'applyto_x', 'applyto');
 
 
 // Security check

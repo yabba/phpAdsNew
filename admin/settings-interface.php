@@ -1,4 +1,4 @@
-<?php // $Revision: 1.8 $
+<?php // $Revision: 1.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -16,6 +16,10 @@
 
 // Include required files
 include ("lib-settings.inc.php");
+
+
+// Register input variables
+phpAds_registerGlobal ('name', 'my_header', 'my_footer', 'client_welcome', 'client_welcome_msg', 'content_gzip_compression');
 
 
 // Security check
@@ -99,7 +103,7 @@ phpAds_EndSettings();
 /*********************************************************/
 
 ?>
-<form name="settingsform" method="post" action="<?php echo $PHP_SELF;?>">
+<form name="settingsform" method="post" action="<?php echo $HTTP_SERVER_VARS['PHP_SELF'];?>">
 <?php
 
 phpAds_FlushSettings();

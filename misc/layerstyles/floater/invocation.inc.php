@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -16,6 +16,11 @@
 
 // Define constant used to place code generator
 define('phpAds_adLayerLoaded', true);
+
+
+// Register input variables
+phpAds_registerGlobal ('ltr', 'loop', 'speed', 'pause', 'shiftv', 'transparent', 'backcolor',
+					   'limited', 'lmargin', 'rmargin');
 
 
 

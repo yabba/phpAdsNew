@@ -1,4 +1,4 @@
-<?php // $Revision: 1.11 $
+<?php // $Revision: 1.12 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -16,6 +16,12 @@
 
 // Include required files
 include ("lib-settings.inc.php");
+
+
+// Register input variables
+phpAds_registerGlobal ('default_banner_url', 'default_banner_target', 'type_sql_allow', 'type_web_allow', 'type_url_allow',
+					   'type_html_allow', 'type_txt_allow', 'type_web_mode', 'type_web_url', 'type_web_dir', 'type_web_ftp_user',
+					   'type_web_ftp_password', 'type_web_ftp_host', 'type_web_ftp_path', 'type_html_auto', 'type_html_php');
 
 
 // Security check
@@ -182,7 +188,7 @@ phpAds_EndSettings();
 /*********************************************************/
 
 ?>
-<form name="settingsform" method="post" action="<?php echo $PHP_SELF;?>">
+<form name="settingsform" method="post" action="<?php echo $HTTP_SERVER_VARS['PHP_SELF'];?>">
 <?php
 
 phpAds_FlushSettings();

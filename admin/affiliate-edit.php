@@ -1,4 +1,4 @@
-<?php // $Revision: 1.18 $
+<?php // $Revision: 1.19 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -19,6 +19,11 @@ require ("config.php");
 require ("lib-statistics.inc.php");
 require ("lib-zones.inc.php");
 require ("lib-languages.inc.php");
+
+
+// Register input variables
+phpAds_registerGlobal ('move', 'name', 'website', 'contact', 'email', 'language', 'publiczones', 
+					   'errormessage', 'username', 'password', 'affiliatepermissions', 'submit');
 
 
 // Security check

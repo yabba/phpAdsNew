@@ -1,4 +1,4 @@
-<?php // $Revision: 1.10 $
+<?php // $Revision: 1.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -17,6 +17,10 @@
 // Include required files
 require ("config.php");
 require ("lib-statistics.inc.php");
+
+
+// Register input variables
+phpAds_registerGlobal ('expand', 'collapse', 'hideinactive', 'listorder', 'orderdirection');
 
 
 // Security check

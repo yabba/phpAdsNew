@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -16,6 +16,11 @@
 
 // Define constant used to place code generator
 define('phpAds_adLayerLoaded', true);
+
+
+// Register input variables
+phpAds_registerGlobal ('target', 'align', 'padding', 'closebutton', 'backcolor', 'bordercolor',
+					   'valign', 'closetime', 'shifth', 'shiftv');
 
 
 

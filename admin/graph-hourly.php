@@ -1,4 +1,4 @@
-<?php // $Revision: 1.7 $
+<?php // $Revision: 1.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -17,6 +17,9 @@
 // Include required files
 require ("config.php");
 
+
+// Register input variables
+phpAds_registerGlobal ('where');
 
 
 /*********************************************************/

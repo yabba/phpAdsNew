@@ -1,4 +1,4 @@
-<?php // $Revision: 1.45 $
+<?php // $Revision: 1.46 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -17,6 +17,12 @@
 // Include required files
 require ("config.php");
 require ("lib-statistics.inc.php");
+
+
+// Register input variables
+phpAds_registerGlobal ('move', 'submit', 'clientname', 'views', 'clicks', 'unlimitedviews', 'unlimitedclicks', 'priority', 
+					   'targetviews', 'weight', 'expire', 'expireSet', 'expireDay', 'expireMonth', 'expireYear', 'activateSet', 
+					   'activateDay', 'activateMonth', 'activateYear');
 
 
 // Security check
@@ -80,7 +86,6 @@ if (isset($submit))
 		
 		$targetviews = 0;
 	}
-	
 	
 	if ($expireSet == 't')
 	{
@@ -168,7 +173,6 @@ if (isset($submit))
 				clientid = ".$campaignid
 		);
 	}
-	
 	
 	if (isset($move) && $move == 't')
 	{
@@ -494,7 +498,7 @@ echo "<br><br>";
 echo "<form name='clientform' method='post' action='campaign-edit.php' onSubmit='return phpAds_formCheck(this);'>";
 echo "<input type='hidden' name='campaignid' value='".(isset($campaignid) ? $campaignid : '')."'>";
 echo "<input type='hidden' name='clientid' value='".(isset($clientid) ? $clientid : '')."'>";
-echo "<input type='hidden' name='expire' value='".(isset($row["expire"]) ?$row["expire"] : '')."'>";
+echo "<input type='hidden' name='expire' value='".(isset($row["expire"]) ? $row["expire"] : '')."'>";
 echo "<input type='hidden' name='move' value='".(isset($move) ? $move : '')."'>";
 
 echo "<table border='0' width='100%' cellpadding='0' cellspacing='0'>";

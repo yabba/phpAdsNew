@@ -1,4 +1,4 @@
-<?php // $Revision: 1.11 $
+<?php // $Revision: 1.12 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -16,6 +16,12 @@
 
 // Include required files
 include ("lib-settings.inc.php");
+
+
+// Register input variables
+phpAds_registerGlobal ('gui_show_campaign_info', 'gui_show_banner_info', 'gui_show_campaign_preview', 'gui_show_banner_html', 
+					   'gui_show_banner_preview', 'gui_hide_inactive', 'gui_show_matching', 'gui_show_parents', 
+					   'gui_link_compact_limit', 'begin_of_week', 'percentage_decimals', 'default_banner_weight', 'default_campaign_weight');
 
 
 // Security check
@@ -60,7 +66,7 @@ if (isset($HTTP_POST_VARS) && count($HTTP_POST_VARS))
 	{
 		if (phpAds_SettingsWriteFlush())
 		{
-			header("Location: $PHP_SELF");
+			header("Location: ".$HTTP_SERVER_VARS['PHP_SELF']);
 			exit;
 		}
 	}
@@ -128,7 +134,7 @@ phpAds_EndSettings();
 /*********************************************************/
 
 ?>
-<form name="settingsform" method="post" action="<?php echo $PHP_SELF;?>">
+<form name="settingsform" method="post" action="<?php echo $HTTP_SERVER_VARS['PHP_SELF'];?>">
 <?php
 
 phpAds_FlushSettings();

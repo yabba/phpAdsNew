@@ -1,4 +1,4 @@
-<?php // $Revision: 1.19 $
+<?php // $Revision: 1.20 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -21,6 +21,10 @@ require ("lib-storage.inc.php");
 require ("lib-swf.inc.php");
 require ("lib-banner.inc.php");
 require ("lib-zones.inc.php");
+
+
+// Register input variables
+phpAds_registerGlobal ('convert', 'cancel', 'compress');
 
 
 // Security check
