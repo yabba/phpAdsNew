@@ -1,4 +1,4 @@
-<?php // $Revision: 1.18 $
+<?php // $Revision: 1.19 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -79,6 +79,8 @@ if (phpAds_isUser(phpAds_Admin))
 			$affiliateid == $row['affiliateid']
 		);
 	}
+	
+	phpAds_PageShortcut($strAffiliateHistory, 'stats-affiliate-history.php?affiliateid='.$affiliateid, 'images/icon-statistics.gif');	
 	
 	phpAds_PageHeader("4.2.3");
 		echo "<img src='images/icon-affiliate.gif' align='absmiddle'>&nbsp;<b>".phpAds_getAffiliateName($affiliateid)."</b><br><br><br>";
