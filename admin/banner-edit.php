@@ -1,4 +1,4 @@
-<?php // $Revision: 1.25 $
+<?php // $Revision: 1.26 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -175,8 +175,30 @@ if (isset($submit))
 	
 	// Construct appropiate SQL query
 	// If bannerID==null, then this is an INSERT, else it's an UPDATE
-	if ($final["bannerID"] == '')
-	{ 
+	if (isset($bannerID) && trim($bannerID) != '')
+	{
+		// UPDATE
+		$set = "";
+		while (list($name, $value) = each($final))
+		{
+			$set .= "$name = '$value', ";
+		}
+		
+		// Cut trailing commas
+		$set = ereg_replace(", $", "", $set);
+		
+		// Execute query
+		$sql_query = "
+			UPDATE
+				$phpAds_tbl_banners
+			SET
+				$set
+			WHERE
+				bannerID = ".$final['bannerID'];
+		$res = db_query($sql_query) or mysql_die();
+	}
+	else
+	{
 		// INSERT
 		$values_fields = "";
 		$values = "";
@@ -197,29 +219,7 @@ if (isset($submit))
 				($values_fields)
 			VALUES
 			($values)";
-		$res = db_query($sql_query) or mysql_die();     
-	}
-	else 
-	{
-		// UPDATE
-		$set = "";
-		while (list($name, $value) = each($final))
-		{
-			$set .= "$name = '$value', ";
-		}
-		
-		// Cut trailing commas
-		$set = ereg_replace(", $", "", $set);
-		
-		// Execute query
-		$sql_query = "
-			UPDATE
-				$phpAds_tbl_banners
-			SET
-				$set
-			WHERE
-				bannerID = ".$final['bannerID'];
-		$res = db_query($sql_query) or mysql_die();     
+		$res = db_query($sql_query) or mysql_die();
 	}
 	
 	
