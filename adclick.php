@@ -1,4 +1,4 @@
-<?php // $Revision: 1.5 $
+<?php // $Revision: 1.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -69,23 +69,25 @@ if ($bannerID != "DEFAULT")
 	
 	
 	// Get vars
-	for (reset ($HTTP_GET_VARS); $key = key($HTTP_GET_VARS); next($HTTP_GET_VARS))
-	{
-		if ($key != 'bannerID' &&
-			$key != 'dest' &&
-			$key != 'ismap' &&
-			$key != 'cb')
-			$vars[] = $key.'='.$HTTP_GET_VARS[$key];
-	}
+	if (isset($HTTP_GET_VARS))
+		for (reset ($HTTP_GET_VARS); $key = key($HTTP_GET_VARS); next($HTTP_GET_VARS))
+		{
+			if ($key != 'bannerID' &&
+				$key != 'dest' &&
+				$key != 'ismap' &&
+				$key != 'cb')
+				$vars[] = $key.'='.$HTTP_GET_VARS[$key];
+		}
 	
-	for (reset ($HTTP_POST_VARS); $key = key($HTTP_POST_VARS); next($HTTP_POST_VARS))
-	{
-		if ($key != 'bannerID' &&
-			$key != 'dest' &&
-			$key != 'ismap' &&
-			$key != 'cb')
-			$vars[] = $key.'='.$HTTP_POST_VARS[$key];
-	}
+	if (isset($HTTP_POST_VARS))
+		for (reset ($HTTP_POST_VARS); $key = key($HTTP_POST_VARS); next($HTTP_POST_VARS))
+		{
+			if ($key != 'bannerID' &&
+				$key != 'dest' &&
+				$key != 'ismap' &&
+				$key != 'cb')
+				$vars[] = $key.'='.$HTTP_POST_VARS[$key];
+		}
 	
 	if (is_array($vars) && sizeof($vars) > 0)
 	{
