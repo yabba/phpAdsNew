@@ -1,4 +1,4 @@
-<?php // $Revision: 1.29 $
+<?php // $Revision: 1.30 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -256,17 +256,17 @@ $GLOBALS['strBannercode']				= "Codice";
 $GLOBALS['strSearch']					= "Ricerca";
 $GLOBALS['strNoMatchesFound']			= "Nessun elemento trovato per la tua ricerca";
 
-$GLOBALS['strNoViewLoggedInInterval']   = "No views were logged during the span of this report";
-$GLOBALS['strNoClickLoggedInInterval']  = "No clicks were logged during the span of this report";
-$GLOBALS['strMailReportPeriod']			= "This report includes statistics from {startdate} up to {enddate}.";
-$GLOBALS['strMailReportPeriodAll']		= "This report includes all statistics up to {enddate}.";
-$GLOBALS['strNoStatsForCampaign'] 		= "There are no statistics available for this campaign";
-$GLOBALS['strFrom']						= "From";
-$GLOBALS['strTo']						= "to";
-$GLOBALS['strMaintenance']				= "Maintenance";
-$GLOBALS['strCampaignStats']			= "Campaign statistics";
-$GLOBALS['strClientStats']				= "Client statistics";
-$GLOBALS['strErrorOccurred']			= "An error occurred";
-$GLOBALS['strAdReportSent']				= "Advertising report sent";
+$GLOBALS['strNoViewLoggedInInterval']   = "Nessuna visualizzazione in questo report";
+$GLOBALS['strNoClickLoggedInInterval']  = "Nessun click durante questo report";
+$GLOBALS['strMailReportPeriod']			= "Questo report include le statistiche dal {startdate} al {enddate}.";
+$GLOBALS['strMailReportPeriodAll']		= "Questo report include tutte le statistiche fino al {enddate}.";
+$GLOBALS['strNoStatsForCampaign'] 		= "Non sono disponibili statistiche per questa campagna";
+$GLOBALS['strFrom']						= "Da";
+$GLOBALS['strTo']						= "a";
+$GLOBALS['strMaintenance']				= "Manutenzione";
+$GLOBALS['strCampaignStats']			= "Statistiche Campagna";
+$GLOBALS['strClientStats']				= "Statistiche Clienti";
+$GLOBALS['strErrorOccurred']			= "Errore";
+$GLOBALS['strAdReportSent']				= "Report Pubblicitario inviato";
 
 ?>

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -254,17 +254,17 @@ $GLOBALS['strBannercode']             = "Resultado";
 $GLOBALS['strSearch']					= "Pesquisar";
 $GLOBALS['strNoMatchesFound']			= "Não foram encontrados resultados";
 
-$GLOBALS['strNoViewLoggedInInterval']   = "No views were logged during the span of this report";
-$GLOBALS['strNoClickLoggedInInterval']  = "No clicks were logged during the span of this report";
-$GLOBALS['strMailReportPeriod']			= "This report includes statistics from {startdate} up to {enddate}.";
-$GLOBALS['strMailReportPeriodAll']		= "This report includes all statistics up to {enddate}.";
-$GLOBALS['strNoStatsForCampaign'] 		= "There are no statistics available for this campaign";
-$GLOBALS['strFrom']						= "From";
-$GLOBALS['strTo']						= "to";
-$GLOBALS['strMaintenance']				= "Maintenance";
-$GLOBALS['strCampaignStats']			= "Campaign statistics";
-$GLOBALS['strClientStats']				= "Client statistics";
-$GLOBALS['strErrorOccurred']			= "An error occurred";
-$GLOBALS['strAdReportSent']				= "Advertising report sent";
+$GLOBALS['strNoViewLoggedInInterval']   = "Sem visualizações executadas durante o processamento do relatório";
+$GLOBALS['strNoClickLoggedInInterval']  = "Sem cliques executados durante o processamento do relatório";
+$GLOBALS['strMailReportPeriod']			= "Este relatório inclui estatísticas entre {startdate} e {enddate}.";
+$GLOBALS['strMailReportPeriodAll']		= "Este relatório inclui todas as estatísticas até {enddate}.";
+$GLOBALS['strNoStatsForCampaign'] 		= "Não existem estatísticas para esta campanha";
+$GLOBALS['strFrom']						= "Desde";
+$GLOBALS['strTo']						= "até";
+$GLOBALS['strMaintenance']				= "Manutenção";
+$GLOBALS['strCampaignStats']			= "Estatísticas da Campanha";
+$GLOBALS['strClientStats']				= "Estatísticas do Cliente";
+$GLOBALS['strErrorOccurred']			= "Ocorreu um erro";
+$GLOBALS['strAdReportSent']				= "Relatório de Publicidade enviado";
 
 ?>
