@@ -1,4 +1,4 @@
-<?php // $Revision: 1.28 $
+<?php // $Revision: 1.29 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -193,13 +193,13 @@ function phpAds_showZoneBanners ($zoneid)
 				$precondition .= " AND ".$phpAds_config['tbl_banners'].".storagetype <> 'txt' ";
 			
 			
-			if (!defined('LIBVIEWQUERY_INCLUDED'))  include (phpAds_path.'/lib-view-query.inc.php');
+			if (!defined('LIBVIEWQUERY_INCLUDED'))  include (phpAds_path.'/libraries/lib-view-query.inc.php');
 			$select = phpAds_buildQuery ($what, false, $precondition);
 		}
 		else
 		{
 			// Direct selection
-			if (!defined('LIBVIEWQUERY_INCLUDED'))  include (phpAds_path.'/lib-view-query.inc.php');
+			if (!defined('LIBVIEWQUERY_INCLUDED'))  include (phpAds_path.'/libraries/lib-view-query.inc.php');
 			$select = phpAds_buildQuery ($what, false, '');
 			$zone = array('what' => $what);
 		}

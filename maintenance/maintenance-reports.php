@@ -1,4 +1,4 @@
-<?php // $Revision: 1.8 $
+<?php // $Revision: 1.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -15,7 +15,7 @@
 
 
 // Include required files
-require	(phpAds_path."/lib-reports.inc.php"); 
+require	(phpAds_path."/libraries/lib-reports.inc.php"); 
 
 
 

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -15,7 +15,7 @@
 
 
 // Include required files
-require	(phpAds_path."/lib-priority.inc.php"); 
+require	(phpAds_path."/libraries/lib-priority.inc.php"); 
 
 
 $report = phpAds_PriorityCalculate();

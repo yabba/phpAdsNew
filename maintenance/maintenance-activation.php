@@ -1,4 +1,4 @@
-<?php // $Revision: 1.13 $
+<?php // $Revision: 1.14 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -14,7 +14,7 @@
 
 
 // Include required files
-require	(phpAds_path."/lib-warnings.inc.php"); 
+require	(phpAds_path."/libraries/lib-warnings.inc.php"); 
 
 
 /*********************************************************/

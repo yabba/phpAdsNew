@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -19,7 +19,7 @@ define ('LIBUPDATES_INCLUDED', true);
 
 
 // Include required files
-require (phpAds_path.'/lib-xmlrpc.inc.php');
+require (phpAds_path.'/libraries/lib-xmlrpc.inc.php');
 
 
 

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.52 $
+<?php // $Revision: 1.53 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -189,7 +189,7 @@ if (isset($submit))
 	}
 	
 	
-	require ("../lib-priority.inc.php");
+	require ("../libraries/lib-priority.inc.php");
 	phpAds_PriorityCalculate ();
 	
 	

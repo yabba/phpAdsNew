@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -19,7 +19,7 @@ require ("config.php");
 require ("lib-maintenance.inc.php");
 require ("lib-statistics.inc.php");
 require ("lib-zones.inc.php");
-require ("../lib-priority.inc.php");
+require ("../libraries/lib-priority.inc.php");
 
 
 // Security check
