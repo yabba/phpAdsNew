@@ -1,4 +1,4 @@
-<?php // $Revision: 1.19 $
+<?php // $Revision: 1.20 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -295,7 +295,7 @@ else
 
 
 
-<form name="clientform" method="post" action="<?echo basename($PHP_SELF);?>" onSubmit="return valid(this)">
+<form name="clientform" method="post" action="<?echo basename($PHP_SELF);?>">
 <input type="hidden" name="clientID" value="<?if(isset($clientID)) echo $clientID;?>">
 
 <table border='0' width='100%' cellpadding='0' cellspacing='0'>
