@@ -1,4 +1,4 @@
-<?php // $Revision: 1.12 $
+<?php // $Revision: 1.13 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -372,5 +372,7 @@ $GLOBALS['strApplyLimitationsTo']		= "Apply limitations to";
 $GLOBALS['strWholeCampaign']			= "Whole campaign";
 $GLOBALS['strZonesWithoutAffiliate']	= "Zones without affiliate";
 $GLOBALS['strMoveToNewAffiliate']		= "Move to new affiliate";
+
+$GLOBALS['strNoBannersToLink']			= "There are currently no banners available which can be linked to this zone";
 
 ?>
