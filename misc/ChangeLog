@@ -1,6 +1,55 @@
 phpAdsNew - ChangeLog
 
 CVS
+v2.1 Alpha 1
+			+ Misc changes
+			  - 2003-12-21:  Add session based capping (e.g. user can only see 1 popup for this session until they close the browser) (Scott)
+			  - 2003-12-21:  Structural changes to frequency and time based capping cookies (Scott)
+			  - 2003-12-21:  Structural changes to geotracking cookies (Scott)
+			  - 2003-12-21:  Do not pass the 'log' querystring variable to 3rd party banners. (adjs.php) (Scott)
+			  - 2003-12-21:  Agency Support - An agency can be defined, and the agency can make its own advertisers and publishers. (Scott)
+			  - 2003-12-21:  Make Keywords a configuration option. (Scott)
+			  - 2003-12-21:  Store stats in a session variable for some screens (much faster stats screens) (Scott)
+			  - 2003-12-21:  Support for automatically changing 3rd party rich media tags (e.g. DART and Atlas) for click tracking. (Scott)
+			  - 2003-12-21:  Remove 'Source' from adstats for performance reasons.  Source will be re-implemented in another index table like adstats in the future. (Scott)
+			  - 2003-12-21:  Add an administration URL prefix which can be different than the delivery engine URL prefix. (Scott)
+			  - 2003-12-21:  Add an SSL URL prefix which can be different than the delivery engine URL prefix (e.g. instead of a blind change to https, you can specify a different URL) (Scott)
+			  - 2003-12-21:  Add variable tracking to conversion tracking. (Scott)
+			  - 2003-12-21:  Add backup image support to flash banners - if a browser does not support flash, then show another image based banner. (Scott)
+			  - 2003-12-21:  Batch edit the 'source' parameter in existing adviews tables (if you decide to change a channel name). (Scott)
+			  - 2003-12-21:  If source contains '/', then it is assumed that the source is hierarchical. (Scott)
+			  - 2003-12-21:  Structural changes - present a statistics row in a standard format. (Scott)
+			  - 2003-12-21:  Add conversions to most of the statistics screens. (Scott)
+			  - 2003-12-21:  Allow for all columns on statistics screens to be sortable. (Scott)
+			  - 2003-12-21:  Allow for an invocation code which will deliver a single banner with no cookie requirement (for email newsletters). (Scott)
+			  - 2003-12-21:  Add 'View Targeting Statistics' as a permission. (Scott)
+			  - 2003-12-21:  Most Settings only viewable by Admin, although interface defaults settable by Agency. (Scott)
+			  - 2003-12-21:  Ability to obfuscate the source parameter in the URL string, so that blind campaigns will not know where their ads are running on clickthroughs. (Scott)
+			  - 2003-12-21:  Ability to warn an agency when campaigns are getting low. (Scott)
+			  - 2003-12-21:  A number of new statistics screens and reports. (Scott)
+			  - 2003-12-21:  Automatically optimise a campaign by creative. (Scott)
+			  - 2003-12-21:  Anonymous campaigns - for blind networks, do not show an advertiser where their banners are running (and vice versa). (Scott)
+			  - 2003-12-21:  Create Javascript invocation tags for trackers which will get variables from the web pages that they are running on. (Scott)
+			  - 2003-12-21:  A number of changes to the english language internationalisation files. (Scott)
+			  - 2003-12-21:  Numerous additions and changes to the tab structure. (Scott)
+			  - 2003-12-21:  Add a primary key to the adconversion table (Scott)
+			  - 2003-12-21:  Change numerous indexes for the adviews,adclicks,adconversions,adstats tables. (Scott)
+			  - 2003-12-21:  Increase the size of views, clicks, and conversions in the campaigns tables, so that you can enter more than 8 million views. (Scott)
+			  - 2003-12-21:  Start work rewriting autotargeting and priorities, taking into account zones, delivery limitations, and other parameters, thus making the predictions much more accurate. (Scott)
+			  
+			+ Misc bugfixes
+			  - 2003-12-21:  The 'format' column is now 'storagetype' in the phpads_banners table. (admin-search.php) (Scott)
+			  - 2003-12-21:  Check for 'referer' being passed in from ad tags. (adframe.php) (Scott)
+			  - 2003-12-21:  Only retrieve the correct column names (not *) when performing a search.  Otherwise, BLOBS get pulled down as well. (admin-search.php) (Scott)
+			  - 2003-12-21:  Move campaign was not moving to the correct advertiser (campaign-modify.php) (Scott)
+			  - 2003-12-21:  Some graphing functions were limited to 'compact stats' when they could be rewritten to use adstats instead of adviews (graph-hourly.php) (Scott)
+			  - 2003-12-21:  Add a method (determineAdConversionsLeft) which is similar to the clicks and views functions (lib-expiration.inc.php) (Scott)
+			  - 2003-12-21:  Allow for passive FTP access (for firewalled systems).  This should be a user defined option in the future. (Scott)
+			  - 2003-12-21:  Various errors with campaign-tracker clickwindow and viewwindow (Scott)
+			  - 2003-12-21:  $phpAds_productname is undefined.  For now, it is hardcoded to 'phpAdsNew' (Scott)
+			  - 2003-12-21:  When compiling tracker conversions, only count conversions which link to views/clicks from a banner in the correct campaign. (Scott)
+
+
 			+ Misc changes
 			  - 2003-04-13:  Added support for paths in direct selection query string  (Niels)
  			  - 2003-04-13:  Beacon image is not enclosed in a hidden layer to prevent unneeded linewraps after tables and other html tags  (Niels)
