@@ -21,6 +21,7 @@ CVS			+ Added P3P Privacy Policies support
 			  - Added support for changing form HTML automatically  (Niels)
 			  - Extra variables assigned to adclick.php are now passed through to target url  (Niels)
 			  - Added {random} support to HTML banners
+			  - Added ability to embed PHP scripts in HTML banners  (Niels)
 
 			+ Added search capabilities  (Niels and Tobi Schulz)
 			+ Added client statistics  (Niels)
