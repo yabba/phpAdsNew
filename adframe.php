@@ -1,4 +1,4 @@
-<?php // $Revision: 1.2 $
+<?php // $Revision: 1.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -17,7 +17,6 @@
 // Include required files
 require("config.inc.php");
 require("view.inc.php");
-require("lib-acl.inc.php");
 
 // Set header information
 require("lib-cache.inc.php");
