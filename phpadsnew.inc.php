@@ -1,4 +1,4 @@
-<?php // $Revision: 1.8 $
+<?php // $Revision: 1.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -38,6 +38,6 @@ else
 // Include required files
 require	(phpAds_path."/config.inc.php"); 
 require	(phpAds_path."/view.inc.php"); 
-require	(phpAds_path."/acl.inc.php"); 
+require	(phpAds_path."/lib-acl.inc.php"); 
 
 ?>

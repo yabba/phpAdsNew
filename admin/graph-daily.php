@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -37,7 +37,7 @@
 
 
 // Include required files
-require ("../nocache.inc.php");
+require ("../lib-cache.inc.php");
 require ("lib-gd.inc.php");
 
 

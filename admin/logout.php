@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -16,7 +16,7 @@
 
 // Include required files
 require ("../config.inc.php");
-require ("../dblib.php");
+require ("../lib-db.inc.php");
 require ("lib-permissions.inc.php");
 
 
@@ -25,7 +25,7 @@ require ("lib-permissions.inc.php");
 /* Main code                                             */
 /*********************************************************/
 
-db_connect();
+phpAds_dbConnect();
 phpAds_Logout();
 
 ?>

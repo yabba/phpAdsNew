@@ -1,10 +1,10 @@
-<?php // $Revision: 1.2 $
+<?php // $Revision: 1.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
 /* ===========                                                          */
 /*                                                                      */
-/* Copyright (c) 2001 by Niels Leenheer <niels@creatype.nl>             */
+/* Copyright (c) 2001 by Bjoern Hoehrmann		                        */
 /* http://sourceforge.net/projects/phpadsnew                            */
 /*                                                                      */
 /* This program is free software. You can redistribute it and/or modify */
@@ -14,36 +14,11 @@
 
 
 
-// Include required files
-require ("../config.inc.php");
-require ("../lib-db.inc.php");
-require ("../lib-cache.inc.php");
-require ("../admin/lib-statistics.inc.php");
-
-// Set time limit and ignore user abort
-if (!get_cfg_var ('safe_mode')) 
-{
-	set_time_limit (300);
-	ignore_user_abort(1);
-}
-
-
-// Load language strings
-require("../language/$phpAds_language.inc.php");
-
-
-// Make database connection
-phpAds_dbConnect();
-
-
-$adminreport = "";
-
-include ("maintenance-reports.php");
-include ("maintenance-activation.php");
-
-if ($adminreport != "")
-{
-	// mail admin report to admin
-}
+$now = gmdate("D, d M Y H:i:s") . " GMT";
+header ("Date: $now");
+header ("Expires: $now");
+header ("Last-Modified: $now");
+header ("Pragma: no-cache");
+header ("Cache-Control: no-store, no-cache, max-age=0, must-revalidate");
 
 ?>

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -17,10 +17,10 @@
 // Include required files
 require("config.inc.php");
 require("view.inc.php");
-require("acl.inc.php");
+require("lib-acl.inc.php");
 
 // Set header information
-require("nocache.inc.php");
+require("lib-cache.inc.php");
 
 
 if (!isset($what)) 		$what = '';
