@@ -14,10 +14,15 @@ CVS			+ Added P3P Privacy Policies support
 			  - Changed mail headers as a workaround for Win32 SMTP extension bug  (Niels)
 			  - Added ability to force a report from being sent from the Admin interface  (Niels)
 
+			+ HTML banners
+			  - Automatic changing of HTML in order to log clicks can be disabled  (Niels)
+			  - Added support for changing form HTML automatically  (Niels)
+			  - Extra variables assigned to adclick.php are now passed through to target url  (Niels)
+			  - Added {random} support to HTML banners
+
 			+ Added search capabilities  (Niels and Tobi Schulz)
 			+ Added client statistics  (Niels)
 			+ Added ability to reset stats for a complete client  (Niels)
-
 			+ Added expiration details to campaign index  (Niels)
 			+ Added URL prefix and scrolling=no  to bannercode generator  (Niels)
 			+ Changed default names of tables, added prefix to 
@@ -26,6 +31,7 @@ CVS			+ Added P3P Privacy Policies support
 			  for the german translation provided by René Friedrich  (Niels)
 			+ Fixed quote problem with banner-text, alt and description fields  (Niels)
 			+ Fixed HTML layout problem with large description and/or alt-text  (Niels)
+			+ Changes all occurances of <? to <?php  (Niels)
 
 
 v 2.0beta5		+ Added override setting for automatic GD detection  (Niels)
