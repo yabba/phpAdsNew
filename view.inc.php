@@ -1,4 +1,4 @@
-<?php // $Revision: 1.52 $
+<?php // $Revision: 1.53 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -463,10 +463,44 @@ function enjavanate ($str, $limit = 60)
 
 
 /*********************************************************/
+/* Parse the PHP inside a HTMl banner                    */
+/*********************************************************/
+
+function phpAds_ParseHTMLExpressions ($parser_html)
+{
+	if (eregi ("(\<\?php(.*)\?\>)", $parser_html, $parser_regs))
+	{
+		// Extract PHP script
+		$parser_php 	= $parser_regs[2];
+		$parser_result 	= '';
+		
+		// Replace output function
+		$parser_php = eregi_replace ("echo([^;]*);", '$parser_result .=\\1;', $parser_php);
+		$parser_php = eregi_replace ("print([^;]*);", '$parser_result .=\\1;', $parser_php);
+		$parser_php = eregi_replace ("printf([^;]*);", '$parser_result .= sprintf\\1;', $parser_php);
+		
+		// Split the PHP script into lines
+		$parser_lines = explode (";", $parser_php);
+		for ($parser_i = 0; $parser_i < sizeof($parser_lines); $parser_i++)
+		{
+			if (trim ($parser_lines[$parser_i]) != '')
+				eval (trim ($parser_lines[$parser_i]).';');
+		}
+		
+		// Replace the script with the result
+		$parser_html = str_replace ($parser_regs[1], $parser_result, $parser_html);
+	}
+	
+	return ($parser_html);
+}
+
+
+
+/*********************************************************/
 /* Parse the HTML entered in order to log clicks		 */
 /*********************************************************/
 
-function phpAds_parseHTMLBanner ($html, $bannerID, $url, $target)
+function phpAds_ParseHTMLAutoLog ($html, $bannerID, $url, $target)
 {
 	global $phpAds_url_prefix;
 	
@@ -618,7 +652,7 @@ function view_raw($what, $clientID=0, $target='', $source='', $withtext=0, $cont
 {
     global $phpAds_db, $REMOTE_HOST, $phpAds_url_prefix;
 	global $phpAds_default_banner_url, $phpAds_default_banner_target;
-	global $phpAds_type_html_auto;
+	global $phpAds_type_html_auto, $phpAds_type_html_php;
 	
 	if(!ereg('^[0-9]+$', $clientID))
 	{
@@ -655,8 +689,11 @@ function view_raw($what, $clientID=0, $target='', $source='', $withtext=0, $cont
 				// HTML banner
 				$html = stripslashes($row['banner']);
 				
+				if ($phpAds_type_html_php == true)
+					$html = phpAds_ParseHTMLExpressions ($html);
+				
 				if ($phpAds_type_html_auto == true && $row['autohtml'] == 'true')
-					$html = phpAds_parseHTMLBanner ($html, $row['bannerID'], $row['url'], $target);
+					$html = phpAds_ParseHTMLAutoLog ($html, $row['bannerID'], $row['url'], $target);
 				
 				// Replace standard variables
 				$html = str_replace ('{timestamp}',	time(), $html);
