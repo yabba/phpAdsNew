@@ -1,4 +1,4 @@
-<?php // $Revision: 1.16 $
+<?php // $Revision: 1.17 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -234,4 +234,8 @@ $GLOBALS['strSendDeactivationWarning']  = "Stuur een waarschuwing wanneer de cam
 
 $GLOBALS['strWarnClientTxt']			= "Er zijn minder dan {limit} AdClicks of AdViews over voor uw banners. ";
 $GLOBALS['strViewsClicksLow']			= "Uw AdViews/AdClicks zijn bijna volledig gebruikt";
+
+$GLOBALS['strDays']						= "Dagen";
+$GLOBALS['strHistory']					= "Geschiedenis";
+$GLOBALS['strAverage']					= "Gemiddelde";
 ?>

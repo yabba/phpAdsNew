@@ -1,4 +1,4 @@
-<?php // $Revision: 1.11 $
+<?php // $Revision: 1.12 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -232,4 +232,9 @@ $GLOBALS['strNoViewLoggedInInterval']   = "No views were logged in the last {int
 $GLOBALS['strNoClickLoggedInInterval']  = "No clicks were logged in the last {interval} days";
 $GLOBALS['strSendAdvertisingReport']	= "Send an advertising report via e-mail";
 $GLOBALS['strNoDaysBetweenReports']		= "Number of days between reports";
+
+$GLOBALS['strDays']						= "Days";
+$GLOBALS['strHistory']					= "History";
+$GLOBALS['strAverage']					= "Average";
+
 ?>

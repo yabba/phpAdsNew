@@ -1,4 +1,4 @@
-<?php // $Revision: 1.13 $
+<?php // $Revision: 1.14 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -243,5 +243,9 @@ $GLOBALS['strSendDeactivationWarning']  = "Send a warning when a campaign is dea
 
 $GLOBALS['strWarnClientTxt']			= "Click or View count is getting below {limit} for your banners. ";
 $GLOBALS['strViewsClicksLow']			= "Ad views/clicks are low";
+
+$GLOBALS['strDays']						= "Days";
+$GLOBALS['strHistory']					= "History";
+$GLOBALS['strAverage']					= "Average";
 ?>
 
