@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -21,7 +21,7 @@ $res_campaigns = phpAds_dbQuery("
 	SELECT
 		clientid,
 		clientname,
-		DATE_FORMAT(expire, '%Y-%m-%s') AS expire,
+		DATE_FORMAT(expire, '%Y-%m-%d') AS expire,
 		target,
 		views
 	FROM
