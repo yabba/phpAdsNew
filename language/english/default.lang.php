@@ -1,4 +1,4 @@
-<?php // $Revision: 1.11 $
+<?php // $Revision: 1.12 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -370,5 +370,7 @@ $GLOBALS['strAdminSettings']			= "Administration settings";
 
 $GLOBALS['strApplyLimitationsTo']		= "Apply limitations to";
 $GLOBALS['strWholeCampaign']			= "Whole campaign";
+$GLOBALS['strZonesWithoutAffiliate']	= "Zones without affiliate";
+$GLOBALS['strMoveToNewAffiliate']		= "Move to new affiliate";
 
 ?>
