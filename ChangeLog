@@ -3,15 +3,24 @@ phpAdsNew - ChangeLog
 v 2.0beta5		+ Added override setting for automatic GD detection  (Niels)
 			+ Added support for passing ISMAP click location  (Niels)
 
-			+ Misc bugfixes for beta4
+			+ Changes to the database library
+			  - Replaced mysql_db_query with mysql_query  (Niels)
+			  - Always use the mysql link resource parameter  (Niels)
+			  - Database will be closed when using non-persistant connections  (Niels)
+
+			+ Clients / Campaigns
+			  - Weight based sequential banner retrieval now also takes
+			    campaign weight into account  (Niels)
+			  - Campaign weight was not substracted when ACL failed  (Niels)
+			  - Fixed clientid selection bug  (Niels)
+
+			+ PHP3 support
 			  - Replaced variable references for PHP3 support  (Niels)
 			  - Removed array_pop function for PHP 3 support  (Niels)
 			  - Changed {random} regexp for PHP 3 support  (Niels)
+				
+			+ Misc bugfixes for beta4
 			  - Changed dhtml detection for Opera   (Niels)
-			  - Fixed clientid selection bug  (Niels)
-			  - Client weight was not substracted when ACL failed  (Niels)
-			  - Weight based sequential banner retrieval now also takes
-			    client weight into account  (Niels)
 			  - HTML banner preview popup fixed if banner is disabled  (Niels)
 			  - Function call-time pass-by-reference removed, 
 			    will be deprecated in future versions of PHP  (Niels)

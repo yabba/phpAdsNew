@@ -1,4 +1,4 @@
-<?php // $Revision: 1.17 $
+<?php // $Revision: 1.18 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -154,7 +154,7 @@ if (isset($submit))
 		{
 			if ($clientID == "null")
 			{
-				$clientID = @mysql_insert_id ();
+				$clientID = @mysql_insert_id ($phpAds_db_link);
 				Header("Location: campaign-edit.php?clientID=$clientID");
 				exit;
 			}
@@ -167,7 +167,7 @@ if (isset($submit))
 		else
 		{
 			if ($clientID == "null")
-				$clientID = @mysql_insert_id ();
+				$clientID = @mysql_insert_id ($phpAds_db_link);
 			
 			Header("Location: client-edit.php?clientID=$clientID&errormessage=".urlencode($errormessage));
 			exit;

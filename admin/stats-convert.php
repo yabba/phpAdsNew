@@ -1,4 +1,4 @@
-<?php // $Revision: 1.9 $
+<?php // $Revision: 1.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -440,8 +440,6 @@ function phpAds_convertTableCreate()
 		   PRIMARY KEY (conversionID)
 		)
 	");
-	
-	echo mysql_error();
 }
 
 

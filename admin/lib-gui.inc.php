@@ -1,4 +1,4 @@
-<?php // $Revision: 1.12 $
+<?php // $Revision: 1.13 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -303,7 +303,7 @@ function phpAds_ShowMessage($message)
 function mysql_die()
 {
 	global $strMySQLError;
-    global $phpAds_last_query;
+    global $phpAds_db_link, $phpAds_last_query;
 	global $phpAds_GUIDone;
 	
 	if ($phpAds_GUIDone == false) phpAds_PageHeader(-1);
@@ -315,7 +315,7 @@ function mysql_die()
 		echo "<td width='20' valign='top'><img src='images/error.gif' hspace='3'></td>";
 		echo "<td valign='top'>";
 		echo "<b>$strMySQLError</b><br>";
-		echo mysql_error()."<br><br>";
+		echo @mysql_error($phpAds_db_link)."<br><br>";
 		echo "<b>SQL Query:</b><br>";
 		echo "$phpAds_last_query<br>";
 		echo "</td>";
