@@ -148,6 +148,13 @@ $phpAds_acl = "0";
 $phpAds_default_banner_url = "";
 $phpAds_default_banner_target = "";
 
+// Cache zones, this should speed things up when using zones
+$phpAds_zone_cache = true;
+
+// Time between cache updates (in seconds)
+// Once this limit has been reached the cache will be rebuild
+$phpAds_zone_cache_limit = 300; // Reload every 5 minutes
+
 
 
 /*********************************************************/
