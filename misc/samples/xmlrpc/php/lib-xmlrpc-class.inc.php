@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -80,7 +80,7 @@ class phpAds_XmlRpc
 		$this->output = '';
 	}
 	
-	function view_raw($what, $clientid=0, $target='', $source='', $withtext=0, $context=0, $richmedia = true)
+	function view_raw($what, $clientid=0, $campaignid=0, $target='', $source='', $withtext=0, $context=0, $richmedia = true)
 	{
 		// Create context XML-RPC array
 		if (is_array($context))
@@ -98,6 +98,7 @@ class phpAds_XmlRpc
 			$this->remote_info,
 			new xmlrpcval($what, "string"),
 			new xmlrpcval($clientid, "int"),
+			new xmlrpcval($campaignid, "int"),
 			new xmlrpcval($target, "string"),
 			new xmlrpcval($source, "string"),
 			new xmlrpcval($withtext, "boolean"),
@@ -119,15 +120,14 @@ class phpAds_XmlRpc
 		return false;
 	}
 
-	function view($what, $clientid=0, $target='', $source='', $withtext=0, $context=0, $richmedia = true)
+	function view($what, $clientid=0, $campaignid=0, $target='', $source='', $withtext=0, $context=0, $richmedia = true)
 	{
-		$this->view_raw($what, $clientid, $target, $source, $withtext, $context, $richmedia);
+		$this->view_raw($what, $clientid, $campaignid, $target, $source, $withtext, $context, $richmedia);
 
 		echo $this->output['html'];
 
 		return $this->output['bannerid'];
 	}
-
 }
 
 ?>
