@@ -1,4 +1,4 @@
-<?php // $Revision: 1.6 $
+<?php // $Revision: 1.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -123,6 +123,8 @@ function phpAds_aclCheckClientip($aclrow)
 	$data = $aclrow['acl_data'];
 	$host = $GLOBALS['REMOTE_ADDR'];
 	
+	if ($data == '')
+		return (true);
 	
 	if (!strpos($data, '/'))
 	{
