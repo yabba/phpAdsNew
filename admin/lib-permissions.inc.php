@@ -1,4 +1,4 @@
-<?php // $Revision: 1.10 $
+<?php // $Revision: 1.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -27,6 +27,8 @@ define ("phpAds_Client", 2);
 define ("phpAds_ModifyInfo", 1);
 define ("phpAds_ModifyBanner", 2);
 define ("phpAds_AddBanner", 4);
+define ("phpAds_DisableBanner", 8);
+define ("phpAds_ActivateBanner", 16);
 
 
 

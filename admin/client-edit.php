@@ -1,4 +1,4 @@
-<?php // $Revision: 1.18 $
+<?php // $Revision: 1.19 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -110,6 +110,8 @@ if (isset($submit))
 		{
 			$permissions += $clientpermissions[$i];
 		}
+		
+		if (!isset($clientreport)) $clientreport = false;
 		
 		if ($clientreportlastdate == '' || $clientreportlastdate == '0000-00-00' || $clientreportprevious != $clientreport)
 		{
@@ -231,8 +233,8 @@ if ($clientID != "")
 			WHERE
 				parent = 0  
 			") or mysql_die();
-
-		$extra = "";		
+		
+		$extra = "";
 		while ($row = mysql_fetch_array($res))
 		{
 			if ($clientID == $row['clientID'])
@@ -335,7 +337,7 @@ else
 			<select name="clientlanguage">
 		<?
 		echo "<option value='' SELECTED>".$GLOBALS['strDefault']."</option>\n"; 
-
+		
 		$langdir = opendir ("../language/");
 		while ($langfile = readdir ($langdir))
 		{
@@ -472,6 +474,20 @@ else
 		<td colspan='2'>
 			<input type="checkbox" name="clientpermissions[]" value="<?echo phpAds_ModifyBanner; ?>"<?echo (phpAds_ModifyBanner & $row["permissions"]) ? " CHECKED" : ""; ?>>
 			<?echo $GLOBALS['strAllowClientModifyBanner']; ?>
+		</td>
+	</tr>	
+	<tr>
+		<td width='30'>&nbsp;</td>
+		<td colspan='2'>
+			<input type="checkbox" name="clientpermissions[]" value="<?echo phpAds_DisableBanner; ?>"<?echo (phpAds_DisableBanner & $row["permissions"]) ? " CHECKED" : ""; ?>>
+			<?echo $GLOBALS['strAllowClientDisableBanner']; ?>
+		</td>
+	</tr>	
+	<tr>
+		<td width='30'>&nbsp;</td>
+		<td colspan='2'>
+			<input type="checkbox" name="clientpermissions[]" value="<?echo phpAds_ActivateBanner; ?>"<?echo (phpAds_ActivateBanner & $row["permissions"]) ? " CHECKED" : ""; ?>>
+			<?echo $GLOBALS['strAllowClientActivateBanner']; ?>
 		</td>
 	</tr>	
 	<!-- Still working on this (Niels)

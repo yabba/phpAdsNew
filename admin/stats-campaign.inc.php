@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -367,6 +367,18 @@ if (count($tmp_order) > 0)
 			// Buttons
 			echo "<tr><td colspan='4' height='25' align='right'>";
 			
+			if (phpAds_isUser(phpAds_Client) && phpAds_isAllowed(phpAds_DisableBanner) && $row_banners['active'] == 'true') // only for the client if allowed
+			{
+				echo "&nbsp;&nbsp;&nbsp;&nbsp;";
+				echo "<img src='images/icon-deactivate.gif' align='absmiddle'>&nbsp;";
+				echo "<a href='banner-activate.php?campaignID=$campaignID&bannerID=".$row_banners['bannerID']."&value=true'>$strDeActivate</a>";
+			}
+			if (phpAds_isUser(phpAds_Client) && phpAds_isAllowed(phpAds_ActivateBanner) && $row_banners['active'] != 'true') // only for the client if allowed
+			{
+				echo "&nbsp;&nbsp;&nbsp;&nbsp;";
+				echo "<img src='images/icon-activate.gif' align='absmiddle'>&nbsp;";
+				echo "<a href='banner-activate.php?campaignID=$campaignID&bannerID=".$row_banners['bannerID']."&value=false'>$strActivate</a>";
+			}
 			if ($adclicks > 0 || $adviews > 0)
 			{
 				echo "&nbsp;&nbsp;&nbsp;&nbsp;";
