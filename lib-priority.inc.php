@@ -1,4 +1,4 @@
-<?php // $Revision: 1.6 $
+<?php // $Revision: 1.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -480,6 +480,8 @@ function phpAds_PriorityPrepareCampaigns()
 {
 	global $phpAds_config;
 	
+	$campaigns = array();
+
 	$query = "
 		SELECT clientid, weight, target
 		FROM ".$phpAds_config['tbl_clients']."
@@ -500,6 +502,8 @@ function phpAds_PriorityPrepareCampaigns()
 function phpAds_PriorityPrepareBanners()
 {
 	global $phpAds_config;
+	
+	$banners = array();
 	
 	// Get all banners
 	$query = "
