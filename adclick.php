@@ -1,4 +1,4 @@
-<?php // $Revision: 1.11 $
+<?php // $Revision: 1.12 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -94,7 +94,7 @@ if ($bannerID != "DEFAULT")
 				$vars[] = $key.'='.$HTTP_POST_VARS[$key];
 		}
 	
-	if (is_array($vars) && sizeof($vars) > 0)
+	if (isset($vars) && is_array($vars) && sizeof($vars) > 0)
 	{
 		if (strpos ($url, '?') > 0)
 			$url = $url.'&'.implode ('&', $vars);
