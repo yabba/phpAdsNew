@@ -5,6 +5,25 @@
 
 # --------------------------------------------------------
 #
+# Table structure for table 'phpads_zones'
+#
+
+CREATE TABLE phpads_zones (
+   zoneid mediumint(9) NOT NULL AUTO_INCREMENT,
+   zonename varchar(255) NOT NULL,
+   zonetype smallint(6) DEFAULT '0' NOT NULL,
+   what blob NOT NULL,
+   width smallint(6) DEFAULT '0' NOT NULL,
+   height smallint(6) DEFAULT '0' NOT NULL,
+   retrieval enum('random','cookie') DEFAULT 'random' NOT NULL,
+   cachecontents blob,
+   cachetimestamp int DEFAULT '0' NOT NULL,
+   PRIMARY KEY (zoneid)
+);
+
+
+# --------------------------------------------------------
+#
 # Table structure for table 'phpads_adclicks'
 #
 
@@ -104,6 +123,7 @@ CREATE TABLE phpads_session (
 
 CREATE TABLE phpads_acls (
    bannerID mediumint(9) DEFAULT '0' NOT NULL,
+   acl_con set('and','or') NOT NULL,
    acl_type enum('clientip','useragent','weekday','domain','source','time') NOT NULL,
    acl_data varchar(255) NOT NULL,
    acl_ad set('allow','deny') NOT NULL,
