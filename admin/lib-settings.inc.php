@@ -1,4 +1,4 @@
-<?php // $Revision: 1.15 $
+<?php // $Revision: 1.16 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -48,6 +48,7 @@ $phpAds_settings_sections = array(
 	"1.2.2"		=> $strKeywordRetrieval,
 	"1.2.3"		=> $strZonesSettings,
 	"1.2.4"		=> $strP3PSettings,
+	"1.2.5"		=> $strDeliveryLimitations,
 	"1.3"		=> $strBannerSettings,
 	"1.3.1"		=> $strDefaultBanners,
 	"1.3.2"		=> $strAllowedBannerTypes,
