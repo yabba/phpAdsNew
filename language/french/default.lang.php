@@ -1,11 +1,11 @@
-<?php // $Revision: 1.3 $
+<?php // $Id: default.lang.php,v 1.4 2001/11/13 22:34:08 ciaccia Exp $
 
 /************************************************************************/
-/* phpAdsNew 2                                                          */
-/* ===========                                                          */
+/* phpPgAds                                                             */
+/* ========                                                             */
 /*                                                                      */
-/* Copyright (c) 2001 by the phpAdsNew developers                       */
-/* http://sourceforge.net/projects/phpadsnew                            */
+/* Copyright (c) 2001 by the phpPgAds developers                        */
+/* http://sourceforge.net/projects/phppgads                             */
 /*                                                                      */
 /* This program is free software. You can redistribute it and/or modify */
 /* it under the terms of the GNU General Public License as published by */
@@ -17,7 +17,7 @@
 $GLOBALS['strHome'] = "Accueil";
 $GLOBALS['date_format'] = "%d/%m/%Y";
 $GLOBALS['time_format'] = "%H:%i:%S";
-$GLOBALS['strMySQLError'] = "Erreur MySQL:";
+$GLOBALS['strPgSQLError'] = "Erreur PostgreSQL:";
 $GLOBALS['strAdminstration'] = "Administration";
 $GLOBALS['strAddClient'] = "Ajouter un nouveau client";
 $GLOBALS['strModifyClient'] = "Modifier client";
@@ -100,7 +100,7 @@ $GLOBALS['strLogErrorClicks'] = "[phpAds] Une erreur a eu lieu en tentant de réc
 $GLOBALS['strLogErrorDisactivate'] = "[phpAds] Une erreur a eu lieu en tentant de désactiver un bandeau.";
 $GLOBALS['strRatio'] = "Pourcentage de clics";
 $GLOBALS['strChooseBanner'] = "Veuillez choisir le type de bandeau.";
-$GLOBALS['strMySQLBanner'] = "Bandeau stocké dans MySQL";
+$GLOBALS['strPgSQLBanner'] = "Bandeau stocké dans PostgreSQL";
 $GLOBALS['strWebBanner'] = "Bandeau stocké sur le Serveur Web";
 $GLOBALS['strURLBanner'] = "Bandeau récupéré par une URL";
 $GLOBALS['strHTMLBanner'] = "Bandeau HTML";
