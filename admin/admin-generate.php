@@ -1,4 +1,4 @@
-<?php // $Revision: 1.2 $
+<?php // $Revision: 1.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -158,10 +158,10 @@ function phpAds_GenerateInvocationCode()
 	
 	if ($codetype=='local')
 	{
-		$buffer .= "<?php\n";
+		$buffer .= "<"."?php\n";
 		$buffer .= "    require('phpadsnew.inc.php');\n";
 		$buffer .= "    view ('$what', $clientID, '$target', '$source', '$withText');\n";
-		$buffer .= "?>";
+		$buffer .= "?".">";
 	
 	}
 	
