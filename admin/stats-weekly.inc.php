@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -50,3 +50,5 @@ function GetWeekSigns()
 	
 	return array($php_week_sign,$mysql_week_sign);
 }
+
+?>
