@@ -1,4 +1,4 @@
-// $Revision: 1.3 $
+// $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -48,10 +48,12 @@ function confirm_submit(o, str)
 /* Disable checkbox                                      */
 /*********************************************************/
 
-function disable_checkbox(o)
+function disable_checkbox(oc,oe)
 {
-	c = findObj(o);
-	if(c.checked = true) c.checked = false;
+	e = findObj(oe);
+	c = findObj(oc);
+
+	c.checked = e.value != '-' ? false : true;
 }
 
 
