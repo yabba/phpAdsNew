@@ -1,4 +1,4 @@
-<?php // $Revision: 1.11 $
+<?php // $Revision: 1.12 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -61,6 +61,7 @@ function enjavanateOld ($str, $limit = 60)
 		$line = str_replace("\r", '', $line);
 		$line = str_replace("\n", "\\n", $line);
 		$line = str_replace("\t", "\\t", $line);
+		$line = str_replace('<', "<'+'", $line);
 		
 		print "\t\tphpadsbanner += '$line';\n";
 	}
@@ -110,6 +111,7 @@ function enjavanateBanner ($output, $limit = 60)
 		$line = str_replace("\r", '', $line);
 		$line = str_replace("\n", "\\n", $line);
 		$line = str_replace("\t", "\\t", $line);
+		$line = str_replace('<', "<'+'", $line);
 		
 		$ret .= "\tphpadsbanner += '$line';\n";
 	}
