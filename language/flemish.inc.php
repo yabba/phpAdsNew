@@ -1,4 +1,4 @@
-<?php // $Revision: 1.24 $
+<?php // $Revision: 1.25 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -271,11 +271,13 @@ $GLOBALS['strAddZone']					= "Maak zone";
 $GLOBALS['strModifyZone']				= "Wijzig zone";
 $GLOBALS['strAddNewZone']				= "Voeg een zone toe";
 
-$GLOBALS['strOverview']					= "Overzich";
+$GLOBALS['strOverview']					= "Overzicht";
 $GLOBALS['strEqualTo']					= "is gelijk aan";
 $GLOBALS['strDifferentFrom']			= "is verschillend van";
 $GLOBALS['strAND']						= "EN";  // logical operator
 $GLOBALS['strOR']						= "OF"; // logical operator
 $GLOBALS['strOnlyDisplayWhen']			= "Toon deze banner alleen wanneer:";
+
+$GLOBALS['strStatusText']				= "Status Tekst";
 
 ?>

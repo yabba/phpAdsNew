@@ -1,4 +1,4 @@
-<?php // $Revision: 1.26 $
+<?php // $Revision: 1.27 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -281,5 +281,7 @@ $GLOBALS['strDifferentFrom']			= "is different from";
 $GLOBALS['strAND']						= "AND";  // logical operator
 $GLOBALS['strOR']						= "OR"; // logical operator
 $GLOBALS['strOnlyDisplayWhen']			= "Only display this banner when:";
+
+$GLOBALS['strStatusText']				= "Status Text";
 
 ?>

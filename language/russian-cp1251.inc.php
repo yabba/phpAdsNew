@@ -1,4 +1,4 @@
-<?php // $Revision: 1.35 $
+<?php // $Revision: 1.36 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -273,7 +273,7 @@ $GLOBALS['strAutoChangeHTML']			= "Изменить HTML для подсчета кликов";
 
 $GLOBALS['strZones']					= "Зоны";
 $GLOBALS['strAddZone']					= "Создать зону";
-$GLOBALS['strModifyZone']				= "Редактировать зону
+$GLOBALS['strModifyZone']				= "Редактировать зону";
 $GLOBALS['strAddNewZone']				= "Добавить новую зону";
 
 $GLOBALS['strOverview']					= "Обозрение";
@@ -282,5 +282,7 @@ $GLOBALS['strDifferentFrom']			= "отличается от";
 $GLOBALS['strAND']						= "AND";  // logical operator
 $GLOBALS['strOR']						= "OR"; // logical operator
 $GLOBALS['strOnlyDisplayWhen']			= "Показывать этот баннер только когда:";
+
+$GLOBALS['strStatusText']				= "Status Text";
 
 ?>
