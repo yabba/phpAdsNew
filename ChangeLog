@@ -32,6 +32,8 @@ v 2.0beta5		+ Added override setting for automatic GD detection  (Niels)
 			  - Removed spaces after ?> in phpadsnew.inc.php (Thanks to Anonymous :-)
 			  - Made standard CTR calculation respect decimal settings  (Niels)
 			  - stats-index.php and stats-campaign now use standard CTR calculation  (Niels)
+			  - Changed default decimal setting to 2  (Niels)
+			  - Changed default email headers to include the admins full name  (Niels)
 			  
 
 
