@@ -1,4 +1,4 @@
-<?php // $Revision: 1.29 $
+<?php // $Revision: 1.30 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -416,11 +416,8 @@ else
 
 echo "</table>";
 
-if (count($acl) > 0)
-{
-	echo "<br><br>";
-	echo "<input type='submit' name='submit' value='$strSaveChanges'>";
-}
+echo "<br><br>";
+echo "<input type='submit' name='submit' value='$strSaveChanges'>";
 
 echo "</form>";
 echo "<br><br>";
