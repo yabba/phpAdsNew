@@ -1,4 +1,4 @@
-<?php // $Revision: 1.17 $
+<?php // $Revision: 1.18 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -199,14 +199,14 @@ $GLOBALS['strShowClientsInactive']		= "Show clients with inactive banners";
 $GLOBALS['strSize']						= "Size";
 
 $GLOBALS['strMonth'] 					= array("January","February","March","April","May","June","July", "August", "September", "October", "November", "December");
-$GLOBALS['strDontExpire']				= "Don't expire this client on a specific date";
-$GLOBALS['strActivateNow'] 				= "Activate this client immediately";
+$GLOBALS['strDontExpire']				= "Don't expire this campaign on a specific date";
+$GLOBALS['strActivateNow'] 				= "Activate this campaign immediately";
 $GLOBALS['strExpirationDate']			= "Expiration date";
 $GLOBALS['strActivationDate']			= "Activation date";
 
 $GLOBALS['strMailClientDeactivated'] 	= "The following banners have been disabled because";
 $GLOBALS['strMailNothingLeft'] 			= "If you would like to continue advertising on our website, please feel free to contact us.\nWe'd be glad to hear from you.";
-$GLOBALS['strClientDeactivated']		= "This client is currently not active because";
+$GLOBALS['strClientDeactivated']		= "This campaign is currently not active because";
 $GLOBALS['strBeforeActivate']			= "the activation date has not yet been reached";
 $GLOBALS['strAfterExpire']				= "the expiration date has been reached";
 $GLOBALS['strNoMoreClicks']				= "the amount of AdClicks purchased are used";
