@@ -15,7 +15,9 @@ CVS			+ Added P3P Privacy Policies support
 			  - Added ability to force a report from being sent from the Admin interface  (Niels)
 
 			+ HTML banners
-			  - Automatic changing of HTML in order to log clicks can be disabled  (Niels)
+			  - Automatic changing of HTML in order to log clicks can be disabled globally  (Niels)
+			  - Automatic changing of HTML in order to log clicks can be disabled on a per banner basis  (Niels)
+			  - The tag target='...' will be automatically replaced with the right target  (Niels)
 			  - Added support for changing form HTML automatically  (Niels)
 			  - Extra variables assigned to adclick.php are now passed through to target url  (Niels)
 			  - Added {random} support to HTML banners
@@ -25,13 +27,15 @@ CVS			+ Added P3P Privacy Policies support
 			+ Added ability to reset stats for a complete client  (Niels)
 			+ Added expiration details to campaign index  (Niels)
 			+ Added URL prefix and scrolling=no  to bannercode generator  (Niels)
+			+ Changed the way JavaScript is generated for remote invocation with JavaScript  (Niels)
 			+ Changed default names of tables, added prefix to 
 			  avoid conflicts with other products  (Niels)
 			+ Rearanged directory structure for the manual, to make room
 			  for the german translation provided by René Friedrich  (Niels)
 			+ Fixed quote problem with banner-text, alt and description fields  (Niels)
 			+ Fixed HTML layout problem with large description and/or alt-text  (Niels)
-			+ Changes all occurances of <? to <?php  (Niels)
+			+ Changed all occurances of <? to <?php  (Niels)
+			+ Changed most " to ' in view.inc.php for minor speed improvement  (Niels)
 
 
 v 2.0beta5		+ Added override setting for automatic GD detection  (Niels)
