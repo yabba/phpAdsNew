@@ -1,4 +1,4 @@
-<?php // $Revision: 1.38 $
+<?php // $Revision: 1.39 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -284,11 +284,11 @@ $GLOBALS['strOnlyDisplayWhen']			= "ѕоказывать этот баннер только когда:";
 $GLOBALS['strStatusText']				= "ќписание статуса";
 
 $GLOBALS['strConfirmDeleteClient'] 		= "¬ы действительно хотите удалить этого клиента?";
-$GLOBALS['strConfirmDeleteCampaign']	= "Do you really want to delete this campaign?";
-$GLOBALS['strConfirmDeleteBanner']		= "Do you really want to delete this banner?";
-$GLOBALS['strConfirmResetStats']		= "Do you really want to reset all stats?";
-$GLOBALS['strConfirmResetCampaignStats']= "Do you really want to reset stats for this campaign?";
+$GLOBALS['strConfirmDeleteCampaign']	= "¬ы действительно хотите удалить эту кампанию?";
+$GLOBALS['strConfirmDeleteBanner']		= "¬ы действительно хотите удалить этот баннер?";
+$GLOBALS['strConfirmResetStats']		= "¬ы действительно хотите обнулить всю статистику?";
+$GLOBALS['strConfirmResetCampaignStats']= "¬ы действительно хотите обнулить статистику дл€ этой кампании?";
 $GLOBALS['strConfirmResetClientStats']	= "¬ы действительно хотите обнулить статистику дл€ этого клиента ?";
-$GLOBALS['strConfirmResetBannerStats']	= "Do you really want to reset stats for this banner?";
+$GLOBALS['strConfirmResetBannerStats']	= "¬ы действительно хотите обнулить статистику дл€ этого баннера?";
 
 ?>
