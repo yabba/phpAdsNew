@@ -1,4 +1,4 @@
-<?php // $Revision: 1.32 $
+<?php // $Revision: 1.33 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -238,7 +238,7 @@ $GLOBALS['strSendDeactivationWarning']  = "Посылать предупреждение, когда кампан
 $GLOBALS['strWarnClientTxt']			= "Количество нажатий или просмотров для ваших баннеров скоро станет меньше {limit}. ";
 $GLOBALS['strViewsClicksLow']			= "Рекламные просмотры/нажатия подходят к концу";
 
-$GLOBALS['strDays']						= "Дни";
+$GLOBALS['strDays']						= "Дней";
 $GLOBALS['strHistory']					= "История";
 $GLOBALS['strAverage']					= "В среднем";
 $GLOBALS['strDuplicateClientName']		= "Указанное имя пользователя уже существует, пожалуйста введите другое имя.";
