@@ -1,4 +1,4 @@
-<?php // $Revision: 1.15 $
+<?php // $Revision: 1.16 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -130,7 +130,7 @@ function phpAds_warningMail ($campaign)
 			
 			if ($phpAds_config['warn_admin'])
 			{
-				$To = '"'.$phpAds_config['admin_fullname'].'" <'.$phpAds_config['admin_email'].">';
+				$To = '"'.$phpAds_config['admin_fullname'].'" <'.$phpAds_config['admin_email'].'>';
 				$Headers2 = $Headers.(!get_cfg_var('SMTP') ? "" : "To: $To");
 				@mail($To, $Subject, $Body, $Headers2);
 			}
