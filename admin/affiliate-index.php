@@ -1,4 +1,4 @@
-<?php // $Revision: 1.8 $
+<?php // $Revision: 1.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -89,6 +89,7 @@ while ($row_zones = phpAds_dbFetchArray($res_zones))
 	if ($row_zones['cachecontents'] != '')
 		$stats['cachedzones']++;
 }
+
 
 
 // Expand tree nodes
@@ -284,22 +285,22 @@ else
 		echo "<tr height='1'><td colspan='5' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
 		$i++;
 	}
+}
+
+if ($loosezones)
+{
+	echo "<tr height='25' ".($i%2==0?"bgcolor='#F6F6F6'":"").">";
+	echo "<td height='25'>&nbsp;&nbsp;";
+	echo "<img src='images/icon-zone.gif' align='absmiddle'>&nbsp;";
+	echo $strZonesWithoutAffiliate."</td>";
+	echo "<td height='25'>&nbsp;-&nbsp;</td>";
+	echo "<td height='25' colspan='3'>";
+	echo "<a href='affiliate-edit.php?move=t'>";
+	echo "<img src='images/icon-update.gif' border='0' align='absmiddle' alt='$strMoveToNewAffiliate'>&nbsp;$strMoveToNewAffiliate</a>&nbsp;&nbsp;";
+	echo "</td>";
+	echo "</tr>";
 	
-	if ($loosezones)
-	{
-		echo "<tr height='25' ".($i%2==0?"bgcolor='#F6F6F6'":"").">";
-		echo "<td height='25'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-		echo "<img src='images/icon-zone.gif' align='absmiddle'>&nbsp;";
-		echo $strZonesWithoutAffiliate."</td>";
-		echo "<td height='25'>&nbsp;-&nbsp;</td>";
-		echo "<td height='25' colspan='3'>";
-		echo "<a href='affiliate-edit.php?move=t'>";
-		echo "<img src='images/icon-update.gif' border='0' align='absmiddle' alt='$strMoveToNewAffiliate'>&nbsp;$strMoveToNewAffiliate</a>&nbsp;&nbsp;";
-		echo "</td>";
-		echo "</tr>";
-		
-		echo "<tr height='1'><td colspan='5' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
-	}
+	echo "<tr height='1'><td colspan='5' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
 }
 
 echo "<tr height='25'><td colspan='5' height='25'>";
