@@ -1,4 +1,4 @@
-<?php // $Revision: 1.18 $
+<?php // $Revision: 1.19 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -266,14 +266,9 @@ for ($d=0;$d<$limit;$d++)
 	
 	echo "<tr>";
 	
-	if (!$phpAds_config['compact_stats'] && $available) 
-	{
-		echo "<td height='25' bgcolor='$bgcolor'>&nbsp;";
-		echo "<a href='stats-daily.php?day=".urlencode($text)."&campaignid=".$campaignid."&bannerid=".$bannerid."'>";
-		echo $text."</a></td>";
-	}
-	else
-		echo "<td height='25' bgcolor='$bgcolor'>&nbsp;".$text."</td>";
+	echo "<td height='25' bgcolor='$bgcolor'>&nbsp;";
+	echo "<a href='stats-daily.php?day=".urlencode($text)."&campaignid=".$campaignid."&bannerid=".$bannerid."'>";
+	echo $text."</a></td>";
 	
 	echo "<td height='25' bgcolor='$bgcolor'>".$views."</td>";
 	echo "<td height='25' bgcolor='$bgcolor'>".$clicks."</td>";
