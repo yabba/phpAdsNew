@@ -1,4 +1,4 @@
-<?php // $Revision: 1.21 $
+<?php // $Revision: 1.22 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -639,12 +639,16 @@ function phpAds_totalStats($table, $column, $bannerID, $timeconstraint="")
 
 function phpAds_totalClicks($bannerID="", $timeconstraint="")
 {
-    return phpAds_totalStats($GLOBALS["phpAds_tbl_adclicks"], "clicks", $bannerID, $timeconstraint);
+	global $phpAds_config;
+	
+    return phpAds_totalStats($phpAds_config['tbl_adclicks'], "clicks", $bannerID, $timeconstraint);
 }
 
 function phpAds_totalViews($bannerID="", $timeconstraint="")
 {
-    return phpAds_totalStats($GLOBALS["phpAds_tbl_adviews"], "views", $bannerID, $timeconstraint);
+	global $phpAds_config;
+	
+    return phpAds_totalStats($phpAds_config['tbl_adviews'], "views", $bannerID, $timeconstraint);
 }
 
 ?>
