@@ -1,4 +1,4 @@
-<?php // $Revision: 1.9 $
+<?php // $Revision: 1.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -34,6 +34,7 @@ if (!isset($bannerID))
 	if(isset($n) && is_array($banID)) $bannerID = $banID[$n];
 	
 	// Get destination
+	if(isset($destNum) && !empty($destNum)) $dest = $destNum;
 	if(isset($n) && is_array($destID)) $dest = $destID[$n];
 }
 
