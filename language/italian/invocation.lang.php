@@ -1,4 +1,4 @@
-<?php // $Revision: 1.6 $
+<?php // $Revision: 1.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -100,8 +100,8 @@ $GLOBALS['strAlwaysActive']				= "Sempre attivo";
 $GLOBALS['strSpeed']					= "Velocit&agrave;";
 $GLOBALS['strPause']					= "Pausa";
 $GLOBALS['strLimited']					= "Limitato";
-$GLOBALS['strLeftmargin']				= "Margine sinistro";
-$GLOBALS['strRightmargin']				= "Margine destro";
+$GLOBALS['strLeftMargin']				= "Margine sinistro";
+$GLOBALS['strRightMargin']				= "Margine destro";
 $GLOBALS['strTransparentBackground']	= "Sfondo trasparente";
 
 
