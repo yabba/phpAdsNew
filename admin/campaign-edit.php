@@ -1,4 +1,4 @@
-<?php // $Revision: 2.8 $
+<?php // $Revision: 2.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -970,8 +970,10 @@ while ($row = phpAds_dbFetchArray($res))
 	    							 (f.views.value == '') ||
 	    							 (f.unlimitedviews.checked == true) );
 
-	    // Only allow automatic distribution is autotargeting is available.
+	    // If autotargeting is available, do not allow manual targeting, no targeting, or low priority campaigns.
 		f.delivery[0].disabled = !autotarget_available;
+		f.delivery[1].disabled = autotarget_available;
+		f.delivery[2].disabled = autotarget_available;
 		// Disable low priority campaigns if autotargeting is available.
 		f.priority[2].disabled = autotarget_available;
 			
