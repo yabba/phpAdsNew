@@ -49,6 +49,8 @@ CVS			+ Added search capabilities  (Niels and Tobi Schulz)
 
 			+ Statistics
 			  - Added client statistics  (Niels)
+			  - Added general history statistics (Niels)
+			  - Added history statistics for campaigns (Niels)
 			  - Added ability to reset stats for a complete client  (Niels)
 			  - Added ability to reset all stats  (Niels)
 			
