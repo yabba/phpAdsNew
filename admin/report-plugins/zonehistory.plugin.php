@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -122,7 +122,7 @@ function Plugin_ZonehistoryExecute($zoneid, $delimiter=",")
 		}
 	}
 	
-	echo $strZone.": ".phpAds_getZoneName ($zoneid)."\n\n";
+	echo $strZone.": ".strip_tags(phpAds_getZoneName ($zoneid))."\n\n";
 	echo $strDay.$delimiter.$strViews.$delimiter.$strClicks.$delimiter.$strCTRShort."\n";
 	
 	$totalclicks = 0;

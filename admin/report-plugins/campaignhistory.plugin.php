@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -136,7 +136,7 @@ function Plugin_CampaignhistoryExecute($campaignid, $delimiter=",")
 		}
 	}
 	
-	echo $strCampaign.": ".phpAds_getClientName ($campaignid)."\n\n";
+	echo $strCampaign.": ".strip_tags(phpAds_getClientName ($campaignid))."\n\n";
 	echo $strDay.$delimiter.$strViews.$delimiter.$strClicks.$delimiter.$strCTRShort."\n";
 	
 	$totalclicks = 0;
