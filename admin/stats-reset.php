@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -30,7 +30,7 @@ phpAds_checkAccess(phpAds_Admin);
 if (isset($bannerID))
 {
     db_delete_stats($bannerID);
-	Header("Location: stats-client.php?clientID=$clientID");
+	Header("Location: stats-campaign.php?campaignID=$campaignID");
 }  
 
 ?>
