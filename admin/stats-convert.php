@@ -1,4 +1,4 @@
-<?php // $Revision: 1.10 $
+<?php // $Revision: 1.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -185,7 +185,7 @@ if ($command == 'overview')
 			}
 		//-->
 		</script>
-	<?
+	<?php
 	echo "</head><body onLoad=\"StartCleanup();\">";
 	echo "<table width='100%' cellpadding='0' cellspacing='0' border='0'>";
 	

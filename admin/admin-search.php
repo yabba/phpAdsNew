@@ -26,7 +26,7 @@ phpAds_checkAccess(phpAds_Admin);
 <html>
 	<head>
 		<title><?php echo $strSearch; ?></title>
-		<meta http-equiv='Content-Type' content='text/html<? echo $phpAds_CharSet != "" ? "; charset=".$phpAds_CharSet : "" ?>'>
+		<meta http-equiv='Content-Type' content='text/html<?php echo $phpAds_CharSet != "" ? "; charset=".$phpAds_CharSet : "" ?>'>
 		<meta name='author" content='phpAdsNew - http://sourceforge.net/projects/phpadsnew'>
 		<link rel='stylesheet' href='interface.css'>
 		<script language='JavaScript' src='interface.js'></script>

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.7 $
+<?php // $Revision: 1.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -89,13 +89,13 @@ if (phpAds_isUser(phpAds_Client))
 ?>
 
 <table width='100%' border="0" align="center" cellspacing="0" cellpadding="0">
-	<tr><td height='25' colspan='4'><img src='images/icon-client.gif' align='absmiddle'>&nbsp;<b><?echo phpAds_getClientName($clientID);?></b></td></tr>
+	<tr><td height='25' colspan='4'><img src='images/icon-client.gif' align='absmiddle'>&nbsp;<b><?php echo phpAds_getClientName($clientID);?></b></td></tr>
   <tr><td height='1' colspan='4' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>
 </table>
 
 <br><br>
 
-<?
+<?php
 
 if (!isset($limit) || $limit=='') $limit = '7';
 

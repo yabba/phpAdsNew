@@ -1,4 +1,4 @@
-<?php // $Revision: 1.6 $
+<?php // $Revision: 1.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -89,48 +89,48 @@ function showaclrow($row, $total, $update, $count=1)
 	$bgcolor = $count % 2 == 0 ? "#F6F6F6" : "#FFFFFF";
 	
 	?>
-	<tr bgcolor='<?echo $bgcolor?>'>
-		<form action="<?echo basename($PHP_SELF);?>" method="get">
-		<input type="hidden" name="campaignID" value="<? echo $campaignID; ?>">
-		<input type="hidden" name="bannerID" value="<? print $row['bannerID']; ?>">
-		<input type="hidden" name="acl_order" value="<? print $row['acl_order']; ?>">
-		<input type="hidden" name="update" value="<? print $update; ?>">
+	<tr bgcolor='<?php echo $bgcolor?>'>
+		<form action="<?php echo basename($PHP_SELF);?>" method="get">
+		<input type="hidden" name="campaignID" value="<?php echo $campaignID; ?>">
+		<input type="hidden" name="bannerID" value="<?php print $row['bannerID']; ?>">
+		<input type="hidden" name="acl_order" value="<?php print $row['acl_order']; ?>">
+		<input type="hidden" name="update" value="<?php print $update; ?>">
 
 		<td height='35'>
-			&nbsp;<? acltypeselect(isset($row['acl_type']) ? $row['acl_type'] : ""); ?>
+			&nbsp;<?php acltypeselect(isset($row['acl_type']) ? $row['acl_type'] : ""); ?>
 		</td>
 		<td height='35'>
-			<? acladselect(isset($row['acl_ad']) ? $row['acl_ad']: ""); ?>&nbsp;&nbsp;
+			<?php acladselect(isset($row['acl_ad']) ? $row['acl_ad']: ""); ?>&nbsp;&nbsp;
 		</td>
 		<td height='35'>
-			<input type="text" size="40" name="acl_data" value="<? print isset($row['acl_data']) ? $row['acl_data'] : ""; ?>">
+			<input type="text" size="40" name="acl_data" value="<?php print isset($row['acl_data']) ? $row['acl_data'] : ""; ?>">
 		</td>
 		<td height='35' colspan='4' align='right'>
-			<? if ($row['acl_order'] && $row['acl_order'] < $total) { ?>
-				<input type="image" name="btnup" src='images/triangle-u.gif' border='0' alt='<?print $strUp?>'>
-			<? } else { ?>
-				<img src='images/triangle-u-d.gif' alt='<?print $strUp?>'>
-			<? } ?>
+			<?php if ($row['acl_order'] && $row['acl_order'] < $total) { ?>
+				<input type="image" name="btnup" src='images/triangle-u.gif' border='0' alt='<?php print $strUp?>'>
+			<?php } else { ?>
+				<img src='images/triangle-u-d.gif' alt='<?php print $strUp?>'>
+			<?php } ?>
 
-			<? if ($row['acl_order'] < $total - 1) { ?>
-				<input type="image" name="btndown" src='images/triangle-d.gif' border='0' alt='<?print $strDown?>'>
-			<? } else { ?>
-				<img src='images/triangle-d-d.gif' alt='<?print $strDown?>'>
-			<? } ?>
+			<?php if ($row['acl_order'] < $total - 1) { ?>
+				<input type="image" name="btndown" src='images/triangle-d.gif' border='0' alt='<?php print $strDown?>'>
+			<?php } else { ?>
+				<img src='images/triangle-d-d.gif' alt='<?php print $strDown?>'>
+			<?php } ?>
 
-			<? if ($row['acl_order'] < $total) { ?>
-				<input type="image" name="btndel" src='images/icon-recycle.gif' border='0' alt='<?print $strDelete?>'>
-			<? } else { ?>
-				<img src='images/icon-recycle-d.gif' alt='<?print $strDelete?>'>
-			<? } ?>
+			<?php if ($row['acl_order'] < $total) { ?>
+				<input type="image" name="btndel" src='images/icon-recycle.gif' border='0' alt='<?php print $strDelete?>'>
+			<?php } else { ?>
+				<img src='images/icon-recycle-d.gif' alt='<?php print $strDelete?>'>
+			<?php } ?>
 			
-			<input type="image" name="btnsave" src='images/save.gif' border='0' alt='<?print $strSave?>'>
+			<input type="image" name="btnsave" src='images/save.gif' border='0' alt='<?php print $strSave?>'>
 			&nbsp;
 		</td>
 		</form>
 	</tr>
 	<tr><td height='1' colspan='7' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>
-	<?
+	<?php
 }
 
 ?>

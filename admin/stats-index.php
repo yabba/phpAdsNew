@@ -1,4 +1,4 @@
-<?php // $Revision: 1.8 $
+<?php // $Revision: 1.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -535,72 +535,72 @@ if (isset($clients) && is_array($clients) && count($clients) > 0)
 ?>
 
 
-<? if (phpAds_isUser(phpAds_Admin)) { ?>
+<?php if (phpAds_isUser(phpAds_Admin)) { ?>
 
 <table width='100%' border="0" align="center" cellspacing="0" cellpadding="0">
-  <tr><td height='25' colspan='4'><b><?echo $strStats;?></b></td></tr>
+  <tr><td height='25' colspan='4'><b><?php echo $strStats;?></b></td></tr>
   <tr height='1'><td colspan='4' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>
 
-<?
+<?php
 	// stats today
 	$adviews = db_total_views("", "day");
 	$adclicks = db_total_clicks("", "day");
 	$ctr = phpAds_buildCTR($adviews, $adclicks)
 ?>
 
-  <tr><td height='25'><?echo $strToday;?></td>
-  	  <td height='25'><?echo $strViews;?>: <b><?echo $adviews;?></b></td>
-      <td height='25'><?echo $strClicks;?>: <b><?echo $adclicks;?></b></td>
-      <td height='25'><?echo $strCTRShort;?>: <b><?echo $ctr;?></b></td></tr>
+  <tr><td height='25'><?php echo $strToday;?></td>
+  	  <td height='25'><?php echo $strViews;?>: <b><?php echo $adviews;?></b></td>
+      <td height='25'><?php echo $strClicks;?>: <b><?php echo $adclicks;?></b></td>
+      <td height='25'><?php echo $strCTRShort;?>: <b><?php echo $ctr;?></b></td></tr>
   <tr height='1'><td colspan='4' bgcolor='#888888'><img src='images/break-el.gif' height='1' width='100%'></td></tr>
 
-<?
+<?php
 	// stats this week
 	$adviews = db_total_views("", "week");
 	$adclicks = db_total_clicks("", "week");
 	$ctr = phpAds_buildCTR($adviews, $adclicks)
 ?>
 
-  <tr><td height='25'><?echo $strThisWeek;?></td>
-   	  <td height='25'><?echo $strViews;?>: <b><?echo $adviews;?></b></td>
-      <td height='25'><?echo $strClicks;?>: <b><?echo $adclicks;?></b></td>
-      <td height='25'><?echo $strCTRShort;?>: <b><?echo $ctr;?></b></td></tr>
+  <tr><td height='25'><?php echo $strThisWeek;?></td>
+   	  <td height='25'><?php echo $strViews;?>: <b><?php echo $adviews;?></b></td>
+      <td height='25'><?php echo $strClicks;?>: <b><?php echo $adclicks;?></b></td>
+      <td height='25'><?php echo $strCTRShort;?>: <b><?php echo $ctr;?></b></td></tr>
   <tr height='1'><td colspan='4' bgcolor='#888888'><img src='images/break-el.gif' height='1' width='100%'></td></tr>
 
-<?
+<?php
 	// stats this month
 	$adviews = db_total_views("", "month");
 	$adclicks = db_total_clicks("", "month");
 	$ctr = phpAds_buildCTR($adviews, $adclicks)
 ?>
 
-  <tr><td height='25'><?echo $strThisMonth;?></td>
-  	  <td height='25'><?echo $strViews;?>: <b><?echo $adviews;?></b></td>
-      <td height='25'><?echo $strClicks;?>: <b><?echo $adclicks;?></b></td>
-      <td height='25'><?echo $strCTRShort;?>: <b><?echo $ctr;?></b></td></tr>
+  <tr><td height='25'><?php echo $strThisMonth;?></td>
+  	  <td height='25'><?php echo $strViews;?>: <b><?php echo $adviews;?></b></td>
+      <td height='25'><?php echo $strClicks;?>: <b><?php echo $adclicks;?></b></td>
+      <td height='25'><?php echo $strCTRShort;?>: <b><?php echo $ctr;?></b></td></tr>
   <tr height='1'><td colspan='4' bgcolor='#888888'><img src='images/break-el.gif' height='1' width='100%'></td></tr>
   
   
-<?
+<?php
 	// overall stats
 	$adviews = db_total_views();
 	$adclicks = db_total_clicks();
 	$ctr = phpAds_buildCTR($adviews, $adclicks)
 ?>
 
-  <tr><td height='25'><?echo $strOverall;?></td>
-  	  <td height='25'><?echo $strViews;?>: <b><?echo $adviews;?></b></td>
-      <td height='25'><?echo $strClicks;?>: <b><?echo $adclicks;?></b></td>
-      <td height='25'><?echo $strCTRShort;?>: <b><?echo $ctr;?></b></td></tr>
+  <tr><td height='25'><?php echo $strOverall;?></td>
+  	  <td height='25'><?php echo $strViews;?>: <b><?php echo $adviews;?></b></td>
+      <td height='25'><?php echo $strClicks;?>: <b><?php echo $adclicks;?></b></td>
+      <td height='25'><?php echo $strCTRShort;?>: <b><?php echo $ctr;?></b></td></tr>
   <tr height='1'><td colspan='4' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>
   
 </table>   
 
-<? } ?>
+<?php } ?>
 
 <br><br>
 
-<?
+<?php
 
 /*********************************************************/
 /* HTML framework                                        */

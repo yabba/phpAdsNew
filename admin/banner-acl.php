@@ -1,4 +1,4 @@
-<?php // $Revision: 1.7 $
+<?php // $Revision: 1.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -195,17 +195,17 @@ phpAds_PageHeader("4.1.3", $extra);
 
 
 <table width='100%' border="0" align="center" cellspacing="0" cellpadding="0">
-	<tr><td height='25' colspan='4'><img src='images/icon-client.gif' align='absmiddle'>&nbsp;<?echo phpAds_getParentName($campaignID);?>
+	<tr><td height='25' colspan='4'><img src='images/icon-client.gif' align='absmiddle'>&nbsp;<?php echo phpAds_getParentName($campaignID);?>
 									&nbsp;<img src='images/caret-rs.gif'>&nbsp;
-									<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<?echo phpAds_getClientName($campaignID);?>
+									<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<?php echo phpAds_getClientName($campaignID);?>
 									&nbsp;<img src='images/caret-rs.gif'>&nbsp;
-									<? if ($bannerID != '') { ?>
-									<img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;<b><?echo phpAds_getBannerName($bannerID);?></b></td></tr>
-									<? } else { ?>
-									<img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;<?echo $strUntitled; ?></td></tr>
-									<? } ?>
+									<?php if ($bannerID != '') { ?>
+									<img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;<b><?php echo phpAds_getBannerName($bannerID);?></b></td></tr>
+									<?php } else { ?>
+									<img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;<?php echo $strUntitled; ?></td></tr>
+									<?php } ?>
   <tr><td height='1' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>
-  <?
+  <?php
 	if ($bannerID != '')
 		echo "<tr><td align='left'><br>".phpAds_getBannerCode($bannerID)."<br><br></td></tr>";
   ?>
@@ -213,7 +213,7 @@ phpAds_PageHeader("4.1.3", $extra);
 
 <br><br>
 
-<?
+<?php
 echo "<table border='0' width='100%' cellpadding='0' cellspacing='0'>";
 
 
@@ -244,9 +244,9 @@ if ($count > 0)
 ?>
 
 	<tr><td height='35' colspan='7'>&nbsp;</td></tr>
-	<tr><td height='25' colspan='7'><b><? echo $strACLAdd; ?></b></td></tr>
+	<tr><td height='25' colspan='7'><b><?php echo $strACLAdd; ?></b></td></tr>
 	<tr><td height='1' colspan='7' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>
-	<?
+	<?php
 	$newdata['acl_order'] = $count;
 	$newdata['bannerID'] = $bannerID;
 	showaclrow($newdata, 0, 0, 0);
@@ -256,7 +256,7 @@ if ($count > 0)
 <br><br>
 
 
-<?	
+<?php
 
 // Show acl help file
 include("../language/banneracl.".$phpAds_language.".inc.php");

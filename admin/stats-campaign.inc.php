@@ -1,4 +1,4 @@
-<?php // $Revision: 1.6 $
+<?php // $Revision: 1.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -149,34 +149,34 @@ else
 ?>
 
 <table border='0' width='100%' cellpadding='0' cellspacing='0'>
-	<tr><td height='25' colspan='2'><img src='images/icon-client.gif' align='absmiddle'>&nbsp;<?echo phpAds_getParentName($campaignID);?>
+	<tr><td height='25' colspan='2'><img src='images/icon-client.gif' align='absmiddle'>&nbsp;<?php echo phpAds_getParentName($campaignID);?>
 									&nbsp;<img src='images/caret-rs.gif'>&nbsp;
-									<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<b><?echo phpAds_getClientName($campaignID);?></b></td></tr>
+									<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<b><?php echo phpAds_getClientName($campaignID);?></b></td></tr>
 
 	<tr height='1'><td colspan='2' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>
 	<tr>
-		<form action='<? echo $GLOBALS['PHP_SELF']; ?>'>
+		<form action='<?php echo $GLOBALS['PHP_SELF']; ?>'>
 		<td height='35' align='left'>
-			<input type='hidden' name='campaignID' value='<? echo $campaignID; ?>'>
+			<input type='hidden' name='campaignID' value='<?php echo $campaignID; ?>'>
 			<select name='view' onChange='this.form.submit();'>
-				<option value='all'<? echo $view=='all' ? " selected" : ""?>><? echo $strShowAllBanners ?></option>
-				<option value='adclicks'<? echo $view=='adclicks' ? " selected" : ""?>><? echo $strShowBannersNoAdClicks ?></option>
-				<option value='adviews'<? echo $view=='adviews' ? " selected" : ""?>><? echo $strShowBannersNoAdViews ?></option>
+				<option value='all'<?php echo $view=='all' ? " selected" : ""?>><?php echo $strShowAllBanners ?></option>
+				<option value='adclicks'<?php echo $view=='adclicks' ? " selected" : ""?>><?php echo $strShowBannersNoAdClicks ?></option>
+				<option value='adviews'<?php echo $view=='adviews' ? " selected" : ""?>><?php echo $strShowBannersNoAdViews ?></option>
 			</select>
 			&nbsp;<? echo $strOrderBy ?>&nbsp;
 			<select name='order' onChange='this.form.submit();'>
-				<option value='bannerid'<? echo $order=='bannerid' ? " selected" : ""?>><? echo $strID ?></option>
-				<option value='alt'<? echo $order=='alt' ? " selected" : ""?>><? echo $strDescription ?></option>
-				<option value='adviews'<? echo $order=='adviews' ? " selected" : ""?>><? echo $strViews ?></option>
-				<option value='adclicks'<? echo $order=='adclicks' ? " selected" : ""?>><? echo $strClicks ?></option>
-				<option value='ctr'<? echo $order=='ctr' ? " selected" : ""?>><? echo $strCTRShort ?></option>
+				<option value='bannerid'<?php echo $order=='bannerid' ? " selected" : ""?>><?php echo $strID ?></option>
+				<option value='alt'<?php echo $order=='alt' ? " selected" : ""?>><?php echo $strDescription ?></option>
+				<option value='adviews'<?php echo $order=='adviews' ? " selected" : ""?>><?php echo $strViews ?></option>
+				<option value='adclicks'<?php echo $order=='adclicks' ? " selected" : ""?>><?php echo $strClicks ?></option>
+				<option value='ctr'<?php echo $order=='ctr' ? " selected" : ""?>><?php echo $strCTRShort ?></option>
 			</select>
 			<input type="image" border="0" name='submit' src="images/go_blue.gif">
 		</td>
 		<td height='35' align='right'>
 			<select name='compact' onChange='this.form.submit();'>
-				<option value='false'<? echo $compact!='true' ? " selected" : ""?>><? echo $strVerbose ?></option>
-				<option value='true'<? echo $compact=='true' ? " selected" : ""?>><? echo $strCompact ?></option>
+				<option value='false'<?php echo $compact!='true' ? " selected" : ""?>><?php echo $strVerbose ?></option>
+				<option value='true'<?php echo $compact=='true' ? " selected" : ""?>><?php echo $strCompact ?></option>
 			</select>
 		</td>
 		</form>
@@ -220,7 +220,7 @@ function showHideLayers(obj) {
 </script>
 
 
-<?
+<?php
 
 $totaladviews = 0;
 $totaladclicks = 0;
@@ -542,48 +542,48 @@ if (count($tmp_order) > 0)
 ?>
 
 <table border='0' width='100%' cellpadding='0' cellspacing='0'>
-	<tr><td height='25' colspan='2'><b><?echo $strCreditStats;?></b></td></tr>
+	<tr><td height='25' colspan='2'><b><?php echo $strCreditStats;?></b></td></tr>
 	<tr><td height='1' colspan='2' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>
 
-<?
+<?php
 if (phpAds_GDImageFormat() != "none" && $totaladviews > 0 && !$phpAds_compact_stats)
 {
 ?>
 	<tr><td height='20' colspan='2'>&nbsp;</td></tr>	
 	<tr>
-		<td bgcolor="#FFFFFF" colspan=2><img src="graph-hourly.php?where=<?$where = ereg_replace("OR$", "", $where); echo urlencode("$where");?>" border="0" width="385" height="150"></td>
+		<td bgcolor="#FFFFFF" colspan=2><img src="graph-hourly.php?where=<?php $where = ereg_replace("OR$", "", $where); echo urlencode("$where");?>" border="0" width="385" height="150"></td>
 	</tr>
 	<tr><td height='10' colspan='2'>&nbsp;</td></tr>	
 	<tr><td height='1' colspan='2' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>
-<?
+<?php
 }
 ?>
 
-<?
+<?php
 list($desc,$enddate,$daysleft)=days_left($campaignID);
 $adclicksleft = adclicks_left($campaignID);
 $adviewsleft  = adviews_left($campaignID);
 ?>
 	<tr>
-		<td height='25'><?echo $strTotalViews;?>: <b><?echo $totaladviews;?></b></td>
-		<td height='25'><?echo $strViewCredits;?>: <b><?echo $adviewsleft;?></b></td>
+		<td height='25'><?php echo $strTotalViews;?>: <b><?php echo $totaladviews;?></b></td>
+		<td height='25'><?php echo $strViewCredits;?>: <b><?php echo $adviewsleft;?></b></td>
 	</tr>
 	<tr><td height='1' colspan='2' bgcolor='#888888'><img src='images/break-el.gif' height='1' width='100%'></td></tr>
 	<tr>
-		<td height='25'><?echo $strTotalClicks;?>: <b><?echo $totaladclicks;?></b></td>
-		<td height='25'><?echo $strClickCredits;?>: <b><?echo $adclicksleft;?></b></td>
+		<td height='25'><?php echo $strTotalClicks;?>: <b><?php echo $totaladclicks;?></b></td>
+		<td height='25'><?php echo $strClickCredits;?>: <b><?php echo $adclicksleft;?></b></td>
 	</tr>
 	<tr><td height='1' colspan='2' bgcolor='#888888'><img src='images/break-el.gif' height='1' width='100%'></td></tr>
 	<tr>
-		<td height='25' colspan='2'><? echo $desc; ?></td>
+		<td height='25' colspan='2'><?php echo $desc; ?></td>
 	</tr>
-	<?
+	<?php
 		if ($adviewsleft != $strUnlimited || $adclicksleft != $strUnlimited) {
 	?>
 	<tr><td height='1' colspan='2' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>
 	<tr>
 		<td height='60' align='left'>
-		<?
+		<?php
 		if ($adviewsleft == $strUnlimited)
 			print "&nbsp;";
 		else
@@ -595,13 +595,13 @@ $adviewsleft  = adviews_left($campaignID);
 			print "<img src='graph-daily.php?width=200&data=Clicks^$totaladclicks^^Credits^$adclicksleft^^'></td>\n";
 		?>
 	</tr>
-	<?
+	<?php
 		}
 	?>
 	<tr><td height='1' colspan='2' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>
 	<tr>
 		<td colspan='2' height='25'>
-		<?
+		<?php
 		if ($totaladclicks > 0 || $totaladviews > 0)
 		{
 			print "<img src='images/icon-weekly.gif' align='absmiddle'>&nbsp;<a href='stats-weekly.php?campaignID=$campaignID'>$strWeeklyStats</a>&nbsp;&nbsp;&nbsp;&nbsp;";
@@ -610,6 +610,3 @@ $adviewsleft  = adviews_left($campaignID);
 		</td>
 	</tr>
 </table>
-
-
-
