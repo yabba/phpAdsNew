@@ -1,4 +1,4 @@
-<?php // $Revision: 1.14 $
+<?php // $Revision: 1.15 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -327,7 +327,7 @@ function days_left($clientid)
 		$ret_val[] = '';
 	}
 	
-	return isset($ret_val) $ret_val : false;
+	return isset($ret_val) ? $ret_val : false;
 }
 
 
