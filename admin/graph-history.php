@@ -1,4 +1,4 @@
-<?php // $Revision: 1.7 $
+<?php // $Revision: 1.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -96,6 +96,12 @@ elseif ($affiliateid != '')
 			$zoneids[] = "zoneid = ".$row['zoneid'];
 	
 	$where[] = "(".implode(' OR ', $zoneids).")";
+}
+
+// Source
+if ($source != '-')
+{
+	$where[] = "source = '".$source."'";
 }
 
 
