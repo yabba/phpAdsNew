@@ -1,4 +1,4 @@
-<?php // $Revision: 1.15 $
+<?php // $Revision: 1.16 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -101,6 +101,7 @@ $GLOBALS['strLogErrorDisactivate'] = "[phpAds] Si e\' verificato un errore nel t
 $GLOBALS['strRatio'] = "Percentuale di Click-Through";
 $GLOBALS['strChooseBanner'] = "Scegliere il tipo di banner.";
 $GLOBALS['strMySQLBanner'] = "Banner memorizzato nel database MySQL";
+$GLOBALS['strWebBanner'] = "Banner stored on the Webserver";
 $GLOBALS['strURLBanner'] = "Banner situato ad un altro URL";
 $GLOBALS['strHTMLBanner'] = "HTML banner";
 $GLOBALS['strNewBannerFile'] = "Nuovo file del banner";
