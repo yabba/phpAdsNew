@@ -1,4 +1,4 @@
-// $Revision: 1.1 $
+// $Revision: 2.0 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -28,7 +28,7 @@
  * Of course, this soft is provided "as is" without express or implied
  * warranty of any kind.
  *
- * $Id: md5.js,v 1.1 2002/08/15 21:43:53 rakaz Exp $
+ * $Id: md5.js,v 2.0 2002/10/29 21:01:41 rakaz Exp $
  *
  */
 
