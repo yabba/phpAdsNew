@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -24,8 +24,18 @@ require ("lib-append.inc.php");
 
 
 // Register input variables
-phpAds_registerGlobal ('chaintype', 'chainzone', 'chainwhat', 'append', 'prepend', 'submitbutton');
-phpAds_registerGlobal ('appendtype', 'appendid', 'appenddelivery', 'appendsave');
+phpAds_registerGlobal (
+	 'append'
+	,'appenddelivery'
+	,'appendid'
+	,'appendsave'
+	,'appendtype'
+	,'chaintype'
+	,'chainwhat'
+	,'chainzone'
+	,'prepend'
+	,'submitbutton'
+);
 
 
 // Security check
@@ -124,6 +134,8 @@ if (isset($submitbutton))
 				}
 				
 				$append = addslashes(phpAds_GenerateInvocationCode());
+				//Temporary fix - allow {source} for popup tags...
+				$append = str_replace('%7Bsource%7D', '{source}', $append);
 			}
 			
 			$sqlupdate[] = "append='".$append."'";

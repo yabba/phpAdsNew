@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -100,7 +100,7 @@ if (phpAds_isUser(phpAds_Admin))
 		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentClientName($campaignid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<b>".phpAds_getCampaignName($campaignid)."</b><br><br><br>";
-		phpAds_ShowSections(array("2.1.2.1", "2.1.2.2", "2.1.2.3", "2.1.2.4"));
+		phpAds_ShowSections(array("2.1.2.1", "2.1.2.2", "2.1.2.3", "2.1.2.4", "2.1.2.5"));
 }
 
 
@@ -110,7 +110,7 @@ if (phpAds_isUser(phpAds_Admin))
 /*********************************************************/
 
 	$lib_targetstats_params    = array ('clientid' => $clientid, 'campaignid' => $campaignid);
-	$lib_targetstats_where			= "clientid = '".$campaignid."'";
+	$lib_targetstats_where			= "campaignid = '".$campaignid."'";
 	
 	include ("lib-targetstats.inc.php");
 

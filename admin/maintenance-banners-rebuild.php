@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -42,7 +42,8 @@ while ($current = phpAds_dbFetchArray($res))
 		$current['imageurl'] = "{url_prefix}/adimage.php?filename=".$current['filename']."&amp;contenttype=".$current['contenttype'];
 	
 	if ($current['storagetype'] == 'web')
-		$current['imageurl'] = $phpAds_config['type_web_url'].'/'.$current['filename'];
+		//$current['imageurl'] = $phpAds_config['type_web_url'].'/'.$current['filename'];
+		$current['imageurl'] = '{image_url_prefix}/'.$current['filename'];
 	
 	
 	// Add slashes to status to prevent javascript errors

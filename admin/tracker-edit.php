@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -233,8 +233,8 @@ else
 	
 	
 	$row['trackername'] .= $strDefault." ".$strTracker;
-	$row['clickwindow'] = $phpAds_config['conversion_clickwindow'];
-	$row['viewwindow'] = $phpAds_config['conversion_viewwindow'];
+	$row['clickwindow'] = $phpAds_config['default_conversion_clickwindow'];
+	$row['viewwindow'] = $phpAds_config['default_conversion_viewwindow'];
 }
 
 // Parse the number of seconds in the conversion windows into days, hours, minutes, seconds..

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.6 $
+<?php // $Revision: 1.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -193,16 +193,15 @@ while ($row_banners = phpAds_dbFetchArray($res_banners))
 	}
 	
 	
-	$res_stats = phpAds_dbQuery("
-		SELECT
-			sum(views) as views,
-			sum(clicks) as clicks,
-			sum(conversions) as conversions
-		FROM 
-			".$phpAds_config['tbl_adstats']."
-		WHERE
-			bannerid = ".$row_banners['bannerid'].$limit."
-		") or phpAds_sqlDie();
+	$res_stats = phpAds_dbQuery(
+		"SELECT".
+		" sum(views) as views".
+		",sum(clicks) as clicks".
+		",sum(conversions) as conversions".
+		" FROM ".$phpAds_config['tbl_adstats'].
+		" WHERE bannerid = ".$row_banners['bannerid'].
+		$limit
+	) or phpAds_sqlDie();
 	
 	if ($row_stats = phpAds_dbFetchArray($res_stats))
 	{

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -20,7 +20,7 @@ require ('lib-gd.inc.php');
 if (!isset($source))
 	$source = '-';
 
-if ($source != '-')
+if ( ($source != '-') && (phpAds_isUser(phpAds_Admin)) )
 	$lib_history_source = "source = '".$source."'";
 
 if (!isset($period) || $period == '')
@@ -147,18 +147,21 @@ if (isset($row['span']) && $row['span'] > 0)
 	/*********************************************************/
 	
 	$sources = array();
-	
-	$result = phpAds_dbQuery("
-		SELECT
-			DISTINCT source as source
-		FROM
-			".$phpAds_config['tbl_adstats']."
-			".(isset($lib_history_where) ? 'WHERE '.$lib_history_where : '')."
-	");
-	
-	while ($row = phpAds_dbFetchArray($result))
+
+	if (phpAds_isUser(phpAds_Admin))
 	{
-		$sources[] = $row['source'];
+		$result = phpAds_dbQuery("
+			SELECT
+				DISTINCT source as source
+			FROM
+				".$phpAds_config['tbl_adstats']."
+				".(isset($lib_history_where) ? 'WHERE '.$lib_history_where : '')."
+		");
+		
+		while ($row = phpAds_dbFetchArray($result))
+		{
+			$sources[] = $row['source'];
+		}
 	}
 	
 	/*********************************************************/
@@ -211,7 +214,7 @@ if (isset($row['span']) && $row['span'] > 0)
 		echo "<option value='m'".($period == 'm' ? ' selected' : '').">".$strMonthlyHistory."</option>";
 	echo "</select>";
 	
-	if ((count($sources) == 1 && $sources[0] != '') || count($sources) > 1)
+	if (((count($sources) == 1 && $sources[0] != '') || count($sources) > 1) && (phpAds_isUser(phpAds_Admin)))
 	{
 		echo "&nbsp;&nbsp;";
 		echo $strFilterBySource;

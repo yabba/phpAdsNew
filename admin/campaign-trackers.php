@@ -85,7 +85,7 @@ if (isset($campaignid) && $campaignid != '')
 			
 		if (isset($trackerids) && is_array($trackerids))
 		{
-			for ($i=0; $i<sizeof($campaignids); $i++)
+			for ($i=0; $i<sizeof($trackerids); $i++)
 			{
 				$logid = 'n';
 				for ($j=0; $j<sizeof($logids); $j++)

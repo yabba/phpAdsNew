@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -17,6 +17,35 @@ function phpAds_getBannerTemplate($type)
 {
 	if ($type == 'swf')
 	{
+
+		$buffer  = "\n";
+		$buffer .= "<script language='Javascript' type='text/javascript'>\n";
+		$buffer .= "<!--\n";
+		$buffer .= "\tvar plugin = (navigator.mimeTypes && navigator.mimeTypes['application/x-shockwave-flash']) ? navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin : 0;\n";
+		$buffer .= "\tif ( plugin ) {\n";
+		$buffer .= "\t\tplugin = parseInt(plugin.description.substring(plugin.description.indexOf('.')-1)) >= {pluginversion};\n";
+		$buffer .= "\t}\n";
+		$buffer .= "\telse if (navigator.userAgent && navigator.userAgent.indexOf('MSIE')>=0 && (navigator.userAgent.indexOf('Windows 95')>=0 || navigator.userAgent.indexOf('Windows 98')>=0 || navigator.userAgent.indexOf('Windows NT')>=0)) {\n";
+		$buffer .= "\t\tdocument.write(\"<script language=VBScript\\>\");\n";
+		$buffer .= "\t\tdocument.write(\"on error resume next\");\n";
+		$buffer .= "\t\tdocument.write(\"plugin = ( IsObject(CreateObject('ShockwaveFlash.ShockwaveFlash.{pluginversion}')))\");\n";
+		$buffer .= "\t\tdocument.write(\"if ( plugin <= 0 ) then plugin = ( IsObject(CreateObject('ShockwaveFlash.ShockwaveFlash.{pluginversion}')))\");\n";
+		$buffer .= "\t\tdocument.write(\"<\\/script\>\");\n";
+		$buffer .= "\t}\n";
+		$buffer .= "\tif ( plugin ) {\n";
+		$buffer .= "\t\tdocument.write(\"<object classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000' codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version={pluginversion:4,0,0,0}' width='{width}' HEIGHT='{height}'>\");\n";
+		$buffer .= "\t\tdocument.write(\"<param name='movie' value='{imageurl}{swf_con}{swf_param}'>\");\n";
+		$buffer .= "\t\tdocument.write(\"<param name='quality' value='high'>\");\n";
+		$buffer .= "\t\tdocument.write(\"<embed src='{imageurl}{swf_con}{swf_param}' quality='high' width='{width}' height='{height}' type='application/x-shockwave-flash' pluginspage='http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash'></embed>\");\n";
+		$buffer .= "\t\tdocument.write(\"</object>\");\n";
+		$buffer .= "\t} else if (!(navigator.appName && navigator.appName.indexOf('Netscape')>=0 && navigator.appVersion.indexOf('2.')>=0)) {\n";
+		$buffer .= "\t\tdocument.write(\"<a href='{targeturl}' target='{target}'><img src='{alt_imageurl}' width='{width}' height='{height}' border='0'></a>\");\n";
+		$buffer .= "\t}\n";
+		$buffer .= "//-->\n";
+		$buffer .= "</script>\n";
+		$buffer .= "<noembed><a href='{targeturl}' target='{target}'><img src='{alt_imageurl}' width='{width}' height='{height}' border='0'></a></noembed>\n";
+		$buffer .= "<noscript><a href='{targeturl}' target='{target}'><img src='{alt_imageurl}' width='{width}' height='{height}' border='0'></a></noscript>\n";
+/*
 		$buffer  = "<object classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000' ";
 		$buffer .= "codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/";
 		$buffer .= "swflash.cab#version={pluginversion:4,0,0,0}' width='{width}' height='{height}'>";
@@ -24,8 +53,9 @@ function phpAds_getBannerTemplate($type)
 		$buffer .= "<param name='quality' value='high'>";
 		$buffer .= "<embed src='{imageurl}{swf_con}{swf_param}' quality=high ";
 		$buffer .= "width='{width}' height='{height}' type='application/x-shockwave-flash' ";
-		$buffer .= "pluginspace='http://www.macromedia.com/go/getflashplayer'></embed>";
+		$buffer .= "pluginspage='http://www.macromedia.com/go/getflashplayer'></embed>";
 		$buffer .= "</object>";
+*/
 	}
 	elseif ($type == 'dcr')
 	{
@@ -352,8 +382,10 @@ function phpAds_getBannerCache($banner)
 	
 	// Set imageurl
 	if ($banner['storagetype'] == 'sql' || $banner['storagetype'] == 'web' || $banner['storagetype'] == 'url')
+	{
 		$buffer = str_replace ('{imageurl}', $banner['imageurl'], $buffer);
-	
+		$buffer = str_replace ('{alt_imageurl}', $banner['alt_imageurl'], $buffer);
+	}
 	
 	// Set flash variables
 	if ($banner['contenttype'] == 'swf')
@@ -429,6 +461,9 @@ function phpAds_getBannerCache($banner)
 		
 		$buffer = str_replace ($matches[0], $pluginversion, $buffer);
 	}
+	// Player version
+	if (isset($banner['pluginversion']) && $banner['pluginversion'] != '')
+		$buffer = str_replace ('{pluginversion}', $banner['pluginversion'], $buffer);
 	
 	
 	// Append

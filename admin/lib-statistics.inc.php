@@ -1,4 +1,4 @@
-<?php // $Revision: 2.8 $
+<?php // $Revision: 2.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -605,6 +605,8 @@ function phpAds_buildBannerCode ($bannerid, $fullpreview = false)
 		
 		// Replace url_prefix
 		$row['htmlcache'] = str_replace ('{url_prefix}', $phpAds_config['url_prefix'], $row['htmlcache']);
+		// Replace image_url_prefix
+		$row['htmlcache'] = str_replace ('{image_url_prefix}', $phpAds_config['type_web_url'], $row['htmlcache']);
 		
 		
 		switch ($row['storagetype'])
@@ -723,14 +725,28 @@ function phpAds_buildBannerCode ($bannerid, $fullpreview = false)
 
 function phpAds_buildCTR ($views, $clicks)
 {
+	return phpAds_formatPercentage(phpAds_buildRatio($clicks, $views));
+}
+
+function phpAds_buildRatio($numerator, $denominator)
+{
+	return ($denominator == 0 ? 0 : $numerator/$denominator);
+}
+
+function phpAds_formatPercentage($number)
+{
 	global $phpAds_config, $phpAds_DecimalPoint, $phpAds_ThousandsSeperator;
+	return number_format($number*100, $phpAds_config['percentage_decimals'], $phpAds_DecimalPoint, $phpAds_ThousandsSeperator).'%';
+}
+
+function phpAds_formatNumber ($number)
+{
+	global $phpAds_ThousandsSeperator;
 	
-	if ($views > 0)
-		$ctr = number_format(($clicks*100)/$views, $phpAds_config['percentage_decimals'], $phpAds_DecimalPoint, $phpAds_ThousandsSeperator)."%";
-	else
-		$ctr="0".$phpAds_DecimalPoint."00%";
-		
-	return ($ctr);
+	if (!strcmp($number, '-'))
+		return '-';
+	
+	return (number_format($number, 0, '', $phpAds_ThousandsSeperator));
 }
 
 
@@ -761,7 +777,7 @@ function phpAds_deleteStatsByTrackerID($trackerid)
 /* Get overview statistics						         */
 /*********************************************************/
 
-function phpAds_totalStats($table, $column, $bannerid, $timeconstraint="")
+function phpAds_totalStats($column, $bannerid, $timeconstraint="")
 {
     global $phpAds_config;
     
@@ -812,14 +828,21 @@ function phpAds_totalClicks($bannerid="", $timeconstraint="")
 {
 	global $phpAds_config;
 	
-    return phpAds_totalStats($phpAds_config['tbl_adclicks'], "clicks", $bannerid, $timeconstraint);
+    return phpAds_totalStats("clicks", $bannerid, $timeconstraint);
+}
+
+function phpAds_totalConversions($bannerid="", $timeconstraint="")
+{
+	global $phpAds_config;
+	
+    return phpAds_totalStats("conversions", $bannerid, $timeconstraint);
 }
 
 function phpAds_totalViews($bannerid="", $timeconstraint="")
 {
 	global $phpAds_config;
 	
-    return phpAds_totalStats($phpAds_config['tbl_adviews'], "views", $bannerid, $timeconstraint);
+    return phpAds_totalStats("views", $bannerid, $timeconstraint);
 }
 
 function phpAds_htmlQuotes ($string)
@@ -830,17 +853,6 @@ function phpAds_htmlQuotes ($string)
 	
 	return $string;
 }
-
-function phpAds_formatNumber ($number)
-{
-	global $phpAds_ThousandsSeperator;
-	
-	if (!strcmp($number, '-'))
-		return '-';
-	
-	return (number_format($number, 0, '', $phpAds_ThousandsSeperator));
-}
-
 
 
 /*********************************************************/

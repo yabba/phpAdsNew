@@ -1,4 +1,4 @@
-<?php // $Revision: 2.10 $
+<?php // $Revision: 2.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -152,6 +152,7 @@ $phpAds_nav = array (
     	        "2.1.2.2.2" 		=> 	array("stats-banner-affiliates.php?clientid=$clientid&campaignid=$campaignid&bannerid=$bannerid" => $strDistribution),
     	      "2.1.2.3"		 		=> 	array("stats-campaign-affiliates.php?clientid=$clientid&campaignid=$campaignid" => $strDistribution),
     	      "2.1.2.4"		 		=> 	array("stats-campaign-target.php?clientid=$clientid&campaignid=$campaignid" => $strTargetStats),
+    	      "2.1.2.5"		 		=> 	array("stats-campaign-optimise.php?clientid=$clientid&campaignid=$campaignid" => $strOptimise),
 		  "2.2"						=>  array("stats-global-history.php" => $strGlobalHistory),
 		    "2.2.1"					=> 	array("stats-global-daily.php?day=$day" => $strDailyStats),
 		    "2.2.2"					=> 	array("stats-global-daily-hosts.php?day=$day" => $strHosts),

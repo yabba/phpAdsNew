@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -19,7 +19,8 @@ require ("config.php");
 require ("lib-statistics.inc.php");
 require ("lib-size.inc.php");
 require ("lib-zones.inc.php");
-
+require_once('lib-data-sources.inc.php');
+require_once('lib-data-campaigns.inc.php');
 
 // Register input variables
 phpAds_registerGlobal (
@@ -135,7 +136,7 @@ if (phpAds_isUser(phpAds_Admin))
 		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentClientName($campaignid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<b>".phpAds_getCampaignName($campaignid)."</b><br><br><br>";
-		phpAds_ShowSections(array("2.1.2.1", "2.1.2.2", "2.1.2.3", "2.1.2.4"));
+		phpAds_ShowSections(array("2.1.2.1", "2.1.2.2", "2.1.2.3", "2.1.2.4", "2.1.2.5"));
 }
 
 
@@ -143,60 +144,9 @@ if (phpAds_isUser(phpAds_Admin))
 /* Main code                                             */
 /*********************************************************/
 
-$manual['clicks'] = 0;
-$manual['conversions'] = 0;
-$manual['views'] = 0;
-$totalclicks = 0;
-$totalconversions = 0;
-$totalviews = 0;
-
 // Check to see if this campaign is anonymous
-$anonymous = false;
-$res_campaign = phpAds_dbQuery(
-	"SELECT anonymous".
-	" FROM ".$phpAds_config['tbl_campaigns'].
-	" WHERE campaignid=".$campaignid
-);
-
-if ($row_campaign = phpAds_dbFetchArray($res_campaign))
-{
-	$anonymous = ($row_campaign['anonymous'] == 't');
-}
-
-$sources = array();
-
-// Get the adviews/clicks for each campaign
-$res_stats = phpAds_dbQuery(
-	"SELECT".
-	" source".
-	",sum(views) as views".
-	",sum(clicks) as clicks".
-	",sum(conversions) as conversions".
-	" FROM ".$phpAds_config['tbl_adstats']." AS s".
-	",".$phpAds_config['tbl_banners']." AS b".
-	" WHERE b.bannerid=s.bannerid".
-	" AND b.campaignid=".$campaignid.
-	" GROUP BY source"
-) or phpAds_sqlDie();
-
-while ($row_stats = phpAds_dbFetchArray($res_stats))
-{
-	$source = $row_stats['source'];
-	if (strlen($source) > 0)
-	{
-		$sources = phpAds_buildSourceArray($sources, $source, '', $row_stats);
-	}
-	else
-	{
-		$manual['clicks'] += $row_stats['clicks'];
-		$manual['conversions'] += $row_stats['conversions'];
-		$manual['views'] += $row_stats['views'];
-	}
-	
-	$totalclicks += $row_stats['clicks'];
-	$totalconversions += $row_stats['conversions'];
-	$totalviews += $row_stats['views'];
-}
+$campaign = phpAds_getCampaignByCampaignID($campaignid);
+$anonymous = ($campaign['anonymous'] == 't');
 
 // Add ID found in expand to expanded nodes
 if (isset($expand) && ($expand != ''))
@@ -224,12 +174,15 @@ for ($i=0; $i<$arrlen; $i++)
 	}
 	else
 	{
-		$sources['expand'][$node_array[$i]] = 1;
+		$sources_expand[$node_array[$i]] = 1;
 	}
 }
 
 if ($expand == 'all')
-	$sources['expand'] = 'all';
+	$sources_expand = 'all';
+
+// Get the list of sources...
+$source_arr = phpAds_getSourceStatsByCampaignID($campaignid, $listorder, $orderdirection);
 
 echo "\t\t\t\t<form action='".$HTTP_SERVER_VARS['PHP_SELF']."'>\n";
 echo "\t\t\t\t<input type='hidden' name='clientid' value='".$clientid."'>\n";
@@ -243,36 +196,25 @@ phpAds_ShowBreak();
 echo "\t\t\t\t</form>\n";
 
 
-if ($totalviews > 0 || $totalclicks > 0)
+if ($source_arr['views'] > 0 || $source_arr['clicks'] > 0 || $source_arr['conversions'] > 0)
 {
 	echo "\t\t\t\t<br><br>\n";
 	echo "\t\t\t\t<table border='0' width='100%' cellpadding='0' cellspacing='0'>\n";	
 	
 	echo "\t\t\t\t<tr height='25'>\n";
-	echo "\t\t\t\t\t<td height='25' width='40%'><b>&nbsp;&nbsp;<a href='stats-campaign-sources.php?clientid=".$clientid."&campaignid=".$campaignid."&listorder=name'>".$GLOBALS['strName']."</a>";
 	
-	if (($listorder == "name") || ($listorder == ""))
-	{
-		if  (($orderdirection == "") || ($orderdirection == "down"))
-		{
-			echo " <a href='stats-campaign-sources.php?clientid=".$clientid."&campaignid=".$campaignid."&orderdirection=up'>";
-			echo "<img src='images/caret-ds.gif' border='0' alt='' title=''>";
-		}
-		else
-		{
-			echo " <a href='stats-campaign-sources.php?clientid=".$clientid."&campaignid=".$campaignid."&orderdirection=down'>";
-			echo "<img src='images/caret-u.gif' border='0' alt='' title=''>";
-		}
-		echo "</a>";
-	}
-	
-	echo "</b></td>\n";
-	
-	echo "\t\t\t\t\t<td height='25' align='".$phpAds_TextAlignRight."'><b>".$GLOBALS['strViews']."</b></td>\n";
-	echo "\t\t\t\t\t<td height='25' align='".$phpAds_TextAlignRight."'><b>".$GLOBALS['strClicks']."</b></td>\n";
-	echo "\t\t\t\t\t<td height='25' align='".$phpAds_TextAlignRight."'><b>".$GLOBALS['strCTRShort']."</b></td>\n";
-	echo "\t\t\t\t\t<td height='25' align='".$phpAds_TextAlignRight."'><b>".$GLOBALS['strConversions']."</b></td>\n";
-	echo "\t\t\t\t\t<td height='25' align='".$phpAds_TextAlignRight."'><b>".$GLOBALS['strCNVRShort']."</b>&nbsp;&nbsp;</td>\n";
+	$link = "stats-campaign-sources.php?clientid=".$clientid."&campaignid=".$campaignid;
+
+	// Name column header
+	echo "\t\t\t\t\t<td height='25' width='40%'>".phpAds_getColumnHeader($GLOBALS['strName'], "name", $link, ($listorder=='' ? 'name':$listorder), $orderdirection)."</td>\n";
+	// Views column header
+	echo "\t\t\t\t\t<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_getColumnHeader($GLOBALS['strViews'], 'views', $link, $listorder, $orderdirection)."</td>\n";
+	// Clicks column header
+	echo "\t\t\t\t\t<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_getColumnHeader($GLOBALS['strClicks'], 'clicks', $link, $listorder, $orderdirection)."</td>\n";
+	echo "\t\t\t\t\t<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_getColumnHeader($GLOBALS['strCTRShort'], 'ctr', $link, $listorder, $orderdirection)."</td>\n";
+	// Conversions column header
+	echo "\t\t\t\t\t<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_getColumnHeader($GLOBALS['strConversions'], "conversions", $link, $listorder, $orderdirection)."</td>\n";
+	echo "\t\t\t\t\t<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_getColumnHeader($GLOBALS['strCNVRShort'], 'cnvr', $link, $listorder, $orderdirection)."&nbsp;&nbsp;</td>\n";
 	echo "\t\t\t\t</tr>\n";
 	
 	echo "\t\t\t\t<tr height='1'><td colspan='6' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>\n";
@@ -280,40 +222,24 @@ if ($totalviews > 0 || $totalclicks > 0)
 	
 	$cnt=0;
 
-	for ($i=0; $i<sizeof($sources); $i++)
+	for ($i=0; $i<sizeof($source_arr['children']); $i++)
 	{
-		if (is_array($sources[$i]))
+		if (is_array($source_arr['children'][$i]))
 		{
-			phpAds_printSourceRow($sources[$i], $sources['expand'], "&nbsp;&nbsp;");
+			phpAds_printSourceRow($source_arr['children'][$i], $sources_expand, $listorder, $orderdirection, "&nbsp;&nbsp;");
 			echo "\t\t\t\t<tr height='1'><td colspan='6' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>\n";
 			$cnt++;
 		}
 	}
 	
-	if ( ($manual['views'] > 0) || ($manual['clicks'] > 0) || ($manual['conversions'] > 0) )
-	{
-		echo "\t\t\t\t<tr height='25' ".($cnt%2==0?"bgcolor='#F6F6F6'":"").">\n";
-		echo "\t\t\t\t\t<td>&nbsp;&nbsp;".$strUnknown."</td>";
-		
-		echo "\t\t\t\t\t<td align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($manual['views'])."</td>\n";
-		echo "\t\t\t\t\t<td align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($manual['clicks'])."</td>\n";
-		echo "\t\t\t\t\t<td align='".$phpAds_TextAlignRight."'>".phpAds_buildCTR($manual['views'], $manual['clicks'])."</td>\n";
-		echo "\t\t\t\t\t<td align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($manual['conversions'])."</td>\n";
-		echo "\t\t\t\t\t<td align='".$phpAds_TextAlignRight."'>".phpAds_buildCTR($manual['clicks'], $manual['conversions'])."&nbsp;&nbsp;</td>\n";
-		echo "\t\t\t\t</tr>\n";
-		
-		echo "\t\t\t\t<tr height='1'><td colspan='6' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>\n";
-	}
-	
-	
 	// Total
 	echo "\t\t\t\t<tr height='25'>\n";
-	echo "\t\t\t\t\t<td height='25'>&nbsp;&nbsp;<b>".$strTotal."</b></td>\n";
-	echo "\t\t\t\t\t<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($totalviews)."</td>\n";
-	echo "\t\t\t\t\t<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($totalclicks)."</td>\n";
-	echo "\t\t\t\t\t<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_buildCTR($totalviews, $totalclicks)."</td>\n";
-	echo "\t\t\t\t\t<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($totalconversions)."</td>\n";
-	echo "\t\t\t\t\t<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_buildCTR($totalclicks, $totalconversions)."&nbsp;&nbsp;</td>\n";
+	echo "\t\t\t\t\t<td>&nbsp;&nbsp;<b>".$strTotal."</b></td>\n";
+	echo "\t\t\t\t\t<td align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($source_arr['views'])."</td>\n";
+	echo "\t\t\t\t\t<td align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($source_arr['clicks'])."</td>\n";
+	echo "\t\t\t\t\t<td align='".$phpAds_TextAlignRight."'>".phpAds_formatPercentage($source_arr['ctr'])."</td>\n";
+	echo "\t\t\t\t\t<td align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($source_arr['conversions'])."</td>\n";
+	echo "\t\t\t\t\t<td align='".$phpAds_TextAlignRight."'>".phpAds_formatPercentage($source_arr['cnvr'])."&nbsp;&nbsp;</td>\n";
 	echo "\t\t\t\t</tr>\n";
 	
 	// Break
@@ -357,7 +283,7 @@ phpAds_SessionDataStore();
 
 phpAds_PageFooter();
 
-function phpAds_printSourceRow($source_row, $expand_arr, $begin_str)
+function phpAds_printSourceRow($source_row, $expand_arr, $listorder, $orderdirection, $begin_str)
 {
 	global
 		 $anonymous
@@ -378,9 +304,9 @@ function phpAds_printSourceRow($source_row, $expand_arr, $begin_str)
 	if ($children_present && !$anonymous)
 	{
 		if ($expand)
-			echo "<a href='stats-campaign-sources.php?clientid=".$clientid."&campaignid=".$campaignid."&collapse=".$source_row['path']."'><img src='images/triangle-d.gif' align='absmiddle' border='0'></a>&nbsp;";
+			echo "<a href='stats-campaign-sources.php?clientid=".$clientid."&campaignid=".$campaignid."&collapse=".urlencode($source_row['path'])."'><img src='images/triangle-d.gif' align='absmiddle' border='0'></a>&nbsp;";
 		else
-			echo "<a href='stats-campaign-sources.php?clientid=".$clientid."&campaignid=".$campaignid."&expand=".$source_row['path']."'><img src='images/".$phpAds_TextDirection."/triangle-l.gif' align='absmiddle' border='0'></a>&nbsp;";
+			echo "<a href='stats-campaign-sources.php?clientid=".$clientid."&campaignid=".$campaignid."&expand=".urlencode($source_row['path'])."'><img src='images/".$phpAds_TextDirection."/triangle-l.gif' align='absmiddle' border='0'></a>&nbsp;";
 	}
 	else
 		echo "<img src='images/spacer.gif' align='absmiddle' width='16' height='16' border='0'>";
@@ -388,7 +314,7 @@ function phpAds_printSourceRow($source_row, $expand_arr, $begin_str)
 	if ($anonymous)
 		echo "(hidden source #".($cnt+1).")";
 	else
-		echo $source_row['name'];
+		echo $source_row['source'];
 
 	echo "</td>\n";	
 	echo "\t\t\t\t\t<td align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($source_row['views'])."</td>\n";
@@ -404,79 +330,32 @@ function phpAds_printSourceRow($source_row, $expand_arr, $begin_str)
 		for ($i=0; $i<sizeof($child_source_row); $i++)
 		{
 			echo "\t\t\t\t<tr height='1'".($cnt%2==0?" bgcolor='#F6F6F6'":"")."><td><img src='images/spacer.gif' width='100%' height='1' border='0'></td><td colspan='5' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>\n";
-			phpAds_printSourceRow($child_source_row[$i], $expand_arr, $begin_str."&nbsp;&nbsp;&nbsp;&nbsp;");
+			phpAds_printSourceRow($child_source_row[$i], $expand_arr, $listorder, $orderdirection, $begin_str."&nbsp;&nbsp;&nbsp;&nbsp;");
 		}
 	}
 }
 
-function phpAds_buildSourceArray($sources, $source, $path, $row_stats)
+function phpAds_getColumnHeader($name, $id, $link, $listorder, $orderdirection)
 {
-	// Set the master array if there is not already one.
-	if (!isset($sources) || !is_array($sources) )
-		$sources = array();
-
-	// First, get the name of this branch of the source.
-	$len = strpos($source, '/');
-	if ($len > -1)
-	{
-		$name = substr($source, 0, $len);
-	}
-	else
-	{
-		$name = $source;
-	}
+	$str = "<b><a href='".$link."&listorder=".$id."'>".$name."</a>";
 	
-	// Next, see if there is already a branch present in the sources array
-	$index = -1;
-	for ($i=0; $i<sizeof($sources); $i++)
+	if (($listorder == $id))
 	{
-		if ($sources[$i]['name'] == $name)
+		if  (($orderdirection == "") || ($orderdirection == "down"))
 		{
-			$index = $i;
-			break;
+			$str .= "<a href='".$link."&orderdirection=up'>";
+			$str .= "<img src='images/caret-ds.gif' border='0' alt='' title=''>";
 		}
-	}
-	
-	// If this branch is not present, add the default information
-	if ($index == -1)
-	{
-		$source_arr['name'] = $name;
-		if (strlen($path) > 0)
-			$source_arr['path'] = $path.'/'.$source_arr['name'];
 		else
-			$source_arr['path'] = $source_arr['name'];
-
-		$source_arr['clicks'] = 0;
-		$source_arr['conversions'] = 0;
-		$source_arr['views'] = 0;
-		$source_arr['children'] = array();
-	}
-	// ...Otherwise, grab this specific branch of the source array
-	else 
-	{
-		$source_arr = $sources[$index];
+		{
+			$str .= "<a href='".$link."&orderdirection=down'>";
+			$str .= "<img src='images/caret-u.gif' border='0' alt='' title=''>";
+		}
+		$str .= "</a>";
 	}
 	
-	// Increment the stats for this branch
-	$source_arr['views'] += $row_stats['views'];
-	$source_arr['clicks'] += $row_stats['clicks'];
-	$source_arr['conversions'] += $row_stats['conversions'];
-
-	// If there are children, recursively populate the children array
-	if ($len > -1)
-	{
-		$source_arr['children'] = phpAds_buildSourceArray($source_arr['children'], substr($source, $len+1), $source_arr['path'], $row_stats);
-	}
+	$str .= "</b>";
 	
-	if ($index == -1)
-	{
-		$sources[] = $source_arr;
-	}
-	else 
-	{
-		$sources[$index] = $source_arr;
-	}
-	
-	return $sources;
+	return $str;
 }
 ?>
