@@ -1,4 +1,4 @@
-<?php // $Revision: 1.2 $
+<?php // $Revision: 1.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -402,7 +402,7 @@ if (count($tmp_order) > 0)
 			echo "<tr bgcolor='$bgcolor'>";
 			
 			echo "<td height='25' width='30' align='left'>&nbsp;";
-			if (!ereg ("Mozilla/4", $HTTP_USER_AGENT) || ereg ("IE", $HTTP_USER_AGENT))
+			if (ereg ("Mozilla/6", $HTTP_USER_AGENT) || ereg ("IE", $HTTP_USER_AGENT))
 				echo "<img name='caret".$row_banners['bannerID']."' src='images/triangle-l.gif' align='absmiddle' onClick=\"showHideLayers('".$row_banners['bannerID']."');\">";
 			echo "</td>";
 			
@@ -471,7 +471,7 @@ if (count($tmp_order) > 0)
 			echo "<td height='1' width='30'><img src='images/spacer.gif' width='1' height='1'></td>";
 			echo "<td colspan='5'>";
 			
-			if (!ereg ("Mozilla/4", $HTTP_USER_AGENT) || ereg ("IE", $HTTP_USER_AGENT))
+			if (ereg ("Mozilla/6", $HTTP_USER_AGENT) || ereg ("IE", $HTTP_USER_AGENT))
 			{
 				echo "<div id='banner".$row_banners['bannerID']."' style='display: none;'>";
 				

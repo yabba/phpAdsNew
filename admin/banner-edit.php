@@ -1,4 +1,4 @@
-<?php // $Revision: 1.22 $
+<?php // $Revision: 1.23 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -315,10 +315,14 @@ else
 
 // Determine if the browser supports DHTML
 
-if (!ereg ("Mozilla/4", $HTTP_USER_AGENT) || ereg ("IE", $HTTP_USER_AGENT))
+$BrowserNS6 	= ereg ("Mozilla/5", $HTTP_USER_AGENT);
+$BrowserIE  	= ereg ("IE", $HTTP_USER_AGENT);
+
+if ($BrowserNS6 || $BrowserIE)
 	$dhtml = true;
 else
 	$dhtml = false;
+
 
 // Determine which bannertypes to show
 $show_sql  = $phpAds_type_sql_allow;
@@ -354,7 +358,7 @@ if (!isset($type))
 		htmlObject = findObj ('htmlForm');
 		urlObject = findObj ('urlForm');
 		webObject = findObj ('webForm');
-	
+
         ss="none"; sh="none"; su="none"; sw="none"
         if (n=='mysql') {
           ss="";
