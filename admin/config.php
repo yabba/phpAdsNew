@@ -1,4 +1,4 @@
-<?php // $Revision: 1.11 $
+<?php // $Revision: 1.12 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -30,6 +30,13 @@ if (!$link)
 										 please make sure the database is working 
 										 and phpAdsNew is configured correctly");
 }
+
+
+
+
+// First thing to do is clear the $Session variable to
+// prevent users from pretending to be logged in.
+unset($Session);
 
 // Authorize the user and load user specific settings.
 phpAds_Start();
