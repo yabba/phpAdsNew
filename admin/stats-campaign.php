@@ -1,4 +1,4 @@
-<?php // $Revision: 1.10 $
+<?php // $Revision: 1.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -37,7 +37,7 @@ if (!isset($view))	  $view = '';
 
 if (phpAds_isUser(phpAds_Client))
 {
-	if (phpAds_clientid() == phpAds_getParentID ($campaignid))
+	if (phpAds_getUserID() == phpAds_getParentID ($campaignid))
 	{
 		$extra = '';
 		

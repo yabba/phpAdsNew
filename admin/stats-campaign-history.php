@@ -1,4 +1,4 @@
-<?php // $Revision: 1.6 $
+<?php // $Revision: 1.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -32,7 +32,7 @@ phpAds_checkAccess(phpAds_Admin+phpAds_Client);
 
 if (phpAds_isUser(phpAds_Client))
 {
-	if (phpAds_clientid() == phpAds_getParentID ($campaignid))
+	if (phpAds_getUserID() == phpAds_getParentID ($campaignid))
 	{
 		$extra = '';
 		
