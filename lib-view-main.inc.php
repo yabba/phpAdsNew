@@ -1,4 +1,4 @@
-<?php // $Revision: 1.10 $
+<?php // $Revision: 1.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -94,6 +94,9 @@ function view_raw($what, $clientid=0, $target='', $source='', $withtext=0, $cont
 		$outputbuffer = str_replace ('{zoneid}', $row['zoneid'], $outputbuffer);
 		$outputbuffer = str_replace ('{target}', $target, $outputbuffer);
 		$outputbuffer = str_replace ('{source}', $source, $outputbuffer);
+		
+		// Set path of phpAdsNew
+		$outputbuffer = str_replace ('{url_prefix}', $phpAds_config['url_prefix'], $outputbuffer);
 		
 		
 		// Add text below banner
