@@ -1,4 +1,4 @@
-<?php // $Revision: 1.8 $
+<?php // $Revision: 1.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -76,7 +76,10 @@ phpAds_Start();
 if (file_exists("../language/".$phpAds_config['language']."/default.lang.php"))
 	include("../language/".$phpAds_config['language']."/default.lang.php");
 else
+{
+	$phpAds_config['language'] = 'english';
 	include("../language/english/default.lang.php");
+}
 
 if (file_exists("../language/".$phpAds_config['language']."/settings.lang.php"))
 	include("../language/".$phpAds_config['language']."/settings.lang.php");
@@ -193,6 +196,7 @@ if (phpAds_isUser(phpAds_Admin))
 		
 		// Update config_version and write settings
 		phpAds_SettingsWriteAdd('config_version', $phpAds_version);
+		phpAds_SettingsWriteAdd('language', $phpAds_config['language']);
 		phpAds_ConfigFileUpdateFlush();
 		
 		// Go to the next step
