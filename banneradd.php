@@ -1,5 +1,5 @@
 <?
-/* $Id: banneradd.php,v 1.5 2001/03/11 20:48:41 rakaz Exp $ */
+/* $Id: banneradd.php,v 1.6 2001/04/01 20:49:09 rakaz Exp $ */
 
 require ("config.php");
 
@@ -59,7 +59,7 @@ if (isset($submit))
 			$final["height"] = "";
 			$final["alt"] = "";
 			$final["bannertext"] = "";
-			$final["url"] = $html_url;
+			$final["url"] = addslashes($html_url);
 			break;
 	}
 	$final["clientID"] = $clientID;
