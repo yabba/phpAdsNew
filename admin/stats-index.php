@@ -1,4 +1,4 @@
-<?php // $Revision: 1.21 $
+<?php // $Revision: 1.22 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -103,6 +103,8 @@ if (phpAds_isUser(phpAds_Client) && $phpAds_config['client_welcome'])
 }
 
 
+if (!isset($listorder)) 	 $listorder = '';
+if (!isset($orderdirection)) $orderdirection = '';
 
 
 // Get clients & campaign and build the tree
