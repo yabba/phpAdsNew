@@ -1,4 +1,4 @@
-<?php // $Revision: 1.23 $
+<?php // $Revision: 1.24 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -107,6 +107,11 @@ if (isset($submit))
 				}
 				$final["banner"] = addslashes(fread(fopen($mysql_banner, "rb"), filesize($mysql_banner)));
 			}
+			else
+			{
+				$final["width"] = $mysql_width;
+				$final["height"] = $mysql_height;
+			}
 			$final["alt"] = addslashes($mysql_alt);
 			$final["bannertext"] = addslashes($mysql_bannertext);
 			$final["url"] = $mysql_url;
@@ -121,6 +126,11 @@ if (isset($submit))
 				// upload $web_banner file to location
 				// set banner to web location
 				$final["banner"] = phpAds_Store($web_banner, basename($web_banner_name));
+			}
+			else
+			{
+				$final["width"] = $web_width;
+				$final["height"] = $web_height;
 			}
 			$final["format"] = "web";
 			$final["alt"] = addslashes($web_alt);
@@ -468,7 +478,21 @@ if (!isset($type))
 		<td width='200'><?echo $strTextBelow;?></td>
 		<td><input size="35" type="text" name="mysql_bannertext" style="width:350px;" value="<?if (isset($type) && $type == "mysql") echo $row["bannertext"];?>"></td>
 	</tr>
-
+	<?if (isset($bannerID) && $bannerID != '') {?>
+	<tr>
+		<td><img src='images/spacer.gif' height='1' width='100%'></td>
+		<td colspan='2'><img src='images/break-l.gif' height='1' width='200' vspace='6'></td>
+	</tr>
+	<tr>
+		<td width='30'>&nbsp;</td>	
+		<td width='200'><?echo $strSize;?></td>
+		<td>
+			<?echo $strWidth;?>: <input size="5" type="text" name="mysql_width" value="<?if (isset($type) && $type == "mysql") echo $row["width"];?>">
+			&nbsp;&nbsp;&nbsp;
+			<?echo $strHeight;?>: <input size="5" type="text" name="mysql_height" value="<?if (isset($type) && $type == "mysql") echo $row["height"];?>">
+		</td>
+	</tr>
+	<?}?>
 	<tr><td height='20' colspan='3'>&nbsp;</td></tr>
 	<tr><td height='1' colspan='3' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>
 </table>
@@ -522,7 +546,21 @@ if (!isset($type))
 		<td width='200'><?echo $strTextBelow;?></td>
 		<td><input size="35" type="text" name="web_bannertext" style="width:350px;" value="<?if (isset($type) && $type == "web") echo $row["bannertext"];?>"></td>
 	</tr>
-
+	<?if (isset($bannerID) && $bannerID != '') {?>
+	<tr>
+		<td><img src='images/spacer.gif' height='1' width='100%'></td>
+		<td colspan='2'><img src='images/break-l.gif' height='1' width='200' vspace='6'></td>
+	</tr>
+	<tr>
+		<td width='30'>&nbsp;</td>	
+		<td width='200'><?echo $strSize;?></td>
+		<td>
+			<?echo $strWidth;?>: <input size="5" type="text" name="web_width" value="<?if (isset($type) && $type == "web") echo $row["width"];?>">
+			&nbsp;&nbsp;&nbsp;
+			<?echo $strHeight;?>: <input size="5" type="text" name="web_height" value="<?if (isset($type) && $type == "web") echo $row["height"];?>">
+		</td>
+	</tr>
+	<?}?>
 	<tr><td height='20' colspan='3'>&nbsp;</td></tr>
 	<tr><td height='1' colspan='3' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>
 </table>

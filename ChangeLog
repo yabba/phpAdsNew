@@ -2,9 +2,11 @@ phpAdsNew - ChangeLog
 
 v 2.0beta5		+ Added override setting for automatic GD detection  (Niels)
 			+ Added support for passing ISMAP click location  (Niels)
-			+ Clients can now deactivate their own banners if permitted  (Niels)
-			+ Clients can now activate their own banners if permitted  (Niels)
+			+ Clients can now deactivate their own banners if permitted  (Niels thanks to Shannon Johnston)
+			+ Clients can now activate their own banners if permitted  (Niels thanks to Shannon Johnston)
 			+ Added cookie check for Admin interface login  (Niels)
+			+ Added to ability to override the banner width and height 
+ 			  if the banner is stored in MySQL or on the webserver  (Niels)
 
 			+ Changes to the database library
 			  - Replaced mysql_db_query with mysql_query  (Niels)
