@@ -1,4 +1,4 @@
-<?php // $Revision: 1.6 $
+<?php // $Revision: 1.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -48,6 +48,7 @@ $GLOBALS['strInvocationTemplate'] 		= "Store the banner inside a variable so it 
 $GLOBALS['strIFrameRefreshAfter']		= "Refresh after";
 $GLOBALS['strIframeResizeToBanner']		= "Resize iframe to banner dimensions";
 $GLOBALS['strIframeMakeTransparent']	= "Make the iframe transparent";
+$GLOBALS['strIframeIncludeNetscape4']	= "Include Netscape 4 compatible ilayer";
 
 
 // PopUp
