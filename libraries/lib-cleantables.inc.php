@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -34,7 +34,8 @@ function phpAds_cleanTables($weeks, $stats)
 		$tables = array(
 			$phpAds_config['tbl_adstats'] => array('day', 'Ymd'),
 			$phpAds_config['tbl_adviews'] => array('t_stamp', 'YmdHis'),
-			$phpAds_config['tbl_adclicks'] => array('t_stamp', 'YmdHis')
+			$phpAds_config['tbl_adclicks'] => array('t_stamp', 'YmdHis'),
+			$phpAds_config['tbl_adconversions'] => array('t_stamp', 'YmdHis')
 		);
 	else
 		$tables = array(

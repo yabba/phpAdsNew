@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -19,14 +19,33 @@ if (!defined('LIBMAIL_INCLUDED'))
 
 function phpAds_SendMaintenanceReport ($clientid, $first_unixtimestamp, $last_unixtimestamp, $update=true)
 {
-	global $phpAds_config;
-	global $date_format;
-	global $strMailSubject, $strMailHeader, $strMailBannerStats, $strMailFooter, $strMailReportPeriod;
-	global $strLogErrorClients, $strLogErrorBanners, $strLogErrorViews, $strNoStatsForCampaign;
-	global $strLogErrorClicks, $strNoClickLoggedInInterval, $strNoViewLoggedInInterval;
-	global $strTotal, $strTotalThisPeriod;
-	global $strCampaign, $strBanner, $strLinkedTo, $strViews, $strClicks, $strMailReportPeriodAll;
-	global $phpAds_CharSet;
+	global $phpAds_config
+			,$phpAds_CharSet
+			,$date_format
+			,$strBanner
+			,$strCampaign
+			,$strViews
+			,$strClicks
+			,$strConversions
+			,$strLinkedTo
+			,$strMailSubject
+			,$strMailHeader
+			,$strMailBannerStats
+			,$strMailFooter
+			,$strMailReportPeriod
+			,$strMailReportPeriodAll
+			,$strLogErrorBanners
+			,$strLogErrorClients
+			,$strLogErrorViews
+			,$strLogErrorClicks
+			,$strLogErrorConversions
+			,$strNoStatsForCampaign
+			,$strNoViewLoggedInInterval
+			,$strNoClickLoggedInInterval
+			,$strNoCampaignLoggedInInterval
+			,$strTotal
+			,$strTotalThisPeriod
+	;
 	
 	
 	// Convert timestamps to SQL format
@@ -68,23 +87,20 @@ function phpAds_SendMaintenanceReport ($clientid, $first_unixtimestamp, $last_un
 		
 		// Fetch all campaings belonging to client
 		
-		$res_campaigns = phpAds_dbQuery("
-			SELECT
-				clientid,
-				clientname,
-				views,
-				clicks,
-				expire,
-				UNIX_TIMESTAMP(expire) as expire_st,
-				activate,
-				UNIX_TIMESTAMP(activate) as activate_st,
-				active
-			FROM
-				".$phpAds_config['tbl_clients']."
-			WHERE
-				parent = ".$client['clientid']."
-		
-		") or die($strLogErrorClients);
+		$res_campaigns = phpAds_dbQuery("SELECT".
+			" clientid".
+			",clientname".
+			",views".
+			",clicks".
+			",conversions".
+			",expire".
+			",UNIX_TIMESTAMP(expire) as expire_st".
+			",activate".
+			",UNIX_TIMESTAMP(activate) as activate_st".
+			",active".
+			" FROM ".$phpAds_config['tbl_clients'].
+			" WHERE parent = ".$client['clientid'])
+		or die($strLogErrorClients);
 		
 		while($campaign = phpAds_dbFetchArray($res_campaigns))
 		{
@@ -115,8 +131,10 @@ function phpAds_SendMaintenanceReport ($clientid, $first_unixtimestamp, $last_un
 		        $client["views_used"] = $adviews;
 				$adclicks = phpAds_totalClicks($row_banners["bannerid"]);
 				$campaign["clicks_used"] = $adclicks;
+				$adconversions = phpAds_totalConversions($row_banners["bannerid"]);
+				$campaign["conversions_used"] = $adconversions;
 				
-				if ($adviews > 0 || $adclicks > 0)
+				if ($adviews > 0 || $adclicks > 0 || $adconversions > 0)
 				{
 					$log .= $strBanner."  ".strip_tags(phpAds_buildBannerName ($row_banners['bannerid'], $row_banners['description'], $row_banners['alt']))."\n";
 					$log .= $strLinkedTo.": ".$row_banners['URL']."\n";
@@ -129,23 +147,18 @@ function phpAds_SendMaintenanceReport ($clientid, $first_unixtimestamp, $last_un
 						$log .= $strViews." (".$strTotal."):    ".$adviews."\n";
 						
 						// Fetch all adviews belonging to banner belonging to client, grouped by day
-			            $res_adviews = phpAds_dbQuery("
-			    			SELECT
-			    				SUM(views) as qnt,
-			    				DATE_FORMAT(day, '$date_format') as t_stamp_f,
-			    				TO_DAYS(day) AS the_day
-			    			FROM
-			    				".$phpAds_config['tbl_adstats']."
-			    			WHERE
-			    				bannerid = ".$row_banners['bannerid']." AND
-			                    views > 0 AND
-								UNIX_TIMESTAMP(day) >= $first_unixtimestamp AND
-								UNIX_TIMESTAMP(day) < $last_unixtimestamp
-			    			GROUP BY
-			    				day
-			    			ORDER BY
-			    				day DESC
-			    			") or die($strLogErrorViews);
+			            $res_adviews = phpAds_dbQuery("SELECT".
+			            	" SUM(views) as qnt".
+			            	",DATE_FORMAT(day, '$date_format') as t_stamp_f".
+			            	",TO_DAYS(day) AS the_day".
+			            	" FROM ".$phpAds_config['tbl_adstats'].
+			            	" WHERE bannerid = ".$row_banners['bannerid'].
+			            	" AND views>0".
+			            	" AND UNIX_TIMESTAMP(day)>=".$first_unixtimestamp.
+			            	" AND UNIX_TIMESTAMP(day)<".$last_unixtimestamp.
+			            	" GROUP BY day".
+			            	" ORDER BY day DESC")
+			            or die($strLogErrorViews." ".phpAds_dbError());
 				        
 						if (phpAds_dbNumRows($res_adviews))
 						{
@@ -172,25 +185,20 @@ function phpAds_SendMaintenanceReport ($clientid, $first_unixtimestamp, $last_un
 				        $log .= "\n".$strClicks." (".$strTotal."):   ".$adclicks."\n";
 						
 						// Fetch all adclicks belonging to banner belonging to client, grouped by day
-			            $res_adclicks = phpAds_dbQuery("
-			    			SELECT
-			    				SUM(clicks) as qnt,
-			    				DATE_FORMAT(day, '$date_format') as t_stamp_f,
-			    				TO_DAYS(day) AS the_day
-			    			FROM
-			    				".$phpAds_config['tbl_adstats']."
-			    			WHERE
-			    				bannerid = ".$row_banners['bannerid']." AND
-			                    clicks > 0 AND
-								UNIX_TIMESTAMP(day) >= $first_unixtimestamp AND
-								UNIX_TIMESTAMP(day) < $last_unixtimestamp
-			    			GROUP BY
-			    				day
-			    			ORDER BY
-			    				day DESC
-			    			") or die("$strLogErrorClicks ".phpAds_dbError());
+			            $res_adclicks = phpAds_dbQuery("SELECT".
+			            	" SUM(clicks) as qnt".
+			            	",DATE_FORMAT(day, '$date_format') as t_stamp_f".
+			            	",TO_DAYS(day) AS the_day".
+			            	" FROM ".$phpAds_config['tbl_adstats'].
+			            	" WHERE bannerid = ".$row_banners['bannerid'].
+			            	" AND clicks>0".
+			            	" AND UNIX_TIMESTAMP(day)>=".$first_unixtimestamp.
+			            	" AND UNIX_TIMESTAMP(day)<".$last_unixtimestamp.
+			            	" GROUP BY day".
+			            	" ORDER BY day DESC")
+			            or die($strLogErrorClicks." ".phpAds_dbError());
 						
-						if (phpAds_dbNumRows($res_adviews))
+						if (phpAds_dbNumRows($res_adclicks))
 						{
 							$total = 0;
 							
@@ -206,6 +214,44 @@ function phpAds_SendMaintenanceReport ($clientid, $first_unixtimestamp, $last_un
 						else
 						{
 							$log .= "      ".$strNoClickLoggedInInterval."\n";
+						}
+					}
+					
+					if ($adconversions > 0)
+					{
+						// Total adclicks
+				        $log .= "\n".$strConversions." (".$strTotal."):   ".$adconversions."\n";
+						
+						// Fetch all adclicks belonging to banner belonging to client, grouped by day
+			            $res_adconversions = phpAds_dbQuery("SELECT".
+			            	" SUM(conversions) as qnt".
+			            	",DATE_FORMAT(day, '$date_format') as t_stamp_f".
+			            	",TO_DAYS(day) AS the_day".
+			            	" FROM ".$phpAds_config['tbl_adstats'].
+			            	" WHERE bannerid = ".$row_banners['bannerid'].
+			            	" AND conversions>0".
+			            	" AND UNIX_TIMESTAMP(day)>=".$first_unixtimestamp.
+			            	" AND UNIX_TIMESTAMP(day)<".$last_unixtimestamp.
+			            	" GROUP BY day".
+			            	" ORDER BY day DESC")
+			            or die($strLogErrorConversions." ".phpAds_dbError());
+						
+						if (phpAds_dbNumRows($res_adconversions))
+						{
+							$total = 0;
+							
+							while($row_adconversions = phpAds_dbFetchArray($res_adconversions))
+							{
+								$log .= "      ".$row_adcconversions['t_stamp_f'].":   ".$row_adconversions['qnt']."\n";
+								$total += $row_adconversions['qnt'];
+							}
+							
+							$log .= $strTotalThisPeriod.": ".$total."\n";
+							$active_banner_stats = true;
+						}
+						else
+						{
+							$log .= "      ".$strNoConversionLoggedInInterval."\n";
 						}
 					}
 					

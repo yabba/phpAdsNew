@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -131,6 +131,7 @@ $GLOBALS['strConvertingStats']			= "Converting statistics...";
 $GLOBALS['strConvertStats']			= "Convert statistics";
 $GLOBALS['strConvertAdViews']			= "AdViews converted,";
 $GLOBALS['strConvertAdClicks']			= "AdClicks converted...";
+$GLOBALS['strConvertAdConversions']			= "AdConversions converted...";
 $GLOBALS['strConvertNothing']			= "Nothing to convert...";
 $GLOBALS['strConvertFinished']			= "Finished...";
 

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.7 $
+<?php // $Revision: 2.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -48,7 +48,7 @@ function phpads_logCheckHost()
 /* Log an impression                                     */
 /*********************************************************/
 
-function phpAds_logImpression ($bannerid, $clientid, $zoneid, $source)
+function phpAds_logImpression ($cookieid, $bannerid, $clientid, $zoneid, $source)
 {
 	global $HTTP_SERVER_VARS, $phpAds_config, $phpAds_geo;
 	
@@ -62,19 +62,21 @@ function phpAds_logImpression ($bannerid, $clientid, $zoneid, $source)
 		$log_host    = $phpAds_config['log_iponly'] ? $HTTP_SERVER_VARS['REMOTE_ADDR'] : $log_host;
 		
 		phpAds_dbQuery(
-			"INSERT ".($phpAds_config['insert_delayed'] ? 'DELAYED' : '')." INTO ".$phpAds_config['tbl_adviews']."
-				(bannerid,
-				zoneid,
-				host,
-				source,
-				country)
-			VALUES
-				('".$bannerid."',
-				'".$zoneid."',
-				'".$log_host."',
-				'".$log_source."',
-				'".$log_country."')
-		");
+			"INSERT ".($phpAds_config['insert_delayed'] ? 'DELAYED' : '')." INTO ".$phpAds_config['tbl_adviews'].
+			"(cookieid".
+			",bannerid".
+			",zoneid".
+			",host".
+			",source".
+			",country)".
+			" VALUES ".
+			"('".$cookieid."'".
+			",".$bannerid.
+			",".$zoneid.
+			",'".$log_host."'".
+			",'".$source."'".
+			",'".$log_country."')"
+		);
 	}
 }
 
@@ -82,7 +84,7 @@ function phpAds_logImpression ($bannerid, $clientid, $zoneid, $source)
 /* Log a click                                          */
 /*********************************************************/
 
-function phpAds_logClick($bannerid, $clientid, $zoneid, $source)
+function phpAds_logClick($cookieid, $bannerid, $clientid, $zoneid, $source)
 {
 	global $HTTP_SERVER_VARS, $phpAds_config, $phpAds_geo;
 	
@@ -96,19 +98,57 @@ function phpAds_logClick($bannerid, $clientid, $zoneid, $source)
 		$log_host    = $phpAds_config['log_iponly'] ? $HTTP_SERVER_VARS['REMOTE_ADDR'] : $log_host;
 		
 		phpAds_dbQuery(
-			"INSERT ".($phpAds_config['insert_delayed'] ? 'DELAYED' : '')." INTO ".$phpAds_config['tbl_adclicks']."
-				(bannerid,
-				zoneid,
-				host,
-				source,
-				country)
-			VALUES
-				('".$bannerid."',
-				'".$zoneid."',
-				'".$log_host."',
-				'".$log_source."',
-				'".$log_country."')
-		");
+			"INSERT ".($phpAds_config['insert_delayed'] ? 'DELAYED' : '')." INTO ".$phpAds_config['tbl_adclicks'].
+			"(cookieid".
+			",bannerid".
+			",zoneid".
+			",host".
+			",source".
+			",country)".
+			" VALUES ".
+			"('".$cookieid."'".
+			",".$bannerid.
+			",".$zoneid.
+			",'".$log_host."'".
+			",'".$source."'".
+			",'".$log_country."')"
+		);
+	}
+}
+
+/*********************************************************/
+/* Log a conversion                                      */
+/*********************************************************/
+
+function phpAds_logConversion($cookieid, $bannerid, $clientid, $zoneid, $source)
+{
+	global $HTTP_SERVER_VARS, $phpAds_config, $phpAds_geo;
+	
+	// Check if host is on list of hosts to ignore
+	if ($host = phpads_logCheckHost())
+	{
+		$log_source = $phpAds_config['log_source'] ? $source : '';
+		
+		$log_country = $phpAds_config['geotracking_stats'] && $phpAds_geo && $phpAds_geo['country'] ? $phpAds_geo['country'] : '';
+		$log_host    = $phpAds_config['log_hostname'] ? $HTTP_SERVER_VARS['REMOTE_HOST'] : '';
+		$log_host    = $phpAds_config['log_iponly'] ? $HTTP_SERVER_VARS['REMOTE_ADDR'] : $log_host;
+		
+		phpAds_dbQuery(
+			"INSERT ".($phpAds_config['insert_delayed'] ? 'DELAYED' : '')." INTO ".$phpAds_config['tbl_adconversions'].
+			"(cookieid".
+			",bannerid".
+			",zoneid".
+			",host".
+			",source".
+			",country)".
+			" VALUES ".
+			"('".$cookieid."'".
+			",".$bannerid.
+			",".$zoneid.
+			",'".$log_host."'".
+			",'".$source."'".
+			",'".$log_country."')"
+		);
 	}
 }
 

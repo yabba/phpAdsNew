@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -83,6 +83,34 @@ function phpAds_slashArray ($a)
 	return ($a);
 }
 
+
+
+/*********************************************************/
+/* Store cookies to be set in a cache                    */
+/*********************************************************/
+
+function phpAds_getCookieID( $create = true )
+{
+	global $phpAds_config, $HTTP_COOKIE_VARS, $HTTP_SERVER_VARS;
+	
+	if (isset($HTTP_COOKIE_VARS['phpAds_id']))
+		$cookieid = $HTTP_COOKIE_VARS['phpAds_id'];
+	
+	if ( !isset($cookieid) && $create )
+	{
+		// Create a unique ID.  This is done by combining the web server's address, remote address, and microtime.
+		$remote_address = $HTTP_SERVER_VARS['REMOTE_ADDR'];
+		$local_address = $phpAds_config['url_prefix'];  //How do I get the IP address of this server?
+		//Get the exact time
+		list($usec, $sec) = explode(" ", microtime());
+		$time = (float) $usec + (float) $sec;
+		// Get a random number
+		$random = mt_rand(0,999999999);
+		$cookieid = substr(md5($local_address.$time.$remote_address.$random),0,32);  // Need to find a way to generate this...
+	}
+	
+	return $cookieid;
+}
 
 
 /*********************************************************/

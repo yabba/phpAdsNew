@@ -20,8 +20,9 @@ $phpAds_config['dbpassword'] = '';
 $phpAds_config['dbname'] = '';
 
 // Database table names
-$phpAds_config['tbl_adclicks'] = 'phpads_adclicks';
 $phpAds_config['tbl_adviews'] = 'phpads_adviews';
+$phpAds_config['tbl_adclicks'] = 'phpads_adclicks';
+$phpAds_config['tbl_adconversions'] = 'phpads_adconversions';
 $phpAds_config['tbl_adstats'] = 'phpads_adstats';
 $phpAds_config['tbl_banners'] = 'phpads_banners';
 $phpAds_config['tbl_clients'] = 'phpads_clients';
@@ -106,6 +107,9 @@ $phpAds_config['log_adviews'] = true;
 // Enabled logging of adclicks?
 $phpAds_config['log_adclicks'] = true;
 
+// Enabled logging of adclicks?
+$phpAds_config['log_adconversions'] = true;
+
 // Log the source parameter
 $phpAds_config['log_source'] = true;
 
@@ -129,13 +133,17 @@ $phpAds_config['block_adviews'] = 0;
 // This is to prevent users from boosting the stats by clicking multiple times
 $phpAds_config['block_adclicks'] = 0;
 
-// E-mail admin when clicks/views get low?
+// Block logging of conversions for xx seconds after the last entry
+// This is to prevent users from boosting the stats by clicking multiple times
+$phpAds_config['block_adconversions'] = 0;
+
+// E-mail admin when views/clicks/conversions get low?
 $phpAds_config['warn_admin'] = true;
 
-// E-mail client when clicks/views get low?
+// E-mail client when views/clicks/conversions get low?
 $phpAds_config['warn_client'] = true;
 
-// Minimum clicks/views before warning e-mail is sent
+// Minimum views/clicks/conversions before warning e-mail is sent
 $phpAds_config['warn_limit'] = 100; 
 
 

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.11 $
+<?php // $Revision: 2.12 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -224,8 +224,9 @@ $GLOBALS['strStatisticsSettings']		= "Statistics Settings";
 
 $GLOBALS['strStatisticsFormat']			= "Statistics format";
 $GLOBALS['strCompactStats']				= "Statistics format";
-$GLOBALS['strLogAdviews']				= "Log an AdView everytime a banner is delivered";
-$GLOBALS['strLogAdclicks']				= "Log an AdClick everytime a visitor clicks on a banner";
+$GLOBALS['strLogAdViews']				= "Log an AdView everytime a banner is delivered";
+$GLOBALS['strLogAdClicks']				= "Log an AdClick everytime a visitor clicks on a banner";
+$GLOBALS['strLogAdConversions']				= "Log an AdConversion everytime a visitor views a page with an AdConversion beacon";
 $GLOBALS['strLogSource']				= "Log the source parameter specified during invocation";
 $GLOBALS['strGeoLogStats']				= "Log the country of the visitor in the statistics";
 $GLOBALS['strLogHostnameOrIP']			= "Log the hostname or IP address of the visitor";
@@ -235,8 +236,9 @@ $GLOBALS['strLogBeacon']				= "Use a small beacon image to log AdViews to ensure
 
 $GLOBALS['strRemoteHosts']				= "Remote hosts";
 $GLOBALS['strIgnoreHosts']				= "Don't store statistics for visitors using one of the following IP addresses or hostnames";
-$GLOBALS['strBlockAdviews']				= "Don't log AdViews if the visitor already seen the same banner within the specified number of seconds";
-$GLOBALS['strBlockAdclicks']			= "Don't log AdClicks if the visitor already clicked on the same banner within the specified number of seconds";
+$GLOBALS['strBlockAdViews']				= "Don't log AdViews if the visitor already seen the same banner within the specified number of seconds";
+$GLOBALS['strBlockAdClicks']			= "Don't log AdClicks if the visitor already clicked on the same banner within the specified number of seconds";
+$GLOBALS['strBlockAdConversions']			= "Don't log AdConversions if the visitor has already seen the page with the embedded conversion beacon within the specified number of seconds";
 
 
 $GLOBALS['strPreventLogging']			= "Prevent logging";

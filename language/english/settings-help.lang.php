@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -143,7 +143,7 @@ $GLOBALS['phpAds_hlp_log_beacon'] = "
 		also is displayed. If you turn this feature on ".$phpAds_productname." will use this beacon image 
 		to count the number of impressions the banner has recieved. If you turn this feature 
 		off the impression will be counted during delivery, but this is not entirely accurate, 
-		because a delivered banner doesn’t always have to be displayed on the screen. 
+		because a delivered banner doesnï¿½t always have to be displayed on the screen. 
 		";
 		
 $GLOBALS['phpAds_hlp_compact_stats'] = "
@@ -152,7 +152,7 @@ $GLOBALS['phpAds_hlp_compact_stats'] = "
         be a big problem on sites with a lot of visitors. To overcome this problem
 		".$phpAds_productname." also supports a new kind of statistics, the compact statistics, 
 		which is less demanding on the database server, but also less detailed. 
-		The compact statistics collects AdViews and AdClicks for each hour, if you need
+		The compact statistics collects AdViews, AdClicks, and AdConversions for each hour, if you need
 		more detail you can turn the compact statistics off.
 		";
 		
@@ -165,7 +165,7 @@ $GLOBALS['phpAds_hlp_block_adviews'] = "
 		If a visitor reloads a page an AdView will be logged by ".$phpAds_productname." every time. 
 		This feature is used to make sure that only one AdView is logged for each unique 
 		banner for the number of seconds you specify. For example: if you set this value 
-		to 300 seconds, ".$phpAds_productname." will only log AdViews if the same banner isn’t already 
+		to 300 seconds, ".$phpAds_productname." will only log AdViews if the same banner isnï¿½t already 
 		shown to the same visitor in the last 5 minutes. This feature only works the browser accepts cookies.
 		";
 		
@@ -178,8 +178,21 @@ $GLOBALS['phpAds_hlp_block_adclicks'] = "
 		If a visitor clicks multiple times on a banner an AdClick will be logged by ".$phpAds_productname." 
 		every time. This feature is used to make sure that only one AdClick is logged for each 
 		unique banner for the number of seconds you specify. For example: if you set this value 
-		to 300 seconds, ".$phpAds_productname." will only log AdClicks if the visitor didn’t click on the same 
+		to 300 seconds, ".$phpAds_productname." will only log AdClicks if the visitor didnï¿½t click on the same 
 		banner in the last 5 minutes. This feature only works when the browser accepts cookies.
+		";
+		
+$GLOBALS['phpAds_hlp_log_adconversions'] = "
+        Normally all AdConversions are logged, if you don't want to gather statistics 
+        about AdConversions you can turn this off.
+		";
+		
+$GLOBALS['phpAds_hlp_block_adconversions'] = "
+		If a visitor reloads a page with an AdConversion beacon, ".$phpAds_productname." will log the AdConversion
+		every time. This feature is used to make sure that only one AdConversion is logged for each 
+		unique conversion for the number of seconds you specify. For example: if you set this value 
+		to 300 seconds, ".$phpAds_productname." will only log AdConversions if the visitor didnï¿½t load the same
+		page with the AdConversion beacon in the last 5 minutes. This feature only works when the browser accepts cookies.
 		";
 		
 $GLOBALS['phpAds_hlp_log_source'] = "
@@ -205,7 +218,7 @@ $GLOBALS['phpAds_hlp_log_hostname'] = "
 $GLOBALS['phpAds_hlp_log_iponly'] = "
 		Storing the hostname of the visitor takes a lot of space inside the database. If you enable
 		this feature ".$phpAds_productname." will still store information about the host, but it will store the
-		less space consuming IP address only. This option isn’t available if the hostname isn't
+		less space consuming IP address only. This option isnï¿½t available if the hostname isn't
 		provided by the server or ".$phpAds_productname.", because in that case the IP address will always be
 		stored.
 		";
@@ -263,7 +276,7 @@ $GLOBALS['phpAds_hlp_geotracking_cookie'] = "
 		";
 		
 $GLOBALS['phpAds_hlp_ignore_hosts'] = "
-        If you don't want to count clicks and views from certain computer you 
+        If you don't want to count views, clicks, and conversions from certain computer you 
         can add these to this list. If you have enabled reverse lookup you can 
         add both domain names and IP addresses, otherwise you can only use IP 
         addresses. You can also use wildcards (i.e. '*.altavista.com' or '192.168.*').
@@ -280,12 +293,12 @@ $GLOBALS['phpAds_hlp_percentage_decimals'] = "
 		
 $GLOBALS['phpAds_hlp_warn_admin'] = "
         ".$phpAds_productname." can sent you e-mail if a campaign has only a limited number of 
-        clicks or views left. This is turned on by default.
+        views, clicks, or conversions left. This is turned on by default.
 		";
 		
 $GLOBALS['phpAds_hlp_warn_client'] = "
         ".$phpAds_productname." can sent the advertiser e-mail if one of his campaigns has only a 
-		limited number of clicks or views left. This is turned on by default.
+		limited number of views, clicks, or conversions left. This is turned on by default.
 		";
 		
 $GLOBALS['phpAds_hlp_qmail_patch'] = "
@@ -510,7 +523,8 @@ $GLOBALS['phpAds_hlp_default_campaign_weight'] = "
 $GLOBALS['phpAds_hlp_gui_show_campaign_info'] = "
 		If this option is enabled extra information about each campain will be shown on the 
 		<i>Campaign overview</i> page. The extra information includes the number of AdViews remaining, 
-		the number of AdClicks remaining, activation date, expiration date and the priority settings.
+		the number of AdClicks remaining, the number of AdConversions remaining, activation date,
+		expiration date and the priority settings.
 		";
 		
 $GLOBALS['phpAds_hlp_gui_show_banner_info'] = "

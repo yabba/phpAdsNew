@@ -1,4 +1,4 @@
-<?php // $Revision: 2.13 $
+<?php // $Revision: 2.14 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -30,8 +30,9 @@ $GLOBALS['phpAds_settings_information'] = array(
 	'dbuser' => 					array ('type' => 'string', 	'sql' => false),
 	'dbpassword' => 				array ('type' => 'string', 	'sql' => false),
 	'dbname' => 					array ('type' => 'string', 	'sql' => false),
-	'tbl_adclicks' => 				array ('type' => 'string', 	'sql' => false),
 	'tbl_adviews' => 				array ('type' => 'string', 	'sql' => false),
+	'tbl_adclicks' => 				array ('type' => 'string', 	'sql' => false),
+	'tbl_adconversions' => 			array ('type' => 'string', 	'sql' => false),
 	'tbl_adstats' => 				array ('type' => 'string', 	'sql' => false),
 	'tbl_banners' => 				array ('type' => 'string', 	'sql' => false),
 	'tbl_clients' => 				array ('type' => 'string', 	'sql' => false),
@@ -68,9 +69,11 @@ $GLOBALS['phpAds_settings_information'] = array(
 	'compact_stats' =>				array ('type' => 'boolean', 'sql' => false),
 	'log_beacon' =>					array ('type' => 'boolean', 'sql' => false),
 	'log_adviews' =>				array ('type' => 'boolean', 'sql' => false),
-	'block_adviews' =>				array ('type' => 'integer', 'sql' => false),
 	'log_adclicks' => 				array ('type' => 'boolean', 'sql' => false),
+	'log_adconversions' => 			array ('type' => 'boolean', 'sql' => false),
+	'block_adviews' =>				array ('type' => 'integer', 'sql' => false),
 	'block_adclicks' =>				array ('type' => 'integer', 'sql' => false),
+	'block_adconversions' =>		array ('type' => 'integer', 'sql' => false),
 	'reverse_lookup' =>				array ('type' => 'boolean', 'sql' => false),
 	'ignore_hosts' => 				array ('type' => 'array',	'sql' => false),
 	'warn_admin' =>					array ('type' => 'boolean', 'sql' => false),

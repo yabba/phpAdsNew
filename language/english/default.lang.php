@@ -1,4 +1,4 @@
-<?php // $Revision: 2.12 $
+<?php // $Revision: 2.13 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -154,12 +154,17 @@ $GLOBALS['strNewPassword']			= "New Password";
 // General advertising
 $GLOBALS['strViews'] 				= "AdViews";
 $GLOBALS['strClicks']				= "AdClicks";
+$GLOBALS['strConversions']			= "AdSales";
 $GLOBALS['strCTRShort'] 			= "CTR";
-$GLOBALS['strCTR'] 				= "Click-Through Ratio";
+$GLOBALS['strCNVRShort'] 			= "SR";
+$GLOBALS['strCTR'] 					= "Click-Through Ratio";
+$GLOBALS['strCNVR'] 				= "Conversion Ratio";
 $GLOBALS['strTotalViews'] 			= "Total AdViews";
 $GLOBALS['strTotalClicks'] 			= "Total AdClicks";
+$GLOBALS['strTotalConversions'] 	= "Total AdSales";
 $GLOBALS['strViewCredits'] 			= "AdView credits";
-$GLOBALS['strClickCredits'] 			= "AdClick credits";
+$GLOBALS['strClickCredits'] 		= "AdClick credits";
+$GLOBALS['strConversionCredits'] 	= "AdSale credits";
 
 
 // Time and date related
@@ -243,10 +248,11 @@ $GLOBALS['strExpirationDate']			= "Expiration date";
 $GLOBALS['strActivationDate']			= "Activation date";
 $GLOBALS['strViewsPurchased'] 			= "AdViews remaining";
 $GLOBALS['strClicksPurchased'] 			= "AdClicks remaining";
+$GLOBALS['strConversionsPurchased'] 	= "AdSales remaining";
 $GLOBALS['strCampaignWeight']			= "Campaign weight";
 $GLOBALS['strHighPriority']			= "Show banners in this campaign with high priority.<br>If you use this option phpAdsNew will try to distribute the number of AdViews evenly over the course of the day.";
 $GLOBALS['strLowPriority']			= "Show banner in this campaign with low priority.<br> This campaign is used to show the left over AdViews which aren't used by high priority campaigns.";
-$GLOBALS['strTargetLimitAdviews']		= "Limit the number of AdViews to";
+$GLOBALS['strTargetLimitAdViews']		= "Limit the number of AdViews to";
 $GLOBALS['strTargetPerDay']			= "per day.";
 $GLOBALS['strPriorityAutoTargeting']		= "Distribute the remaining AdViews evenly over the remaining number of days. The target number of AdViews will be set accordingly every day.";
 $GLOBALS['strCampaignWarningNoWeight'] = "The priority of this campaign has been set to low, \nbut the weight is set to zero or it has not been \nspecified. This will cause the campaign to be \ndeactivated and it's banners won't be delivered \nuntil the weight has been set to a valid number. \n\nAre you sure you want to continue?";
@@ -264,8 +270,9 @@ $GLOBALS['strActiveBanners'] 			= "Active banners";
 $GLOBALS['strTotalBanners'] 			= "Total banners";
 $GLOBALS['strShowBanner']			= "Show banner";
 $GLOBALS['strShowAllBanners']	 		= "Show all banners";
-$GLOBALS['strShowBannersNoAdClicks']		= "Show banners without AdClicks";
 $GLOBALS['strShowBannersNoAdViews']		= "Show banners without AdViews";
+$GLOBALS['strShowBannersNoAdClicks']		= "Show banners without AdClicks";
+$GLOBALS['strShowBannersNoAdConversions']		= "Show banners without AdSales";
 $GLOBALS['strDeleteAllBanners']	 		= "Delete all banners";
 $GLOBALS['strActivateAllBanners']		= "Activate all banners";
 $GLOBALS['strDeactivateAllBanners']		= "Deactivate all banners";
@@ -524,10 +531,13 @@ $GLOBALS['strLogErrorClients'] 			= "[phpAds] An error occurred while trying to 
 $GLOBALS['strLogErrorBanners'] 			= "[phpAds] An error occurred while trying to fetch the banners from the database.";
 $GLOBALS['strLogErrorViews'] 			= "[phpAds] An error occurred while trying to fetch the adviews from the database.";
 $GLOBALS['strLogErrorClicks'] 			= "[phpAds] An error occurred while trying to fetch the adclicks from the database.";
+$GLOBALS['strLogErrorConversions'] 		= "[phpAds] An error occurred while trying to fetch the adsales from the database.";
 $GLOBALS['strErrorViews'] 			= "You must enter the number of views or select the unlimited box !";
 $GLOBALS['strErrorNegViews'] 			= "Negative views are not allowed";
 $GLOBALS['strErrorClicks'] 			= "You must enter the number of clicks or select the unlimited box !";
 $GLOBALS['strErrorNegClicks'] 			= "Negative clicks are not allowed";
+$GLOBALS['strErrorConversions'] 			= "You must enter the number of sales or select the unlimited box !";
+$GLOBALS['strErrorNegConversions'] 			= "Negative sales are not allowed";
 $GLOBALS['strNoMatchesFound']			= "No matches were found";
 $GLOBALS['strErrorOccurred']			= "An error occurred";
 $GLOBALS['strErrorUploadSecurity']		= "Detected a possible security problem, upload halted!";
@@ -556,13 +566,15 @@ $GLOBALS['strMailNothingLeft'] 			= "If you would like to continue advertising o
 $GLOBALS['strClientDeactivated']		= "This campaign is currently not active because";
 $GLOBALS['strBeforeActivate']			= "the activation date has not yet been reached";
 $GLOBALS['strAfterExpire']			= "the expiration date has been reached";
-$GLOBALS['strNoMoreClicks']			= "there are no AdClicks remaining";
 $GLOBALS['strNoMoreViews']			= "there are no AdViews remaining";
+$GLOBALS['strNoMoreClicks']			= "there are no AdClicks remaining";
+$GLOBALS['strNoMoreConversions']			= "there are no AdSales remaining";
 $GLOBALS['strWeightIsNull']			= "its weight is set to zero";
-$GLOBALS['strWarnClientTxt']			= "The AdClicks or AdViews left for your banners are getting below {limit}. \nYour banners will be disabled when there are no AdClicks or AdViews left. ";
-$GLOBALS['strViewsClicksLow']			= "AdViews/AdClicks are low";
+$GLOBALS['strWarnClientTxt']			= "The AdViews, AdClicks, or AdSales left for your banners are getting below {limit}. \nYour banners will be disabled when there are no AdViews, AdClicks, or AdSales left. ";
+$GLOBALS['strViewsClicksConversionsLow']			= "AdViews/AdClicks/AdSales are low";
 $GLOBALS['strNoViewLoggedInInterval']   	= "No AdViews were logged during the span of this report";
 $GLOBALS['strNoClickLoggedInInterval']  	= "No AdClicks were logged during the span of this report";
+$GLOBALS['strNoConversionLoggedInInterval']  	= "No AdSales were logged during the span of this report";
 $GLOBALS['strMailReportPeriod']			= "This report includes statistics from {startdate} up to {enddate}.";
 $GLOBALS['strMailReportPeriodAll']		= "This report includes all statistics up to {enddate}.";
 $GLOBALS['strNoStatsForCampaign'] 		= "There are no statistics available for this campaign";

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -24,7 +24,7 @@ define ('LIBWARNING_INCLUDED', true);
 function phpAds_warningMail ($campaign)
 {
 	global $phpAds_config;
-	global $strViewsClicksLow, $strMailHeader, $strWarnClientTxt;
+	global $strViewsClicksConversionsLow, $strMailHeader, $strWarnClientTxt;
 	global $strMailNothingLeft, $strMailFooter;
 	
 	
@@ -50,7 +50,7 @@ function phpAds_warningMail ($campaign)
 			
 			
 			// Build email
-			$Subject = $strViewsClicksLow.": ".$campaign["clientname"];
+			$Subject = $strViewsClicksConversionsLow.": ".$campaign["clientname"];
 			
 			$Body    = "$strMailHeader\n";
 			$Body 	.= "$strWarnClientTxt\n";
