@@ -29,6 +29,7 @@ CVS			+ Added P3P Privacy Policies support
 			+ Added ability to reset all stats  (Niels)
 			+ Added expiration details to campaign index  (Niels)
 			+ Added URL prefix and scrolling=no  to bannercode generator  (Niels)
+			+ Added local path to phpadsnew.inc.php for local mode to bannercode generator  (Niels)
 			+ Changed the way JavaScript is generated for remote invocation with JavaScript  (Niels)
 			+ Changed default names of tables, added prefix to 
 			  avoid conflicts with other products  (Niels)
