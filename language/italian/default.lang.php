@@ -1,4 +1,4 @@
-<?php // $Revision: 1.25 $
+<?php // $Revision: 1.26 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -399,7 +399,7 @@ $GLOBALS['strNoStats']						= "Non ci sono statistiche disponibili";
 $GLOBALS['strConfirmResetStats']			= "Vuoi veramente cancellare tutte le statistiche?";
 $GLOBALS['strGlobalHistory']				= "Storico globale";
 $GLOBALS['strDailyHistory']					= "Storico giornaliero";
-$GLOBALS['strDailyStats']					= "Statistiche gGiornaliere";
+$GLOBALS['strDailyStats']					= "Statistiche giornaliere";
 $GLOBALS['strWeeklyHistory']				= "Storico settimanale";
 $GLOBALS['strMonthlyHistory']				= "Storico mensile";
 $GLOBALS['strCreditStats']					= "Statistiche credito";
