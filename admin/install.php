@@ -1,4 +1,4 @@
-<?php // $Revision: 1.20 $
+<?php // $Revision: 1.21 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -50,8 +50,6 @@ if (!isset($phpAds_config['language']))
 	$phpAds_config['language'] = 'english';
 
 include('../language/'.$phpAds_config['language'].'/default.lang.php');
-include('../language/'.$phpAds_config['language'].'/settings.lang.php');
-
 
 
 // Include other required files
@@ -64,6 +62,8 @@ require ("lib-languages.inc.php");
 require ("lib-settings.inc.php");
 
 
+// Load settings/install language strings
+include('../language/'.$phpAds_config['language'].'/settings.lang.php');
 
 
 // If an old config.inc.php is present, upgrade!
