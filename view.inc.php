@@ -1,4 +1,4 @@
-<?php // $Revision: 1.50 $
+<?php // $Revision: 1.51 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -631,7 +631,7 @@ function view_raw($what, $clientID=0, $target="", $source="", $withtext=0, $cont
 				
 				// Replace standard variables
 				$html = str_replace ('{timestamp}',	time(), $html);
-				$html = str_replace ('{id}', 		$row['bannerID'], $html);
+				$html = str_replace ('{bannerid}', 	$row['bannerID'], $html);
 				$html = str_replace ("{targeturl}", $phpAds_url_prefix."/adclick.php?bannerID=".$row['bannerID']."&ismap=", $html);
 				
 				if (strpos ($html, "{targeturl:") > 0)
@@ -642,11 +642,37 @@ function view_raw($what, $clientID=0, $target="", $source="", $withtext=0, $cont
 					}
 				}
 				
+				$lastrandom = 0;
+				$lastdigits = 0;
+				
+				// Replace random
+				while (eregi ('\{random(:([1-9])){0,1}\}', $html, $matches))
+				{
+					if ($matches[1] == "")
+						$randomdigits = 8;
+					else
+						$randomdigits = $matches[2];
+					
+					if ($lastdigits == $randomdigits)
+						$randomnumber = $lastrandom;
+					else
+						$randomnumber = sprintf ("%0".$randomdigits."d", mt_rand (0, pow (10, $randomdigits) - 1));
+					
+					$html = str_replace ($matches[0], $randomnumber, $html);
+					
+					$lastdigits = $randomdigits;
+					$lastrandom = $randomnumber;
+				}
+				
+				
 				$outputbuffer = $html;
 			}
 			elseif ($row["format"] == "url")
 			{
 				// Banner refered through URL
+				
+				// Replace standard variables
+				$row['banner'] = str_replace ('{timestamp}',	time(), $row['banner']);
 				
 				// Determine cachebuster
 				if (eregi ('\{random(:([1-9])){0,1}\}', $row['banner'], $matches))
