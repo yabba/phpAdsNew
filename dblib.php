@@ -1,4 +1,4 @@
-<?// $id:
+<?// $Id: dblib.php,v 1.2 2001/02/15 01:18:15 phord Exp $
 
 function db_connect()
 {
@@ -13,4 +13,12 @@ function db_close()
     mysql_close();
 }
 
+
+function db_query($query, $link = "")
+{
+    global $phpAds_last_query, $phpAds_db;
+
+    $phpAds_last_query = $query;
+    return mysql_db_query($phpAds_db, $query);
+}
 ?>
