@@ -6,6 +6,7 @@ CVS			+ Added P3P Privacy Policies support
 
 			+ Added expiration details to campaign index  (Niels)
 			+ Added URL prefix and scrolling=no  (Niels)
+			+ Added search capabilities  (Niels and Tobi Schulz)
 
 
 v 2.0beta5		+ Added override setting for automatic GD detection  (Niels)
