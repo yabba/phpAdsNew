@@ -1,4 +1,4 @@
-<?php // $Revision: 1.82 $
+<?php // $Revision: 1.83 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -725,7 +725,7 @@ if ($bannerid != '')
 		{
 			$buffer = $row['htmltemplate'];
 			
-			while (eregi("alink([0-9]+)={targeturl:([^}]+)}", $buffer, $regs))
+			while (eregi("alink([0-9]+)=\{targeturl:([^\}]+)\}", $buffer, $regs))
 			{
 				$hardcoded_links[$regs[1]] = $regs[2];
 				$buffer = str_replace ($regs[0], '', $buffer);
