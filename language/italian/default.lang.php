@@ -1,4 +1,4 @@
-<?php // $Revision: 1.21 $
+<?php // $Revision: 1.22 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -73,7 +73,7 @@ $GLOBALS['strDown']							= "Gi&ugrave;";
 $GLOBALS['strSave']							= "Salva";
 $GLOBALS['strCancel']						= "Cancella";
 $GLOBALS['strPrevious']						= "Precedente";
-$GLOBALS['strNext']							= "Sucessivo";
+$GLOBALS['strNext']							= "Successivo";
 $GLOBALS['strYes']							= "S&igrave;";
 $GLOBALS['strNo']							= "No";
 $GLOBALS['strNone']							= "Nessuno";

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -16,6 +16,7 @@
 
 // Include required files
 require ("config.php");
+require ("lib-statistics.inc.php");
 require ("../lib-priority.inc.php");
 
 
