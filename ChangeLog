@@ -4,6 +4,15 @@ CVS			+ Added search capabilities  (Niels and Tobi Schulz)
 			+ Added expiration details to campaign index  (Niels)
 			+ Added the ablity to get the IP adress of users behind a proxy server  (Niels & Mesut Tunga)
 
+			+ ACLs
+			  The ACL routines have been rewritten. This is a very big change and possibly
+			  a change from previous behavoir. It is needed to check existing ACLs after
+			  upgrading!!! The changes include:
+			  - Ability to select multiple weekdays per ACL  (Niels)
+			  - Ability to select multiple hours per ACL  (Niels)
+			  - Added boolean operators to ACLs  (Niels)
+			  - Changed IP check, it is not possible to use * instead of a mask  (Niels)
+
 			+ Added P3P Privacy Policies support
 			  - Sending Policy location using P3P header  (Niels)
 			  - Sending Compact Policy using P3P header for cookie evaluation  (Niels)
