@@ -1,4 +1,4 @@
-<?php // $Revision: 1.20 $
+<?php // $Revision: 1.21 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -110,6 +110,15 @@ $GLOBALS['strCantConnectToDb']			= "Can't connect to database";
 
 // Invocation and Delivery
 $GLOBALS['strInvocationAndDelivery']	= "Invocation and delivery settings";
+
+$GLOBALS['strAllowedInvocationTypes']	= "Allowed invocation types";
+$GLOBALS['strAllowRemoteInvocation']	= "Allow Remote Invocation";
+$GLOBALS['strAllowRemoteJavascript']	= "Allow Remote Invocation for Javascript";
+$GLOBALS['strAllowRemoteFrames']		= "Allow Remote Invocation for Frames";
+$GLOBALS['strAllowRemoteXMLRPC']		= "Allow Remote Invocation using XML-RPC";
+$GLOBALS['strAllowLocalmode']			= "Allow Local mode";
+$GLOBALS['strAllowInterstitial']		= "Allow Interstitials";
+$GLOBALS['strAllowPopups']				= "Allow Popups";
 
 $GLOBALS['strKeywordRetrieval']			= "Keyword retrieval";
 $GLOBALS['strBannerRetrieval']			= "Banner retrieval method";

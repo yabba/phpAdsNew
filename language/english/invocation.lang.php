@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -23,6 +23,10 @@ $GLOBALS['strInvocationCombined']		= "Combined Remote Invocation";
 $GLOBALS['strInvocationPopUp']			= "Pop-up";
 $GLOBALS['strInvocationAdLayer']		= "Interstitial";
 $GLOBALS['strInvocationLocal']			= "Local mode";
+
+
+// Other
+$GLOBALS['strCopyToClipboard']			= "Copy to clipboard";
 
 
 // Measures
