@@ -1,4 +1,4 @@
-<?php // $Revision: 2.14 $
+<?php // $Revision: 2.15 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -478,7 +478,7 @@ else
 		$row["campaignname"] = '';
 	
 	
-	$row["campaignname"] .= $strDefault;
+	$row["campaignname"] .= $strDefault." ".$strCampaign;
 	$row["views"] 		= '';
 	$row["clicks"] 		= '';
 	$row["conversions"] = '';

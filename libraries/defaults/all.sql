@@ -177,6 +177,7 @@ CREATE TABLE phpads_campaigns_trackers (
    campaign_trackerid mediumint(9) NOT NULL AUTO_INCREMENT,
    campaignid mediumint(9) DEFAULT '0' NOT NULL,
    trackerid mediumint(9) DEFAULT '0' NOT NULL,
+   logstats enum('t','f') DEFAULT 'y' NOT NULL,
    PRIMARY KEY (campaign_trackerid)
 );
 
@@ -294,6 +295,7 @@ CREATE TABLE phpads_conversionlog (
    action_host varchar(255) NOT NULL,
    action_source varchar(50) NOT NULL,
    action_country char(2) NOT NULL,
+   PRIMARY KEY (conversionlogid)
 );
 
 
@@ -341,7 +343,7 @@ CREATE TABLE phpads_targetstats (
    target int(11) DEFAULT '0' NOT NULL,
    views int(11) DEFAULT '0' NOT NULL,
    modified tinyint(4) DEFAULT '0' NOT NULL,
-   PRIMARY KEY (day,clientid)
+   PRIMARY KEY (day,campaignid)
 );
 
 

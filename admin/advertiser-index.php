@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -146,10 +146,14 @@ while ($row_banners = phpAds_dbFetchArray($res_banners))
 		$campaigns[$row_banners['campaignid']]['count']++;
 	}
 	
+/* CANNOT HAVE BANNERS WITHOUT ADVERTISERS ANYMORE...
+
 	if (isset($clients[$row_banners['campaignid']]))
 	{
 		$clients[$row_banners['campaignid']]['count']++;
 	}
+*/
+
 }
 
 
@@ -484,6 +488,8 @@ else
 			}
 		}
 		
+/* CANNOT HAVE BANNERS WITHOUT ADVERTISERS ANYMORE...
+
 		if ($client['count'] > 0)
 		{
 			// Divider
@@ -503,6 +509,7 @@ else
 			echo "</td>\n";
 			echo "\t\t\t\t</tr>\n";
 		}
+*/
 		
 		echo "\t\t\t\t<tr height='1'>\n";
 		echo "\t\t\t\t\t<td colspan='5' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td>\n";

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.7 $
+<?php // $Revision: 1.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -213,6 +213,7 @@ function phpAds_countConversions($begin_timestamp, $end_timestamp, $day, $hour, 
 				",".$phpAds_config['tbl_campaigns_trackers'].
 				" WHERE ".$phpAds_config['tbl_campaigns_trackers'].".trackerid=".$trackerid.
 				" AND ".$phpAds_config['tbl_campaigns_trackers'].".campaignid=".$phpAds_config['tbl_conversionrules'].".campaignid".
+				" AND ".$phpAds_config['tbl_campaigns_trackers'].".logstats='t'".
 				" ORDER BY campaignid,conversiontype,action";
 			;
 	

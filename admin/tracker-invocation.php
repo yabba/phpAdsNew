@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -17,6 +17,7 @@
 // Include required files
 require ("config.php");
 require ("lib-statistics.inc.php");
+require ("lib-invocation.inc.php");
 
 
 // Register input variables
@@ -122,16 +123,16 @@ if ($trackerid != "")
 	
 	phpAds_PageShortcut($strClientProperties, 'advertiser-edit.php?clientid='.$clientid, 'images/icon-advertiser.gif');
 	//phpAds_PageShortcut($strTrackerHistory, 'stats-tracker-history.php?clientid='.$clientid.'&trackerid='.$trackerid, 'images/icon-statistics.gif');
-		
+	
 	
 	$extra  = "\t\t\t\t<form action='tracker-modify.php'>"."\n";
 	$extra .= "\t\t\t\t<input type='hidden' name='trackerid' value='$trackerid'>"."\n";
 	$extra .= "\t\t\t\t<input type='hidden' name='clientid' value='$clientid'>"."\n";
-	$extra .= "\t\t\t\t<input type='hidden' name='returnurl' value='tracker-edit.php'>"."\n";
+	$extra .= "\t\t\t\t<input type='hidden' name='returnurl' value='tracker-invocation.php'>"."\n";
 	$extra .= "\t\t\t\t<br><br>"."\n";
 	$extra .= "\t\t\t\t<b>$strModifyTracker</b><br>"."\n";
 	$extra .= "\t\t\t\t<img src='images/break.gif' height='1' width='160' vspace='4'><br>"."\n";
-	$extra .= "\t\t\t\t<img src='images/icon-duplicate-tracker.gif' align='absmiddle'>&nbsp;<a href='tracker-modify.php?clientid=".$clientid."&trackerid=".$trackerid."&duplicate=true&returnurl=tracker-edit.php'>$strDuplicate</a><br>"."\n";
+	$extra .= "\t\t\t\t<img src='images/icon-duplicate-tracker.gif' align='absmiddle'>&nbsp;<a href='tracker-modify.php?clientid=".$clientid."&trackerid=".$trackerid."&duplicate=true&returnurl=tracker-invocation.php'>$strDuplicate</a><br>"."\n";
 	$extra .= "\t\t\t\t<img src='images/break.gif' height='1' width='160' vspace='4'><br>"."\n";
 	$extra .= "\t\t\t\t<img src='images/icon-move-tracker.gif' align='absmiddle'>&nbsp;$strMoveTo<br>"."\n";
 	$extra .= "\t\t\t\t<img src='images/spacer.gif' height='1' width='160' vspace='2'><br>"."\n";
@@ -155,7 +156,7 @@ if ($trackerid != "")
 	$extra .= "\t\t\t\t</form>\n";
 	
 	
-	phpAds_PageHeader("4.1.4.2", $extra);
+	phpAds_PageHeader("4.1.4.4", $extra);
 		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getClientName(phpAds_getTrackerParentClientID($trackerid));
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 		echo "<img src='images/icon-tracker.gif' align='absmiddle'>&nbsp;<b>".phpAds_getTrackerName($trackerid)."</b><br><br><br>";
@@ -167,11 +168,11 @@ else
 	{
 		// Convert client to tracker
 		
-		phpAds_PageHeader("4.1.4.2");
+		phpAds_PageHeader("4.1.4.4");
 			echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getClientName($clientid);
 			echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 			echo "<img src='images/icon-tracker.gif' align='absmiddle'>&nbsp;<b>".$strUntitled."</b><br><br><br>";
-			phpAds_ShowSections(array("4.1.4.2"));
+			phpAds_ShowSections(array("4.1.4.4"));
 	}
 	else
 	{
@@ -218,7 +219,7 @@ else
 		$row["trackername"] = '';
 	
 	
-	$row["trackername"] .= $strDefault." ".$strTracker;
+	$row["trackername"] .= $strDefault;
 }
 
 
@@ -230,71 +231,32 @@ else
 $tabindex = 1;
 
 echo "<br><br>";
-echo "<form name='clientform' method='post' action='tracker-edit.php'>"."\n";
-echo "<input type='hidden' name='trackerid' value='".(isset($trackerid) ? $trackerid : '')."'>"."\n";
-echo "<input type='hidden' name='clientid' value='".(isset($clientid) ? $clientid : '')."'>"."\n";
 echo "<input type='hidden' name='move' value='".(isset($move) ? $move : '')."'>"."\n";
 
 echo "<table border='0' width='100%' cellpadding='0' cellspacing='0'>"."\n";
-echo "<tr><td height='25' colspan='3'><b>".$strBasicInformation."</b></td></tr>"."\n";
-echo "<tr height='1'><td colspan='3' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>"."\n";
-echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>"."\n";
+// START CODE
+echo "<table border='0' width='550' cellpadding='0' cellspacing='0'>";
+echo "<tr><td height='25'><img src='images/icon-generatecode.gif' align='absmiddle'>&nbsp;<b>".$GLOBALS['strTrackercode']."</b></td>";
 
-echo "<tr>"."\n";
-echo "\t"."<td width='30'>&nbsp;</td>"."\n";
-echo "\t"."<td width='200'>".$strName."</td>"."\n";
-echo "\t"."<td><input class='flat' type='text' name='trackername' size='35' style='width:350px;' value='".phpAds_htmlQuotes($row['trackername'])."' tabindex='".($tabindex++)."'></td>"."\n";
-echo "</tr>"."\n";
-echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>"."\n";
+// Show clipboard button only on IE
+if (strpos ($HTTP_SERVER_VARS['HTTP_USER_AGENT'], 'MSIE') > 0 &&
+	strpos ($HTTP_SERVER_VARS['HTTP_USER_AGENT'], 'Opera') < 1)
+{
+	echo "<td height='25' align='right'><img src='images/icon-clipboard.gif' align='absmiddle'>&nbsp;";
+	echo "<a href='javascript:phpAds_CopyClipboard(\"bannercode\");'>".$GLOBALS['strCopyToClipboard']."</a></td></tr>";
+}
+else
+	echo "<td>&nbsp;</td>";
 
-echo "<tr>"."\n";
-echo "\t"."<td width='30'>&nbsp;</td>"."\n";
-echo "\t"."<td width='200'>".$strDescription."</td>"."\n";
-echo "\t"."<td><input class='flat' type='text' name='description' size='35' style='width:350px;' value='".phpAds_htmlQuotes($row['description'])."' tabindex='".($tabindex++)."'></td>"."\n";
-echo "</tr>"."\n";
-echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>"."\n";
-
+echo "<tr height='1'><td colspan='2' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
+echo "<tr><td colspan='2'><textarea name='bannercode' class='code-gray' rows='6' cols='55' style='width:550;' readonly>".htmlspecialchars(phpAds_GenerateTrackerCode())."</textarea></td></tr>";
+echo "</table><br>";
+//phpAds_ShowBreak();
+echo "<br>";
+// END CODE
 echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>"."\n";
 echo "<tr height='1'><td colspan='3' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>"."\n";
 echo "</table>"."\n";
-
-echo "<br><br>"."\n";
-echo "<input type='submit' name='submit' value='".$strSaveChanges."' tabindex='".($tabindex++)."'>"."\n";
-
-echo "</form>"."\n";
-
-
-/*********************************************************/
-/* Form requirements                                     */
-/*********************************************************/
-
-// Get unique affiliate
-$unique_names = array();
-
-$query = 
-	"SELECT trackername".
-	" FROM ".$phpAds_config['tbl_trackers'].
-	" WHERE clientid=".$clientid
-;
-
-if (isset($trackerid) && ($trackerid > 0))
-	$query .= " AND trackerid!=".$trackerid;
-
-$res = phpAds_dbQuery($query) or phpAds_sqlDie();
-
-while ($row = phpAds_dbFetchArray($res))
-	$unique_names[] = $row['trackername'];
-?>
-
-<script language='JavaScript'>
-<!--
-	phpAds_formSetRequirements('trackername', '<?php echo addslashes($strName); ?>', true, 'unique');
-	
-	phpAds_formSetUnique('trackername', '|<?php echo addslashes(implode('|', $unique_names)); ?>|');
-//-->
-</script>
-
-<?php
 
 /*********************************************************/
 /* HTML framework                                        */

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -550,6 +550,8 @@ if ($clientshidden > 0 || $totalviews > 0 || $totalclicks > 0)
 			}
 		}
 		
+/* CANNOT HAVE BANNERS WITHOUT ADVERTISERS ANYMORE...
+
 		if (isset ($client['banners']) && sizeof($client['banners']) > 0)
 		{
 			// Divider
@@ -567,7 +569,7 @@ if ($clientshidden > 0 || $totalviews > 0 || $totalclicks > 0)
 		echo "<tr height='1'><td colspan='5' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
 		$i++;
 	}
-	
+*/	
 	
 	// Total
 	echo "<tr height='25' ".($i % 2 == 0 ? "bgcolor='#F6F6F6'" : "")."><td height='25'>&nbsp;&nbsp;<b>".$strTotal."</b></td>";

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.16 $
+<?php // $Revision: 2.17 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -275,15 +275,18 @@ $GLOBALS['strCampaignWarningNoTarget'] 	= "The priority of this campaign has bee
 
 
 // Tracker
+$GLOBALS['strTracker']					= "Tracker";
 $GLOBALS['strTrackerOverview']			= "Tracker overview";
 $GLOBALS['strAddTracker'] 				= "Add new tracker";
 $GLOBALS['strAddTracker_Key'] 			= "Add <u>n</u>ew tracker";
 $GLOBALS['strNoTrackers']				= "There are currently no trackers defined";
 $GLOBALS['strConfirmDeleteAllTrackers']	= "Do you really want to delete all trackers owned by this advertiser?";
-$GLOBALS['strConfirmDeleteTrackers']	= "Do you really want to delete this tracker?";
+$GLOBALS['strConfirmDeleteTracker']		= "Do you really want to delete this tracker?";
 $GLOBALS['strDeleteAllTrackers']		= "Delete all trackers";
 $GLOBALS['strTrackerProperties']		= "Tracker properties";
 $GLOBALS['strTrackerOverview']			= "Tracker overview";
+$GLOBALS['strModifyTracker']			= "Modify tracker";
+
 
 // Banners (General)
 $GLOBALS['strBanner'] 				= "Banner";
@@ -547,6 +550,7 @@ $GLOBALS['strGenerate']				= "Generate";
 $GLOBALS['strParameters']			= "Parameters";
 $GLOBALS['strFrameSize']			= "Frame size";
 $GLOBALS['strBannercode']			= "Bannercode";
+$GLOBALS['strTrackercode']			= "Trackercode";
 $GLOBALS['strOptional']				= "optional";
 
 

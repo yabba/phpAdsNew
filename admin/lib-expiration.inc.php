@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -27,9 +27,10 @@ function phpAds_getAdViewsLeft($campaignid)
 		"SELECT views".
 		" FROM ".$phpAds_config['tbl_campaigns'].
 		" WHERE campaignid=".$campaignid
-	) or phpAds_sqlDie();
+	;
 	
-	$res_campaign = phpAds_dbQuery($campaign_query);
+	$res_campaign = phpAds_dbQuery($campaign_query)
+		or phpAds_sqlDie();
 	
 	if (phpAds_dbNumRows($res_campaign) == 1)
 	{
