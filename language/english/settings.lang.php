@@ -1,11 +1,11 @@
-<?php // $Revision: 1.2 $
+<?php // $Id: settings.lang.php,v 1.3 2001/11/06 00:13:10 ciaccia Exp $
 
 /************************************************************************/
-/* phpAdsNew 2                                                          */
-/* ===========                                                          */
+/* phpPgAds                                                             */
+/* ========                                                             */
 /*                                                                      */
-/* Copyright (c) 2001 by the phpAdsNew developers                       */
-/* http://sourceforge.net/projects/phpadsnew                            */
+/* Copyright (c) 2001 by the phpPgAds developers                        */
+/* http://sourceforge.net/projects/phppgads                             */
 /*                                                                      */
 /* This program is free software. You can redistribute it and/or modify */
 /* it under the terms of the GNU General Public License as published by */
