@@ -1,4 +1,4 @@
-<?php // $Revision: 1.29 $
+<?php // $Revision: 1.30 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -237,7 +237,7 @@ $res = phpAds_dbQuery("
 	".phpAds_getZoneListOrder ($listorder, $orderdirection)."
 ") or phpAds_sqlDie();
 
-$zone_count = phpAds_dbNumRows($res);
+$zone_count += phpAds_dbNumRows($res);
 while ($row = phpAds_dbFetchArray($res))
 {
 	if (isset($affiliates[$row['affiliateid']]))
