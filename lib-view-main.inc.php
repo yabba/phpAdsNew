@@ -1,4 +1,4 @@
-<?php // $Revision: 1.14 $
+<?php // $Revision: 1.15 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -242,7 +242,7 @@ function view_raw($what, $clientid = 0, $target = '', $source = '', $withtext = 
 /* Display a banner                                      */
 /*********************************************************/
 
-function view($what, $clientid = 0, $target = '', $source = '', $withtext = 0, $context = 0, $richmedia)
+function view($what, $clientid = 0, $target = '', $source = '', $withtext = 0, $context = 0, $richmedia = true)
 {
 	$output = view_raw($what, $clientid, "$target", "$source", $withtext, $context, $richmedia);
 	print($output['html']);
