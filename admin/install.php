@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -186,6 +186,12 @@ if (phpAds_isUser(phpAds_Admin))
 					ini_get ('track_vars') != true)
 					$fatal[] = $strWarningTrackVars;
 			}
+			
+			
+			// Check for PREG extention
+			if (!function_exists('preg_match'))
+				$fatal[] = $strWarningPREG;
+			
 			
 			// Check if config file is writable
 			if (!phpAds_isConfigWritable())
