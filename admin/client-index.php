@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -42,44 +42,46 @@ if (isset($message))
 /*********************************************************/
 
 // Get clients & campaign and build the tree
-$res_clients = db_query("
-	SELECT 
-		*
-	FROM 
-		$phpAds_tbl_clients
-	ORDER BY
-		parent, clientID
-	") or mysql_die();
+if (phpAds_isUser(phpAds_Admin))
+{
+	$res_clients = db_query("
+		SELECT 
+			*
+		FROM 
+			$phpAds_tbl_clients
+		ORDER BY
+			parent, clientID
+		") or mysql_die();
+}
+else
+{
+	$res_clients = db_query("
+		SELECT 
+			*
+		FROM 
+			$phpAds_tbl_clients
+		WHERE
+			clientID = ".$Session["clientID"]." OR
+			parent = ".$Session["clientID"]."
+		ORDER BY
+			parent, clientID
+		") or mysql_die();
+}
 
 while ($row_clients = mysql_fetch_array($res_clients))
 {
 	if ($row_clients['parent'] == 0)
-		$clients[$row_clients['clientID']] = $row_clients;
-	else
 	{
 		$clients[$row_clients['clientID']] = $row_clients;
-		$clients[$row_clients['parent']]['campaigns'][$row_clients['clientID']] = & $clients[$row_clients['clientID']];
+		$clients[$row_clients['clientID']]['expand'] = 0;
+		$clients[$row_clients['clientID']]['count'] = 0;
 	}
-	
-	$clients[$row_clients['clientID']]['count'] = 0;
-	$clients[$row_clients['clientID']]['expand'] = 0;
-}
-
-
-// Get the number of banner for each campaign
-$res_clients = db_query("
-	SELECT 
-		clientID, 
-		count(*) as count
-	FROM 
-		$phpAds_tbl_banners
-	GROUP BY
-		clientID
-	") or mysql_die();
-
-while ($row_clients = mysql_fetch_array($res_clients))
-{
-	$clients[$row_clients['clientID']]['count'] = $row_clients['count'];
+	else
+	{
+		$campaigns[$row_clients['clientID']] = $row_clients;
+		$campaigns[$row_clients['clientID']]['expand'] = 0;
+		$campaigns[$row_clients['clientID']]['count'] = 0;
+	}
 }
 
 
@@ -98,12 +100,24 @@ $res_banners = db_query("
 
 while ($row_banners = mysql_fetch_array($res_banners))
 {
-	$clients[$row_banners['clientID']]['banners'][$row_banners['bannerID']] = $row_banners;
+	if (isset($campaigns[$row_banners['clientID']]))
+	{
+		$banners[$row_banners['bannerID']] = $row_banners;
+		$campaigns[$row_banners['clientID']]['count']++;
+	}
+	
+	if (isset($clients[$row_banners['clientID']]))
+	{
+		$clients[$row_banners['clientID']]['count']++;
+	}
 }
 
 
-if (isset($Session["admin_nodes"]) && $Session["admin_nodes"])
-	$node_array = explode (",", $Session["admin_nodes"]);
+
+// Expand tree nodes
+
+if (isset($Session["stats_nodes"]) && $Session["stats_nodes"])
+	$node_array = explode (",", $Session["stats_nodes"]);
 else
 	$node_array = array();
 
@@ -116,12 +130,37 @@ for ($i=0; $i < sizeof($node_array);$i++)
 	if (isset($collapse) && $collapse == $node_array[$i])
 		unset ($node_array[$i]);
 	else
+	{
 		if (isset($clients[$node_array[$i]]))
 			$clients[$node_array[$i]]['expand'] = 1;
+		if (isset($campaigns[$node_array[$i]]))
+			$campaigns[$node_array[$i]]['expand'] = 1;
+	}
 }
 
-$Session["admin_nodes"] = implode (",", $node_array);
+$Session["stats_nodes"] = implode (",", $node_array);
 phpAds_SessionDataStore();
+
+
+
+// Build Tree
+if (isset($banners) && is_array($banners) && count($banners) > 0)
+{
+	// Add banner to campaigns
+	for (reset($banners);$bkey=key($banners);next($banners))
+		$campaigns[$banners[$bkey]['clientID']]['banners'][$bkey] = $banners[$bkey];
+	
+	unset ($banners);
+}
+
+if (isset($campaigns) && is_array($campaigns) && count($campaigns) > 0)
+{
+	for (reset($campaigns);$ckey=key($campaigns);next($campaigns))
+		$clients[$campaigns[$ckey]['parent']]['campaigns'][$ckey] = $campaigns[$ckey];
+	
+	unset ($campaigns);
+}
+
 
 
 
@@ -146,7 +185,7 @@ if (isset($clients) && is_array($clients) && count($clients) > 0)
 	$i=0;
 	for (reset($clients);$key=key($clients);next($clients))
 	{
-		$client = & $clients[$key];
+		$client = $clients[$key];
 		
 		if ($client['parent'] == 0)
 		{
