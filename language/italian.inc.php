@@ -1,4 +1,4 @@
-<?php // $Revision: 1.30 $
+<?php // $Revision: 1.31 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -268,5 +268,7 @@ $GLOBALS['strCampaignStats']			= "Statistiche Campagna";
 $GLOBALS['strClientStats']				= "Statistiche Clienti";
 $GLOBALS['strErrorOccurred']			= "Errore";
 $GLOBALS['strAdReportSent']				= "Report Pubblicitario inviato";
+
+$GLOBALS['strAutoChangeHTML']			= "Change HTML in order to log AdClicks";
 
 ?>

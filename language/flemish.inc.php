@@ -1,4 +1,4 @@
-<?php // $Revision: 1.22 $
+<?php // $Revision: 1.23 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -264,5 +264,6 @@ $GLOBALS['strClientStats']				= "Klant statistieken";
 $GLOBALS['strErrorOccurred']			= "Er is een fout opgetreden";
 $GLOBALS['strAdReportSent']				= "Advertentierapport verzonden";
 
+$GLOBALS['strAutoChangeHTML']			= "Change HTML in order to log AdClicks";
 
 ?>
