@@ -1,5 +1,5 @@
 <?
-/* $Id: expiration.inc.php,v 1.4 2001/01/13 13:13:13 wimg Exp $ */
+/* $Id: expiration.inc.php,v 1.5 2001/01/24 18:42:00 wimg Exp $ */
 
 /* estimated end of clients adviews */
 /* -------------------------------- */
