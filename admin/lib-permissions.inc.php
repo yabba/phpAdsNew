@@ -1,4 +1,4 @@
-<?php // $Revision: 1.8 $
+<?php // $Revision: 1.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -217,7 +217,7 @@ function phpAds_Login()
 function phpAds_IsLoggedIn()
 {
 	global $Session;
-	return ($Session['loggedin'] == "true");
+	return (isset($Session['loggedin']) ? ($Session['loggedin'] == "true") : false);
 }
 
 
