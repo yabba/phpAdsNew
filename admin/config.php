@@ -1,4 +1,4 @@
-<?php // $Revision: 1.23 $
+<?php // $Revision: 1.24 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -11,6 +11,14 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+
+
+
+// Figure out our location
+if (strlen(__FILE__) > strlen(basename(__FILE__)))
+    define ('phpAds_path', substr(__FILE__, 0, strpos(__FILE__, 'admin') - 1));
+else
+    define ('phpAds_path', '.');
 
 
 
