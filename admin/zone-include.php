@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -379,7 +379,7 @@ function phpAds_showZoneCampaign ($width, $height, $what, $delivery)
 		echo "<input type='hidden' name='affiliateid' value='".$GLOBALS['affiliateid']."'>";
 		echo "<input type='hidden' name='zonetype' value='".phpAds_ZoneCampaign."'>";
 		
-		echo "<td><img src='images/icon-client.gif' align='absmiddle'>&nbsp;";
+		echo "<td><img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;";
 		echo "<select name='clientid' onChange='this.form.submit();' tabindex='".($tabindex++)."'>";
 		
 		if (!isset($GLOBALS['clientid']) || $GLOBALS['clientid'] == '')
@@ -813,7 +813,7 @@ function phpAds_showZoneBanners ($width, $height, $what, $zonetype, $delivery)
 		echo "<input type='hidden' name='affiliateid' value='".$GLOBALS['affiliateid']."'>";
 		echo "<input type='hidden' name='zonetype' value='".phpAds_ZoneBanners."'>";
 		
-		echo "<td><img src='images/icon-client.gif' align='absmiddle'>&nbsp;";
+		echo "<td><img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;";
 		echo "<select name='clientid' onChange='this.form.submit();' tabindex='".($tabindex++)."'>";
 		
 		if (!isset($GLOBALS['clientid']) || $GLOBALS['clientid'] == '')

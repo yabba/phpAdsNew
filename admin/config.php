@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -127,12 +127,12 @@ if (!isset($day))		  $day = '';
 // Setup navigation
 $phpAds_nav = array (
 	"admin"	=> array (
-		"2"							=>  array("stats-global-client.php" => $strStats),
- 	  	  "2.1"						=>  array("stats-global-client.php" => $strClientsAndCampaigns),
-		    "2.1.1"					=>  array("stats-client-history.php?clientid=$clientid" => $strClientHistory),
-		      "2.1.1.1"				=> 	array("stats-client-daily.php?clientid=$clientid&day=$day" => $strDailyStats),
-		      "2.1.1.2"				=> 	array("stats-client-daily-hosts.php?clientid=$clientid&day=$day" => $strHosts),
-		    "2.1.2"					=>  array("stats-client-campaigns.php?clientid=$clientid" => $strCampaignOverview),
+		"2"							=>  array("stats-global-advertiser.php" => $strStats),
+ 	  	  "2.1"						=>  array("stats-global-advertiser.php" => $strClientsAndCampaigns),
+		    "2.1.1"					=>  array("stats-advertiser-history.php?clientid=$clientid" => $strClientHistory),
+		      "2.1.1.1"				=> 	array("stats-advertiser-daily.php?clientid=$clientid&day=$day" => $strDailyStats),
+		      "2.1.1.2"				=> 	array("stats-advertiser-daily-hosts.php?clientid=$clientid&day=$day" => $strHosts),
+		    "2.1.2"					=>  array("stats-advertiser-campaigns.php?clientid=$clientid" => $strCampaignOverview),
     	      "2.1.2.1"		 		=> 	array("stats-campaign-history.php?clientid=$clientid&campaignid=$campaignid" => $strCampaignHistory),
 		        "2.1.2.1.1"			=> 	array("stats-campaign-daily.php?clientid=$clientid&campaignid=$campaignid&day=$day" => $strDailyStats),
 		        "2.1.2.1.2"			=> 	array("stats-campaign-daily-hosts.php?clientid=$clientid&campaignid=$campaignid&day=$day" => $strHosts),
@@ -157,11 +157,11 @@ $phpAds_nav = array (
 		        "2.4.2.2.1"			=>  array("stats-linkedbanner-history.php?affiliateid=$affiliateid&zoneid=$zoneid&bannerid=$bannerid" => $strLinkedBannerHistory),
 	      "2.5"		 				=> 	array("stats-global-misc.php" => $strMiscellaneous),
 		"3"							=>  array("report-index.php" => $strReports),
-		"4"							=>	array("client-index.php" => $strAdminstration),
-		  "4.1"						=>	array("client-index.php" => $strClientsAndCampaigns),
-		    "4.1.1"					=> 	array("client-edit.php" => $strAddClient),
-		    "4.1.2"					=> 	array("client-edit.php?clientid=$clientid" => $strClientProperties),
-		    "4.1.3"					=> 	array("client-campaigns.php?clientid=$clientid" => $strCampaignOverview),
+		"4"							=>	array("advertiser-index.php" => $strAdminstration),
+		  "4.1"						=>	array("advertiser-index.php" => $strClientsAndCampaigns),
+		    "4.1.1"					=> 	array("advertiser-edit.php" => $strAddClient),
+		    "4.1.2"					=> 	array("advertiser-edit.php?clientid=$clientid" => $strClientProperties),
+		    "4.1.3"					=> 	array("advertiser-campaigns.php?clientid=$clientid" => $strCampaignOverview),
 		      "4.1.3.1"				=>  array("campaign-edit.php?clientid=$clientid" => $strAddCampaign),
 		      "4.1.3.2"				=>	array("campaign-edit.php?clientid=$clientid&campaignid=$campaignid" => $strCampaignProperties),
 		      "4.1.3.3"				=> 	array("campaign-zone.php?clientid=$clientid&campaignid=$campaignid" => $strLinkedZones),
@@ -192,11 +192,11 @@ $phpAds_nav = array (
 	),
 
 	"client" => array (
-		"1"							=>  array("stats-client-history.php?clientid=$clientid" => $strHome),
-		  "1.1"						=>  array("stats-client-history.php?clientid=$clientid" => $strClientHistory),
-	        "1.1.1"					=> 	array("stats-client-daily.php?clientid=$clientid&day=$day" => $strDailyStats),
-		    "1.1.2"					=> 	array("stats-client-daily-hosts.php?clientid=$clientid&day=$day" => $strHosts),
-		  "1.2"						=>  array("stats-client-campaigns.php?clientid=$clientid" => $strCampaignOverview),
+		"1"							=>  array("stats-advertiser-history.php?clientid=$clientid" => $strHome),
+		  "1.1"						=>  array("stats-advertiser-history.php?clientid=$clientid" => $strClientHistory),
+	        "1.1.1"					=> 	array("stats-advertiser-daily.php?clientid=$clientid&day=$day" => $strDailyStats),
+		    "1.1.2"					=> 	array("stats-advertiser-daily-hosts.php?clientid=$clientid&day=$day" => $strHosts),
+		  "1.2"						=>  array("stats-advertiser-campaigns.php?clientid=$clientid" => $strCampaignOverview),
     	    "1.2.1"		 			=> 	array("stats-campaign-history.php?clientid=$clientid&campaignid=$campaignid" => $strCampaignHistory),
 		      "1.2.1.1"				=> 	array("stats-campaign-daily.php?clientid=$clientid&campaignid=$campaignid&day=$day" => $strDailyStats),
 		      "1.2.1.2"				=> 	array("stats-campaign-daily-hosts.php?clientid=$clientid&campaignid=$campaignid&day=$day" => $strHosts),
@@ -235,6 +235,6 @@ $phpAds_nav = array (
 );
 
 if (phpAds_isUser(phpAds_Client) && phpAds_isAllowed(phpAds_ModifyInfo))
-	$phpAds_nav["client"]["2"] =  array("client-edit.php" => $strPreferences);
+	$phpAds_nav["client"]["2"] =  array("advertiser-edit.php" => $strPreferences);
 
 ?>

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -33,13 +33,13 @@ phpAds_checkAccess(phpAds_Admin+phpAds_Client);
 /* HTML framework                                        */
 /*********************************************************/
 
-if (isset($Session['prefs']['stats-client-campaigns.php']['listorder']))
-	$navorder = $Session['prefs']['stats-client-campaigns.php']['listorder'];
+if (isset($Session['prefs']['stats-advertiser-campaigns.php']['listorder']))
+	$navorder = $Session['prefs']['stats-advertiser-campaigns.php']['listorder'];
 else
 	$navorder = '';
 
-if (isset($Session['prefs']['stats-client-campaigns.php']['orderdirection']))
-	$navdirection = $Session['prefs']['stats-client-campaigns.php']['orderdirection'];
+if (isset($Session['prefs']['stats-advertiser-campaigns.php']['orderdirection']))
+	$navdirection = $Session['prefs']['stats-advertiser-campaigns.php']['orderdirection'];
 else
 	$navdirection = '';
 
@@ -99,7 +99,7 @@ if (phpAds_isUser(phpAds_Admin))
 		);
 	}
 	
-	phpAds_PageShortcut($strClientProperties, 'client-edit.php?clientid='.$clientid, 'images/icon-client.gif');
+	phpAds_PageShortcut($strClientProperties, 'advertiser-edit.php?clientid='.$clientid, 'images/icon-advertiser.gif');
 	phpAds_PageShortcut($strCampaignProperties, 'campaign-edit.php?clientid='.$clientid.'&campaignid='.$campaignid, 'images/icon-campaign.gif');
 	
 	$extra  = "<br><br><br>";
@@ -110,7 +110,7 @@ if (phpAds_isUser(phpAds_Admin))
 	$extra .= "<br><br>";
 	
 	phpAds_PageHeader("2.1.2.1", $extra);
-		echo "<img src='images/icon-client.gif' align='absmiddle'>&nbsp;".phpAds_getParentName($campaignid);
+		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentName($campaignid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<b>".phpAds_getClientName($campaignid)."</b><br><br><br>";
 		phpAds_ShowSections(array("2.1.2.1", "2.1.2.2", "2.1.2.3"));

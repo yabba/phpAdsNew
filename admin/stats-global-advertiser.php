@@ -1,4 +1,4 @@
-<?php // $Revision: 2.8 $
+<?php // $Revision: 1.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -55,30 +55,30 @@ phpAds_ShowSections(array("2.1", "2.4", "2.2", "2.5"));
 
 if (!isset($hideinactive))
 {
-	if (isset($Session['prefs']['stats-global-client.php']['hideinactive']))
-		$hideinactive = $Session['prefs']['stats-global-client.php']['hideinactive'];
+	if (isset($Session['prefs']['stats-global-advertiser.php']['hideinactive']))
+		$hideinactive = $Session['prefs']['stats-global-advertiser.php']['hideinactive'];
 	else
 		$hideinactive = ($phpAds_config['gui_hide_inactive'] == 't');
 }
 
 if (!isset($listorder))
 {
-	if (isset($Session['prefs']['stats-global-client.php']['listorder']))
-		$listorder = $Session['prefs']['stats-global-client.php']['listorder'];
+	if (isset($Session['prefs']['stats-global-advertiser.php']['listorder']))
+		$listorder = $Session['prefs']['stats-global-advertiser.php']['listorder'];
 	else
 		$listorder = '';
 }
 
 if (!isset($orderdirection))
 {
-	if (isset($Session['prefs']['stats-global-client.php']['orderdirection']))
-		$orderdirection = $Session['prefs']['stats-global-client.php']['orderdirection'];
+	if (isset($Session['prefs']['stats-global-advertiser.php']['orderdirection']))
+		$orderdirection = $Session['prefs']['stats-global-advertiser.php']['orderdirection'];
 	else
 		$orderdirection = '';
 }
 
-if (isset($Session['prefs']['stats-global-client.php']['nodes']))
-	$node_array = explode (",", $Session['prefs']['stats-global-client.php']['nodes']);
+if (isset($Session['prefs']['stats-global-advertiser.php']['nodes']))
+	$node_array = explode (",", $Session['prefs']['stats-global-advertiser.php']['nodes']);
 else
 	$node_array = array();
 
@@ -240,7 +240,7 @@ if (isset($banners) && is_array($banners) && count($banners) > 0)
 	reset ($banners);
 	while (list ($bkey, $banner) = each ($banners))
 		if ($hideinactive == false || $banner['active'] == 't')
-			$campaigns[$banner['clientid']]['banners'][$bkey] = $banner;
+			$campaigns[$banner['campaignid']]['banners'][$bkey] = $banner;
 	
 	unset ($banners);
 }
@@ -357,33 +357,33 @@ if ($clientshidden > 0 || $totalviews > 0 || $totalclicks > 0)
 	echo "<table border='0' width='100%' cellpadding='0' cellspacing='0'>";	
 	
 	echo "<tr height='25'>";
-	echo '<td height="25" width="40%"><b>&nbsp;&nbsp;<a href="stats-global-client.php?listorder=name">'.$GLOBALS['strName'].'</a>';
+	echo '<td height="25" width="40%"><b>&nbsp;&nbsp;<a href="stats-global-advertiser.php?listorder=name">'.$GLOBALS['strName'].'</a>';
 	if (($listorder == "name") || ($listorder == ""))
 	{
 		if  (($orderdirection == "") || ($orderdirection == "down"))
 		{
-			echo ' <a href="stats-global-client.php?orderdirection=up">';
+			echo ' <a href="stats-global-advertiser.php?orderdirection=up">';
 			echo '<img src="images/caret-ds.gif" border="0" alt="" title="">';
 		}
 		else
 		{
-			echo ' <a href="stats-global-client.php?orderdirection=down">';
+			echo ' <a href="stats-global-advertiser.php?orderdirection=down">';
 			echo '<img src="images/caret-u.gif" border="0" alt="" title="">';
 		}
 		echo '</a>';
 	}
 	echo '</b></td>';
-	echo '<td height="25"><b><a href="stats-global-client.php?listorder=id">'.$GLOBALS['strID'].'</a>';
+	echo '<td height="25"><b><a href="stats-global-advertiser.php?listorder=id">'.$GLOBALS['strID'].'</a>';
 	if ($listorder == "id")
 	{
 		if  (($orderdirection == "") || ($orderdirection == "down"))
 		{
-			echo ' <a href="stats-global-client.php?orderdirection=up">';
+			echo ' <a href="stats-global-advertiser.php?orderdirection=up">';
 			echo '<img src="images/caret-ds.gif" border="0" alt="" title="">';
 		}
 		else
 		{
-			echo ' <a href="stats-global-client.php?orderdirection=down">';
+			echo ' <a href="stats-global-advertiser.php?orderdirection=down">';
 			echo '<img src="images/caret-u.gif" border="0" alt="" title="">';
 		}
 		echo '</a>';
@@ -409,15 +409,15 @@ if ($clientshidden > 0 || $totalviews > 0 || $totalclicks > 0)
 		if (isset($client['campaigns']))
 		{
 			if ($client['expand'] == '1')
-				echo "&nbsp;<a href='stats-global-client.php?period=".$period."&amp;collapse=".$client['clientid']."'><img src='images/triangle-d.gif' align='absmiddle' border='0'></a>&nbsp;";
+				echo "&nbsp;<a href='stats-global-advertiser.php?period=".$period."&amp;collapse=".$client['clientid']."'><img src='images/triangle-d.gif' align='absmiddle' border='0'></a>&nbsp;";
 			else
-				echo "&nbsp;<a href='stats-global-client.php?period=".$period."&amp;expand=".$client['clientid']."'><img src='images/".$phpAds_TextDirection."/triangle-l.gif' align='absmiddle' border='0'></a>&nbsp;";
+				echo "&nbsp;<a href='stats-global-advertiser.php?period=".$period."&amp;expand=".$client['clientid']."'><img src='images/".$phpAds_TextDirection."/triangle-l.gif' align='absmiddle' border='0'></a>&nbsp;";
 		}
 		else
 			echo "&nbsp;<img src='images/spacer.gif' height='16' width='16'>&nbsp;";
 			
-		echo "<img src='images/icon-client.gif' align='absmiddle'>&nbsp;";
-		echo "<a href='stats-client-history.php?clientid=".$client['clientid']."'>".$client['clientname']."</a>";
+		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;";
+		echo "<a href='stats-advertiser-history.php?clientid=".$client['clientid']."'>".$client['clientname']."</a>";
 		echo "</td>";
 		
 		// ID
@@ -453,9 +453,9 @@ if ($clientshidden > 0 || $totalviews > 0 || $totalclicks > 0)
 				if (isset($campaigns[$ckey]['banners']))
 				{
 					if ($campaigns[$ckey]['expand'] == '1')
-						echo "<a href='stats-global-client.php?period=".$period."&amp;collapse=".$campaigns[$ckey]['clientid']."'><img src='images/triangle-d.gif' align='absmiddle' border='0'></a>&nbsp;";
+						echo "<a href='stats-global-advertiser.php?period=".$period."&amp;collapse=".$campaigns[$ckey]['clientid']."'><img src='images/triangle-d.gif' align='absmiddle' border='0'></a>&nbsp;";
 					else
-						echo "<a href='stats-global-client.php?period=".$period."&amp;expand=".$campaigns[$ckey]['clientid']."'><img src='images/".$phpAds_TextDirection."/triangle-l.gif' align='absmiddle' border='0'></a>&nbsp;";
+						echo "<a href='stats-global-advertiser.php?period=".$period."&amp;expand=".$campaigns[$ckey]['clientid']."'><img src='images/".$phpAds_TextDirection."/triangle-l.gif' align='absmiddle' border='0'></a>&nbsp;";
 				}
 				else
 					echo "<img src='images/spacer.gif' height='16' width='16' align='absmiddle'>&nbsp;";
@@ -579,21 +579,21 @@ if ($clientshidden > 0 || $totalviews > 0 || $totalclicks > 0)
 	if ($hideinactive == true)
 	{
 		echo "&nbsp;&nbsp;<img src='images/icon-activate.gif' align='absmiddle' border='0'>";
-		echo "&nbsp;<a href='stats-global-client.php?period=".$period."&amp;hideinactive=0'>".$strShowAll."</a>";
+		echo "&nbsp;<a href='stats-global-advertiser.php?period=".$period."&amp;hideinactive=0'>".$strShowAll."</a>";
 		echo "&nbsp;&nbsp;|&nbsp;&nbsp;".$clientshidden." ".$strInactiveAdvertisersHidden;
 	}
 	else
 	{
 		echo "&nbsp;&nbsp;<img src='images/icon-hideinactivate.gif' align='absmiddle' border='0'>";
-		echo "&nbsp;<a href='stats-global-client.php?period=".$period."&amp;hideinactive=1'>".$strHideInactiveAdvertisers."</a>";
+		echo "&nbsp;<a href='stats-global-advertiser.php?period=".$period."&amp;hideinactive=1'>".$strHideInactiveAdvertisers."</a>";
 	}
 	
 	echo "</td><td height='25' colspan='2' align='".$phpAds_TextAlignRight."' nowrap>";
 	echo "<img src='images/triangle-d.gif' align='absmiddle' border='0'>";
-	echo "&nbsp;<a href='stats-global-client.php?period=".$period."&amp;expand=all' accesskey='".$keyExpandAll."'>".$strExpandAll."</a>";
+	echo "&nbsp;<a href='stats-global-advertiser.php?period=".$period."&amp;expand=all' accesskey='".$keyExpandAll."'>".$strExpandAll."</a>";
 	echo "&nbsp;&nbsp;|&nbsp;&nbsp;";
 	echo "<img src='images/".$phpAds_TextDirection."/triangle-l.gif' align='absmiddle' border='0'>";
-	echo "&nbsp;<a href='stats-global-client.php?period=".$period."&amp;expand=none' accesskey='".$keyCollapseAll."'>".$strCollapseAll."</a>&nbsp;&nbsp;";
+	echo "&nbsp;<a href='stats-global-advertiser.php?period=".$period."&amp;expand=none' accesskey='".$keyCollapseAll."'>".$strCollapseAll."</a>&nbsp;&nbsp;";
 	echo "</td></tr>";
 	
 	
@@ -653,10 +653,10 @@ else
 /* Store preferences                                     */
 /*********************************************************/
 
-$Session['prefs']['stats-global-client.php']['hideinactive'] = $hideinactive;
-$Session['prefs']['stats-global-client.php']['listorder'] = $listorder;
-$Session['prefs']['stats-global-client.php']['orderdirection'] = $orderdirection;
-$Session['prefs']['stats-global-client.php']['nodes'] = implode (",", $node_array);
+$Session['prefs']['stats-global-advertiser.php']['hideinactive'] = $hideinactive;
+$Session['prefs']['stats-global-advertiser.php']['listorder'] = $listorder;
+$Session['prefs']['stats-global-advertiser.php']['orderdirection'] = $orderdirection;
+$Session['prefs']['stats-global-advertiser.php']['nodes'] = implode (",", $node_array);
 
 phpAds_SessionDataStore();
 

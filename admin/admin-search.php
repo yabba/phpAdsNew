@@ -210,8 +210,8 @@ if (!isset($keyword))
 			
 			echo "<td height='25'>";
 			echo "&nbsp;&nbsp;";
-			echo "<img src='images/icon-client.gif' align='absmiddle'>&nbsp;";
-			echo "<a href='JavaScript:GoOpener(\"client-edit.php?clientid=".$row_clients['clientid']."\")'>".$row_clients['clientname']."</a>";
+			echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;";
+			echo "<a href='JavaScript:GoOpener(\"advertiser-edit.php?clientid=".$row_clients['clientid']."\")'>".$row_clients['clientname']."</a>";
 			echo "</td>";
 			
 			echo "<td height='25'>".$row_clients['clientid']."</td>";
@@ -221,12 +221,12 @@ if (!isset($keyword))
 		   	
 			// Button 1
 			echo "<td height='25'>";
-			echo "<a href='JavaScript:GoOpener(\"client-campaigns.php?clientid=".$row_clients['clientid']."\")'><img src='images/icon-overview.gif' border='0' align='absmiddle' alt='$strOverview'>&nbsp;$strOverview</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+			echo "<a href='JavaScript:GoOpener(\"advertiser-campaigns.php?clientid=".$row_clients['clientid']."\")'><img src='images/icon-overview.gif' border='0' align='absmiddle' alt='$strOverview'>&nbsp;$strOverview</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 			echo "</td>";
 		 	
 			// Button 2
 			echo "<td height='25'>";
-			echo "<a href='JavaScript:GoOpener(\"client-delete.php?clientid=".$row_clients['clientid']."\", true)'".phpAds_DelConfirm($strConfirmDeleteClient)."><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+			echo "<a href='JavaScript:GoOpener(\"advertiser-delete.php?clientid=".$row_clients['clientid']."\", true)'".phpAds_DelConfirm($strConfirmDeleteClient)."><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 			echo "</td></tr>";
 			
 			

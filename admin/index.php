@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -29,13 +29,13 @@ phpAds_checkAccess(phpAds_Admin+phpAds_Client+phpAds_Affiliate);
 
 if (phpAds_isUser(phpAds_Admin))
 {
-	Header("Location: ".$phpAds_config['url_prefix']."/admin/client-index.php");
+	Header("Location: ".$phpAds_config['url_prefix']."/admin/advertiser-index.php");
 	exit;
 }
 
 if (phpAds_isUser(phpAds_Client))
 {
-	Header("Location: ".$phpAds_config['url_prefix']."/admin/stats-client-history.php?clientid=".phpAds_getUserID());
+	Header("Location: ".$phpAds_config['url_prefix']."/admin/stats-advertiser-history.php?clientid=".phpAds_getUserID());
 	exit;
 }
 

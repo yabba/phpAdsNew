@@ -1,4 +1,4 @@
-<?php // $Revision: 2.7 $
+<?php // $Revision: 1.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -32,13 +32,13 @@ phpAds_checkAccess(phpAds_Admin);
 /* HTML framework                                        */
 /*********************************************************/
 
-if (isset($Session['prefs']['client-index.php']['listorder']))
-	$navorder = $Session['prefs']['client-index.php']['listorder'];
+if (isset($Session['prefs']['advertiser-index.php']['listorder']))
+	$navorder = $Session['prefs']['advertiser-index.php']['listorder'];
 else
 	$navorder = '';
 
-if (isset($Session['prefs']['client-index.php']['orderdirection']))
-	$navdirection = $Session['prefs']['client-index.php']['orderdirection'];
+if (isset($Session['prefs']['advertiser-index.php']['orderdirection']))
+	$navdirection = $Session['prefs']['advertiser-index.php']['orderdirection'];
 else
 	$navdirection = '';
 
@@ -58,15 +58,15 @@ while ($row = phpAds_dbFetchArray($res))
 {
 	phpAds_PageContext (
 		phpAds_buildClientName ($row['clientid'], $row['clientname']),
-		"client-campaigns.php?clientid=".$row['clientid'],
+		"advertiser-campaigns.php?clientid=".$row['clientid'],
 		$clientid == $row['clientid']
 	);
 }
 
-phpAds_PageShortcut($strClientHistory, 'stats-client-history.php?clientid='.$clientid, 'images/icon-statistics.gif');
+phpAds_PageShortcut($strClientHistory, 'stats-advertiser-history.php?clientid='.$clientid, 'images/icon-statistics.gif');
 
 phpAds_PageHeader("4.1.3");
-	echo "<img src='images/icon-client.gif' align='absmiddle'>&nbsp;<b>".phpAds_getClientName($clientid)."</b><br><br><br>";
+	echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;<b>".phpAds_getClientName($clientid)."</b><br><br><br>";
 	phpAds_ShowSections(array("4.1.2", "4.1.3"));
 
 
@@ -77,30 +77,30 @@ phpAds_PageHeader("4.1.3");
 
 if (!isset($hideinactive))
 {
-	if (isset($Session['prefs']['client-campaigns.php'][$clientid]['hideinactive']))
-		$hideinactive = $Session['prefs']['client-campaigns.php'][$clientid]['hideinactive'];
+	if (isset($Session['prefs']['advertiser-campaigns.php'][$clientid]['hideinactive']))
+		$hideinactive = $Session['prefs']['advertiser-campaigns.php'][$clientid]['hideinactive'];
 	else
 		$hideinactive = ($phpAds_config['gui_hide_inactive'] == 't');
 }
 
 if (!isset($listorder))
 {
-	if (isset($Session['prefs']['client-campaigns.php'][$clientid]['listorder']))
-		$listorder = $Session['prefs']['client-campaigns.php'][$clientid]['listorder'];
+	if (isset($Session['prefs']['advertiser-campaigns.php'][$clientid]['listorder']))
+		$listorder = $Session['prefs']['advertiser-campaigns.php'][$clientid]['listorder'];
 	else
 		$listorder = '';
 }
 
 if (!isset($orderdirection))
 {
-	if (isset($Session['prefs']['client-campaigns.php'][$clientid]['orderdirection']))
-		$orderdirection = $Session['prefs']['client-campaigns.php'][$clientid]['orderdirection'];
+	if (isset($Session['prefs']['advertiser-campaigns.php'][$clientid]['orderdirection']))
+		$orderdirection = $Session['prefs']['advertiser-campaigns.php'][$clientid]['orderdirection'];
 	else
 		$orderdirection = '';
 }
 
-if (isset($Session['prefs']['client-campaigns.php'][$clientid]['nodes']))
-	$node_array = explode (",", $Session['prefs']['client-campaigns.php'][$clientid]['nodes']);
+if (isset($Session['prefs']['advertiser-campaigns.php'][$clientid]['nodes']))
+	$node_array = explode (",", $Session['prefs']['advertiser-campaigns.php'][$clientid]['nodes']);
 else
 	$node_array = array();
 
@@ -230,36 +230,36 @@ echo "<br><br>";
 echo "<table border='0' width='100%' cellpadding='0' cellspacing='0'>";	
 
 echo "<tr height='25'>";
-echo "<td height='25' width='40%'><b>&nbsp;&nbsp;<a href='client-campaigns.php?clientid=".$clientid."&listorder=name'>".$GLOBALS['strName']."</a>";
+echo "<td height='25' width='40%'><b>&nbsp;&nbsp;<a href='advertiser-campaigns.php?clientid=".$clientid."&listorder=name'>".$GLOBALS['strName']."</a>";
 
 if (($listorder == "name") || ($listorder == ""))
 {
 	if  (($orderdirection == "") || ($orderdirection == "down"))
 	{
-		echo ' <a href="client-campaigns.php?clientid='.$clientid.'&orderdirection=up">';
+		echo ' <a href="advertiser-campaigns.php?clientid='.$clientid.'&orderdirection=up">';
 		echo '<img src="images/caret-ds.gif" border="0" alt="" title="">';
 	}
 	else
 	{
-		echo ' <a href="client-campaigns.php?clientid='.$clientid.'&orderdirection=down">';
+		echo ' <a href="advertiser-campaigns.php?clientid='.$clientid.'&orderdirection=down">';
 		echo '<img src="images/caret-u.gif" border="0" alt="" title="">';
 	}
 	echo '</a>';
 }
 
 echo '</b></td>';
-echo '<td height="25"><b><a href="client-campaigns.php?clientid='.$clientid.'&listorder=id">'.$GLOBALS['strID'].'</a>';
+echo '<td height="25"><b><a href="advertiser-campaigns.php?clientid='.$clientid.'&listorder=id">'.$GLOBALS['strID'].'</a>';
 
 if ($listorder == "id")
 {
 	if  (($orderdirection == "") || ($orderdirection == "down"))
 	{
-		echo ' <a href="client-campaigns.php?clientid='.$clientid.'&orderdirection=up">';
+		echo ' <a href="advertiser-campaigns.php?clientid='.$clientid.'&orderdirection=up">';
 		echo '<img src="images/caret-ds.gif" border="0" alt="" title="">';
 	}
 	else
 	{
-		echo ' <a href="client-campaigns.php?clientid='.$clientid.'&orderdirection=down">';
+		echo ' <a href="advertiser-campaigns.php?clientid='.$clientid.'&orderdirection=down">';
 		echo '<img src="images/caret-u.gif" border="0" alt="" title="">';
 	}
 	echo '</a>';
@@ -296,9 +296,9 @@ else
 		if (isset($campaigns[$ckey]['banners']))
 		{
 			if ($campaigns[$ckey]['expand'] == '1')
-				echo "<a href='client-campaigns.php?clientid=".$clientid."&collapse=".$campaigns[$ckey]['clientid']."'><img src='images/triangle-d.gif' align='absmiddle' border='0'></a>&nbsp;";
+				echo "<a href='advertiser-campaigns.php?clientid=".$clientid."&collapse=".$campaigns[$ckey]['clientid']."'><img src='images/triangle-d.gif' align='absmiddle' border='0'></a>&nbsp;";
 			else
-				echo "<a href='client-campaigns.php?clientid=".$clientid."&expand=".$campaigns[$ckey]['clientid']."'><img src='images/".$phpAds_TextDirection."/triangle-l.gif' align='absmiddle' border='0'></a>&nbsp;";
+				echo "<a href='advertiser-campaigns.php?clientid=".$clientid."&expand=".$campaigns[$ckey]['clientid']."'><img src='images/".$phpAds_TextDirection."/triangle-l.gif' align='absmiddle' border='0'></a>&nbsp;";
 		}
 		else
 			echo "<img src='images/spacer.gif' height='16' width='16' align='absmiddle'>&nbsp;";
@@ -330,7 +330,7 @@ else
 		
 		// Button 3
 		echo "<td height='25' align='".$phpAds_TextAlignRight."'>";
-		echo "<a href='campaign-delete.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['clientid']."&returnurl=client-campaigns.php'".phpAds_DelConfirm($strConfirmDeleteCampaign)."><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+		echo "<a href='campaign-delete.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['clientid']."&returnurl=advertiser-campaigns.php'".phpAds_DelConfirm($strConfirmDeleteCampaign)."><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 		echo "</td></tr>";
 		
 		if ($campaigns[$ckey]['expand'] == '1' && isset($campaigns[$ckey]['banners']))
@@ -392,7 +392,7 @@ else
 				
 				// Button 3
 				echo "<td height='25' align='".$phpAds_TextAlignRight."'>";
-				echo "<a href='banner-delete.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['clientid']."&bannerid=".$banners[$bkey]['bannerid']."&returnurl=client-campaigns.php'".phpAds_DelConfirm($strConfirmDeleteBanner)."><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+				echo "<a href='banner-delete.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['clientid']."&bannerid=".$banners[$bkey]['bannerid']."&returnurl=advertiser-campaigns.php'".phpAds_DelConfirm($strConfirmDeleteBanner)."><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 				echo "</td></tr>";
 			}
 		}
@@ -433,22 +433,22 @@ echo "<tr height='25'><td colspan='2' height='25' nowrap>";
 if ($hideinactive == true)
 {
 	echo "&nbsp;&nbsp;<img src='images/icon-activate.gif' align='absmiddle' border='0'>";
-	echo "&nbsp;<a href='client-campaigns.php?clientid=".$clientid."&hideinactive=0'>".$strShowAll."</a>";
+	echo "&nbsp;<a href='advertiser-campaigns.php?clientid=".$clientid."&hideinactive=0'>".$strShowAll."</a>";
 	echo "&nbsp;&nbsp;|&nbsp;&nbsp;".$campaignshidden." ".$strInactiveCampaignsHidden;
 }
 else
 {
 	echo "&nbsp;&nbsp;<img src='images/icon-hideinactivate.gif' align='absmiddle' border='0'>";
-	echo "&nbsp;<a href='client-campaigns.php?clientid=".$clientid."&hideinactive=1'>".$strHideInactiveCampaigns."</a>";
+	echo "&nbsp;<a href='advertiser-campaigns.php?clientid=".$clientid."&hideinactive=1'>".$strHideInactiveCampaigns."</a>";
 }
 
 echo "</td>";
 echo "<td colspan='3' height='25' align='".$phpAds_TextAlignRight."' nowrap>";
 echo "<img src='images/triangle-d.gif' align='absmiddle' border='0'>";
-echo "&nbsp;<a href='client-campaigns.php?clientid=".$clientid."&expand=all' accesskey='".$keyExpandAll."'>".$strExpandAll."</a>";
+echo "&nbsp;<a href='advertiser-campaigns.php?clientid=".$clientid."&expand=all' accesskey='".$keyExpandAll."'>".$strExpandAll."</a>";
 echo "&nbsp;&nbsp;|&nbsp;&nbsp;";
 echo "<img src='images/".$phpAds_TextDirection."/triangle-l.gif' align='absmiddle' border='0'>";
-echo "&nbsp;<a href='client-campaigns.php?clientid=".$clientid."&expand=none' accesskey='".$keyCollapseAll."'>".$strCollapseAll."</a>&nbsp;&nbsp;";
+echo "&nbsp;<a href='advertiser-campaigns.php?clientid=".$clientid."&expand=none' accesskey='".$keyCollapseAll."'>".$strCollapseAll."</a>&nbsp;&nbsp;";
 echo "</td>";
 echo "</tr>";
 
@@ -457,7 +457,7 @@ if (isset($campaigns) && count($campaigns))
 	echo "<tr height='1'><td colspan='5' bgcolor='#888888'><img src='images/break-el.gif' height='1' width='100%'></td></tr>";
 	echo "<tr height='25'>";
 	echo "<td colspan='5' height='25' align='".$phpAds_TextAlignRight."'>";
-	echo "<img src='images/icon-recycle.gif' border='0' align='absmiddle'>&nbsp;<a href='campaign-delete.php?clientid=".$clientid."&returnurl=client-campaigns.php'".phpAds_DelConfirm($strConfirmDeleteAllCampaigns).">$strDeleteAllCampaigns</a>&nbsp;&nbsp;";
+	echo "<img src='images/icon-recycle.gif' border='0' align='absmiddle'>&nbsp;<a href='campaign-delete.php?clientid=".$clientid."&returnurl=advertiser-campaigns.php'".phpAds_DelConfirm($strConfirmDeleteAllCampaigns).">$strDeleteAllCampaigns</a>&nbsp;&nbsp;";
 	echo "</td>";
 	echo "</tr>";
 }
@@ -471,10 +471,10 @@ echo "<br><br>";
 /* Store preferences                                     */
 /*********************************************************/
 
-$Session['prefs']['client-campaigns.php'][$clientid]['hideinactive'] = $hideinactive;
-$Session['prefs']['client-campaigns.php'][$clientid]['listorder'] = $listorder;
-$Session['prefs']['client-campaigns.php'][$clientid]['orderdirection'] = $orderdirection;
-$Session['prefs']['client-campaigns.php'][$clientid]['nodes'] = implode (",", $node_array);
+$Session['prefs']['advertiser-campaigns.php'][$clientid]['hideinactive'] = $hideinactive;
+$Session['prefs']['advertiser-campaigns.php'][$clientid]['listorder'] = $listorder;
+$Session['prefs']['advertiser-campaigns.php'][$clientid]['orderdirection'] = $orderdirection;
+$Session['prefs']['advertiser-campaigns.php'][$clientid]['nodes'] = implode (",", $node_array);
 
 phpAds_SessionDataStore();
 

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 1.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -254,7 +254,7 @@ if (isset($submit))
 			}
 			else
 			{
-				header ("Location: client-campaigns.php?clientid=".$clientid);
+				header ("Location: advertiser-campaigns.php?clientid=".$clientid);
 			}
 		}
 		
@@ -278,13 +278,13 @@ if ($clientid != "")
 {
 	if (phpAds_isUser(phpAds_Admin))
 	{
-		if (isset($Session['prefs']['client-index.php']['listorder']))
-			$navorder = $Session['prefs']['client-index.php']['listorder'];
+		if (isset($Session['prefs']['advertiser-index.php']['listorder']))
+			$navorder = $Session['prefs']['advertiser-index.php']['listorder'];
 		else
 			$navorder = '';
 		
-		if (isset($Session['prefs']['client-index.php']['orderdirection']))
-			$navdirection = $Session['prefs']['client-index.php']['orderdirection'];
+		if (isset($Session['prefs']['advertiser-index.php']['orderdirection']))
+			$navdirection = $Session['prefs']['advertiser-index.php']['orderdirection'];
 		else
 			$navdirection = '';
 		
@@ -304,15 +304,15 @@ if ($clientid != "")
 		{
 			phpAds_PageContext (
 				phpAds_buildClientName ($row['clientid'], $row['clientname']),
-				"client-edit.php?clientid=".$row['clientid'],
+				"advertiser-edit.php?clientid=".$row['clientid'],
 				$clientid == $row['clientid']
 			);
 		}
 		
-		phpAds_PageShortcut($strClientHistory, 'stats-client-history.php?clientid='.$clientid, 'images/icon-statistics.gif');
+		phpAds_PageShortcut($strClientHistory, 'stats-advertiser-history.php?clientid='.$clientid, 'images/icon-statistics.gif');
 		
 		phpAds_PageHeader("4.1.2");
-			echo "<img src='images/icon-client.gif' align='absmiddle'>&nbsp;<b>".phpAds_getClientName($clientid)."</b><br><br><br>";
+			echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;<b>".phpAds_getClientName($clientid)."</b><br><br><br>";
 			phpAds_ShowSections(array("4.1.2", "4.1.3"));
 	}
 	else
@@ -347,7 +347,7 @@ if ($clientid != "")
 else
 {
 	phpAds_PageHeader("4.1.1");   
-		echo "<img src='images/icon-client.gif' align='absmiddle'>&nbsp;<b>".phpAds_getClientName($clientid)."</b><br><br><br>";
+		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;<b>".phpAds_getClientName($clientid)."</b><br><br><br>";
 		phpAds_ShowSections(array("4.1.1"));
 	
 	// Do not set this information if the page
@@ -377,7 +377,7 @@ $tabindex = 1;
 /*********************************************************/
 
 echo "<br><br>";
-echo "<form name='clientform' method='post' action='client-edit.php' onSubmit='return phpAds_formCheck(this);'>";
+echo "<form name='clientform' method='post' action='advertiser-edit.php' onSubmit='return phpAds_formCheck(this);'>";
 echo "<input type='hidden' name='clientid' value='".(isset($clientid) && $clientid != '' ? $clientid : '')."'>";
 
 

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -34,13 +34,13 @@ phpAds_checkAccess(phpAds_Admin);
 /* HTML framework                                        */
 /*********************************************************/
 
-if (isset($Session['prefs']['client-campaigns.php'][$clientid]['listorder']))
-	$navorder = $Session['prefs']['client-campaigns.php'][$clientid]['listorder'];
+if (isset($Session['prefs']['advertiser-campaigns.php'][$clientid]['listorder']))
+	$navorder = $Session['prefs']['advertiser-campaigns.php'][$clientid]['listorder'];
 else
 	$navorder = '';
 
-if (isset($Session['prefs']['client-campaigns.php'][$clientid]['orderdirection']))
-	$navdirection = $Session['prefs']['client-campaigns.php'][$clientid]['orderdirection'];
+if (isset($Session['prefs']['advertiser-campaigns.php'][$clientid]['orderdirection']))
+	$navdirection = $Session['prefs']['advertiser-campaigns.php'][$clientid]['orderdirection'];
 else
 	$navdirection = '';
 
@@ -65,7 +65,7 @@ while ($row = phpAds_dbFetchArray($res))
 	);
 }
 
-phpAds_PageShortcut($strClientProperties, 'client-edit.php?clientid='.$clientid, 'images/icon-client.gif');
+phpAds_PageShortcut($strClientProperties, 'advertiser-edit.php?clientid='.$clientid, 'images/icon-advertiser.gif');
 phpAds_PageShortcut($strCampaignHistory, 'stats-campaign-history.php?clientid='.$clientid.'&campaignid='.$campaignid, 'images/icon-statistics.gif');
 
 
@@ -88,13 +88,13 @@ while ($row = phpAds_dbFetchArray($res))
 
 $extra .= "</select>&nbsp;<input type='image' src='images/".$phpAds_TextDirection."/go_blue.gif'><br>";
 $extra .= "<img src='images/break.gif' height='1' width='160' vspace='4'><br>";
-$extra .= "<img src='images/icon-recycle.gif' align='absmiddle'>&nbsp;<a href='campaign-delete.php?clientid=".$clientid."&campaignid=".$campaignid."&returnurl=client-index.php'".phpAds_DelConfirm($strConfirmDeleteCampaign).">$strDelete</a><br>";
+$extra .= "<img src='images/icon-recycle.gif' align='absmiddle'>&nbsp;<a href='campaign-delete.php?clientid=".$clientid."&campaignid=".$campaignid."&returnurl=advertiser-index.php'".phpAds_DelConfirm($strConfirmDeleteCampaign).">$strDelete</a><br>";
 $extra .= "</form>";
 
 
 
 phpAds_PageHeader("4.1.3.4", $extra);
-	echo "<img src='images/icon-client.gif' align='absmiddle'>&nbsp;".phpAds_getParentName($campaignid);
+	echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentName($campaignid);
 	echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 	echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<b>".phpAds_getClientName($campaignid)."</b><br><br><br>";
 	phpAds_ShowSections(array("4.1.3.2", "4.1.3.3", "4.1.3.4"));

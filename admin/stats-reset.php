@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -63,7 +63,7 @@ elseif (isset($campaignid) && $campaignid != '')
 	}
 	
 	// Return to campaign statistics
-	Header("Location: stats-client-campaigns.php?clientid=".$clientid);
+	Header("Location: stats-advertiser-campaigns.php?clientid=".$clientid);
 }
 
 
@@ -90,7 +90,7 @@ elseif (isset($clientid) && $clientid != '')
 	}
 	
 	// Return to campaign statistics
-	Header("Location: stats-global-client.php");
+	Header("Location: stats-global-advertiser.php");
 }
 
 
@@ -102,6 +102,6 @@ elseif (isset($all) && $all == 'tr'.'ue')
     phpAds_dbQuery("DELETE FROM ".$phpAds_config['tbl_adstats']) or phpAds_sqlDie();
 	
 	// Return to campaign statistics
-	Header("Location: stats-global-client.php");
+	Header("Location: stats-global-advertiser.php");
 }
 ?>

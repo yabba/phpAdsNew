@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -127,7 +127,7 @@ phpAds_cacheDelete();
 
 
 if (!isset($returnurl) && $returnurl == '')
-	$returnurl = 'client-campaigns.php';
+	$returnurl = 'advertiser-campaigns.php';
 
 header ("Location: ".$returnurl."?clientid=".$clientid);
 

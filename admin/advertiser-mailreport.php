@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 1.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -61,6 +61,6 @@ else
 	$message = $strErrorOccurred;
 }
 
-header("Location: stats-client-history.php?clientid=$clientid&message=".urlencode($message));
+header("Location: stats-advertiser-history.php?clientid=$clientid&message=".urlencode($message));
 
 ?>

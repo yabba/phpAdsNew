@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 1.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -57,6 +57,7 @@ while ($row = phpAds_dbFetchArray($idresult))
 	$bannerids[] = "bannerid = ".$row['bannerid'];
 }
 
+
 $res = phpAds_dbQuery("
 	SELECT
 		DATE_FORMAT(day, '%Y%m%d') as date,
@@ -76,33 +77,27 @@ while ($row = phpAds_dbFetchArray($res))
 {
 	phpAds_PageContext (
 		$row['date_formatted'],
-		"stats-client-daily.php?day=".$row['date']."&clientid=".$clientid,
+		"stats-advertiser-daily-hosts.php?day=".$row['date']."&clientid=".$clientid,
 		$day == $row['date']
 	);
 }
 
 if (phpAds_isUser(phpAds_Admin))
 {
-	phpAds_PageShortcut($strClientProperties, 'client-edit.php?clientid='.$clientid, 'images/icon-client.gif');
+	phpAds_PageShortcut($strClientProperties, 'advertiser-edit.php?clientid='.$clientid, 'images/icon-advertiser.gif');
 	
-	phpAds_PageHeader("2.1.1.1");
-		echo "<img src='images/icon-client.gif' align='absmiddle'>&nbsp;".phpAds_getClientName($clientid);
+	phpAds_PageHeader("2.1.1.2");
+		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getClientName($clientid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 		echo "<img src='images/icon-date.gif' align='absmiddle'>&nbsp;<b>".date(str_replace('%', '', $date_format), mktime(0, 0, 0, substr($day, 4, 2), substr($day, 6, 2), substr($day, 0, 4)))."</b><br><br><br>";
-		
-		$sections[] = "2.1.1.1";
-		if (!$phpAds_config['compact_stats']) $sections[] = "2.1.1.2";
-		phpAds_ShowSections($sections);
+		phpAds_ShowSections(array("2.1.1.1", "2.1.1.2"));
 }
 
 if (phpAds_isUser(phpAds_Client))
 {
-	phpAds_PageHeader("1.1.1");
+	phpAds_PageHeader("1.1.2");
 		echo "<img src='images/icon-date.gif' align='absmiddle'>&nbsp;<b>".date(str_replace('%', '', $date_format), mktime(0, 0, 0, substr($day, 4, 2), substr($day, 6, 2), substr($day, 0, 4)))."</b><br><br>";
-		
-		$sections[] = "1.1.1";
-		if (!$phpAds_config['compact_stats']) $sections[] = "1.1.2";
-		phpAds_ShowSections($sections);
+		phpAds_ShowSections(array("1.1.1", "1.1.2"));
 }
 
 
@@ -113,7 +108,7 @@ if (phpAds_isUser(phpAds_Client))
 
 $lib_hourly_where = "(".implode(' OR ', $bannerids).")";
 
-include ("lib-hourly.inc.php");
+include ("lib-hourly-hosts.inc.php");
 
 
 

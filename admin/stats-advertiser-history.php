@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 1.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -45,13 +45,13 @@ if (phpAds_isUser(phpAds_Client))
 
 if (phpAds_isUser(phpAds_Admin))
 {
-	if (isset($Session['prefs']['stats-global-client.php']['listorder']))
-		$navorder = $Session['prefs']['stats-global-client.php']['listorder'];
+	if (isset($Session['prefs']['stats-global-advertiser.php']['listorder']))
+		$navorder = $Session['prefs']['stats-global-advertiser.php']['listorder'];
 	else
 		$navorder = '';
 	
-	if (isset($Session['prefs']['stats-global-client.php']['orderdirection']))
-		$navdirection = $Session['prefs']['stats-global-client.php']['orderdirection'];
+	if (isset($Session['prefs']['stats-global-advertiser.php']['orderdirection']))
+		$navdirection = $Session['prefs']['stats-global-advertiser.php']['orderdirection'];
 	else
 		$navdirection = '';
 	
@@ -69,12 +69,12 @@ if (phpAds_isUser(phpAds_Admin))
 	{
 		phpAds_PageContext (
 			phpAds_buildClientName ($row['clientid'], $row['clientname']),
-			"stats-client-history.php?clientid=".$row['clientid'],
+			"stats-advertiser-history.php?clientid=".$row['clientid'],
 			$clientid == $row['clientid']
 		);
 	}
 	
-	phpAds_PageShortcut($strClientProperties, 'client-edit.php?clientid='.$clientid, 'images/icon-client.gif');
+	phpAds_PageShortcut($strClientProperties, 'advertiser-edit.php?clientid='.$clientid, 'images/icon-advertiser.gif');
 	
 	
 	$extra  = "<br><br><br>";
@@ -85,7 +85,7 @@ if (phpAds_isUser(phpAds_Admin))
 	$extra .= "<br><br>";
 	
 	phpAds_PageHeader("2.1.1", $extra);
-		echo "<img src='images/icon-client.gif' align='absmiddle'>&nbsp;<b>".phpAds_getClientName($clientid)."</b><br><br><br>";
+		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;<b>".phpAds_getClientName($clientid)."</b><br><br><br>";
 		phpAds_ShowSections(array("2.1.1", "2.1.2"));
 }
 
@@ -133,7 +133,7 @@ if (phpAds_dbNumRows($idresult) > 0)
 	
 	$lib_history_where     = "(".implode(' OR ', $bannerids).")";
 	$lib_history_params    = array ('clientid' => $clientid);
-	$lib_history_hourlyurl = "stats-client-daily.php";
+	$lib_history_hourlyurl = "stats-advertiser-daily.php";
 	
 	include ("lib-history.inc.php");
 	
@@ -157,7 +157,7 @@ if (phpAds_dbNumRows($idresult) > 0)
 		echo "</td></tr>";
 		
 		echo "<tr><td height='25'>";
-		echo "<form method='get' action='client-mailreport.php'>";
+		echo "<form method='get' action='advertiser-mailreport.php'>";
 		echo "<input type='hidden' name='clientid' value='$clientid'>";
 		echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$strFrom&nbsp;&nbsp;";
 		
