@@ -62,6 +62,7 @@ CREATE TABLE phpads_banners (
    format enum('gif','jpeg','png','html','url','web') DEFAULT 'gif' NOT NULL,
    url varchar(255) NOT NULL,
    alt varchar(255) NOT NULL,
+   status varchar(255) NOT NULL,
    keyword varchar(255) NOT NULL,
    bannertext varchar(255) NOT NULL,
    active enum('true','false') NOT NULL,
@@ -124,7 +125,7 @@ CREATE TABLE phpads_session (
 CREATE TABLE phpads_acls (
    bannerID mediumint(9) DEFAULT '0' NOT NULL,
    acl_con set('and','or') NOT NULL,
-   acl_type enum('clientip','useragent','weekday','domain','source','time') NOT NULL,
+   acl_type enum('clientip','useragent','weekday','domain','source','time','language') NOT NULL,
    acl_data varchar(255) NOT NULL,
    acl_ad set('allow','deny') NOT NULL,
    acl_order int(10) unsigned DEFAULT '0' NOT NULL,
