@@ -1,4 +1,4 @@
-<?php // $Revision: 1.2 $
+<?php // $Revision: 1.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -97,6 +97,8 @@ $idresult = phpAds_dbQuery ("
 	WHERE
 		affiliateid = ".$affiliateid."
 ");
+
+$zoneids = array();
 
 while ($row = phpAds_dbFetchArray($idresult))
 {
