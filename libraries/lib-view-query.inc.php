@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -51,7 +51,7 @@ function phpAds_buildQuery ($part, $lastpart, $precondition)
 		" ".$phpAds_config['tbl_banners'].
 		",".$phpAds_config['tbl_campaigns'].
 		" WHERE ".$phpAds_config['tbl_banners'].".active='t'".
-		" AND ".$phpAds_config['tbl_clients'].".active = 't'".
+		" AND ".$phpAds_config['tbl_campaigns'].".active = 't'".
 		" AND ".$phpAds_config['tbl_banners'].".campaignid=".$phpAds_config['tbl_campaigns'].".campaignid "
 	;
 	

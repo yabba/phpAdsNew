@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -76,10 +76,10 @@ elseif (isset($clientid) && $clientid != '')
 			b.bannerid
 		FROM
 			".$phpAds_config['tbl_banners']." AS b,
-			".$phpAds_config['tbl_clients']." AS c
+			".$phpAds_config['tbl_campaigns']." AS c
 		WHERE
-			c.parent = $clientid AND
-			c.clientid = b.campaignid
+			c.clientid = $clientid AND
+			c.campaignid = b.campaignid
 	");
 	
 	// Loop to all banners for this client

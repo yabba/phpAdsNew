@@ -106,14 +106,31 @@ CREATE TABLE phpads_adclicks (
 
 CREATE TABLE phpads_adconversions (
    cookieid varchar(32) NOT NULL,
-   markerid mediumint(9) DEFAULT '0' NOT NULL,
+   trackerid mediumint(9) DEFAULT '0' NOT NULL,
    t_stamp timestamp(14),
    host varchar(255) NOT NULL,
-   source varchar(50) NOT NULL,
    country char(2) NOT NULL,
-   KEY markerid_date (markerid,t_stamp),
+   conversionlogid mediumint(9) DEFAULT '0' NOT NULL,
+   KEY trackerid_date (trackerid,t_stamp),
    KEY date (t_stamp),
    KEY cookie (cookieid)
+);
+
+
+CREATE TABLE phpads_conversionlog (
+   conversionlogid mediumint(9) NOT NULL DEFAULT 0,
+   campaignid mediumint(9) DEFAULT '0' NOT NULL,
+   cookieid varchar(32) NOT NULL,
+   t_stamp timestamp(14),
+   host varchar(255) NOT NULL,
+   country char(2) NOT NULL,
+   action enum('view','click') NULL,
+   action_bannerid mediumint(9) DEFAULT '0' NOT NULL,
+   action_zoneid mediumint(9) DEFAULT '0' NOT NULL,
+   action_t_stamp timestamp(14),
+   action_host varchar(255) NOT NULL,
+   action_source varchar(50) NOT NULL,
+   action_country char(2) NOT NULL,
 );
 
 
@@ -217,6 +234,17 @@ CREATE TABLE phpads_trackers (
    description varchar(255) NOT NULL,
    clientid mediumint(9) DEFAULT '0' NOT NULL,
    PRIMARY KEY (trackerid)
+);
+
+
+-- Table structure for table 'phpads_campaigns_trackers'
+
+
+CREATE TABLE phpads_campaigns_trackers (
+   campaign_trackerid mediumint(9) NOT NULL AUTO_INCREMENT,
+   campaignid mediumint(9) DEFAULT '0' NOT NULL,
+   trackerid mediumint(9) DEFAULT '0' NOT NULL,
+   PRIMARY KEY (campaign_trackerid)
 );
 
 

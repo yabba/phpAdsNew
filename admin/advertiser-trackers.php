@@ -1,4 +1,4 @@
-<?php // $Revision: 1.2 $
+<?php // $Revision: 1.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -130,7 +130,7 @@ echo "\t\t\t\t<table border='0' width='100%' cellpadding='0' cellspacing='0'>\n"
 
 
 echo "\t\t\t\t<tr height='25'>\n";
-echo "\t\t\t\t\t<td height='25'>\n";
+echo "\t\t\t\t\t<td height='25' width='40%'>\n";
 echo "\t\t\t\t\t\t<b>&nbsp;&nbsp;";
 echo "<a href='advertiser-trackers.php?clientid=".$clientid."&listorder=name'>".$GLOBALS['strName']."</a>";
 
@@ -151,8 +151,7 @@ if (($listorder == "name") || ($listorder == ""))
 
 echo "</b>\n";
 echo "\t\t\t\t\t</td>\n";
-echo "\t\t\t\t\t<td height='25'>\n";
-echo "\t\t\t\t\t\t<b><a href='advertiser-trackers.php?clientid=".$clientid."&listorder=id'>".$GLOBALS['strID']."</a>";
+echo "\t\t\t\t\t<td height='25'><b><a href='advertiser-trackers.php?clientid=".$clientid."&listorder=id'>".$GLOBALS['strID']."</a>";
 
 if ($listorder == "id")
 {
@@ -169,13 +168,9 @@ if ($listorder == "id")
 	echo "</a>";
 }
 
-echo "</b>&nbsp;&nbsp;&nbsp;\n";
-echo "\t\t\t\t\t</td>\n";
-echo "\t\t\t\t\t<td height='25'>\n";
-echo "\t\t\t\t\t\t<b><a href='advertiser-trackers.php?clientid=".$clientid."&listorder=description'>".$GLOBALS['strDescription']."</a>";
-
-echo "</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n";
-echo "\t\t\t\t\t</td>\n";
+echo "</b>&nbsp;&nbsp;&nbsp;";
+echo "</td>\n";
+echo "\t\t\t\t\t<td height='25'>&nbsp;</td>\n";
 echo "\t\t\t\t\t<td height='25'>&nbsp;</td>\n";
 echo "\t\t\t\t</tr>\n";
 
@@ -206,41 +201,36 @@ while ($row_trackers = phpAds_dbFetchArray($res_trackers))
 		echo "\t\t\t\t\t<td colspan='4' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td>\n";
 		echo "\t\t\t\t</tr>\n";
 	}
-	echo "\t\t\t\t<tr height='25' ".($i%2==0?"bgcolor='#F6F6F6'":"").">\n";
-	echo "\t\t\t\t\t<td height='25'>\n";
-	echo "\t\t\t\t\t\t&nbsp;&nbsp;<img src='images/icon-tracker.gif' align='absmiddle'>&nbsp;\n";
+	echo "\t\t\t\t<tr height='25'".($i%2==0?" bgcolor='#F6F6F6'":"").">\n";
+	echo "\t\t\t\t\t<td height='25'>";
+	echo "&nbsp;&nbsp;<img src='images/icon-tracker.gif' align='absmiddle'>&nbsp;";
 
 	if (phpAds_isUser(phpAds_Admin) || phpAds_isAllowed(phpAds_EditTracker))
-		echo "\t\t\t\t\t\t<a href='tracker-edit.php?clientid=".$clientid."&trackerid=".$row_trackers['trackerid']."'>".$row_trackers['trackername']."</a>";
+		echo "<a href='tracker-edit.php?clientid=".$clientid."&trackerid=".$row_trackers['trackerid']."'>".$row_trackers['trackername']."</a>";
 	else
-		echo "\t\t\t\t\t\t".$row_trackers['trackername'];
+		echo $row_trackers['trackername'];
 	
-	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n";
-	echo "\t\t\t\t\t</td>\n";
+//	echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+	echo "</td>\n";
 	
 	// ID
 	echo "\t\t\t\t\t<td height='25'>".$row_trackers['trackerid']."</td>\n";
 	
-	// Description
-	echo "\t\t\t\t\t<td height='25'>".$row_trackers['description']."</td>\n";
-
-	echo "\t\t\t\t\t<td>&nbsp;</td>\n";
-	echo "\t\t\t\t</tr>\n";
-	
-	echo "\t\t\t\t<tr height='1'>\n";
-	echo "\t\t\t\t\t<td ".($i%2==0?"bgcolor='#F6F6F6'":"")."><img src='images/spacer.gif' width='1' height='1'></td>\n";
-	echo "\t\t\t\t\t<td colspan='3' bgcolor='#888888'><img src='images/break-l.gif' height='1' width='100%'></td>\n";
-	echo "\t\t\t\t</tr>\n";
-	echo "\t\t\t\t<tr height='25' ".($i%2==0?"bgcolor='#F6F6F6'":"").">\n";
-	
-	// Empty
-	echo "\t\t\t\t\t<td>&nbsp;</td>\n";
-	
 	// Button 1, 2 & 3
-	echo "\t\t\t\t\t<td height='25' colspan='3'>\n";
-	if (phpAds_isUser(phpAds_Admin) || phpAds_isAllowed(phpAds_LinkCampaigns)) echo "\t\t\t\t\t\t<a href='tracker-include.php?clientid=".$clientid."&trackerid=".$row_trackers['trackerid']."'><img src='images/icon-zone-linked.gif' border='0' align='absmiddle'>&nbsp;$strIncludedCampaigns</a>&nbsp;&nbsp;&nbsp;&nbsp;\n";
-	if (phpAds_isUser(phpAds_Admin) || phpAds_isAllowed(phpAds_DeleteTracker)) echo "\t\t\t\t\t\t<a href='tracker-delete.php?clientid=".$clientid."&trackerid=".$row_trackers['trackerid']."&returnurl=advertiser-trackers.php'".phpAds_DelConfirm($strConfirmDeleteTracker)."><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;\n";
-	echo "\t\t\t\t\t</td>\n";
+	echo "\t\t\t\t\t<td height='25'>";
+	if (phpAds_isUser(phpAds_Admin) || phpAds_isAllowed(phpAds_LinkCampaigns))
+		echo "<a href='tracker-include.php?clientid=".$clientid."&trackerid=".$row_trackers['trackerid']."'><img src='images/icon-zone-linked.gif' border='0' align='absmiddle'>&nbsp;$strLinkedCampaigns</a>";
+	else
+		echo "&nbsp;";
+	echo "</td>\n";
+	
+	echo "\t\t\t\t\t<td height='25'>";
+	if (phpAds_isUser(phpAds_Admin) || phpAds_isAllowed(phpAds_DeleteTracker))
+		echo "<a href='tracker-delete.php?clientid=".$clientid."&trackerid=".$row_trackers['trackerid']."&returnurl=advertiser-trackers.php'".phpAds_DelConfirm($strConfirmDeleteTracker)."><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>";
+	else
+		echo "&nbsp;";
+	echo "</td>\n";
+
 	echo "\t\t\t\t</tr>\n";
 	
 	$i++;

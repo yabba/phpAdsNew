@@ -1,4 +1,4 @@
-<?php // $Revision: 2.6 $
+<?php // $Revision: 2.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -98,43 +98,36 @@ while ($row = phpAds_dbFetchArray($result))
 /* Get statistics for today                              */
 /*********************************************************/
 
-$clientids = array();
+$campaignids = array();
 
-$result = phpAds_dbQuery("
-	SELECT
-		clientid
-	FROM
-		".$phpAds_config['tbl_clients']."
-	WHERE
-		parent > 0 AND
-		target > 0
-	");
+$result = phpAds_dbQuery(
+	"SELECT campaignid".
+	" FROM ".$phpAds_config['tbl_campaigns'].
+	" WHERE target > 0"
+);
 
 while ($row = phpAds_dbFetchArray($result))
-	$clientids[] = $row['clientid'];
+	$campaignids[] = $row['campaignid'];
 
-if (count($clientids))
+if (count($campaignids))
 {
-	$clientids = join(', ', $clientids);
+	$campaignids = join(', ', $campaignids);
 
 	// Get stats for selected period
 	$day = date('Ymd');
 	
-	$result = phpAds_dbQuery("
-		SELECT
-			sum(views) AS sum_views,
-			DATE_FORMAT(day, '".$formatted."') AS date
-		FROM
-			".$phpAds_config['tbl_adstats'].",
-			".$phpAds_config['tbl_banners']."
-		WHERE
-			".$phpAds_config['tbl_adstats'].".bannerid = ".$phpAds_config['tbl_banners'].".bannerid AND
-			day = $day AND
-			campaignid IN ($clientids)
-			".(isset($lib_targetstats_where) ? 'AND '.$lib_targetstats_where : '')."
-		GROUP BY
-			date
-	");
+	$result = phpAds_dbQuery(
+		"SELECT".
+		" sum(views) AS sum_views".
+		",DATE_FORMAT(day, '".$formatted."') AS date".
+		" FROM ".$phpAds_config['tbl_adstats'].
+		",".$phpAds_config['tbl_banners'].
+		" WHERE ".$phpAds_config['tbl_adstats'].".bannerid = ".$phpAds_config['tbl_banners'].".bannerid".
+		" AND day = ".$day.
+		" AND campaignid IN (".$campaignids.")".
+		(isset($lib_targetstats_where) ? " AND ".$lib_targetstats_where : "").
+		" GROUP BY date"
+	);
 
 	while ($row = phpAds_dbFetchArray($result))
 		$stats[$row['date']]['sum_views'] = $row['sum_views'];

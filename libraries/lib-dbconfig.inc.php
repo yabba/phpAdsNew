@@ -1,4 +1,4 @@
-<?php // $Revision: 2.16 $
+<?php // $Revision: 2.17 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -18,7 +18,7 @@ define ('LIBDBCONFIG_INCLUDED', true);
 
 
 // Current phpAds version
-$phpAds_version = 200.162;
+$phpAds_version = 200.163;
 $phpAds_version_readable = "2.0 RC 3";
 $phpAds_productname = "phpAdsNew";
 $phpAds_producturl = "www.phpadsnew.com";
@@ -30,21 +30,27 @@ $GLOBALS['phpAds_settings_information'] = array(
 	'dbuser' => 					array ('type' => 'string', 	'sql' => false),
 	'dbpassword' => 				array ('type' => 'string', 	'sql' => false),
 	'dbname' => 					array ('type' => 'string', 	'sql' => false),
-	'tbl_adviews' => 				array ('type' => 'string', 	'sql' => false),
+
+	'tbl_acls' => 					array ('type' => 'string', 	'sql' => false),
 	'tbl_adclicks' => 				array ('type' => 'string', 	'sql' => false),
 	'tbl_adconversions' => 			array ('type' => 'string', 	'sql' => false),
 	'tbl_adstats' => 				array ('type' => 'string', 	'sql' => false),
-	'tbl_banners' => 				array ('type' => 'string', 	'sql' => false),
-	'tbl_clients' => 				array ('type' => 'string', 	'sql' => false),
-	'tbl_session' => 				array ('type' => 'string', 	'sql' => false),
-	'tbl_acls' => 					array ('type' => 'string', 	'sql' => false),
-	'tbl_zones' => 					array ('type' => 'string', 	'sql' => false),
+	'tbl_adviews' => 				array ('type' => 'string', 	'sql' => false),
 	'tbl_affiliates' =>				array ('type' => 'string', 	'sql' => false),
-	'tbl_images' =>					array ('type' => 'string', 	'sql' => false),
-	'tbl_userlog' =>				array ('type' => 'string', 	'sql' => false),
+	'tbl_banners' => 				array ('type' => 'string', 	'sql' => false),
 	'tbl_cache' =>					array ('type' => 'string', 	'sql' => false),
-	'tbl_targetstats' => 			array ('type' => 'string', 	'sql' => false),
+	'tbl_campaigns' => 				array ('type' => 'string', 	'sql' => false),
+	'tbl_campaigns_trackers' => 	array ('type' => 'string', 	'sql' => false),
+	'tbl_clients' => 				array ('type' => 'string', 	'sql' => false),
 	'tbl_config' => 				array ('type' => 'string', 	'sql' => false),
+	'tbl_conversionlog' => 			array ('type' => 'string', 	'sql' => false),
+	'tbl_images' =>					array ('type' => 'string', 	'sql' => false),
+	'tbl_session' => 				array ('type' => 'string', 	'sql' => false),
+	'tbl_targetstats' => 			array ('type' => 'string', 	'sql' => false),
+	'tbl_trackers' => 				array ('type' => 'string', 	'sql' => false),
+	'tbl_userlog' =>				array ('type' => 'string', 	'sql' => false),
+	'tbl_zones' => 					array ('type' => 'string', 	'sql' => false),
+
 	'table_prefix' =>				array ('type' => 'string', 	'sql' => false),
 	'table_type' =>					array ('type' => 'string', 	'sql' => false),
 	'persistent_connections' =>		array ('type' => 'boolean', 'sql' => false),

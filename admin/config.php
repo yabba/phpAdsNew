@@ -1,4 +1,4 @@
-<?php // $Revision: 2.7 $
+<?php // $Revision: 2.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -176,7 +176,7 @@ $phpAds_nav = array (
 		      "4.1.4.1"				=>  array("tracker-edit.php?clientid=$clientid" => $strAddTracker),
 		      "4.1.4.2"				=>	array("tracker-edit.php?clientid=$clientid&trackerid=$trackerid" => $strTrackerProperties),
 		      "4.1.4.3"				=> 	array("tracker-include.php?clientid=$clientid&trackerid=$trackerid" => $strLinkedCampaigns),
-		      "4.1.4.4"				=> 	array("invocation-invocation.php?clientid=$clientid&trackerid=$trackerid" => $strInvocationcode),
+		      "4.1.4.4"				=> 	array("tracker-invocation.php?clientid=$clientid&trackerid=$trackerid" => $strInvocationcode),
 		  "4.2" 					=> 	array("affiliate-index.php" => $strAffiliatesAndZones),
 		    "4.2.1" 				=> 	array("affiliate-edit.php" => $strAddNewAffiliate),
 		    "4.2.2" 				=> 	array("affiliate-edit.php?affiliateid=$affiliateid" => $strAffiliateProperties),

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -37,8 +37,18 @@ if (isset($campaignid) && $campaignid != '')
 {
 	if (isset($moveto) && $moveto != '')
 	{
+		// Delete any campaign-tracker links
+		$res = phpAds_dbQuery(
+			"DELETE FROM ".$phpAds_config['tbl_campaigns_trackers'].
+			" WHERE campaignid=".$campaignid
+		) or phpAds_sqlDie();
+
 		// Move the campaign
-		$res = phpAds_dbQuery("UPDATE ".$phpAds_config['tbl_clients']." SET parent = '".$moveto."' WHERE clientid = '".$campaignid."'") or phpAds_sqlDie();
+		$res = phpAds_dbQuery(
+			"UPDATE ".$phpAds_config['tbl_campaigns'].
+			" SET campaignid=".$moveto.
+			" WHERE campaignid=".$campaignid
+		) or phpAds_sqlDie();
 		
 		// Rebuild cache
 		if (!defined('LIBVIEWCACHE_INCLUDED')) 

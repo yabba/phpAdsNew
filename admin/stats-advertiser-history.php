@@ -1,4 +1,4 @@
-<?php // $Revision: 1.2 $
+<?php // $Revision: 1.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -114,10 +114,10 @@ $idresult = phpAds_dbQuery ("
 		b.bannerid
 	FROM
 		".$phpAds_config['tbl_banners']." AS b,
-		".$phpAds_config['tbl_clients']." AS c
+		".$phpAds_config['tbl_campaigns']." AS c
 	WHERE
-		c.parent = $clientid AND
-		c.clientid = b.campaignid
+		c.clientid = $clientid AND
+		c.campaignid = b.campaignid
 ");
 
 if (phpAds_dbNumRows($idresult) > 0)

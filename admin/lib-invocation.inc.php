@@ -1,4 +1,4 @@
-<?php // $Revision: 2.8 $
+<?php // $Revision: 2.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -462,6 +462,16 @@ function phpAds_GenerateInvocationCode()
 	return $buffer;
 }
 
+function phpAds_generateTrackerCode()
+{
+	global
+		 $phpAds_config
+		,$trackerid;
+		 
+	$buffer = "<img src='".$phpAds_config['url_prefix']."/adconversion.php?trackerid=".$trackerid."' width='1' height='1'>";
+
+	return $buffer;
+}
 
 
 

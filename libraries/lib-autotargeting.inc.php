@@ -1,4 +1,4 @@
-<?php // $Revision: 2.7 $
+<?php // $Revision: 2.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -254,26 +254,22 @@ function phpAds_AutoTargetingCaclulateFactor($profile, &$debuglog)
 	$autotarget_campaigns = 0;
 	
 	// Fetch all targeted campaigns and all which need autotargeting
-	$res = phpAds_dbQuery("
-		SELECT
-			clientid,
-			views,
-			UNIX_TIMESTAMP(expire) AS expire,
-			target
-		FROM
-			".$phpAds_config['tbl_clients']."
-		WHERE
-			parent > 0 AND
-			active AND
-			weight = 0 AND
-			((expire > NOW() AND views > 0) OR target > 0)
-		");
+	$res = phpAds_dbQuery(
+		"SELECT campaignid".
+		",views".
+		",UNIX_TIMESTAMP(expire) AS expire".
+		",target".
+		" FROM ".$phpAds_config['tbl_campaigns'].
+		" WHERE active".
+		" AND weight = 0".
+		" AND ((expire > NOW() AND views > 0) OR target > 0)"
+	);
 
 	$debuglog .= "Targeted campaigns: ". phpAds_dbNumRows($res)."\n";
 	
 	while ($row = phpAds_dbFetchArray($res))
 	{
-		$debuglog .= "\nCAMPAIGN ".$row['clientid']." \n";
+		$debuglog .= "\nCAMPAIGN ".$row['campaignid']." \n";
 		$debuglog .= "--------------------------------------------------\n";
 
 		if ($row['expire'])

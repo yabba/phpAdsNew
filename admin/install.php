@@ -1,4 +1,4 @@
-<?php // $Revision: 2.17 $
+<?php // $Revision: 2.18 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -245,21 +245,25 @@ if (phpAds_isUser(phpAds_Admin))
 				$installvars['table_type'] 	 = $table_type;
 				
 				// Create table names
-				$phpAds_config['tbl_clients'] 	 = $installvars['tbl_clients']    = $table_prefix.'clients';
-				$phpAds_config['tbl_banners']    = $installvars['tbl_banners']    = $table_prefix.'banners';
-				$phpAds_config['tbl_adstats']    = $installvars['tbl_adstats']    = $table_prefix.'adstats';
-				$phpAds_config['tbl_adviews']    = $installvars['tbl_adviews']    = $table_prefix.'adviews';
+				$phpAds_config['tbl_acls'] 	     = $installvars['tbl_acls'] 	  = $table_prefix.'acls';
 				$phpAds_config['tbl_adclicks']   = $installvars['tbl_adclicks']   = $table_prefix.'adclicks';
 				$phpAds_config['tbl_adconversions']   = $installvars['tbl_adconversions']   = $table_prefix.'adconversions';
-				$phpAds_config['tbl_acls'] 	     = $installvars['tbl_acls'] 	  = $table_prefix.'acls';
-				$phpAds_config['tbl_session']    = $installvars['tbl_session']    = $table_prefix.'session';
-				$phpAds_config['tbl_zones'] 	 = $installvars['tbl_zones'] 	  = $table_prefix.'zones';
-				$phpAds_config['tbl_config'] 	 = $installvars['tbl_config'] 	  = $table_prefix.'config';
+				$phpAds_config['tbl_adstats']    = $installvars['tbl_adstats']    = $table_prefix.'adstats';
+				$phpAds_config['tbl_adviews']    = $installvars['tbl_adviews']    = $table_prefix.'adviews';
 				$phpAds_config['tbl_affiliates'] = $installvars['tbl_affiliates'] = $table_prefix.'affiliates';
-				$phpAds_config['tbl_images'] 	 = $installvars['tbl_images'] 	  = $table_prefix.'images';
-				$phpAds_config['tbl_userlog'] 	 = $installvars['tbl_userlog'] 	  = $table_prefix.'userlog';
+				$phpAds_config['tbl_banners']    = $installvars['tbl_banners']    = $table_prefix.'banners';
 				$phpAds_config['tbl_cache'] 	 = $installvars['tbl_cache'] 	  = $table_prefix.'cache';
+				$phpAds_config['tbl_campaigns'] = $installvars['tbl_campaigns'] = $table_prefix.'campaigns';
+				$phpAds_config['tbl_campaigns_trackers'] = $installvars['tbl_campaigns_trackers'] = $table_prefix.'campaigns_trackers';
+				$phpAds_config['tbl_clients'] 	 = $installvars['tbl_clients']    = $table_prefix.'clients';
+				$phpAds_config['tbl_config'] 	 = $installvars['tbl_config'] 	  = $table_prefix.'config';
+				$phpAds_config['tbl_conversionlog'] 	 = $installvars['tbl_conversionlog'] 	  = $table_prefix.'conversionlog';
+				$phpAds_config['tbl_images'] 	 = $installvars['tbl_images'] 	  = $table_prefix.'images';
+				$phpAds_config['tbl_session']    = $installvars['tbl_session']    = $table_prefix.'session';
 				$phpAds_config['tbl_targetstats'] = $installvars['tbl_targetstats'] = $table_prefix.'targetstats';
+				$phpAds_config['tbl_trackers'] 	 = $installvars['tbl_trackers'] = $table_prefix.'trackers';
+				$phpAds_config['tbl_userlog'] 	 = $installvars['tbl_userlog'] 	  = $table_prefix.'userlog';
+				$phpAds_config['tbl_zones'] 	 = $installvars['tbl_zones'] 	  = $table_prefix.'zones';
 				
 				if (phpAds_checkDatabaseExists())
 				{
@@ -311,21 +315,25 @@ if (phpAds_isUser(phpAds_Admin))
 							phpAds_SettingsWriteAdd('table_prefix', $installvars['table_prefix']);
 							phpAds_SettingsWriteAdd('table_type', $installvars['table_type']);
 							
-							phpAds_SettingsWriteAdd('tbl_clients', $installvars['tbl_clients']);
-							phpAds_SettingsWriteAdd('tbl_banners', $installvars['tbl_banners']);
-							phpAds_SettingsWriteAdd('tbl_adstats', $installvars['tbl_adstats']);
-							phpAds_SettingsWriteAdd('tbl_adviews', $installvars['tbl_adviews']);
+							phpAds_SettingsWriteAdd('tbl_acls', $installvars['tbl_acls']);
 							phpAds_SettingsWriteAdd('tbl_adclicks', $installvars['tbl_adclicks']);
 							phpAds_SettingsWriteAdd('tbl_adconversions', $installvars['tbl_adconversions']);
-							phpAds_SettingsWriteAdd('tbl_acls', $installvars['tbl_acls']);
-							phpAds_SettingsWriteAdd('tbl_session', $installvars['tbl_session']);
-							phpAds_SettingsWriteAdd('tbl_zones', $installvars['tbl_zones']);
-							phpAds_SettingsWriteAdd('tbl_config', $installvars['tbl_config']);
+							phpAds_SettingsWriteAdd('tbl_adstats', $installvars['tbl_adstats']);
+							phpAds_SettingsWriteAdd('tbl_adviews', $installvars['tbl_adviews']);
 							phpAds_SettingsWriteAdd('tbl_affiliates', $installvars['tbl_affiliates']);
-							phpAds_SettingsWriteAdd('tbl_images', $installvars['tbl_images']);
-							phpAds_SettingsWriteAdd('tbl_userlog', $installvars['tbl_userlog']);
+							phpAds_SettingsWriteAdd('tbl_banners', $installvars['tbl_banners']);
 							phpAds_SettingsWriteAdd('tbl_cache', $installvars['tbl_cache']);
+							phpAds_SettingsWriteAdd('tbl_campaigns', $installvars['tbl_campaigns']);
+							phpAds_SettingsWriteAdd('tbl_campaigns_trackers', $installvars['tbl_campaigns_trackers']);
+							phpAds_SettingsWriteAdd('tbl_clients', $installvars['tbl_clients']);
+							phpAds_SettingsWriteAdd('tbl_config', $installvars['tbl_config']);
+							phpAds_SettingsWriteAdd('tbl_conversionlog', $installvars['tbl_conversionlog']);
+							phpAds_SettingsWriteAdd('tbl_images', $installvars['tbl_images']);
+							phpAds_SettingsWriteAdd('tbl_session', $installvars['tbl_session']);
 							phpAds_SettingsWriteAdd('tbl_targetstats', $installvars['tbl_targetstats']);
+							phpAds_SettingsWriteAdd('tbl_trackers', $installvars['tbl_trackers']);
+							phpAds_SettingsWriteAdd('tbl_userlog', $installvars['tbl_userlog']);
+							phpAds_SettingsWriteAdd('tbl_zones', $installvars['tbl_zones']);
 							
 							phpAds_SettingsWriteAdd('admin', $installvars['admin']);
 							phpAds_SettingsWriteAdd('admin_pw', $installvars['admin_pw']);

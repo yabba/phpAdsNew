@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -135,11 +135,22 @@ echo "<br>";
 
 
 // Extra campaign info
-$res = phpAds_dbQuery("SELECT COUNT(*) AS count, SUM(target) AS sum_target FROM ".$phpAds_config['tbl_clients']." WHERE parent > 0 AND target > 0");
+$res = phpAds_dbQuery(
+	"SELECT COUNT(*) AS count".
+	",SUM(target) AS sum_target".
+	" FROM ".$phpAds_config['tbl_campaigns'].
+	" WHERE target>0"
+);
+
 $campaigns_count = phpAds_dbResult($res, 0, 'count');
 $campaigns_target = phpAds_dbResult($res, 0, 'sum_target');
 
-$res = phpAds_dbQuery("SELECT COUNT(*) AS campaigns FROM ".$phpAds_config['tbl_clients']." WHERE parent > 0 AND weight > 0");
+$res = phpAds_dbQuery(
+	"SELECT COUNT(*) AS campaigns".
+	" FROM ".$phpAds_config['tbl_campaigns'].
+	" WHERE weight > 0"
+);
+
 $campaigns_weight = phpAds_dbResult($res, 0, 'campaigns');
 
 

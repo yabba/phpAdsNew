@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -1359,3 +1359,4 @@ phpAds_SessionDataStore();
 phpAds_PageFooter();
 
 ?>
+

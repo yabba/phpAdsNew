@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -21,20 +21,25 @@ $phpAds_db_link = '';
 // Add database name to table names if compatibility mode is used
 if ($phpAds_config['compatibility_mode'])
 {
-	$phpAds_config['tbl_adviews'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_adviews'];
+	$phpAds_config['tbl_acls'] 		= $phpAds_config['dbname'].".".$phpAds_config['tbl_acls'];
 	$phpAds_config['tbl_adclicks'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_adclicks'];
 	$phpAds_config['tbl_adconversions'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_adconversions'];
 	$phpAds_config['tbl_adstats'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_adstats'];
-	$phpAds_config['tbl_banners'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_banners'];
-	$phpAds_config['tbl_clients'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_clients'];
-	$phpAds_config['tbl_session'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_session'];
-	$phpAds_config['tbl_acls'] 		= $phpAds_config['dbname'].".".$phpAds_config['tbl_acls'];
-	$phpAds_config['tbl_zones'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_zones'];
-	$phpAds_config['tbl_config'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_config'];
+	$phpAds_config['tbl_adviews'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_adviews'];
 	$phpAds_config['tbl_affiliates']= $phpAds_config['dbname'].".".$phpAds_config['tbl_affiliates'];
-	$phpAds_config['tbl_images'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_images'];
-	$phpAds_config['tbl_userlog'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_userlog'];
+	$phpAds_config['tbl_banners'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_banners'];
 	$phpAds_config['tbl_cache'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_cache'];
+	$phpAds_config['tbl_campaigns'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_campaigns'];
+	$phpAds_config['tbl_campaigns_trackers'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_campaigns_trackers'];
+	$phpAds_config['tbl_clients'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_clients'];
+	$phpAds_config['tbl_config'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_config'];
+	$phpAds_config['tbl_conversionlog'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_conversionlog'];
+	$phpAds_config['tbl_images'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_images'];
+	$phpAds_config['tbl_session'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_session'];
+	$phpAds_config['tbl_targetstats'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_targetstats'];
+	$phpAds_config['tbl_trackers'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_trackers'];
+	$phpAds_config['tbl_userlog'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_userlog'];
+	$phpAds_config['tbl_zones'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_zones'];
 }
 
 // Disable delayed inserts when not using MyISAM tables

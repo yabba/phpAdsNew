@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -216,7 +216,7 @@ function phpAds_SendMaintenanceReport ($clientid, $first_unixtimestamp, $last_un
 					
 					if ($adconversions > 0)
 					{
-						// Total adclicks
+						// Total adconversions
 				        $log .= "\n".$strConversions." (".$strTotal."):   ".$adconversions."\n";
 						
 						// Fetch all adclicks belonging to banner belonging to client, grouped by day

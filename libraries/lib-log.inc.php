@@ -1,4 +1,4 @@
-<?php // $Revision: 2.9 $
+<?php // $Revision: 2.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -120,7 +120,7 @@ function phpAds_logClick($cookieid, $bannerid, $zoneid, $source)
 /* Log a conversion                                      */
 /*********************************************************/
 
-function phpAds_logConversion($cookieid, $bannerid, $zoneid, $source)
+function phpAds_logConversion($cookieid, $trackerid)
 {
 	global $HTTP_SERVER_VARS, $phpAds_config, $phpAds_geo;
 	
@@ -136,17 +136,13 @@ function phpAds_logConversion($cookieid, $bannerid, $zoneid, $source)
 		phpAds_dbQuery(
 			"INSERT ".($phpAds_config['insert_delayed'] ? 'DELAYED' : '')." INTO ".$phpAds_config['tbl_adconversions'].
 			"(cookieid".
-			",bannerid".
-			",zoneid".
+			",trackerid".
 			",host".
-			",source".
 			",country)".
 			" VALUES ".
 			"('".$cookieid."'".
-			",".$bannerid.
-			",".$zoneid.
+			",".$trackerid.
 			",'".$log_host."'".
-			",'".$source."'".
 			",'".$log_country."')"
 		);
 	}

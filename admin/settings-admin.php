@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -114,7 +114,12 @@ phpAds_SettingsSelection("admin");
 
 $unique_users = array();
 
-$res = phpAds_dbQuery("SELECT LOWER(clientusername) as used FROM ".$phpAds_config['tbl_clients']." WHERE clientusername != ''");
+$res = phpAds_dbQuery(
+	"SELECT LOWER(clientusername) as used".
+	" FROM ".$phpAds_config['tbl_clients'].
+	" WHERE clientusername != ''"
+);
+
 while ($row = phpAds_dbFetchArray($res))
 	$unique_users[] = $row['used'];
 

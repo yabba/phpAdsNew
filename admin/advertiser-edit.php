@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -593,7 +593,12 @@ echo "</form>";
 // Get unique clientname
 $unique_names = array();
 
-$res = phpAds_dbQuery("SELECT * FROM ".$phpAds_config['tbl_clients']." WHERE parent = 0 AND clientid != '".$clientid."'");
+$res = phpAds_dbQuery(
+	"SELECT *".
+	" FROM ".$phpAds_config['tbl_clients'].
+	" WHERE clientid != ".$clientid.
+);
+
 while ($row = phpAds_dbFetchArray($res))
 	$unique_names[] = $row['clientname'];
 
@@ -601,7 +606,13 @@ while ($row = phpAds_dbFetchArray($res))
 // Get unique username
 $unique_users = array($phpAds_config['admin']);
 
-$res = phpAds_dbQuery("SELECT * FROM ".$phpAds_config['tbl_clients']." WHERE clientusername != '' AND parent = 0 AND clientid != '".$clientid."'");
+$res = phpAds_dbQuery(
+	"SELECT *".
+	" FROM ".$phpAds_config['tbl_clients'].
+	" WHERE clientusername != ''".
+	" AND clientid != ".$clientid
+);
+
 while ($row = phpAds_dbFetchArray($res))
 	$unique_users[] = $row['clientusername'];
 
