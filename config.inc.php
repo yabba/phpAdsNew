@@ -175,6 +175,10 @@ $phpAds_type_web_ftp	= "ftp://user:password@ftp.myname.com/ads";
 // Public URL of local directory / ftp server
 $phpAds_type_web_url    = "http://www.myname.com/ads";
 
+// Automatically change HTML banners in order to force
+// click logging.
+$phpAds_type_html_auto	=  true;
+
 
 
 /*********************************************************/
