@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -183,7 +183,7 @@ else
 			(".implode(' OR ', $zoneids).") AND
 			t_stamp >= $begin AND t_stamp < $end
 		GROUP BY
-			day
+			date
 		LIMIT
 			$limit
 	");
@@ -207,7 +207,7 @@ else
 			(".implode(' OR ', $zoneids).") AND
 			t_stamp >= $begin AND t_stamp < $end
 		GROUP BY
-			day
+			date
 		LIMIT
 			$limit
 	");

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.2 $
+<?php // $Revision: 1.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -197,7 +197,7 @@ else
 			zoneid = ".$zoneid." AND
 			t_stamp >= $begin AND t_stamp < $end
 		GROUP BY
-			day
+			date
 		LIMIT
 			$limit
 	");
@@ -221,7 +221,7 @@ else
 			zoneid = ".$zoneid." AND
 			t_stamp >= $begin AND t_stamp < $end
 		GROUP BY
-			day
+			date
 		LIMIT
 			$limit
 	");
