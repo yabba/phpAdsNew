@@ -1,4 +1,4 @@
-<?php // $Revision: 1.2 $
+<?php // $Revision: 1.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -260,9 +260,9 @@ if (isset($campaigns) && is_array($campaigns) && count($campaigns) > 0)
 		
 		if ($hideinactive == false || $campaign['active'] == 't' && 
 		   (count($campaign['banners']) != 0 || count($campaign['banners']) == $campaign['count']))
-			$clients[$campaign['parent']]['campaigns'][$ckey] = $campaign;
+			$clients[$campaign['clientid']]['campaigns'][$ckey] = $campaign;
 		else
-			$clients[$campaign['parent']]['hideinactive']++;
+			$clients[$campaign['clientid']]['hideinactive']++;
 	}
 	
 	unset ($campaigns);
@@ -458,9 +458,9 @@ if ($clientshidden > 0 || $totalviews > 0 || $totalclicks > 0)
 				if (isset($campaigns[$ckey]['banners']))
 				{
 					if ($campaigns[$ckey]['expand'] == '1')
-						echo "<a href='stats-global-advertiser.php?period=".$period."&amp;collapse=".$campaigns[$ckey]['clientid']."'><img src='images/triangle-d.gif' align='absmiddle' border='0'></a>&nbsp;";
+						echo "<a href='stats-global-advertiser.php?period=".$period."&amp;collapse=".$campaigns[$ckey]['campaignid']."'><img src='images/triangle-d.gif' align='absmiddle' border='0'></a>&nbsp;";
 					else
-						echo "<a href='stats-global-advertiser.php?period=".$period."&amp;expand=".$campaigns[$ckey]['clientid']."'><img src='images/".$phpAds_TextDirection."/triangle-l.gif' align='absmiddle' border='0'></a>&nbsp;";
+						echo "<a href='stats-global-advertiser.php?period=".$period."&amp;expand=".$campaigns[$ckey]['campaignid']."'><img src='images/".$phpAds_TextDirection."/triangle-l.gif' align='absmiddle' border='0'></a>&nbsp;";
 				}
 				else
 					echo "<img src='images/spacer.gif' height='16' width='16' align='absmiddle'>&nbsp;";

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -22,6 +22,7 @@ require ("lib-statistics.inc.php");
 // Register input variables
 phpAds_registerGlobal (
 	 'trackername'
+	,'description'
 	,'move'
 	,'submit'
 );
@@ -51,12 +52,14 @@ if (isset($submit))
 		"REPLACE INTO ".$phpAds_config['tbl_trackers'].
 		" (trackerid".
 		",trackername".
+		",description".
 		",clientid)".
 		" VALUES".
 		" (".$trackerid.
 		",'".$trackername."'".
+		",'".$description."'".
 		",".$clientid.")"
-	) or phpAds_sqlDie();  
+	) or phpAds_sqlDie();
 	
 	// Get ID of tracker
 	if ($trackerid == "null")
@@ -76,7 +79,7 @@ if (isset($submit))
 		$new_tracker = false;
 	}
 	
-	Header("Location: tracker-zone.php?clientid=".$clientid."&trackerid=".$trackerid);
+	Header("Location: tracker-include.php?clientid=".$clientid."&trackerid=".$trackerid);
 	exit;
 }
 
@@ -118,7 +121,7 @@ if ($trackerid != "")
 	}
 	
 	phpAds_PageShortcut($strClientProperties, 'advertiser-edit.php?clientid='.$clientid, 'images/icon-advertiser.gif');
-	phpAds_PageShortcut($strTrackerHistory, 'stats-tracker-history.php?clientid='.$clientid.'&trackerid='.$trackerid, 'images/icon-statistics.gif');
+	//phpAds_PageShortcut($strTrackerHistory, 'stats-tracker-history.php?clientid='.$clientid.'&trackerid='.$trackerid, 'images/icon-statistics.gif');
 	
 	
 	
@@ -137,7 +140,7 @@ if ($trackerid != "")
 	$res = phpAds_dbQuery(
 		"SELECT *".
 		" FROM ".$phpAds_config['tbl_clients'].
-		" WHERE clientid!=".phpAds_getCampaignParentClientID($trackerid)
+		" WHERE clientid!=".phpAds_getTrackerParentClientID($trackerid)
 	) or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
@@ -188,23 +191,15 @@ if ($trackerid != "" || (isset($move) && $move == 't'))
 	if ($trackerid != "") $ID = $trackerid;
 	if (isset($move) && $move == 't')
 		if (isset($clientid) && $clientid != "") $ID = $clientid;
-	
+
 	$res = phpAds_dbQuery(
 		"SELECT *".
 		" FROM ".$phpAds_config['tbl_trackers'].
 		" WHERE trackerid=".$ID
 	) or phpAds_sqlDie();
-		
+	
 	$row = phpAds_dbFetchArray($res);
 	
-	if ($row['target'] > 0)
-	{
-		$row['weight'] = '-';
-	}
-	else
-	{
-		$row['target'] = '-';
-	}
 }
 else
 {
@@ -246,7 +241,14 @@ echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>"."\n";
 echo "<tr>"."\n";
 echo "\t"."<td width='30'>&nbsp;</td>"."\n";
 echo "\t"."<td width='200'>".$strName."</td>"."\n";
-echo "\t"."<td><input onBlur='phpAds_formPriorityUpdate(this.form);' class='flat' type='text' name='trackername' size='35' style='width:350px;' value='".phpAds_htmlQuotes($row['trackername'])."' tabindex='".($tabindex++)."'></td>"."\n";
+echo "\t"."<td><input class='flat' type='text' name='trackername' size='35' style='width:350px;' value='".phpAds_htmlQuotes($row['trackername'])."' tabindex='".($tabindex++)."'></td>"."\n";
+echo "</tr>"."\n";
+echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>"."\n";
+
+echo "<tr>"."\n";
+echo "\t"."<td width='30'>&nbsp;</td>"."\n";
+echo "\t"."<td width='200'>".$strDescription."</td>"."\n";
+echo "\t"."<td><input class='flat' type='text' name='description' size='35' style='width:350px;' value='".phpAds_htmlQuotes($row['description'])."' tabindex='".($tabindex++)."'></td>"."\n";
 echo "</tr>"."\n";
 echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>"."\n";
 

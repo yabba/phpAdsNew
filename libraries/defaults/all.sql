@@ -214,21 +214,10 @@ CREATE TABLE phpads_campaigns (
 CREATE TABLE phpads_trackers (
    trackerid mediumint(9) NOT NULL AUTO_INCREMENT,
    trackername varchar(255) NOT NULL,
+   description varchar(255) NOT NULL,
    clientid mediumint(9) DEFAULT '0' NOT NULL,
    PRIMARY KEY (trackerid)
 );
-
-
--- Table structure for table 'phpads_markers'
-
-
-CREATE TABLE phpads_markers (
-   markerid mediumint(9) NOT NULL AUTO_INCREMENT,
-   trackerid mediumint(9) DEFAULT '0' NOT NULL,
-   description varchar(255) NOT NULL,
-   PRIMARY KEY (markerid)
-);
-
 
 
 -- Table structure for table 'phpads_session'
