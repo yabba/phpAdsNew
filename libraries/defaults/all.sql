@@ -17,7 +17,7 @@ CREATE TABLE phpads_acls (
 
 
 CREATE TABLE phpads_adclicks (
-   cookieid varchar(32) NOT NULL,
+   userid varchar(32) NOT NULL,
    bannerid mediumint(9) DEFAULT '0' NOT NULL,
    zoneid mediumint(9) DEFAULT '0' NOT NULL,
    t_stamp timestamp(14),
@@ -26,7 +26,7 @@ CREATE TABLE phpads_adclicks (
    country char(2) NOT NULL,
    KEY bannerid_date (bannerid,t_stamp),
    KEY date (t_stamp),
-   KEY cookie (cookieid)
+   KEY user (userid)
 );
 
 
@@ -34,7 +34,7 @@ CREATE TABLE phpads_adclicks (
 
 
 CREATE TABLE phpads_adconversions (
-   cookieid varchar(32) NOT NULL,
+   userid varchar(32) NOT NULL,
    trackerid mediumint(9) DEFAULT '0' NOT NULL,
    t_stamp timestamp(14),
    host varchar(255) NOT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE phpads_adconversions (
    conversionlogid mediumint(9) DEFAULT '0' NOT NULL,
    KEY trackerid_date (trackerid,t_stamp),
    KEY date (t_stamp),
-   KEY cookie (cookieid)
+   KEY user (userid)
 );
 
 
@@ -67,7 +67,7 @@ CREATE TABLE phpads_adstats (
 
 
 CREATE TABLE phpads_adviews (
-   cookieid varchar(32) NOT NULL,
+   userid varchar(32) NOT NULL,
    bannerid mediumint(9) DEFAULT '0' NOT NULL,
    zoneid mediumint(9) DEFAULT '0' NOT NULL,
    t_stamp timestamp(14),
@@ -76,7 +76,7 @@ CREATE TABLE phpads_adviews (
    country char(2) NOT NULL,
    KEY bannerid_date (bannerid,t_stamp),
    KEY date (t_stamp),
-   KEY cookie (cookieid)
+   KEY user (userid)
 );
 
 
@@ -131,6 +131,9 @@ CREATE TABLE phpads_banners (
    append blob NOT NULL,
    appendtype tinyint(4) DEFAULT '0' NOT NULL,
    bannertype tinyint(4) DEFAULT '0' NOT NULL,
+   alt_filename varchar(255) NOT NULL,
+   alt_imageurl varchar(255) NOT NULL,
+   alt_contenttype enum('gif','jpeg','png') DEFAULT 'gif' NOT NULL,
    PRIMARY KEY (bannerid)
 );
 
@@ -178,6 +181,8 @@ CREATE TABLE phpads_campaigns_trackers (
    campaignid mediumint(9) DEFAULT '0' NOT NULL,
    trackerid mediumint(9) DEFAULT '0' NOT NULL,
    logstats enum('y','n') DEFAULT 'y' NOT NULL,
+   viewwindow mediumint(9) DEFAULT '0' NOT NULL,
+   clickwindow mediumint(9) DEFAULT '0' NOT NULL,
    PRIMARY KEY (campaign_trackerid)
 );
 
@@ -283,11 +288,13 @@ CREATE TABLE phpads_conversionlog (
    conversionlogid mediumint(9) NOT NULL AUTO_INCREMENT,
    campaignid mediumint(9) DEFAULT '0' NOT NULL,
    trackerid mediumint(9) DEFAULT '0' NOT NULL,
-   cookieid varchar(32) NOT NULL,
+   userid varchar(32) NOT NULL,
    t_stamp timestamp(14),
    host varchar(255) NOT NULL,
    country char(2) NOT NULL,
-   conversiontype enum('active','passive') NULL,
+   cnv_logstats enum('y','n') DEFAULT 'n',
+   cnv_clickwindow mediumint(9) DEFAULT '0' NOT NULL,
+   cnv_viewwindow mediumint(9) DEFAULT '0' NOT NULL,
    action enum('view','click') NULL,
    action_bannerid mediumint(9) DEFAULT '0' NOT NULL,
    action_zoneid mediumint(9) DEFAULT '0' NOT NULL,
@@ -296,19 +303,6 @@ CREATE TABLE phpads_conversionlog (
    action_source varchar(50) NOT NULL,
    action_country char(2) NOT NULL,
    PRIMARY KEY (conversionlogid)
-);
-
-
--- Table structure for table 'phpads_conversionrules'
-
-
-CREATE TABLE phpads_conversionrules (
-   conversionruleid mediumint(9) NOT NULL AUTO_INCREMENT,
-   campaignid mediumint(9) DEFAULT '0' NOT NULL,
-   conversiontype enum('active','passive') NULL,
-   action enum('view','click') NULL,
-   delay_seconds mediumint(9) DEFAULT '0' NOT NULL,
-   PRIMARY KEY (conversionruleid)
 );
 
 
@@ -347,7 +341,6 @@ CREATE TABLE phpads_targetstats (
 );
 
 
-
 -- Table structure for table 'phpads_trackers'
 
 
@@ -356,6 +349,9 @@ CREATE TABLE phpads_trackers (
    trackername varchar(255) NOT NULL,
    description varchar(255) NOT NULL,
    clientid mediumint(9) DEFAULT '0' NOT NULL,
+   viewwindow mediumint(9) DEFAULT '0' NOT NULL,
+   clickwindow mediumint(9) DEFAULT '0' NOT NULL,
+   blockwindow mediumint(9) DEFAULT '0' NOT NULL,
    PRIMARY KEY (trackerid)
 );
 

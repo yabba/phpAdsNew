@@ -33,7 +33,6 @@ $phpAds_config['tbl_campaigns_trackers'] = 'phpads_campaigns_trackers';
 $phpAds_config['tbl_clients'] = 'phpads_clients';
 $phpAds_config['tbl_config'] = 'phpads_config';
 $phpAds_config['tbl_conversionlog'] = 'phpads_conversionlog';
-$phpAds_config['tbl_conversionrules'] = 'phpads_conversionrules';
 $phpAds_config['tbl_images'] = 'phpads_images';
 $phpAds_config['tbl_session'] = 'phpads_session';
 $phpAds_config['tbl_targetstats'] = 'phpads_targetstats';
@@ -142,6 +141,12 @@ $phpAds_config['block_adclicks'] = 0;
 // This is to prevent users from boosting the stats by clicking multiple times
 $phpAds_config['block_adconversions'] = 0;
 
+// Window for logging of conversions for xx seconds after a click
+$phpAds_config['default_conversion_clickwindow'] = 0;
+
+// Window for logging of conversions for xx seconds after a view
+$phpAds_config['default_conversion_viewwindow'] = 0;
+
 // E-mail admin when views/clicks/conversions get low?
 $phpAds_config['warn_admin'] = true;
 
@@ -194,6 +199,8 @@ $phpAds_config['acl'] = true;
 $phpAds_config['default_banner_url'] = '';
 $phpAds_config['default_banner_target'] = '';
 
+// The URL to your web server banner type image directory
+$phpAds_config['type_web_url'] = '';
 
 
 /*********************************************************/
