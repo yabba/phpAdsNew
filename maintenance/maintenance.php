@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -67,6 +67,7 @@ $res = phpAds_dbQuery ("
 
 include ("maintenance-statistics.php");
 
+if (date('H') == 0)
 {
 	include ("maintenance-reports.php");
 	include ("maintenance-activation.php");
