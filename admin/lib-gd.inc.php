@@ -1,4 +1,4 @@
-<?php // $Revision: 1.6 $
+<?php // $Revision: 1.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -48,8 +48,6 @@ function phpAds_GDImageFormat()
 		    
 		    else 
 		        $phpAds_GDImageFormat = "none";
-			
-			echo $phpAds_GDImageFormat;
 		}
 		else
 	        $phpAds_GDImageFormat = "none";
