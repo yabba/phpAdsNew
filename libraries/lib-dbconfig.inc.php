@@ -1,4 +1,4 @@
-<?php // $Revision: 2.7 $
+<?php // $Revision: 2.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -18,8 +18,8 @@ define ('LIBDBCONFIG_INCLUDED', true);
 
 
 // Current phpAds version
-$phpAds_version = 200.150;
-$phpAds_version_readable = "2.0 RC 1";
+$phpAds_version = 200.151;
+$phpAds_version_readable = "2.0 RC 2";
 $phpAds_productname = "phpAdsNew";
 $phpAds_producturl = "www.phpadsnew.com";
 $phpAds_dbmsname = "MySQL";
