@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -160,7 +160,7 @@ function days_left($clientid)
                    	".$phpAds_config['tbl_banners']." AS b
                     LEFT JOIN ".$phpAds_config['tbl_adstats']." AS v USING (bannerid)
                 WHERE
-                  	b.clientid = $clientid";
+                  	b.campaignid = $clientid";
 			
 			$res_views = phpAds_dbQuery($view_query) or phpAds_sqlDie();
 			if (phpAds_dbNumRows ($res_views) == 1)
@@ -212,7 +212,7 @@ function days_left($clientid)
 					".$phpAds_config['tbl_adstats']."
 					LEFT JOIN ".$phpAds_config['tbl_banners']." USING (bannerid)
 				WHERE
-					clientid = '$clientid' AND
+					campaignid = '$clientid' AND
 					clicks > 0";
 
         	$res_clicks = phpAds_dbQuery($click_query) or phpAds_sqlDie();

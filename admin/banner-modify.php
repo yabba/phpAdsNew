@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -40,7 +40,7 @@ if (isset($bannerid) && $bannerid != '')
 	if (isset($moveto_x) && $moveto != '')
 	{
 		// Move the banner
-		$res = phpAds_dbQuery("UPDATE ".$phpAds_config['tbl_banners']." SET clientid = '".$moveto."' WHERE bannerid = '".$bannerid."'") or phpAds_sqlDie();
+		$res = phpAds_dbQuery("UPDATE ".$phpAds_config['tbl_banners']." SET campaignid = '".$moveto."' WHERE bannerid = '".$bannerid."'") or phpAds_sqlDie();
 		
 		// Rebuild priorities
 		phpAds_PriorityCalculate ();

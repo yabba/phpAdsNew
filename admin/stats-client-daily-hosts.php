@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -49,7 +49,7 @@ $idresult = phpAds_dbQuery ("
 		".$phpAds_config['tbl_clients']." AS c
 	WHERE
 		c.parent = $clientid AND
-		c.clientid = b.clientid
+		c.clientid = b.campaignid
 ");
 
 while ($row = phpAds_dbFetchArray($idresult))

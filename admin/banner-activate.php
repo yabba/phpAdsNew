@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -46,7 +46,7 @@ if (phpAds_isUser(phpAds_Client))
 	{
 		$result = phpAds_dbQuery("
 			SELECT
-				clientid
+				campaignid
 			FROM
 				".$phpAds_config['tbl_banners']."
 			WHERE
@@ -54,14 +54,14 @@ if (phpAds_isUser(phpAds_Client))
 			") or phpAds_sqlDie();
 		$row = phpAds_dbFetchArray($result);
 		
-		if ($row["clientid"] == '' || phpAds_getUserID() != phpAds_getParentID ($row["clientid"]))
+		if ($row["campaignid"] == '' || phpAds_getUserID() != phpAds_getParentID ($row["campaignid"]))
 		{
 			phpAds_PageHeader("1");
 			phpAds_Die ($strAccessDenied, $strNotAdmin);
 		}
 		else
 		{
-			$campaignid = $row["clientid"];
+			$campaignid = $row["campaignid"];
 			
 			$res = phpAds_dbQuery("
 				UPDATE
@@ -116,7 +116,7 @@ if (phpAds_isUser(phpAds_Admin))
 			SET
 				active = '$value'
 			WHERE
-				clientid = '$campaignid'
+				campaignid = '$campaignid'
 		") or phpAds_sqlDie();
 	}
 	

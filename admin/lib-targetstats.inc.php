@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -259,7 +259,7 @@ if (isset($row['span']) && $row['span'] > 0)
 			WHERE
 				".$phpAds_config['tbl_adstats'].".bannerid = ".$phpAds_config['tbl_banners'].".bannerid AND
 				day = $day AND
-				clientid IN ($clientids)
+				campaignid IN ($clientids)
 				".(isset($lib_targetstats_where) ? 'AND '.$lib_targetstats_where : '')."
 			GROUP BY
 				date

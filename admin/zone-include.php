@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -356,7 +356,7 @@ function phpAds_showZoneCampaign ($width, $height, $what, $delivery)
 	
 	while ($row = phpAds_dbFetchArray($res))
 	{
-		$campaigns[$row['clientid']]['banners'][$row['bannerid']] = $row;
+		$campaigns[$row['campaignid']]['banners'][$row['bannerid']] = $row;
 	}
 	
 	
@@ -714,7 +714,7 @@ function phpAds_showZoneBanners ($width, $height, $what, $zonetype, $delivery)
 			if (substr($what_array[$k],0,9)=="clientid:")
 			{
 				$clientid = substr($what_array[$k],9);
-				$clientids[] = 'clientid = '.$clientid;
+				$clientids[] = 'campaignid = '.$clientid;
 			}
 		}
 		
@@ -788,7 +788,7 @@ function phpAds_showZoneBanners ($width, $height, $what, $zonetype, $delivery)
 	
 	while ($row = phpAds_dbFetchArray($res))
 	{
-		$campaigns[$row['clientid']]['banners'][$row['bannerid']] = $row;
+		$campaigns[$row['campaignid']]['banners'][$row['bannerid']] = $row;
 	}
 	
 	$inactivehidden = 0;
@@ -892,7 +892,7 @@ function phpAds_showZoneBanners ($width, $height, $what, $zonetype, $delivery)
 				$query = "
 					SELECT
 						bannerid,
-						clientid,
+						campaignid,
 						alt,
 						description,
 						active,
@@ -900,7 +900,7 @@ function phpAds_showZoneBanners ($width, $height, $what, $zonetype, $delivery)
 					FROM
 						".$phpAds_config['tbl_banners']."
 					WHERE
-						clientid = ".$GLOBALS['campaignid']."
+						campaignid = ".$GLOBALS['campaignid']."
 				";
 				
 				if ($delivery != phpAds_ZoneText)

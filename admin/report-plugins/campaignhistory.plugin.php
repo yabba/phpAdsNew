@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -62,7 +62,7 @@ function Plugin_CampaignhistoryExecute($campaignid, $delimiter=",")
 		FROM
 			".$phpAds_config['tbl_banners']."
 		WHERE
-			clientid = '".$campaignid."'
+			campaignid = '".$campaignid."'
 	");
 	
 	while ($row = phpAds_dbFetchArray($idresult))

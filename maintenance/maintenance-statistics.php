@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -214,7 +214,7 @@ while ($campaign_row = phpAds_dbFetchArray($campaign_result))
 						" FROM ".$phpAds_config['tbl_adviews'].
 						",".$phpAds_config['tbl_banners'].
 						" WHERE ".$phpAds_config['tbl_banners'].".bannerid=".$phpAds_config['tbl_adviews'].".bannerid".
-						" AND ".$phpAds_config['tbl_banners'].".clientid=".$campaign_row['clientid'].
+						" AND ".$phpAds_config['tbl_banners'].".campaignid=".$campaign_row['clientid'].
 						" AND t_stamp>=".$begin_timestamp.
 						" AND t_stamp<".$end_timestamp;
 		$view_result = phpAds_dbQuery($view_query)
@@ -239,7 +239,7 @@ while ($campaign_row = phpAds_dbFetchArray($campaign_result))
 						" FROM ".$phpAds_config['tbl_adclicks'].
 						",".$phpAds_config['tbl_banners'].
 						" WHERE ".$phpAds_config['tbl_banners'].".bannerid=".$phpAds_config['tbl_adclicks'].".bannerid".
-						" AND ".$phpAds_config['tbl_banners'].".clientid=".$campaign_row['clientid'].
+						" AND ".$phpAds_config['tbl_banners'].".campaignid=".$campaign_row['clientid'].
 						" AND t_stamp>=".$begin_timestamp.
 						" AND t_stamp<".$end_timestamp;
 		$click_result = phpAds_dbQuery($click_query)

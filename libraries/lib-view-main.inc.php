@@ -1,4 +1,4 @@
-<?php // $Revision: 2.10 $
+<?php // $Revision: 2.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -217,7 +217,7 @@ function view_raw($what, $clientid = 0, $target = '', $source = '', $withtext = 
 		
 		// Prepare impression logging
 		if ($phpAds_config['log_adviews'] && !$phpAds_config['log_beacon'])
-			phpAds_logImpression ($cookieid, $row['bannerid'], $row['clientid'], $row['zoneid'], $source);
+			phpAds_logImpression ($cookieid, $row['bannerid'], $row['zoneid'], $source);
 		
 		
 		// Return banner

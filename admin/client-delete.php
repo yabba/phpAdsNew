@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -77,7 +77,7 @@ if (isset($clientid) && $clientid != '')
 			FROM
 				".$phpAds_config['tbl_banners']."
 			WHERE
-				clientid = ".$row_campaign['clientid']."
+				campaignid = ".$row_campaign['clientid']."
 			") or phpAds_sqlDie();
 		
 		while ($row = phpAds_dbFetchArray($res_banners))
@@ -106,7 +106,7 @@ if (isset($clientid) && $clientid != '')
 			DELETE FROM
 				".$phpAds_config['tbl_banners']."
 			WHERE
-				clientid = ".$row_campaign['clientid']."
+				campaignid = ".$row_campaign['clientid']."
 			") or phpAds_sqlDie();
 	}
 }

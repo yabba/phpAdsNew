@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -108,7 +108,7 @@ function phpAds_SendMaintenanceReport ($clientid, $first_unixtimestamp, $last_un
 			$res_banners = phpAds_dbQuery("
 				SELECT
 					bannerid,
-					clientid,
+					campaignid,
 					URL,
 					active,
 					description,
@@ -116,7 +116,7 @@ function phpAds_SendMaintenanceReport ($clientid, $first_unixtimestamp, $last_un
 				FROM
 					".$phpAds_config['tbl_banners']."
 				WHERE
-					clientid = ".$campaign['clientid']."
+					campaignid = ".$campaign['clientid']."
 				") or die($strLogErrorBanners);
 			
 			

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.8 $
+<?php // $Revision: 2.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -48,7 +48,7 @@ function phpads_logCheckHost()
 /* Log an impression                                     */
 /*********************************************************/
 
-function phpAds_logImpression ($cookieid, $bannerid, $clientid, $zoneid, $source)
+function phpAds_logImpression ($cookieid, $bannerid, $zoneid, $source)
 {
 	global $HTTP_SERVER_VARS, $phpAds_config, $phpAds_geo;
 	
@@ -84,7 +84,7 @@ function phpAds_logImpression ($cookieid, $bannerid, $clientid, $zoneid, $source
 /* Log a click                                          */
 /*********************************************************/
 
-function phpAds_logClick($cookieid, $bannerid, $clientid, $zoneid, $source)
+function phpAds_logClick($cookieid, $bannerid, $zoneid, $source)
 {
 	global $HTTP_SERVER_VARS, $phpAds_config, $phpAds_geo;
 	
@@ -120,7 +120,7 @@ function phpAds_logClick($cookieid, $bannerid, $clientid, $zoneid, $source)
 /* Log a conversion                                      */
 /*********************************************************/
 
-function phpAds_logConversion($cookieid, $bannerid, $clientid, $zoneid, $source)
+function phpAds_logConversion($cookieid, $bannerid, $zoneid, $source)
 {
 	global $HTTP_SERVER_VARS, $phpAds_config, $phpAds_geo;
 	

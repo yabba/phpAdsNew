@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -46,7 +46,7 @@ elseif ($campaignid != '')
 		FROM
 			".$phpAds_config['tbl_banners']."
 		WHERE
-			clientid = '$campaignid'
+			campaignid = '$campaignid'
 	");
 	
 	if (phpAds_dbNumRows($idresult) > 0)
@@ -67,7 +67,7 @@ elseif ($clientid != '')
 			".$phpAds_config['tbl_clients']." AS c
 		WHERE
 			c.parent = $clientid AND
-			c.clientid = b.clientid
+			c.clientid = b.campaignid
 	");
 	
 	if (phpAds_dbNumRows($idresult) > 0)

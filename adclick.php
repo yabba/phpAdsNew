@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -92,10 +92,10 @@ if (phpAds_dbConnect())
 {
 	if ($bannerid != "DEFAULT")
 	{
-		// Get target URL and ClientID
+		// Get target URL and CampaignID
 		$res = phpAds_dbQuery("
 			SELECT
-				url, clientid
+				url, campaignid
 			FROM
 				".$phpAds_config['tbl_banners']."
 			WHERE
@@ -103,7 +103,7 @@ if (phpAds_dbConnect())
 		") or die();
 		
 		$url 	  = phpAds_dbResult($res, 0, 0);
-		$clientid = phpAds_dbResult($res, 0, 1);
+		$campaignid = phpAds_dbResult($res, 0, 1);
 		
 		
 		// If destination is a parameter don't use
@@ -126,7 +126,7 @@ if (phpAds_dbConnect())
 			   $HTTP_COOKIE_VARS['phpAds_blockClick'][$bannerid] <= time())))
 			{
 				if ($phpAds_config['log_adclicks'])
-					phpAds_logClick($cookieid, $bannerid, $clientid, $zoneid, $source);
+					phpAds_logClick($cookieid, $bannerid, $zoneid, $source);
 				
 				// Send block cookies
 				if ($phpAds_config['block_adclicks'] > 0)

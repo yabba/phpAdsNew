@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -87,7 +87,7 @@ elseif (isset($campaignid) && $campaignid != '')
 		FROM
 			".$phpAds_config['tbl_banners']."
 		WHERE
-			clientid = '$campaignid'
+			campaignid = '$campaignid'
 	");
 	
 	while ($row = phpAds_dbFetchArray($res))

@@ -354,7 +354,7 @@ if (!isset($keyword))
 			
 			if (!$compact)
 			{
-				$query_b_expand = "SELECT * FROM ".$phpAds_config['tbl_banners']." WHERE clientid=".$row_campaigns['clientid'];
+				$query_b_expand = "SELECT * FROM ".$phpAds_config['tbl_banners']." WHERE campaignid=".$row_campaigns['clientid'];
 	  			$res_b_expand = phpAds_dbQuery($query_b_expand) or phpAds_sqlDie();
 				
 				while ($row_b_expand = phpAds_dbFetchArray($res_b_expand))

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.6 $
+<?php // $Revision: 2.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -62,7 +62,7 @@ if (isset($bannerid) && isset($clientid) && isset($zoneid))
 		if ($phpAds_config['log_beacon'] && $phpAds_config['log_adviews'])
 		{
 			phpAds_dbConnect();
-			phpAds_logImpression ($cookieid, $bannerid, $clientid, $zoneid, $source);
+			phpAds_logImpression ($cookieid, $bannerid, $zoneid, $source);
 		}
 		
 		// Send block cookies

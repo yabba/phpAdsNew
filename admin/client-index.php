@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -123,7 +123,7 @@ while ($row_clients = phpAds_dbFetchArray($res_clients))
 $res_banners = phpAds_dbQuery("
 	SELECT 
 		bannerid,
-		clientid,
+		campaignid,
 		alt,
 		description,
 		active,
@@ -135,15 +135,15 @@ $res_banners = phpAds_dbQuery("
 
 while ($row_banners = phpAds_dbFetchArray($res_banners))
 {
-	if (isset($campaigns[$row_banners['clientid']]))
+	if (isset($campaigns[$row_banners['campaignid']]))
 	{
 		$banners[$row_banners['bannerid']] = $row_banners;
-		$campaigns[$row_banners['clientid']]['count']++;
+		$campaigns[$row_banners['campaignid']]['count']++;
 	}
 	
-	if (isset($clients[$row_banners['clientid']]))
+	if (isset($clients[$row_banners['campaignid']]))
 	{
-		$clients[$row_banners['clientid']]['count']++;
+		$clients[$row_banners['campaignid']]['count']++;
 	}
 }
 
@@ -527,7 +527,7 @@ $res_clients 		  = phpAds_dbQuery("SELECT count(*) AS count FROM ".$phpAds_confi
 $res_campaigns 		  = phpAds_dbQuery("SELECT count(*) AS count FROM ".$phpAds_config['tbl_clients']." WHERE parent > 0") or phpAds_sqlDie();
 $res_active_campaigns = phpAds_dbQuery("SELECT count(*) AS count FROM ".$phpAds_config['tbl_clients']." WHERE parent > 0 AND active='t'");
 $res_total_banners 	  = phpAds_dbQuery("SELECT count(*) AS count FROM ".$phpAds_config['tbl_banners']);
-$res_active_banners   = phpAds_dbQuery("SELECT count(*) AS count FROM ".$phpAds_config['tbl_banners']." as b, ".$phpAds_config['tbl_clients']." as c WHERE b.clientid=c.clientid AND c.active='t' AND b.active='t'");
+$res_active_banners   = phpAds_dbQuery("SELECT count(*) AS count FROM ".$phpAds_config['tbl_banners']." as b, ".$phpAds_config['tbl_clients']." as c WHERE b.campaignid=c.clientid AND c.active='t' AND b.active='t'");
 
 
 echo "<br><br><br><br>";

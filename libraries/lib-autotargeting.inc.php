@@ -1,4 +1,4 @@
-<?php // $Revision: 2.6 $
+<?php // $Revision: 2.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -438,12 +438,12 @@ function phpAds_TargetStatsSaveViews()
 
 	$res = phpAds_dbQuery("
 		SELECT
-			clientid
+			campaignid
 		FROM
 			".$phpAds_config['tbl_targetstats']."
 		WHERE
 			day = ".$day." AND
-			clientid > 0
+			campaignid > 0
 		");
 	
 	while ($row = phpAds_dbFetchArray($res))
@@ -457,12 +457,12 @@ function phpAds_TargetStatsSaveViews()
 			WHERE
 				v.day = ".$day." AND
 				b.bannerid = v.bannerid AND
-				b.clientid = ".$row['clientid']."
+				b.campaignid = ".$row['campaignid']."
 		";
 
 		$views = (int)phpAds_dbResult(phpAds_dbQuery($query), 0, 'sum_views');
 		$totalviews += $views;
-		$campaigns[$row['clientid']] = $views;
+		$campaigns[$row['campaignid']] = $views;
 	}
 
 	$campaigns[0] = $sum_views - $totalviews;
@@ -477,7 +477,7 @@ function phpAds_TargetStatsSaveViews()
 				SET
 					views = ".$views."
 				WHERE
-					clientid = ".$campaignid." AND
+					campaignid = ".$campaignid." AND
 					day = ".$day."
 				");
 		}
@@ -485,7 +485,7 @@ function phpAds_TargetStatsSaveViews()
 		{
 			phpAds_dbQuery("
 				INSERT INTO ".$phpAds_config['tbl_targetstats']."
-					(day, clientid, target, views)
+					(day, campaignid, target, views)
 				VALUES
 					(".$day.", ".$campaignid.", 0, ".$views.")
 				");

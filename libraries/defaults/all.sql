@@ -134,7 +134,7 @@ CREATE TABLE phpads_images (
 
 CREATE TABLE phpads_banners (
    bannerid mediumint(9) NOT NULL AUTO_INCREMENT,
-   clientid mediumint(9) DEFAULT '0' NOT NULL,
+   campaignid mediumint(9) DEFAULT '0' NOT NULL,
    active enum('t','f') DEFAULT 't' NOT NULL,
    priority int(11) DEFAULT '0' NOT NULL,
    contenttype enum('gif','jpeg','png','html','swf','dcr','rpm','mov','txt') DEFAULT 'gif' NOT NULL,
@@ -247,7 +247,7 @@ CREATE TABLE phpads_adstats (
 
 CREATE TABLE phpads_targetstats (
    day date DEFAULT '0000-00-00' NOT NULL,
-   clientid smallint(6) DEFAULT '0' NOT NULL,
+   campaignid smallint(6) DEFAULT '0' NOT NULL,
    target int(11) DEFAULT '0' NOT NULL,
    views int(11) DEFAULT '0' NOT NULL,
    modified tinyint(4) DEFAULT '0' NOT NULL,

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.10 $
+<?php // $Revision: 2.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -237,9 +237,9 @@ if (isset($submit))
 			UPDATE
 				".$phpAds_config['tbl_banners']."
 			SET
-				clientid='".$campaignid."'
+				campaignid='".$campaignid."'
 			WHERE
-				clientid='".$clientid."'
+				campaignid='".$clientid."'
 			") or phpAds_sqlDie();
 		
 		// Force priority recalculation
@@ -257,14 +257,14 @@ if (isset($submit))
 				target = '".$targetviews."',
 				modified = 1
 			WHERE
-				clientid = '".$campaignid."' AND
+				campaignid = '".$campaignid."' AND
 				day = ".date('Ymd')."
 			");
 
 		if (!phpAds_dbAffectedRows($res))
 			phpAds_dbQuery("
 				INSERT INTO ".$phpAds_config['tbl_targetstats']."
-					(day, clientid, target, modified)
+					(day, campaignid, target, modified)
 				VALUES
 					(".date('Ymd').", '".$campaignid."', '".$targetviews."', 1)
 				");

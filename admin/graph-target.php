@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -75,7 +75,7 @@ $result = phpAds_dbQuery("
 	FROM
 		".$phpAds_config['tbl_targetstats']."
 	WHERE
-		clientid > 0 AND
+		campaignid > 0 AND
 		day >= $begin AND day < $end
 		".(isset($lib_targetstats_where) ? 'AND '.$lib_targetstats_where : '')."
 	GROUP BY
@@ -130,7 +130,7 @@ if (count($clientids))
 		WHERE
 			".$phpAds_config['tbl_adstats'].".bannerid = ".$phpAds_config['tbl_banners'].".bannerid AND
 			day = $day AND
-			clientid IN ($clientids)
+			campaignid IN ($clientids)
 			".(isset($lib_targetstats_where) ? 'AND '.$lib_targetstats_where : '')."
 		GROUP BY
 			date

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.7 $
+<?php // $Revision: 2.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -143,6 +143,10 @@ function phpAds_upgradeData ()
 	
 	// Upgrade append type to zones when possible
 	phpAds_upgradeDisplayLimitations();
+	
+	// Split out Campaign and Advertiser information
+	phpAds_upgradeBannersCampaign();
+	phpAds_upgradeTargetStatsCampaign();
 	
 	// Create target stats form userlog
 	phpAds_upgradeTargetStats();
@@ -993,6 +997,73 @@ function phpAds_upgradeDisplayLimitations()
 	}
 }
 
+function phpAds_upgradeBannersCampaign()
+{
+	global $phpAds_config;
+	
+	if (!isset($phpAds_config['config_version']) ||	$phpAds_config['config_version'] < 200.161)
+	{
+		$res = phpAds_dbQuery(
+			"DESCRIBE ".$phpAds_config['tbl_banners']." clientid"
+		);
+		if (phpAds_dbNumRows($res) > 0)
+		{
+			$res = phpAds_dbQuery(
+				"SELECT bannerid, clientid".
+				" FROM ".$phpAds_config['tbl_banners'].
+				" WHERE clientid > 0"
+			);
+			
+			while ($row = phpAds_dbFetchArray($res))
+			{
+				phpAds_dbQuery(
+					"UPDATE ".$phpAds_config['tbl_banners'].
+					" SET campaignid=".$row['clientid'].
+					" WHERE bannerid=".$row['bannerid']
+				);
+			}
+			
+			// Delete old columns
+			phpAds_dbQuery("ALTER TABLE ".$phpAds_config['tbl_banners']." DROP COLUMN clientid");
+		}
+	}
+}
+
+function phpAds_upgradeTargetStatsCampaign()
+{
+	global $phpAds_config;
+	
+	if (!isset($phpAds_config['config_version']) ||	$phpAds_config['config_version'] < 200.161)
+	{
+		$res = phpAds_dbQuery(
+			"DESCRIBE ".$phpAds_config['tbl_targetstats']." clientid"
+		);
+		if (phpAds_dbNumRows($res) > 0)
+		{
+			$res = phpAds_dbQuery(
+				"SELECT day, clientid, target, views, modified".
+				" FROM ".$phpAds_config['tbl_targetstats'].
+				" WHERE clientid > 0"
+			);
+			
+			while ($row = phpAds_dbFetchArray($res))
+			{
+				phpAds_dbQuery(
+					"UPDATE ".$phpAds_config['tbl_targetstats'].
+					" SET campaignid=".$row['clientid'].
+					" WHERE day='".$row['day']."'"."'".
+					" AND target='".$row['target']."'".
+					" AND views='".$row['views']."'".
+					" AND modified='".$row['modified']."'"
+				);
+			}
+		
+			// Delete old columns
+			phpAds_dbQuery("ALTER TABLE ".$phpAds_config['tbl_targetstats']." DROP COLUMN clientid");
+		}
+	}
+}
+
 function phpAds_upgradeTargetStats ()
 {
 	global $phpAds_config;
@@ -1073,7 +1144,7 @@ function phpAds_upgradeTargetStats ()
 								v.t_stamp >= ".$begin." AND
 								v.t_stamp <= ".$end." AND
 								b.bannerid = v.bannerid AND
-								b.clientid = ".$campaignid."
+								b.campaignid = ".$campaignid."
 							");
 					}
 					
@@ -1096,7 +1167,7 @@ function phpAds_upgradeTargetStats ()
 						WHERE
 							v.day = ".$day." AND
 							b.bannerid = v.bannerid AND
-							b.clientid NOT IN (".join(', ', $campaigns).")
+							b.campaignid NOT IN (".join(', ', $campaigns).")
 						");
 				}
 				else
@@ -1111,7 +1182,7 @@ function phpAds_upgradeTargetStats ()
 							v.t_stamp >= ".$begin." AND
 							v.t_stamp <= ".$end." AND
 							b.bannerid = v.bannerid AND
-							b.clientid NOT IN (".join(', ', $campaigns).")
+							b.campaignid NOT IN (".join(', ', $campaigns).")
 						");
 				}
 			}
@@ -1158,7 +1229,7 @@ function phpAds_upgradeTargetStats ()
 					INSERT INTO
 						".$phpAds_config['tbl_targetstats']." (
 							day,
-							clientid,
+							campaignid,
 							target,
 							views
 						) VALUES (

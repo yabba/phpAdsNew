@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -134,7 +134,7 @@ function phpAds_deactivateMail ($campaign)
 				FROM
 					".$phpAds_config['tbl_banners']."
 				WHERE
-					clientid = ".$campaign['clientid']."
+					campaignid = ".$campaign['clientid']."
 				");
 			
 			if (phpAds_dbNumRows($res_banners) > 0)

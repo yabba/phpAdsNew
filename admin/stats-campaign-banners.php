@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -177,7 +177,7 @@ $query = "
 		".$phpAds_config['tbl_banners']." LEFT JOIN 
 		".$phpAds_config['tbl_adstats']." USING (bannerid)
 	WHERE
-		".$phpAds_config['tbl_banners'].".clientid = $campaignid
+		".$phpAds_config['tbl_banners'].".campaignid = $campaignid
 	GROUP BY
 		".$phpAds_config['tbl_banners'].".bannerid
 	";

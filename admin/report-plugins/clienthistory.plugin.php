@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -64,7 +64,7 @@ function Plugin_ClienthistoryExecute($clientid, $delimiter=",")
 			".$phpAds_config['tbl_clients']." AS c
 		WHERE
 			c.parent = ".$clientid." AND
-			c.clientid = b.clientid
+			c.clientid = b.campaignid
 	");
 	
 	while ($row = phpAds_dbFetchArray($idresult))

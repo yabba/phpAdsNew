@@ -1,4 +1,4 @@
-<?php // $Revision: 2.7 $
+<?php // $Revision: 2.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -499,7 +499,7 @@ function phpAds_PriorityPrepareCampaigns()
 			".$phpAds_config['tbl_clients']." AS c,
 			".$phpAds_config['tbl_banners']." AS b
 		WHERE
-			c.clientid = b.clientid AND
+			c.clientid = b.campaignid AND
 			c.parent > 0 AND
 			c.active='t' AND
 			b.active='t' AND
@@ -525,7 +525,7 @@ function phpAds_PriorityPrepareBanners()
 	
 	// Get all banners
 	$query = "
-		SELECT bannerid, weight, clientid AS parent
+		SELECT bannerid, weight, campaignid AS parent
 		FROM ".$phpAds_config['tbl_banners']."
 		WHERE active='t' AND weight > 0
 		ORDER BY bannerid
@@ -602,7 +602,7 @@ function phpAds_PriorityStore($banners, $campaigns = '')
 			if ($campaigns[$c]['target'])
 				phpAds_dbQuery("
 					INSERT INTO ".$phpAds_config['tbl_targetstats']."
-						(day, clientid, target)
+						(day, campaignid, target)
 					VALUES
 						(NOW(), ".$campaigns[$c]['clientid'].", ".$campaigns[$c]['target'].")
 				");

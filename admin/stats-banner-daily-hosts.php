@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -40,14 +40,14 @@ if (phpAds_isUser(phpAds_Client))
 		") or phpAds_sqlDie();
 	$row = phpAds_dbFetchArray($result);
 	
-	if ($row["clientid"] == '' || phpAds_getUserID() != phpAds_getParentID ($row["clientid"]))
+	if ($row["campaignid"] == '' || phpAds_getUserID() != phpAds_getParentID ($row["clientid"]))
 	{
 		phpAds_PageHeader("1");
 		phpAds_Die ($strAccessDenied, $strNotAdmin);
 	}
 	else
 	{
-		$campaignid = $row["clientid"];
+		$campaignid = $row["campaignid"];
 	}
 }
 

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.6 $
+<?php // $Revision: 2.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -136,7 +136,7 @@ while ($row_clients = phpAds_dbFetchArray($res_clients))
 $res_banners = phpAds_dbQuery("
 	SELECT 
 		bannerid,
-		clientid,
+		campaignid,
 		alt,
 		description,
 		active,
@@ -148,10 +148,10 @@ $res_banners = phpAds_dbQuery("
 
 while ($row_banners = phpAds_dbFetchArray($res_banners))
 {
-	if (isset($campaigns[$row_banners['clientid']]))
+	if (isset($campaigns[$row_banners['campaignid']]))
 	{
 		$banners[$row_banners['bannerid']] = $row_banners;
-		$campaigns[$row_banners['clientid']]['count']++;
+		$campaigns[$row_banners['campaignid']]['count']++;
 	}
 }
 

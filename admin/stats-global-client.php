@@ -1,4 +1,4 @@
-<?php // $Revision: 2.7 $
+<?php // $Revision: 2.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -153,7 +153,7 @@ switch ($period)
 $res_banners = phpAds_dbQuery("
 	SELECT 
 		bannerid,
-		clientid,
+		campaignid,
 		alt,
 		description,
 		active,
@@ -165,17 +165,17 @@ $res_banners = phpAds_dbQuery("
 
 while ($row_banners = phpAds_dbFetchArray($res_banners))
 {
-	if (isset($clients[$row_banners['clientid']]))
+	if (isset($clients[$row_banners['campaignid']]))
 	{
-		$clients[$row_banners['clientid']]['count']++;
+		$clients[$row_banners['campaignid']]['count']++;
 	}
 	
-	if (isset($campaigns[$row_banners['clientid']]))
+	if (isset($campaigns[$row_banners['campaignid']]))
 	{
 		$banners[$row_banners['bannerid']] = $row_banners;
 		$banners[$row_banners['bannerid']]['clicks'] = 0;
 		$banners[$row_banners['bannerid']]['views'] = 0;
-		$campaigns[$row_banners['clientid']]['count']++;
+		$campaigns[$row_banners['campaignid']]['count']++;
 	}
 	
 	

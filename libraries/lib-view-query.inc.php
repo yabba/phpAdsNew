@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -29,7 +29,7 @@ function phpAds_buildQuery ($part, $lastpart, $precondition)
 	$select = "
 			SELECT
 				".$phpAds_config['tbl_banners'].".bannerid as bannerid,
-				".$phpAds_config['tbl_banners'].".clientid as clientid,
+				".$phpAds_config['tbl_banners'].".campaignid as campaignid,
 				".$phpAds_config['tbl_banners'].".priority as priority,
 				".$phpAds_config['tbl_clients'].".weight as clientweight,
 				".$phpAds_config['tbl_banners'].".contenttype as contenttype,
@@ -53,7 +53,7 @@ function phpAds_buildQuery ($part, $lastpart, $precondition)
 			WHERE
 				".$phpAds_config['tbl_banners'].".active = 't' AND 
 				".$phpAds_config['tbl_clients'].".active = 't' AND 
-				".$phpAds_config['tbl_banners'].".clientid = ".$phpAds_config['tbl_clients'].".clientid";
+				".$phpAds_config['tbl_banners'].".campaignid = ".$phpAds_config['tbl_clients'].".clientid";
 	
 	// Add preconditions to query
 	if ($precondition != '')
