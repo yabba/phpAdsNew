@@ -1,4 +1,4 @@
-<?php // $Revision: 1.22 $
+<?php // $Revision: 1.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -58,7 +58,7 @@ if (phpAds_isUser(phpAds_Admin))
 		else
 			$extra .= "&nbsp;&nbsp;&nbsp;<img src='images/box-0.gif'>&nbsp;";
 		
-		$extra .= "<a href='stats-client.php?clientid=".$row['clientid']."'>";
+		$extra .= "<a href='stats-client-history.php?clientid=".$row['clientid']."'>";
 		$extra .= phpAds_buildClientName ($row['clientid'], $row['clientname']);
 		$extra .= "</a>";
 		$extra .= "<br>"; 
