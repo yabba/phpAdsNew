@@ -1,4 +1,4 @@
-<?php // $Revision: 1.26 $
+<?php // $Revision: 1.27 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -155,6 +155,7 @@ $GLOBALS['strTypeSqlAllow']				= "Allow local banners (SQL)";
 $GLOBALS['strTypeWebAllow']				= "Allow local banners (Webserver)";
 $GLOBALS['strTypeUrlAllow']				= "Allow external banners";
 $GLOBALS['strTypeHtmlAllow']			= "Allow HTML banners";
+$GLOBALS['strTypeTxtAllow']				= "Allow Text ads";
 
 $GLOBALS['strTypeWebSettings']			= "Local banner (Webserver) configuration";
 $GLOBALS['strTypeWebMode']				= "Storing method";
