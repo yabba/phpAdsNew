@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -326,6 +326,26 @@ function phpAds_aclCheckContinent($data, $ad)
 	
 	// Evaluate continent code
 	$expression = ($data == $phpAds_ContinentLookup || in_array ($phpAds_ContinentLookup, explode(',', $data)));
+	$operator   = $ad == '==';
+	return ($expression == $operator);
+}
+
+
+
+/*********************************************************/
+/* Check if the Referer ACL is valid                     */
+/*********************************************************/
+
+function phpAds_aclCheckReferer($data, $ad)
+{
+	global $HTTP_SERVER_VARS;
+
+	if ($data == '')
+		return (true);
+
+	$referer = isset($HTTP_SERVER_VARS['HTTP_REFERER']) ? strtolower($HTTP_SERVER_VARS['HTTP_REFERER']) : '';
+	$expression = strpos($referer, strtolower($data));
+	$expression = is_int($expression);
 	$operator   = $ad == '==';
 	return ($expression == $operator);
 }

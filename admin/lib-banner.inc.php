@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -504,6 +504,9 @@ function phpAds_compileLimitation ($bannerid = '')
 						break;
 					case 'date':
 						$expression .= "phpAds_aclCheckDate(\'".addslashes($acl[$key]['data'])."\', \'".$acl[$key]['comparison']."\')";
+						break;
+					case 'referer':
+						$expression .= "phpAds_aclCheckReferer(\'".addslashes($acl[$key]['data'])."\', \'".$acl[$key]['comparison']."\')";
 						break;
 					default:
 						return(0);

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -66,6 +66,10 @@ if (!isset($target)) 	$target = '_top';
 if (!isset($source)) 	$source = '';
 if (!isset($withtext)) 	$withtext = '';
 if (!isset($context)) 	$context = '';
+
+// Remove referer, to be sure it doesn't cause problems with limitations
+if (isset($HTTP_SERVER_VARS['HTTP_REFERER'])) unset($HTTP_SERVER_VARS['HTTP_REFERER']);
+if (isset($HTTP_REFERER) unset($HTTP_REFERER);
 
 
 // Get the banner

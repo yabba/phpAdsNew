@@ -1,4 +1,4 @@
-<?php // $Revision: 2.8 $
+<?php // $Revision: 2.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -245,6 +245,8 @@ $GLOBALS['strLowPriority']			= "Show banner in this campaign with low priority.<
 $GLOBALS['strTargetLimitAdviews']		= "Limit the number of AdViews to";
 $GLOBALS['strTargetPerDay']			= "per day.";
 $GLOBALS['strPriorityAutoTargeting']		= "Distribute the remaining AdViews evenly over the remaining number of days. The target number of AdViews will be set accordingly every day.";
+$GLOBALS['strCampaignWarningNoWeight'] = "The priority of this campaign has been set to low, \nbut the weight is set to zero or it has not been \nspecified. This will cause the campaign to be \ndeactivated and it's banners won't be delivered \nuntil the weight has been set to a valid number. \n\nAre you sure you want to continue?";
+$GLOBALS['strCampaignWarningNoTarget'] = "The priority of this campaign has been set to high, \nbut the target number of AdViews are not specified. \nThis will cause the campaign to be deactivated and \nit's banners won't be delivered until a valid target \nnumber of AdViews has been set. \n\nAre you sure you want to continue?";
 
 
 
@@ -330,6 +332,8 @@ $GLOBALS['strLaterThan']				= "is later than";
 $GLOBALS['strLaterThanOrEqual']			= "is later than or equal to";
 $GLOBALS['strEarlierThan']				= "is earlier than";
 $GLOBALS['strEarlierThanOrEqual']		= "is earlier than or equal to";
+$GLOBALS['strContains']					= "contains";
+$GLOBALS['strNotContains']				= "doesn't contain";
 $GLOBALS['strAND']						= "AND";  						// logical operator
 $GLOBALS['strOR']						= "OR"; 						// logical operator
 $GLOBALS['strOnlyDisplayWhen']			= "Only display this banner when:";
@@ -343,6 +347,7 @@ $GLOBALS['strBrowser'] 					= "Browser";
 $GLOBALS['strOS'] 						= "OS";
 $GLOBALS['strCountry'] 					= "Country";
 $GLOBALS['strContinent'] 				= "Continent";
+$GLOBALS['strReferer'] 					= "Referring page";
 $GLOBALS['strDeliveryLimitations']		= "Delivery limitations";
 $GLOBALS['strDeliveryCapping']			= "Delivery capping";
 $GLOBALS['strTimeCapping']				= "Once this banner has been delivered once, don't show this banner again to the same user for:";
@@ -524,7 +529,7 @@ $GLOBALS['strErrorStoreLocal']			= "An error occcured while trying to save the b
 $GLOBALS['strErrorStoreFTP']			= "An error occcured while trying to upload the banner to the FTP server. This could be because the server is not available, or because of a misconfiguration of the FTP server settings";
 $GLOBALS['strErrorDBPlain']				= "An error occurred while accessing the database";
 $GLOBALS['strErrorDBSerious']			= "A serious problem with the database has been detected";
-$GLOBALS['strErrorDBNoDataPlain']		= "Due to a problem with the database phpAdsNew couldn't retrieve or store data. ";
+$GLOBALS['strErrorDBNoDataPlain']		= "Due to a problem with the database ".$phpAds_productname." couldn't retrieve or store data. ";
 $GLOBALS['strErrorDBNoDataSerious']		= "Due to a serious problem with the database, ".$phpAds_productname." couldn't retrieve data";
 $GLOBALS['strErrorDBCorrupt']			= "The database table is probably corrupt and needs to be repaired. For more information about repairing corrupted tables please read the chapter <i>Troubleshooting</i> of the <i>Administrator guide</i>.";
 $GLOBALS['strErrorDBContact']			= "Please contact the administrator of this server and notify him or her of the problem.";

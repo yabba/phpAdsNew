@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -63,6 +63,10 @@ if (!isset($clientid)) $clientid = 0;
 if (!isset($what)) $what = '';
 if (!isset($source)) $source = '';
 if (!isset($n)) $n = 'default';
+
+// Remove referer, to be sure it doesn't cause problems with limitations
+if (isset($HTTP_SERVER_VARS['HTTP_REFERER'])) unset($HTTP_SERVER_VARS['HTTP_REFERER']);
+if (isset($HTTP_REFERER) unset($HTTP_REFERER);
 
 
 if (phpAds_dbConnect())

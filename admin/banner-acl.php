@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -69,6 +69,11 @@ $comparison_date = array (
 	'>=' => $strLaterThanOrEqual,
 	'<'	 => $strEarlierThan,
 	'<=' => $strEarlierThanOrEqual
+);
+
+$comparison_referer = array (
+	'==' => $strContains,
+	'!=' => $strNotContains,
 );
 
 $logical_default = array (
@@ -586,6 +591,8 @@ if ($phpAds_config['acl'])
 			
 			if ($acl[$key]['type'] == 'date')
 				$comparison_list = $comparison_date;
+			elseif ($acl[$key]['type'] == 'referer')
+				$comparison_list = $comparison_referer;
 			else
 				$comparison_list = $comparison_default;
 			

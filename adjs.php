@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -106,6 +106,10 @@ if (isset($exclude) && $exclude != '')
 		if ($exclude[$i] != '')
 			$context[] = array ("!=" => $exclude[$i]);
 }
+
+// Set real referer
+if (isset($referer) && $referer)
+	$HTTP_REFERER = $HTTP_SERVER_VARS['HTTP_REFERER'] = stripslashes($referer);
 
 
 // Get the banner

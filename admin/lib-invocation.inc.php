@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -119,6 +119,8 @@ function phpAds_GenerateInvocationCode()
 		if (sizeof($parameters) > 0)
 			$buffer .= "   document.write (\"&amp;".implode ("&amp;", $parameters)."\");\n";
 		$buffer .= "   document.write (\"&amp;exclude=\" + document.phpAds_used);\n";
+		$buffer .= "   if (document.referer)\n";
+		$buffer .= "      document.write (\"&amp;referer=\" + escape(document.referer));\n";
 		$buffer .= "   document.write (\"'><\" + \"/script>\");\n";
 		$buffer .= "//-->\n";
 		$buffer .= "</script>";
