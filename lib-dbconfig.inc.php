@@ -1,4 +1,4 @@
-<?php // $Revision: 1.9 $
+<?php // $Revision: 1.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -15,7 +15,7 @@
 
 
 // Current phpAds version
-$phpAds_version = 200.071;
+$phpAds_version = 200.072;
 $phpAds_version_readable = "2 dev 05012002";
 
 $phpAds_settings_information = array(
