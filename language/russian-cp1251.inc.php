@@ -1,4 +1,4 @@
-<?php // $Revision: 1.12 $
+<?php // $Revision: 1.13 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -155,8 +155,8 @@ $GLOBALS['strMovedDown'] = "был перемещен ниже";
 $GLOBALS['strUpdated'] = "был обновлен";
 $GLOBALS['strACL'] = "ACL";
 $GLOBALS['strNoMoveUp'] = "Не могу переместить первый ряд выше";
-$GLOBALS['strACLAdd'] = "Добавить новый $strACL";
-$GLOBALS['strACLExist'] = "Существующий $strACL:";
+$GLOBALS['strACLAdd'] = "Добавить новый ".$GLOBALS["strACL"];
+$GLOBALS['strACLExist'] = "Существующий ".$GLOBALS["strACL"].":";
 $GLOBALS['strLogin'] = "Login";
 $GLOBALS['strPreferences'] = "Предпочтения";
 $GLOBALS['strAllowClientModifyInfo'] = "Разрешить этому пользователю редактировать собственные клиентские данные";
