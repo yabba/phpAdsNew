@@ -177,8 +177,11 @@ $phpAds_type_web_url    = "http://www.myname.com/ads";
 
 // Automatically change HTML banners in order to force
 // click logging.
-$phpAds_type_html_auto	=  true;
+$phpAds_type_html_auto	= true;
 
+// Allow php expressions to be executed from within a 
+// HTML banner
+$phpAds_type_html_php	= false;
 
 
 /*********************************************************/
