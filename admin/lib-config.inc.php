@@ -1,4 +1,4 @@
-<?php // $Revision: 1.12 $
+<?php // $Revision: 1.13 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -116,12 +116,12 @@ function phpAds_ConfigFileClear ()
 	global $phpAds_configFilepath;
 	
 	$config		= @fopen($phpAds_configFilepath,'w');
-	$template   = @fopen(phpAds_path.'/misc/config.template.php','r');
+	$template   = @fopen(phpAds_path.'/libraries/defaults/config.template.php','r');
 	
 	if ($config && $template)
 	{
 		// Write the contents of the template to the config file
-		@fwrite ($config, @fread($template, filesize(phpAds_path.'/misc/config.template.php')));
+		@fwrite ($config, @fread($template, filesize(phpAds_path.'/libraries/defaults/config.template.php')));
 		
 		@fclose($template);
 		@fclose($config);

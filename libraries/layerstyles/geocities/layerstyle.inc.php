@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -195,7 +195,7 @@ function phpAds_getLayerHTML ($output, $uniqid)
 	$layer_height = $output['height'] + 30 + $padding*2;
 	
 	// Create imagepath
-	$imagepath = $phpAds_config['url_prefix'].'/misc/layerstyles/geocities/images/';
+	$imagepath = $phpAds_config['url_prefix'].'/libraries/layerstyles/geocities/images/';
 	
 	// return HTML code
 	return '

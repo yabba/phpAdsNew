@@ -1,4 +1,4 @@
-<?php // $Revision: 1.24 $
+<?php // $Revision: 1.25 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -183,7 +183,7 @@ function phpAds_ToggleBannerInZone ($bannerid, $zoneid)
 				
 				// Rebuild Cache
 				if (!defined('LIBVIEWCACHE_INCLUDED')) 
-					include (phpAds_path.'/lib-view-cache-'.$phpAds_config['delivery_caching'].'.inc.php');
+					include (phpAds_path.'/libraries/deliverycache/cache-'.$phpAds_config['delivery_caching'].'.inc.php');
 				
 				phpAds_cacheDelete('zone:'.$zoneid);
 			}
@@ -262,7 +262,7 @@ function phpAds_ToggleCampaignInZone ($clientid, $zoneid)
 				
 				// Rebuild cache
 				if (!defined('LIBVIEWCACHE_INCLUDED')) 
-					include (phpAds_path.'/lib-view-cache-'.$phpAds_config['delivery_caching'].'.inc.php');
+					include (phpAds_path.'/libraries/deliverycache/cache-'.$phpAds_config['delivery_caching'].'.inc.php');
 				
 				phpAds_cacheDelete('zone:'.$zoneid);
 			}

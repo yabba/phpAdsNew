@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -37,7 +37,7 @@ if ($report != '' && $phpAds_config['userlog_priority'])
 
 // Rebuild cache
 if (!defined('LIBVIEWCACHE_INCLUDED')) 
-	include (phpAds_path.'/lib-view-cache-'.$phpAds_config['delivery_caching'].'.inc.php');
+	include (phpAds_path.'/libraries/deliverycache/cache-'.$phpAds_config['delivery_caching'].'.inc.php');
 
 phpAds_cacheDelete();
 

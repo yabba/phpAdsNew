@@ -1,4 +1,4 @@
-<?php // $Revision: 1.48 $
+<?php // $Revision: 1.49 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -153,7 +153,7 @@ if (isset($zoneid) && $zoneid != '')
 		}
 		
 		// Rebuild Cache
-		if (!defined('LIBVIEWCACHE_INCLUDED'))  include (phpAds_path.'/lib-view-cache-'.$phpAds_config['delivery_caching'].'.inc.php');
+		if (!defined('LIBVIEWCACHE_INCLUDED'))  include (phpAds_path.'/libraries/deliverycache/cache-'.$phpAds_config['delivery_caching'].'.inc.php');
 		
 		phpAds_cacheDelete('zone:'.$zoneid);
 		

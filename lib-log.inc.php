@@ -1,4 +1,4 @@
-<?php // $Revision: 1.23 $
+<?php // $Revision: 1.24 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -103,7 +103,7 @@ function phpAds_logExpire ($clientid, $type=0)
 				
 				// Recalculate cache
 				if (!defined('LIBVIEWCACHE_INCLUDED'))  
-					include (phpAds_path.'/lib-view-cache-'.$phpAds_config['delivery_caching'].'.inc.php');
+					include (phpAds_path.'/libraries/deliverycache/cache-'.$phpAds_config['delivery_caching'].'.inc.php');
 				
 				phpAds_cacheDelete();
 				
