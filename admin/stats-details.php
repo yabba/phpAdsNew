@@ -1,4 +1,4 @@
-<?php // $Revision: 1.8 $
+<?php // $Revision: 1.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -306,10 +306,10 @@ echo "<td height='35' colspan='4' align='right'>";
 	echo "<input type='hidden' name='bannerID' value='$bannerID'>";
 	echo "<input type='hidden' name='campaignID' value='$campaignID'>";
 	echo "<select name='limit' onChange=\"this.form.submit();\">";
-	echo "<option value='7' ".($limit==7?'selected':'').">7 days</option>";
-	echo "<option value='14' ".($limit==14?'selected':'').">14 days</option>";
-	echo "<option value='21' ".($limit==21?'selected':'').">21 days</option>";
-	echo "<option value='28' ".($limit==28?'selected':'').">28 days</option>";
+	echo "<option value='7' ".($limit==7?'selected':'').">7 ".$strDays."</option>";
+	echo "<option value='14' ".($limit==14?'selected':'').">14 ".$strDays."</option>";
+	echo "<option value='21' ".($limit==21?'selected':'').">21 ".$strDays."</option>";
+	echo "<option value='28' ".($limit==28?'selected':'').">28 ".$strDays."</option>";
 	echo "</select>&nbsp;";
 	echo "<input type='image' src='images/go_blue.gif' border='0' name='submit'>";
 echo "</td>";
