@@ -1,4 +1,4 @@
-// $Revision: 1.1 $
+// $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -29,6 +29,12 @@ function findObj(n, d) {
 function openWindow(theURL,winName,features) {
   window.open(theURL,winName,features);
   return false;
+}
+
+function setTextOfLayer(objName,newText) {
+  if ((obj=findObj(objName))!=null) with (obj)
+    if (document.layers) {document.write(unescape(newText)); document.close();}
+    else innerHTML = unescape(newText);
 }
 
 
