@@ -1,4 +1,4 @@
-<?php // $Revision: 1.2 $
+<?php // $Revision: 1.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -15,11 +15,12 @@
 
 
 // Include required files
-require	("../lib-priority.inc.php"); 
+require	(phpAds_path."/lib-priority.inc.php"); 
 
-phpAds_PriorityCalculate();
 
-if ($debug)
-	mail ($phpAds_config['admin_email'], "PRIORITY DEBUG REPORT: ".date('d-m H:i'), $debuglog);
+$report = phpAds_PriorityCalculate();
+
+if ($report != '' && $phpAds_config['userlog_priority'])
+	phpAds_userlogAdd (phpAds_actionPriorityCalculation, 0, $report);
 
 ?>
