@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -46,14 +46,6 @@ if (isset($plugin) && $plugin != '')
 		$executestring = $plugin_execute_function."(".implode(",", $plugin_variables).");";
 		eval ($executestring);
 	}
-}
-
-// Security check
-phpAds_checkAccess(phpAds_Admin);
-
-if (phpAds_isUser(phpAds_Admin))
-{
-
 }
 
 ?>
