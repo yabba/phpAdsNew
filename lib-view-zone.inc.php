@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -15,10 +15,6 @@
 
 // Set define to prevent duplicate include
 define ('LIBVIEWZONE_INCLUDED', true);
-
-
-// Seed the random number generator
-mt_srand((double) microtime() * 1000000);
 
 
 /*********************************************************/
