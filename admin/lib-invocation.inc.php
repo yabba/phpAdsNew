@@ -1,4 +1,4 @@
-<?php // $Revision: 1.27 $
+<?php // $Revision: 1.28 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -237,7 +237,7 @@ function phpAds_GenerateInvocationCode()
 			if (sizeof($parameters) > 0)
 				$buffer .= "&amp;".implode ("&amp;", $parameters);
 			
-			$buffer .= "' width='".$width."' height='".$height."' visibility='hidden' onLoad=\"moveToAbsolute(layer".$uniqueid.".pageX,layer".$uniqueid.".pageY);clip.width=468;clip.height=60;visibility='show';\"></layer>";
+			$buffer .= "' width='".$width."' height='".$height."' visibility='hidden' onLoad=\"moveToAbsolute(layer".$uniqueid.".pageX,layer".$uniqueid.".pageY);clip.width=".$width.";clip.height=".$height.";visibility='show';\"></layer>";
 		}
 	}
 	
