@@ -1,4 +1,4 @@
-<?php // $Revision: 1.8 $
+<?php // $Revision: 1.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -295,12 +295,12 @@ function days_left($clientID)
 	
 	if (isset($expiration) && sizeof($expiration) > 0)
 	{
-		$sooner = & $expiration[0];
+		$sooner = $expiration[0];
 		
 		for ($i=0;$i<sizeof($expiration);$i++)
 		{
 			if ($expiration[$i]['days_left'] < $sooner['days_left'])
-				$sooner = & $expiration[$i];
+				$sooner = $expiration[$i];
 		}
 		
 		if ($sooner['days_left'] < 0) $sooner['days_left'] = 0;
