@@ -1,4 +1,4 @@
-<?php // $Revision: 1.12 $
+<?php // $Revision: 1.13 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -71,7 +71,7 @@ else
 		$source = '';
 	
 	
-	$row = get_banner($what, $clientID, 0, $source);
+	$row = get_banner($what, $clientID, 0, $source, false);
 	
 	if (is_array($row))
 	{

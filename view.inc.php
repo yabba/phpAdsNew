@@ -1,4 +1,4 @@
-<?php // $Revision: 1.45 $
+<?php // $Revision: 1.46 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -39,7 +39,7 @@ function phpAds_buildQuery ($what, $clientID, $context=0, $source="")
 /* Get a banner						                     */
 /*********************************************************/
 
-function get_banner($what, $clientID, $context=0, $source="")
+function get_banner($what, $clientID, $context=0, $source="", $allowhtml=true)
 {
 	global $phpAds_db, $REMOTE_HOST, $phpAds_tbl_banners, $REMOTE_ADDR, $HTTP_USER_AGENT, $phpAds_con_key;
 	global $phpAds_random_retrieve, $phpAds_mult_key, $phpAds_tbl_clients;
@@ -103,6 +103,9 @@ function get_banner($what, $clientID, $context=0, $source="")
 		
 		if($clientID != 0)
 			$select .= " AND $phpAds_tbl_banners.clientID = $clientID ";
+		
+		if($allowhtml == false)
+			$select .= " AND $phpAds_tbl_banners.format != 'html' ";
 		
 		
 		// Rule
