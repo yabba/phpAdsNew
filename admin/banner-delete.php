@@ -1,4 +1,4 @@
-<?php // $Revision: 1.21 $
+<?php // $Revision: 1.22 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -100,9 +100,12 @@ elseif (isset($campaignid) && $campaignid != '')
 // Rebuild priorities
 phpAds_PriorityCalculate ();
 
-// Rebuild zone cache
-if ($phpAds_config['zone_cache'])
-	phpAds_RebuildZoneCache ();
+
+// Rebuild cache
+if (!defined('LIBVIEWCACHE_INCLUDED')) 
+	include (phpAds_path.'/lib-view-cache-'.$phpAds_config['delivery_caching'].'.inc.php');
+
+phpAds_cacheDelete();
 
 
 if (!isset($returnurl) && $returnurl == '')

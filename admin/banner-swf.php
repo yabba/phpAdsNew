@@ -1,4 +1,4 @@
-<?php // $Revision: 1.22 $
+<?php // $Revision: 1.23 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -148,9 +148,12 @@ if (isset($convert))
 				// Store the banner
 				phpAds_ImageStore ($row['storagetype'], $row['filename'], $result, true);
 				
-				// Rebuild zone cache
-				if ($phpAds_config['zone_cache'])
-					phpAds_RebuildZoneCache ();	
+				
+				// Rebuild cache
+				if (!defined('LIBVIEWCACHE_INCLUDED')) 
+					include (phpAds_path.'/lib-view-cache-'.$phpAds_config['delivery_caching'].'.inc.php');
+				
+				phpAds_cacheDelete();
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.7 $
+<?php // $Revision: 1.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -16,12 +16,7 @@
 
 // Include required files
 require ("config.php");
-require ("lib-storage.inc.php");
 require ("lib-zones.inc.php");
-
-
-// Register input variables
-phpAds_registerGlobal ('moveto', 'returnurl');
 
 
 // Security check
@@ -33,21 +28,13 @@ phpAds_checkAccess(phpAds_Admin);
 /* Main code                                             */
 /*********************************************************/
 
-if (isset($campaignid) && $campaignid != '')
-{
-	if (isset($moveto) && $moveto != '')
-	{
-		// Move the campaign
-		$res = phpAds_dbQuery("UPDATE ".$phpAds_config['tbl_clients']." SET parent = '".$moveto."' WHERE clientid = '".$campaignid."'") or phpAds_sqlDie();
-		
-		// Rebuild cache
-		if (!defined('LIBVIEWCACHE_INCLUDED')) 
-			include (phpAds_path.'/lib-view-cache-'.$phpAds_config['delivery_caching'].'.inc.php');
-		
-		phpAds_cacheDelete();
-	}
-}
+// Rebuild cache
+if (!defined('LIBVIEWCACHE_INCLUDED')) 
+	include (phpAds_path.'/lib-view-cache-'.$phpAds_config['delivery_caching'].'.inc.php');
 
-Header ("Location: ".$returnurl."?clientid=".$moveto."&campaignid=".$campaignid);
+phpAds_cacheDelete();
+
+
+Header("Location: maintenance-cache.php");
 
 ?>

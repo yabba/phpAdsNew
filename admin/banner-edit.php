@@ -1,4 +1,4 @@
-<?php // $Revision: 1.99 $
+<?php // $Revision: 1.100 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -692,9 +692,12 @@ if (isset($submit))
 		phpAds_PriorityCalculate ();
 	}
 	
-	// Rebuild zone cache
-	if ($phpAds_config['zone_cache'])
-		phpAds_RebuildZoneCache ();	
+	
+	// Rebuild cache
+	if (!defined('LIBVIEWCACHE_INCLUDED')) 
+		include (phpAds_path.'/lib-view-cache-'.$phpAds_config['delivery_caching'].'.inc.php');
+	
+	phpAds_cacheDelete();
 	
 	
 	if ($edit_swf)
