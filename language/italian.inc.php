@@ -1,4 +1,4 @@
-<?php // $Revision: 1.35 $
+<?php // $Revision: 1.36 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -291,5 +291,7 @@ $GLOBALS['strConfirmResetStats']		= "Vuoi veramente azzerare tutte le statistich
 $GLOBALS['strConfirmResetCampaignStats']= "Vuoi veramente azzerare le statistiche di questa campagna?";
 $GLOBALS['strConfirmResetClientStats']	= "Vuoi veramente azzerare le statistiche di questo cliente?";
 $GLOBALS['strConfirmResetBannerStats']	= "Vuoi veramente azzerare le statistiche di questo banner?";
+
+$GLOBALS['strClientsAndCampaigns']		= "Clients & Campaigns";
 
 ?>

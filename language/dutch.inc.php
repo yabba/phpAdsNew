@@ -1,4 +1,4 @@
-<?php // $Revision: 1.30 $
+<?php // $Revision: 1.31 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -285,5 +285,7 @@ $GLOBALS['strConfirmResetStats']		= "Weet u zeker dat u alle statistieken wilt w
 $GLOBALS['strConfirmResetCampaignStats']= "Weet u zeker dat u de statistieken wilt wissen voor deze campagne?";
 $GLOBALS['strConfirmResetClientStats']	= "Weet u zeker dat u de statistieken wilt wissen voor deze klant?";
 $GLOBALS['strConfirmResetBannerStats']	= "Weet u zeker dat u de statistieken wilt wizzen voor deze banner?";
+
+$GLOBALS['strClientsAndCampaigns']		= "Klanten & Campagnes";
 
 ?>
