@@ -17,14 +17,14 @@ $phpAds_mysqlpassword = "mysqlpassword";
 $phpAds_db = "phpads";
 
 // phpAdsNew' database tables
-$phpAds_tbl_adclicks = "adclicks";
-$phpAds_tbl_adviews = "adviews";
-$phpAds_tbl_adstats = "adstats";
-$phpAds_tbl_banners = "banners";
-$phpAds_tbl_clients = "clients";
-$phpAds_tbl_session = "session";
-$phpAds_tbl_acls = "acls";
-$phpAds_tbl_zones = "zones";
+$phpAds_tbl_adclicks = "phpads_adclicks";
+$phpAds_tbl_adviews = "phpads_adviews";
+$phpAds_tbl_adstats = "phpads_adstats";
+$phpAds_tbl_banners = "phpads_banners";
+$phpAds_tbl_clients = "phpads_clients";
+$phpAds_tbl_session = "phpads_session";
+$phpAds_tbl_acls = "phpads_acls";
+$phpAds_tbl_zones = "phpads_zones";
 
 // Use persistent connections to the database
 $phpAds_persistent_connections = "0";

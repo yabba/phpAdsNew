@@ -8,7 +8,7 @@
 # Table structure for table 'adclicks'
 #
 
-CREATE TABLE adclicks (
+CREATE TABLE phpads_adclicks (
    bannerID mediumint(9) DEFAULT '0' NOT NULL,
    t_stamp timestamp(14),
    host varchar(255) NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE adclicks (
 # Table structure for table 'adviews'
 #
 
-CREATE TABLE adviews (
+CREATE TABLE phpads_adviews (
    bannerID mediumint(9) DEFAULT '0' NOT NULL,
    t_stamp timestamp(14),
    host varchar(255) NOT NULL,
@@ -34,7 +34,7 @@ CREATE TABLE adviews (
 # Table structure for table 'banners'
 #
 
-CREATE TABLE banners (
+CREATE TABLE phpads_banners (
    bannerID mediumint(9) NOT NULL auto_increment,
    clientID mediumint(9) DEFAULT '0' NOT NULL,
    banner blob NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE banners (
 # Table structure for table 'clients'
 #
 
-CREATE TABLE clients (
+CREATE TABLE phpads_clients (
    clientID mediumint(9) DEFAULT '0' NOT NULL auto_increment,
    clientname varchar(255) NOT NULL,
    contact varchar(255),
@@ -89,7 +89,7 @@ CREATE TABLE clients (
 # Table structure for table 'session'
 #
 
-CREATE TABLE session (
+CREATE TABLE phpads_session (
    SessionID varchar(32) NOT NULL,
    SessionData blob NOT NULL,
    LastUsed timestamp(14),
@@ -101,7 +101,7 @@ CREATE TABLE session (
 # Table structure for table 'acls'
 #
 
-CREATE TABLE acls (
+CREATE TABLE phpads_acls (
    bannerID mediumint(9) DEFAULT '0' NOT NULL,
    acl_type enum('clientip','useragent','weekday','domain','source','time') NOT NULL,
    acl_data varchar(255) NOT NULL,
@@ -115,7 +115,7 @@ CREATE TABLE acls (
 #
 # Table structure for table 'adstats'
 #
-CREATE TABLE adstats (
+CREATE TABLE phpads_adstats (
   views int(11) DEFAULT '0' NOT NULL,
   clicks int(11) DEFAULT '0' NOT NULL,
   day date DEFAULT '0000-00-00' NOT NULL,
