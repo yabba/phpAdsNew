@@ -1,4 +1,4 @@
-<?php // $Revision: 1.16 $
+<?php // $Revision: 1.17 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -422,7 +422,7 @@ function phpAds_PriorityPredictProfile($campaigns, $banners, $profile)
 			for ($i=0;$i<24;$i++)
 			{
 				if ($i<phpAds_CurrentHour)
-					$profile[$i] = (int)$real_profile[$i];
+					$profile[$i] =  isset($real_profile[$i]) ? $real_profile[$i] : 0;
 				else
 					$profile[$i] = (int)round($predicted_left_today / $hours_left_today);
 			}
