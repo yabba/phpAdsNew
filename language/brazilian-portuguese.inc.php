@@ -1,4 +1,4 @@
-<?php // $Revision: 1.20 $
+<?php // $Revision: 1.21 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -263,5 +263,17 @@ $GLOBALS['strErrorOccurred']			= "Ocorreu um erro";
 $GLOBALS['strAdReportSent']				= "Relatório de Publicidade enviado";
 
 $GLOBALS['strAutoChangeHTML']			= "Change HTML in order to log AdClicks";
+
+$GLOBALS['strZones']					= "Zones";
+$GLOBALS['strAddZone']					= "Create zone";
+$GLOBALS['strModifyZone']				= "Modify zone";
+$GLOBALS['strAddNewZone']				= "Add new zone";
+
+$GLOBALS['strOverview']					= "Overview";
+$GLOBALS['strEqualTo']					= "is equal to";
+$GLOBALS['strDifferentFrom']			= "is different from";
+$GLOBALS['strAND']						= "AND";  // logical operator
+$GLOBALS['strOR']						= "OR"; // logical operator
+$GLOBALS['strOnlyDisplayWhen']			= "Only display this banner when:";
 
 ?>

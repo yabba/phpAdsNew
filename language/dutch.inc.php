@@ -1,4 +1,4 @@
-<?php // $Revision: 1.27 $
+<?php // $Revision: 1.28 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -264,6 +264,18 @@ $GLOBALS['strClientStats']				= "Klant statistieken";
 $GLOBALS['strErrorOccurred']			= "Er is een fout opgetreden";
 $GLOBALS['strAdReportSent']				= "Advertentierapport verzonden";
 
-$GLOBALS['strAutoChangeHTML']			= "Change HTML in order to log AdClicks";
+$GLOBALS['strAutoChangeHTML']			= "Verander HTML om AdClicks te loggen";
+
+$GLOBALS['strZones']					= "Zones";
+$GLOBALS['strAddZone']					= "Maak zone";
+$GLOBALS['strModifyZone']				= "Wijzig zone";
+$GLOBALS['strAddNewZone']				= "Voeg een zone toe";
+
+$GLOBALS['strOverview']					= "Overzich";
+$GLOBALS['strEqualTo']					= "is gelijk aan";
+$GLOBALS['strDifferentFrom']			= "is verschillend van";
+$GLOBALS['strAND']						= "EN";  // logical operator
+$GLOBALS['strOR']						= "OF"; // logical operator
+$GLOBALS['strOnlyDisplayWhen']			= "Toon deze banner alleen wanneer:";
 
 ?>

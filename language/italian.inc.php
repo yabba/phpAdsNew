@@ -1,4 +1,4 @@
-<?php // $Revision: 1.31 $
+<?php // $Revision: 1.32 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -10,6 +10,7 @@
 /* Translations by Marco La Ferla                                       */
 /*                 Matteo Beccati                                       */
 /*                 Luca Pescatore                                       */
+/*                 Francesco Lia                                        */
 /*                                                                      */
 /* This program is free software. You can redistribute it and/or modify */
 /* it under the terms of the GNU General Public License as published by */
@@ -34,7 +35,7 @@ $GLOBALS['strViews'] = "Visualizzazioni";
 $GLOBALS['strClicks'] = "Click";
 $GLOBALS['strTotalViews'] = "Visualizzazioni Totali";
 $GLOBALS['strTotalClicks'] = "Click Totali";
-$GLOBALS['strCTR'] = "Rapporto Click-Through";
+$GLOBALS['strCTR'] = "Rapporto Click per Visualizzazione";
 $GLOBALS['strTotalClients'] = "Clienti Totali";
 $GLOBALS['strActiveClients'] = "Clienti attivi";
 $GLOBALS['strActiveBanners'] = "Banner attivi";
@@ -87,10 +88,10 @@ $GLOBALS['strActivate'] = "Attiva";
 $GLOBALS['strDeActivate'] = "Disattiva";
 $GLOBALS['strAuthentification'] = "Autentificazione";
 $GLOBALS['strGo'] = "Vai";
-$GLOBALS['strLinkedTo'] = "linkato a";
+$GLOBALS['strLinkedTo'] = "link verso";
 $GLOBALS['strBannerID'] = "ID Banner";
 $GLOBALS['strClientID'] = "ID Utente";
-$GLOBALS['strMailSubject'] = "Statistiche phpAds";
+$GLOBALS['strMailSubject'] = "Statistiche Advertising";
 $GLOBALS['strMailSubjectDeleted'] = "Banner Disattivati";
 $GLOBALS['strMailHeader'] = "Egr. Sig. {contact},\n";
 $GLOBALS['strMailBannerStats'] = "ecco le statistiche dei banner per {clientname}:";
@@ -101,11 +102,11 @@ $GLOBALS['strLogErrorBanners'] = "[phpAds] Si e' verificato un errore nel tentat
 $GLOBALS['strLogErrorViews'] = "[phpAds] Si e' verificato un errore nel tentativo di recuperare le visualizzazioni dal database.";
 $GLOBALS['strLogErrorClicks'] = "[phpAds] Si e' verificato un errore nel tentativo di recuperare i clicks dal database.";
 $GLOBALS['strLogErrorDisactivate'] = "[phpAds] Si e' verificato un errore nel tentativo di disattivare un banner.";
-$GLOBALS['strRatio'] = "Percentuale di Click-Through";
+$GLOBALS['strRatio'] = "Percentuale di Click per Visualizzazione";
 $GLOBALS['strChooseBanner'] = "Scegliere il tipo di banner.";
 $GLOBALS['strMySQLBanner'] = "Banner memorizzato nel database MySQL";
 $GLOBALS['strWebBanner'] = "Banner memorizzato sul server Web";
-$GLOBALS['strURLBanner'] = "Banner situato ad un altro URL";
+$GLOBALS['strURLBanner'] = "Banner richiamato da un altro URL";
 $GLOBALS['strHTMLBanner'] = "Banner HTML";
 $GLOBALS['strNewBannerFile'] = "Nuovo file del banner";
 $GLOBALS['strNewBannerURL'] = "Nuovo URL del banner (incl. http://)";
@@ -137,9 +138,9 @@ $GLOBALS['strWeek'] = "Settimana";
 $GLOBALS['strWeeklyStats'] = "Statistiche settimanali";
 $GLOBALS['strWeekDay'] = "Giorno della settimana";
 $GLOBALS['strDate'] = "Data";
-$GLOBALS['strCTRShort'] = "CTR";
+$GLOBALS['strCTRShort'] = "CPV";
 $GLOBALS['strDayShortCuts'] = array("Dom","Lun","Mar","Mer","Gio","Ven","Sab");
-$GLOBALS['strShowWeeks'] = "Max. N. di settimane da mostrare";
+$GLOBALS['strShowWeeks'] = "N. Max. di settimane da mostrare";
 $GLOBALS['strAll'] = "Totale";
 $GLOBALS['strAvg'] = "Media";
 $GLOBALS['strHourly'] = "Visualizzazioni/Click per ora";
@@ -149,7 +150,7 @@ $GLOBALS['strSave'] = "Salva";
 $GLOBALS['strUp'] = "Aumenta priorit&agrave;";
 $GLOBALS['strDown'] = "Diminuisci priorit&agrave;";
 $GLOBALS['strSaved'] = "salvato!";
-$GLOBALS['strDeleted'] = "eliminato!";  
+$GLOBALS['strDeleted'] = "eliminato!";
 $GLOBALS['strMovedUp'] = "- priorit&agrave; aumentata";
 $GLOBALS['strMovedDown'] = "- priorit&agrave; diminuita";
 $GLOBALS['strUpdated'] = "aggiornato";
@@ -249,9 +250,9 @@ $GLOBALS['strGenerateBannercode']		= "Genera Codice";
 $GLOBALS['strChooseInvocationType']		= "Scegli il tipo di chiamata banner";
 $GLOBALS['strGenerate']					= "Genera";
 $GLOBALS['strParameters']				= "Parametri";
-$GLOBALS['strUniqueidentifier']			= "Unique identifier";
-$GLOBALS['strFrameSize']				= "Frame size";
-$GLOBALS['strBannercode']				= "Codice";
+$GLOBALS['strUniqueidentifier']			= "Identificatore univoco";
+$GLOBALS['strFrameSize']				= "Dimensione Frame";
+$GLOBALS['strBannercode']				= "Codice Visualizzazione Banner";
 
 $GLOBALS['strSearch']					= "Ricerca";
 $GLOBALS['strNoMatchesFound']			= "Nessun elemento trovato per la tua ricerca";
@@ -270,5 +271,17 @@ $GLOBALS['strErrorOccurred']			= "Errore";
 $GLOBALS['strAdReportSent']				= "Report Pubblicitario inviato";
 
 $GLOBALS['strAutoChangeHTML']			= "Change HTML in order to log AdClicks";
+
+$GLOBALS['strZones']					= "Zones";
+$GLOBALS['strAddZone']					= "Create zone";
+$GLOBALS['strModifyZone']				= "Modify zone";
+$GLOBALS['strAddNewZone']				= "Add new zone";
+
+$GLOBALS['strOverview']					= "Overview";
+$GLOBALS['strEqualTo']					= "is equal to";
+$GLOBALS['strDifferentFrom']			= "is different from";
+$GLOBALS['strAND']						= "AND";  // logical operator
+$GLOBALS['strOR']						= "OR"; // logical operator
+$GLOBALS['strOnlyDisplayWhen']			= "Only display this banner when:";
 
 ?>
