@@ -1,4 +1,4 @@
-<?php // $Revision: 1.13 $
+<?php // $Revision: 1.14 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -48,7 +48,10 @@ function phpAds_logExpire ($clientid, $type=0)
 			{
 				// Include warning library
 				if (!defined('LIBWARNING_INCLUDED'))
-					require (phpAds_path.'/lib-warning.inc.php');
+					require (phpAds_path.'/lib-warnings.inc.php');
+				
+				if (!defined('LIBMAIL_INCLUDED'))
+					require (phpAds_path.'/lib-mail.inc.php');
 				
 				phpAds_warningMail ($campaign);
 			}
@@ -75,12 +78,16 @@ function phpAds_logExpire ($clientid, $type=0)
 		if ($campaign["active"] != $active)
 			phpAds_dbQuery("UPDATE ".$phpAds_config['tbl_clients']." SET active='".$active."' WHERE clientid='".$clientid."'");
 		
+		
 		// Send deactivation warning
 		if ($active == 'f')
 		{
 			// Include warning library
 			if (!defined('LIBWARNING_INCLUDED'))
-				require (phpAds_path.'/lib-warning.inc.php');
+				require (phpAds_path.'/lib-warnings.inc.php');
+			
+			if (!defined('LIBMAIL_INCLUDED'))
+				require (phpAds_path.'/lib-mail.inc.php');
 			
 			phpAds_deactivateMail ($campaign);
 		}
