@@ -1,4 +1,4 @@
-<?php // $Revision: 2.6 $
+<?php // $Revision: 2.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -62,13 +62,19 @@ function phpAds_logImpression ($bannerid, $clientid, $zoneid, $source)
 		$log_host    = $phpAds_config['log_iponly'] ? $HTTP_SERVER_VARS['REMOTE_ADDR'] : $log_host;
 		
 		phpAds_dbQuery(
-			"INSERT ".($phpAds_config['insert_delayed'] ? 'DELAYED' : '')." INTO ".$phpAds_config['tbl_adviews'].
-			" SET bannerid=".$bannerid.
-			",zoneid=".$zoneid.
-			",host='".$log_host."'".
-			",source='".$log_source."'".
-			",country='".$log_country."'"
-		);
+			"INSERT ".($phpAds_config['insert_delayed'] ? 'DELAYED' : '')." INTO ".$phpAds_config['tbl_adviews']."
+				(bannerid,
+				zoneid,
+				host,
+				source,
+				country)
+			VALUES
+				('".$bannerid."',
+				'".$zoneid."',
+				'".$log_host."',
+				'".$log_source."',
+				'".$log_country."')
+		");
 	}
 }
 
@@ -90,13 +96,19 @@ function phpAds_logClick($bannerid, $clientid, $zoneid, $source)
 		$log_host    = $phpAds_config['log_iponly'] ? $HTTP_SERVER_VARS['REMOTE_ADDR'] : $log_host;
 		
 		phpAds_dbQuery(
-			"INSERT ".($phpAds_config['insert_delayed'] ? 'DELAYED' : '')." INTO ".$phpAds_config['tbl_adclicks'].
-			" SET bannerid=".$bannerid.
-			",zoneid=".$zoneid.
-			",host='".$log_host."'".
-			",source='".$log_source."'".
-			",country='".$log_country."'"
-		);
+			"INSERT ".($phpAds_config['insert_delayed'] ? 'DELAYED' : '')." INTO ".$phpAds_config['tbl_adclicks']."
+				(bannerid,
+				zoneid,
+				host,
+				source,
+				country)
+			VALUES
+				('".$bannerid."',
+				'".$zoneid."',
+				'".$log_host."',
+				'".$log_source."',
+				'".$log_country."')
+		");
 	}
 }
 
