@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -333,7 +333,7 @@ for (reset($clients);$key=key($clients);next($clients))
 				echo "&nbsp;<a href='stats-index.php?expand=".$client['clientID']."'><img src='images/triangle-l.gif' align='absmiddle' border='0'></a>&nbsp;";
 		}
 		else
-			echo "&nbsp;<img src='images/spacer' height='16' width='16'>&nbsp;";
+			echo "&nbsp;<img src='images/spacer.gif' height='16' width='16'>&nbsp;";
 			
 		echo "<img src='images/icon-client.gif' align='absmiddle'>&nbsp;";
 		echo $client['clientname'];
@@ -377,7 +377,7 @@ for (reset($clients);$key=key($clients);next($clients))
 						echo "<a href='stats-index.php?expand=".$campaigns[$ckey]['clientID']."'><img src='images/triangle-l.gif' align='absmiddle' border='0'></a>&nbsp;";
 				}
 				else
-					echo "<img src='images/spacer' height='16' width='16'>&nbsp;";
+					echo "<img src='images/spacer.gif' height='16' width='16'>&nbsp;";
 				
 				
 				if ($campaigns[$ckey]['active'] == 'true')
