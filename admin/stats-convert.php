@@ -1,4 +1,4 @@
-<?php // $Revision: 1.8 $
+<?php // $Revision: 1.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -172,7 +172,7 @@ if ($command == 'overview')
 	
 	
 	// Build HTML Taskscheduler :-)
-	$result = @db_query("SELECT begin_stamp, DATE_FORMAT(begin_stamp, '$date_format') as date_f, sum(records) as sum FROM phpAdsConversionTemp WHERE status='waiting' GROUP BY begin_stamp");
+	$result = @db_query("SELECT begin_stamp, DATE_FORMAT(begin_stamp, '$date_format') as date_f, sum(records) as sum FROM phpadsconversiontemp WHERE status='waiting' GROUP BY begin_stamp");
 	
 	echo "<html><head>";
 	echo "<link rel='stylesheet' href='interface.css'>";
@@ -417,7 +417,7 @@ function phpAds_convertTableExists()
 	
 	while ($tables = @mysql_fetch_row($result)) 
 	{
-    	if ($tables[0] == 'phpadsconversiontemp') 
+    	if (strtolower($tables[0]) == 'phpadsconversiontemp') 
 		{
 			$available = true;
 		}
