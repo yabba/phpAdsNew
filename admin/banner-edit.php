@@ -1,4 +1,4 @@
-<?php // $Revision: 1.35 $
+<?php // $Revision: 1.36 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -385,7 +385,7 @@ if ($bannerID != '')
 	}
 	else
 	{
-		phpAds_PageHeader("1.1.3", $extra);
+		phpAds_PageHeader("1.1.1.2", $extra);
 	}
 	
 	
