@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -28,7 +28,8 @@ $GLOBALS['strUserlog'] = array (
 	phpAds_actionPriorityCalculation		=> "Priority recalculated",
 	phpAds_actionPriorityAutoTargeting		=> "Campaign targets recalculated",
 	phpAds_actionDeactiveCampaign			=> "Campaign {id} deactivated",
-	phpAds_actionActiveCampaign				=> "Campaign {id} activated"
+	phpAds_actionActiveCampaign				=> "Campaign {id} activated",
+	phpAds_actionAutoClean					=> "Auto clean of database"
 );
 
 ?>
