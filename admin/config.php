@@ -1,4 +1,4 @@
-<?php // $Revision: 1.51 $
+<?php // $Revision: 1.52 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -18,7 +18,7 @@
 if (strlen(__FILE__) > strlen(basename(__FILE__)))
     define ('phpAds_path', substr(__FILE__, 0, strpos(__FILE__, 'admin') - 1));
 else
-    define ('phpAds_path', '.');
+    define ('phpAds_path', '..');
 
 
 

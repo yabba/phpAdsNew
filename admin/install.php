@@ -1,4 +1,4 @@
-<?php // $Revision: 1.11 $
+<?php // $Revision: 1.12 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -21,7 +21,7 @@ define('phpAds_installing', 1);
 if (strlen(__FILE__) > strlen(basename(__FILE__)))
     define ('phpAds_path', substr(__FILE__, 0, strpos(__FILE__, 'admin') - 1));
 else
-    define ('phpAds_path', '.');
+    define ('phpAds_path', '..');
 
 
 
