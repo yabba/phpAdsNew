@@ -1,4 +1,4 @@
-<?php // $Revision: 1.16 $
+<?php // $Revision: 1.17 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -172,6 +172,7 @@ if ($zoneid != "")
 		
 		$extra  = "<form action='zone-modify.php'>";
 		$extra .= "<input type='hidden' name='zoneid' value='$zoneid'>";
+		$extra .= "<input type='hidden' name='affiliateid' value='$affiliateid'>";
 		$extra .= "<input type='hidden' name='returnurl' value='zone-edit.php'>";
 		$extra .= "<br><br>";
 		$extra .= "<b>$strModifyZone</b><br>";

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.7 $
+<?php // $Revision: 1.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -190,6 +190,10 @@ if (isset($bannerid) && $bannerid != '')
 		phpAds_PriorityCalculate ();
 		
 		Header ("Location: ".$returnurl."?campaignid=".$campaignid."&bannerid=".$new_bannerid);
+	}
+	else
+	{
+		Header ("Location: ".$returnurl."?campaignid=".$campaignid."&bannerid=".$bannerid);
 	}
 }
 
