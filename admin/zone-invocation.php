@@ -1,4 +1,4 @@
-<?php // $Revision: 1.2 $
+<?php // $Revision: 1.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -190,7 +190,7 @@ function phpAds_GenerateInvocationCode($zoneid)
 		
 		$buffer .= "<"."?php\n";
 		$buffer .= "    require($path);\n";
-		$buffer .= "    view ('$what', $clientID, '$target', '$source', '$withText');\n";
+		$buffer .= "    view ('$what', 0, '$target', '$source', '$withText');\n";
 		$buffer .= "?".">";
 	
 	}
