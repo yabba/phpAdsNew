@@ -1,5 +1,9 @@
 phpAdsNew - ChangeLog
 
+CVS			+ Misc bugfixes for beta4
+			  - Changed dhtml detection for Opera  (Niels)
+
+
 v 2.0beta4		+ Updated GUI including a new logo  (Niels)
 			+ Added support for campaigns  (Niels)
 			+ New layout for detailed stats page  (Niels)
