@@ -1,4 +1,4 @@
-<?php // $Revision: 1.5 $
+<?php // $Revision: 1.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -28,7 +28,7 @@ $res = phpAds_dbQuery("
 	SELECT
 		*
 	FROM
-		$phpAds_tbl_banners
+		".$phpAds_config['tbl_banners']."
 	WHERE
 		bannerID = $bannerID
 	") or phpAds_sqlDie();

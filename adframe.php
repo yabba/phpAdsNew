@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -20,7 +20,7 @@ require ("lib-db.inc.php");
 require ("lib-expire.inc.php");
 require ("lib-log.inc.php");
 
-if ($phpAds_acl == '1')
+if ($phpAds_config['acl'])
 	require ("lib-acl.inc.php");
 
 require	("view.inc.php"); 

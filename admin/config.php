@@ -1,4 +1,4 @@
-<?php // $Revision: 1.21 $
+<?php // $Revision: 1.22 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -28,8 +28,8 @@ if (!$link)
 {
 	phpAds_PageHeader('');
 	phpAds_Die ("An fatal error occurred", "phpAdsNew can't connect to the database, 
-										 please make sure the database is working 
-										 and phpAdsNew is configured correctly");
+										    please make sure the database is working 
+										    and phpAdsNew is configured correctly");
 }
 
 
@@ -44,7 +44,7 @@ phpAds_Start();
 
 
 // Load language strings
-require ("../language/".strtolower($phpAds_language).".inc.php");
+require ("../language/".strtolower($phpAds_config['language']).".inc.php");
 
 
 if (!isset($clientID))   $clientID = '';
