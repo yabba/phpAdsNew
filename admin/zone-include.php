@@ -1,4 +1,4 @@
-<?php // $Revision: 1.45 $
+<?php // $Revision: 1.46 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -791,6 +791,7 @@ function phpAds_showZoneBanners ($width, $height, $what, $zonetype, $delivery)
 		$campaigns[$row['clientid']]['banners'][$row['bannerid']] = $row;
 	}
 	
+	$inactivehidden = 0;
 	
 	
 	
