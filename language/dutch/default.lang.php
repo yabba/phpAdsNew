@@ -1,4 +1,4 @@
-<?php // $Revision: 1.16 $
+<?php // $Revision: 1.17 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -286,6 +286,10 @@ $GLOBALS['strChooseNetwork']				= "Kies het banner netwerk dat u wilt gebruiken"
 $GLOBALS['strMoreInformation']				= "Meer informatie...";
 $GLOBALS['strRichMedia']				= "Richmedia";
 $GLOBALS['strTrackAdClicks']				= "Volg AdClicks";
+
+
+// Banner (cache)
+$GLOBALS['strRebuildBannerCache']			= "Banner cache opnieuw aanmaken";
 
 
 // Display limitations
