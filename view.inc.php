@@ -1,4 +1,4 @@
-<?php // $Revision: 1.47 $
+<?php // $Revision: 1.48 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -20,18 +20,6 @@ require ("$phpAds_path/lib-expire.inc.php");
 
 // Seed the random number generator
 mt_srand((double)microtime()*1000000);
-
-
-
-/*********************************************************/
-/* Build the SQL query needed to fetch the banners       */
-/*********************************************************/
-
-function phpAds_buildQuery ($what, $clientID, $context=0, $source="")
-{
-
-
-}
 
 
 
@@ -366,18 +354,19 @@ function get_banner($what, $clientID, $context=0, $source="", $allowhtml=true)
             {
 				if ($phpAds_acl = '1')
 				{
-					$tmprow=$rows[$i];
-	                if (acl_check($request,$tmprow))
-	                    return ($tmprow);
+	                if (acl_check($request, $rows[$i]))
+	                    return ($rows[$i]);
 	                
-	                // Matched, but acl_check failed.  delete this row and adjust $weightsum
+	                // Matched, but acl_check failed.
+					// No more posibilities left, exit!
 	                if (sizeof($rows) == 1)
 	                    return false;
 					
-	                $weightsum -= $tmprow["weight"];
-	                $rows[$i] = array_pop($rows);
+					// Delete this row and adjust $weightsum
+	                $weightsum -= ($rows[$i]["weight"] * $rows[$i]["clientweight"]);
+					unset($rows[$i]);
 					
-					// break out of the for loop to try again
+					// Break out of the for loop to try again
 	                break;
 				}
 				else
