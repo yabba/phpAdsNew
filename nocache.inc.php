@@ -1,9 +1,8 @@
-<?php
+<?php // $Revision: 1.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
 /* ===========                                                          */
-/* $Name:  $ $Revision: 1.2 $													*/
 /*                                                                      */
 /* Copyright (c) 2001 by Bjoern Hoehrmann		                        */
 /* http://sourceforge.net/projects/phpadsnew                            */
