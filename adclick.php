@@ -1,4 +1,4 @@
-<?php // $Revision: 1.15 $
+<?php // $Revision: 1.16 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -72,7 +72,7 @@ if ($bannerid != "DEFAULT")
 	{
 		if ($host = phpads_ignore_host())
 		{
-			phpAds_logClick($bannerid, $zoneid, $host);
+			phpAds_logClick($bannerid, $zoneid, $host, $source);
 			phpAds_expire ($clientid, phpAds_Clicks);
 		}
 	}
