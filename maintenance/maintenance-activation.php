@@ -1,4 +1,4 @@
-<?php // $Revision: 1.9 $
+<?php // $Revision: 1.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -51,6 +51,7 @@ while($client = phpAds_dbFetchArray($res_clients))
 		SELECT
 			clientid,
 			clientname,
+			parent,
 			views,
 			clicks,
 			expire,
