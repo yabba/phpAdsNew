@@ -1,4 +1,4 @@
-<?php // $Revision: 2.7 $
+<?php // $Revision: 2.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -113,7 +113,9 @@ if (phpAds_dbConnect())
 		
 		
 		// If zoneid is not set, log it as a regular banner
-		if (!isset($zoneid)) $zoneid = 0;
+		if ( (!isset($zoneid)) || (strlen($zoneid)==0) )
+			$zoneid = 0;
+		
 		$source = phpAds_deriveSource($source);
 		
 		
