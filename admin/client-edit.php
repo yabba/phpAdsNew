@@ -1,4 +1,4 @@
-<?php // $Revision: 1.16 $
+<?php // $Revision: 1.17 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -341,7 +341,7 @@ else
 		{
 			if (ereg ("^([a-zA-Z0-9\-]*)\.inc\.php$", $langfile, $matches))
 			{
-				$languages[] = ucfirst($matches[1]);
+				$languages[] = $matches[1];
 			}
 		}
 		closedir ($langdir);
@@ -350,9 +350,9 @@ else
 		for ($i=0;$i<sizeof($languages);$i++)
 		{
 			if ($row['language'] == $languages[$i])
-				echo "<option value='".$languages[$i]."' SELECTED>".$languages[$i]."</option>\n";
+				echo "<option value='".$languages[$i]."' SELECTED>".ucfirst($languages[$i])."</option>\n";
 			else
-				echo "<option value='".$languages[$i]."'>".$languages[$i]."</option>\n";
+				echo "<option value='".$languages[$i]."'>".ucfirst($languages[$i])."</option>\n";
 		}
 		?>
 			</select>
