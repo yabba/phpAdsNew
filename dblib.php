@@ -1,4 +1,4 @@
-<?php // $Revision: 1.18 $
+<?php // $Revision: 1.19 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -327,8 +327,7 @@ function phpAds_getClientInformation()
 	}
 	
 	
-	return (array ('addr' => $addr,
-				   'host' => $host));
+	return (array ($addr, $host));
 }
 
 
