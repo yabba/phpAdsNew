@@ -1,4 +1,4 @@
-<?php // $Revision: 2.15 $
+<?php // $Revision: 2.16 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -286,7 +286,7 @@ if (isset($submit))
 	phpAds_cacheDelete();
 	
 	
-	Header("Location: campaign-zone.php?clientid=".$clientid."&campaignid=".$campaignid);
+	Header("Location: campaign-banners.php?clientid=".$clientid."&campaignid=".$campaignid);
 	exit;
 }
 
@@ -364,7 +364,7 @@ if ($campaignid != "")
 		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentClientName($campaignid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<b>".phpAds_getCampaignName($campaignid)."</b><br><br><br>";
-		phpAds_ShowSections(array("4.1.3.2", "4.1.3.3", "4.1.3.4"));
+		phpAds_ShowSections(array("4.1.3.2", "4.1.3.3", "4.1.3.4", "4.1.3.5"));
 }
 else
 {

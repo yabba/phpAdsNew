@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -219,7 +219,7 @@ while ($row_trackers = phpAds_dbFetchArray($res_trackers))
 	// Button 1, 2 & 3
 	echo "\t\t\t\t\t<td height='25'>";
 	if (phpAds_isUser(phpAds_Admin) || phpAds_isAllowed(phpAds_LinkCampaigns))
-		echo "<a href='tracker-include.php?clientid=".$clientid."&trackerid=".$row_trackers['trackerid']."'><img src='images/icon-zone-linked.gif' border='0' align='absmiddle'>&nbsp;$strLinkedCampaigns</a>";
+		echo "<a href='tracker-campaigns.php?clientid=".$clientid."&trackerid=".$row_trackers['trackerid']."'><img src='images/icon-zone-linked.gif' border='0' align='absmiddle'>&nbsp;$strLinkedCampaigns</a>";
 	else
 		echo "&nbsp;";
 	echo "</td>\n";

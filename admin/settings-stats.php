@@ -1,4 +1,4 @@
-<?php // $Revision: 2.9 $
+<?php // $Revision: 2.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -29,6 +29,8 @@ phpAds_registerGlobal (
 	,'block_adclicks'
 	,'block_adconversions'
 	,'compact_stats'
+	,'default_conversion_clickwindow'
+	,'default_conversion_viewwindow'
 	,'geotracking_stats'
 	,'ignore_hosts'
 	,'log_adviews'
@@ -89,6 +91,10 @@ if (isset($HTTP_POST_VARS) && count($HTTP_POST_VARS))
 		phpAds_SettingsWriteAdd('block_adclicks', $block_adclicks);
 	if (isset($block_adconversions))
 		phpAds_SettingsWriteAdd('block_adconversions', $block_adconversions);
+	if (isset($default_conversion_clickwindow))
+		phpAds_SettingsWriteAdd('default_conversion_clickwindow', $default_conversion_clickwindow);
+	if (isset($default_conversion_viewwindow))
+		phpAds_SettingsWriteAdd('default_conversion_viewwindow', $default_conversion_viewwindow);
 	
 	
 	
@@ -280,6 +286,28 @@ array (
 			'type' 	  => 'text', 
 			'name' 	  => 'block_adconversions',
 			'text' 	  => $strBlockAdConversions,
+			'size'    => 12,
+			'depends' => 'log_adconversions==true',
+			'check'	  => 'number+',
+		),
+		array (
+			'type'    => 'break'
+		),
+		array (
+			'type' 	  => 'text', 
+			'name' 	  => 'default_conversion_clickwindow',
+			'text' 	  => $strConversionClickWindow,
+			'size'    => 12,
+			'depends' => 'log_adconversions==true',
+			'check'	  => 'number+',
+		),
+		array (
+			'type'    => 'break'
+		),
+		array (
+			'type' 	  => 'text', 
+			'name' 	  => 'default_conversion_viewwindow',
+			'text' 	  => $strConversionViewWindow,
 			'size'    => 12,
 			'depends' => 'log_adconversions==true',
 			'check'	  => 'number+',

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -48,16 +48,43 @@ if (isset($submit))
 	
 	$new_tracker = $trackerid == 'null';
 	
+	// Set window delays
+	if (isset($clickwindow))
+	{
+		$clickwindow_seconds = 0;
+		if ($clickwindow['second'] != '-') $clickwindow_seconds += (int)$clickwindow['second'];
+		if ($clickwindow['minute'] != '-') $clickwindow_seconds += (int)$clickwindow['minute'] * 60;
+		if ($clickwindow['hour'] != '-') 	$clickwindow_seconds += (int)$clickwindow['hour'] * 60*60;
+		if ($clickwindow['day'] != '-') 	$clickwindow_seconds += (int)$clickwindow['day'] * 60*60*24;
+	}
+	else
+		$clickwindow_seconds = 0;
+	
+	if (isset($viewwindow))
+	{
+		$viewwindow_seconds = 0;
+		if ($viewwindow['second'] != '-') $viewwindow_seconds += (int)$viewwindow['second'];
+		if ($viewwindow['minute'] != '-') $viewwindow_seconds += (int)$viewwindow['minute'] * 60;
+		if ($viewwindow['hour'] != '-') 	$viewwindow_seconds += (int)$viewwindow['hour'] * 60*60;
+		if ($viewwindow['day'] != '-') 	$viewwindow_seconds += (int)$viewwindow['day'] * 60*60*24;
+	}
+	else
+		$viewwindow_seconds = 0;
+	
 	phpAds_dbQuery(
 		"REPLACE INTO ".$phpAds_config['tbl_trackers'].
 		" (trackerid".
 		",trackername".
 		",description".
+		",clickwindow".
+		",viewwindow".
 		",clientid)".
 		" VALUES".
 		" (".$trackerid.
 		",'".$trackername."'".
 		",'".$description."'".
+		",".$clickwindow_seconds.
+		",".$viewwindow_seconds.
 		",".$clientid.")"
 	) or phpAds_sqlDie();
 	
@@ -65,21 +92,8 @@ if (isset($submit))
 	if ($trackerid == "null")
 		$trackerid = phpAds_dbInsertID();
 	
-	if (isset($move) && $move == 't')
-	{
-		// We are moving a client to a tracker
-		// Update banners
-		$res = phpAds_dbQuery(
-			"UPDATE ".$phpAds_config['tbl_banners'].
-			" SET trackerid=".$trackerid.
-			" WHERE trackerid=".$clientid
-		) or phpAds_sqlDie();
-		
-		// Force priority recalculation
-		$new_tracker = false;
-	}
 	
-	Header("Location: tracker-include.php?clientid=".$clientid."&trackerid=".$trackerid);
+	Header("Location: tracker-campaigns.php?clientid=".$clientid."&trackerid=".$trackerid);
 	exit;
 }
 
@@ -215,12 +229,32 @@ else
 	if ($client = phpAds_dbFetchArray($res))
 		$row['trackername'] = $client['clientname'].' - ';
 	else
-		$row["trackername"] = '';
+		$row['trackername'] = '';
 	
 	
-	$row["trackername"] .= $strDefault." ".$strTracker;
+	$row['trackername'] .= $strDefault." ".$strTracker;
+	$row['clickwindow'] = $phpAds_config['conversion_clickwindow'];
+	$row['viewwindow'] = $phpAds_config['conversion_viewwindow'];
 }
 
+// Parse the number of seconds in the conversion windows into days, hours, minutes, seconds..
+$seconds_left = $row['clickwindow'];
+$clickwindow['day'] = floor($seconds_left / (60*60*24));
+$seconds_left = $seconds_left % (60*60*24);
+$clickwindow['hour'] = floor($seconds_left / (60*60));
+$seconds_left = $seconds_left % (60*60);
+$clickwindow['minute'] = floor($seconds_left / (60));
+$seconds_left = $seconds_left % (60);
+$clickwindow['second'] = $seconds_left;
+
+$seconds_left = $row['viewwindow'];
+$viewwindow['day'] = floor($seconds_left / (60*60*24));
+$seconds_left = $seconds_left % (60*60*24);
+$viewwindow['hour'] = floor($seconds_left / (60*60));
+$seconds_left = $seconds_left % (60*60);
+$viewwindow['minute'] = floor($seconds_left / (60));
+$seconds_left = $seconds_left % (60);
+$viewwindow['second'] = $seconds_left;
 
 
 /*********************************************************/
@@ -254,8 +288,32 @@ echo "\t"."<td><input class='flat' type='text' name='description' size='35' styl
 echo "</tr>"."\n";
 echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>"."\n";
 
-echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>"."\n";
+echo "<tr><td height='25' colspan='3'><b>".$strDefaultConversionRules."</b></td></tr>"."\n";
 echo "<tr height='1'><td colspan='3' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>"."\n";
+echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>"."\n";
+
+echo "<tr><td width='30'>&nbsp;</td>";
+echo "<td width='200'>".$strClickWindow."</td>";
+echo "<td valign='top'>";
+echo "<input id='clickwindowday' class='flat' type='text' size='3' name='clickwindow[day]' value='".$clickwindow['day']."' onKeyUp=\"phpAds_formLimitUpdate(this.form);\" tabindex='".($tabindex++)."'> ".$strDays." &nbsp;&nbsp;";
+echo "<input id='clickwindowhour' class='flat' type='text' size='3' name='clickwindow[hour]' value='".$clickwindow['hour']."' onKeyUp=\"phpAds_formLimitUpdate(this.form);\" tabindex='".($tabindex++)."'> ".$strHours." &nbsp;&nbsp;";
+echo "<input id='clickwindowminute' class='flat' type='text' size='3' name='clickwindow[minute]' value='".$clickwindow['minute']."' onKeyUp=\"phpAds_formLimitUpdate(this.form);\" tabindex='".($tabindex++)."'> ".$strMinutes." &nbsp;&nbsp;";
+echo "<input id='clickwindowsecond' class='flat' type='text' size='3' name='clickwindow[second]' value='".$clickwindow['second']."' onBlur=\"phpAds_formLimitBlur(this.form);\" onKeyUp=\"phpAds_formLimitUpdate(this.form);\" tabindex='".($tabindex++)."'> ".$strSeconds." &nbsp;&nbsp;";
+echo "</td></tr>";
+echo "<tr><td><img src='images/spacer.gif' height='1' width='100%'></td>";
+echo "<td colspan='2'><img src='images/break-l.gif' height='1' width='200' vspace='6'></td></tr>";
+
+echo "<tr><td width='30'>&nbsp;</td>";
+echo "<td width='200'>".$strViewWindow."</td>";
+echo "<td valign='top'>";
+echo "<input id='viewwindowday' class='flat' type='text' size='3' name='viewwindow[day]' value='".$viewwindow['day']."' onKeyUp=\"phpAds_formLimitUpdate(this.form);\" tabindex='".($tabindex++)."'> ".$strDays." &nbsp;&nbsp;";
+echo "<input id='viewwindowhour' class='flat' type='text' size='3' name='viewwindow[hour]' value='".$viewwindow['hour']."' onKeyUp=\"phpAds_formLimitUpdate(this.form);\" tabindex='".($tabindex++)."'> ".$strHours." &nbsp;&nbsp;";
+echo "<input id='viewwindowminute' class='flat' type='text' size='3' name='viewwindow[minute]' value='".$viewwindow['minute']."' onKeyUp=\"phpAds_formLimitUpdate(this.form);\" tabindex='".($tabindex++)."'> ".$strMinutes." &nbsp;&nbsp;";
+echo "<input id='viewwindowsecond' class='flat' type='text' size='3' name='viewwindow[second]' value='".$viewwindow['second']."' onBlur=\"phpAds_formLimitBlur(this.form);\" onKeyUp=\"phpAds_formLimitUpdate(this.form);\" tabindex='".($tabindex++)."'> ".$strSeconds." &nbsp;&nbsp;";
+echo "</td></tr>";
+echo "<tr><td><img src='images/spacer.gif' height='1' width='100%'></td>";
+echo "<td colspan='2'><img src='images/break-l.gif' height='1' width='200' vspace='6'></td></tr>";
+
 echo "</table>"."\n";
 
 echo "<br><br>"."\n";
@@ -291,6 +349,49 @@ while ($row = phpAds_dbFetchArray($res))
 	phpAds_formSetRequirements('trackername', '<?php echo addslashes($strName); ?>', true, 'unique');
 	
 	phpAds_formSetUnique('trackername', '|<?php echo addslashes(implode('|', $unique_names)); ?>|');
+	
+	function phpAds_formLimitBlur (f)
+	{
+		if (f.clickwindowday.value == '') f.clickwindowday.value = '0';
+		if (f.clickwindowhour.value == '') f.clickwindowhour.value = '0';
+		if (f.clickwindowminute.value == '') f.clickwindowminute.value = '0';
+		if (f.clickwindowsecond.value == '') f.clickwindowsecond.value = '0';
+		
+		if (f.viewwindowday.value == '') f.viewwindowday.value = '0';
+		if (f.viewwindowhour.value == '') f.viewwindowhour.value = '0';
+		if (f.viewwindowminute.value == '') f.viewwindowminute.value = '0';
+		if (f.viewwindowsecond.value == '') f.viewwindowsecond.value = '0';
+		
+		phpAds_formLimitUpdate (f);
+	}
+			
+	function phpAds_formLimitUpdate (f)
+	{
+		// Set -
+		if (f.clickwindowhour.value == '-' && f.clickwindowday.value != '-') f.clickwindowhour.value = '0';
+		if (f.clickwindowminute.value == '-' && f.clickwindowhour.value != '-') f.clickwindowminute.value = '0';
+		if (f.clickwindowsecond.value == '-' && f.clickwindowminute.value != '-') f.clickwindowsecond.value = '0';
+		
+		// Set 0
+		if (f.clickwindowday.value == '0') f.clickwindowday.value = '-';
+		if (f.clickwindowday.value == '-' && f.clickwindowhour.value == '0') f.clickwindowhour.value = '-';
+		if (f.clickwindowhour.value == '-' && f.clickwindowminute.value == '0') f.clickwindowminute.value = '-';
+		if (f.clickwindowminute.value == '-' && f.clickwindowsecond.value == '0') f.clickwindowsecond.value = '-';
+
+		// Set -
+		if (f.viewwindowhour.value == '-' && f.viewwindowday.value != '-') f.viewwindowhour.value = '0';
+		if (f.viewwindowminute.value == '-' && f.viewwindowhour.value != '-') f.viewwindowminute.value = '0';
+		if (f.viewwindowsecond.value == '-' && f.viewwindowminute.value != '-') f.viewwindowsecond.value = '0';
+		
+		// Set 0
+		if (f.viewwindowday.value == '0') f.viewwindowday.value = '-';
+		if (f.viewwindowday.value == '-' && f.viewwindowhour.value == '0') f.viewwindowhour.value = '-';
+		if (f.viewwindowhour.value == '-' && f.viewwindowminute.value == '0') f.viewwindowminute.value = '-';
+		if (f.viewwindowminute.value == '-' && f.viewwindowsecond.value == '0') f.viewwindowsecond.value = '-';
+	}
+	
+	phpAds_formLimitUpdate(document.clientform);
+	
 //-->
 </script>
 

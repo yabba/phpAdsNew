@@ -1,4 +1,4 @@
-<?php // $Revision: 2.6 $
+<?php // $Revision: 2.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -21,7 +21,12 @@ require ("lib-expiration.inc.php");
 
 
 // Register input variables
-phpAds_registerGlobal ('period', 'start', 'limit', 'source');
+phpAds_registerGlobal (
+	 'limit'
+	,'period'
+	,'source'
+	,'start'
+);
 
 
 // Security check
@@ -66,7 +71,7 @@ if (phpAds_isUser(phpAds_Client))
 		
 		phpAds_PageHeader("1.2.1");
 			echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<b>".phpAds_getCampaignName($campaignid)."</b><br><br><br>";
-			phpAds_ShowSections(array("1.2.1", "1.2.2", "1.2.3"));
+			phpAds_ShowSections(array("1.2.1", "1.2.2", "1.2.3", "1.2.4"));
 	}
 	else
 	{
@@ -107,7 +112,7 @@ if (phpAds_isUser(phpAds_Admin))
 		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentClientName($campaignid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<b>".phpAds_getCampaignName($campaignid)."</b><br><br><br>";
-		phpAds_ShowSections(array("2.1.2.1", "2.1.2.2", "2.1.2.3"));
+		phpAds_ShowSections(array("2.1.2.1", "2.1.2.2", "2.1.2.3", "2.1.2.4"));
 }
 
 

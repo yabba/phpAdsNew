@@ -1,4 +1,4 @@
-<?php // $Revision: 2.10 $
+<?php // $Revision: 2.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -1139,6 +1139,14 @@ function phpAds_upgradeSplitClientTable()
 				"SELECT * FROM ".$phpAds_config['tbl_clients'].
 				" WHERE parent > 0"
 			);
+			
+			if ( ($row['target'] > 0) && ($row['weight'] == 0) )
+				$row['priority'] = 'h';
+			else
+				$row['priority'] = 'l';
+			
+			$row['optimise'] = 'f';
+			$row['anonymous'] = 'f';
 			
 			while ($row = phpAds_dbFetchArray($res))
 			{

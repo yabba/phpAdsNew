@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -108,6 +108,7 @@ if (!isset($what)) 		$what = '';
 if (isset($withText) && !isset($withtext))  $withtext = $withText;
 if (!isset($withtext)) 	$withtext = '';
 
+// Derive the source parameter
 $source = phpAds_deriveSource($source);
 
 if (isset($exclude) && $exclude != '')

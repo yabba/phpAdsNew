@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -78,7 +78,7 @@ $res = phpAds_dbQuery("
 	FROM
 		".$phpAds_config['tbl_banners']."
 	WHERE
-		clientid = '$campaignid'
+		campaignid = '$campaignid'
 	".phpAds_getBannerListOrder($navorder, $navdirection)."
 ") or phpAds_sqlDie();
 
@@ -119,6 +119,7 @@ if (phpAds_isUser(phpAds_Client))
 {
 	$sections[] = "1.2.2.1";
 	if (phpAds_isAllowed(phpAds_ModifyBanner)) $sections[] = "1.2.2.2";
+	$sections[] = "1.2.2.4";
 	
 	phpAds_PageHeader("1.2.2.1");
 		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;".phpAds_getCampaignName($campaignid);

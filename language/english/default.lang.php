@@ -1,4 +1,4 @@
-<?php // $Revision: 2.17 $
+<?php // $Revision: 2.18 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -286,6 +286,16 @@ $GLOBALS['strDeleteAllTrackers']		= "Delete all trackers";
 $GLOBALS['strTrackerProperties']		= "Tracker properties";
 $GLOBALS['strTrackerOverview']			= "Tracker overview";
 $GLOBALS['strModifyTracker']			= "Modify tracker";
+$GLOBALS['strLog']						= "Log?";
+$GLOBALS['strLinkedTrackers']			= "Linked Trackers";
+$GLOBALS['strDefaultConversionRules']	= "Default conversion rules";
+$GLOBALS['strConversionWindow']			= "Conversion window";
+$GLOBALS['strClickWindow']				= "Click window";
+$GLOBALS['strViewWindow']				= "View window";
+$GLOBALS['strClick']					= "Click";
+$GLOBALS['strView']						= "View";
+$GLOBALS['strConversionClickWindow']	= "Count conversions which occur within this number of seconds of a click";
+$GLOBALS['strConversionViewWindow']		= "Count conversions which occur within this number of seconds of a view";
 
 
 // Banners (General)
@@ -468,7 +478,7 @@ $GLOBALS['strZoneProbNullPri']			= "All banners linked to this zone are currentl
 $GLOBALS['strZoneProbListChainLoop']	= "Following the zone chain would cause a circular loop. Delivery for this zone is halted.";
 
 
-// Linked banners/campaigns
+// Linked banners/campaigns/trackers
 $GLOBALS['strSelectZoneType']			= "Please choose the type of linking banners";
 $GLOBALS['strBannerSelection']			= "Banner selection";
 $GLOBALS['strCampaignSelection']		= "Campaign selection";
@@ -482,6 +492,7 @@ $GLOBALS['strNoBannersToLink']			= "There are currently no banners available whi
 $GLOBALS['strNoLinkedBanners']			= "There are no banners available which are linked to this zone";
 $GLOBALS['strMatchingBanners']			= "{count} matching banners";
 $GLOBALS['strNoCampaignsToLink']		= "There are currently no campaigns available which can be linked to this zone";
+$GLOBALS['strNoTrackersToLink']			= "There are currently no trackers available which can be linked to this campaign";
 $GLOBALS['strNoZonesToLinkToCampaign']  	= "There are no zones available to which this campaign can be linked";
 $GLOBALS['strSelectBannerToLink']		= "Select the banner you would like to link to this zone:";
 $GLOBALS['strSelectCampaignToLink']		= "Select the campaign you would like to link to this zone:";
@@ -501,6 +512,7 @@ $GLOBALS['strDetailStats'] 			= "Detailed statistics";
 $GLOBALS['strTotalThisPeriod']			= "Total this period";
 $GLOBALS['strAverageThisPeriod']		= "Average this period";
 $GLOBALS['strDistribution']			= "Distribution";
+$GLOBALS['strDistributionBy']		= "Distribution by";
 $GLOBALS['strResetStats'] 			= "Reset statistics";
 $GLOBALS['strSourceStats']			= "Source statistics";
 $GLOBALS['strSelectSource']			= "Select the source you want to view:";

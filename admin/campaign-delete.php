@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -51,11 +51,6 @@ function phpAds_DeleteCampaign($campaignid)
 	
 	// Delete Conversions Logged to this Campaign
 	$res = phpAds_dbQuery("DELETE FROM ".$phpAds_config['tbl_conversionlog'].
-		" WHERE campaignid=".$campaignid
-	) or phpAds_sqlDie();
-	
-	// Delete any conversion rules to this Campaign
-	$res = phpAds_dbQuery("DELETE FROM ".$phpAds_config['tbl_conversionrules'].
 		" WHERE campaignid=".$campaignid
 	) or phpAds_sqlDie();
 	

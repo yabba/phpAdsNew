@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -112,6 +112,30 @@ if (isset($trackerid) && $trackerid != '')
 	   		") or phpAds_sqlDie();
 			
 			$new_trackerid = phpAds_dbInsertID();
+			
+			// Copy any linked campaigns
+			$res = phpAds_dbQuery(
+				"SELECT".
+				" campaignid".
+				",trackerid".
+				",logstats".
+				",clickwindow".
+				",viewwindow".
+				" FROM ".$phpAds_config['tbl_campaigns_trackers'].
+				" WHERE trackerid=".$trackerid
+			) or phpAds_sqlDie();
+			
+			while($row = phpAds_dbFetchArray($res))
+			{
+				$res2 = phpAds_dbQuery(
+					" INSERT INTO ".$phpAds_config['tbl_campaigns_trackers'].
+					" SET campaignid=".$row['campaignid'].
+					",trackerid=".$new_trackerid.
+					",logstats='".$row['logstats']."'".
+					",clickwindow=".$row['clickwindow'].
+					",viewwindow=".$row['viewwindow']
+				) or phpAds_sqlDie();
+			}
 			
 			Header ("Location: ".$returnurl."?clientid=".$clientid."&trackerid=".$new_trackerid);
 			exit;

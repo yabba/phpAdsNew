@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -65,7 +65,7 @@ if (isset($submit))
 		}
 	}
 	
-	Header("Location: campaign-banners.php?clientid=".$clientid."&campaignid=".$campaignid);
+	Header("Location: campaign-trackers.php?clientid=".$clientid."&campaignid=".$campaignid);
 	exit;
 }
 
@@ -158,11 +158,11 @@ $extra .= "</form>";
 
 
 
-phpAds_PageHeader("4.1.3.3", $extra);
+phpAds_PageHeader("4.1.3.4", $extra);
 	echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentClientName($campaignid);
 	echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 	echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<b>".phpAds_getCampaignName($campaignid)."</b><br><br><br>";
-	phpAds_ShowSections(array("4.1.3.2", "4.1.3.3", "4.1.3.4"));
+	phpAds_ShowSections(array("4.1.3.2", "4.1.3.3", "4.1.3.4", "4.1.3.5"));
 
 
 

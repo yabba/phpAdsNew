@@ -1,4 +1,4 @@
-<?php // $Revision: 2.19 $
+<?php // $Revision: 2.20 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -258,7 +258,6 @@ if (phpAds_isUser(phpAds_Admin))
 				$phpAds_config['tbl_clients']				= $installvars['tbl_clients']				= $table_prefix.'clients';
 				$phpAds_config['tbl_config']				= $installvars['tbl_config']				= $table_prefix.'config';
 				$phpAds_config['tbl_conversionlog']			= $installvars['tbl_conversionlog']			= $table_prefix.'conversionlog';
-				$phpAds_config['tbl_conversionrules']		= $installvars['tbl_conversionrules']		= $table_prefix.'conversionrules';
 				$phpAds_config['tbl_images']				= $installvars['tbl_images']				= $table_prefix.'images';
 				$phpAds_config['tbl_session']				= $installvars['tbl_session']				= $table_prefix.'session';
 				$phpAds_config['tbl_targetstats']			= $installvars['tbl_targetstats']			= $table_prefix.'targetstats';
@@ -329,7 +328,6 @@ if (phpAds_isUser(phpAds_Admin))
 							phpAds_SettingsWriteAdd('tbl_clients', $installvars['tbl_clients']);
 							phpAds_SettingsWriteAdd('tbl_config', $installvars['tbl_config']);
 							phpAds_SettingsWriteAdd('tbl_conversionlog', $installvars['tbl_conversionlog']);
-							phpAds_SettingsWriteAdd('tbl_conversionrules', $installvars['tbl_conversionrules']);
 							phpAds_SettingsWriteAdd('tbl_images', $installvars['tbl_images']);
 							phpAds_SettingsWriteAdd('tbl_session', $installvars['tbl_session']);
 							phpAds_SettingsWriteAdd('tbl_targetstats', $installvars['tbl_targetstats']);

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.9 $
+<?php // $Revision: 2.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -468,7 +468,7 @@ function phpAds_generateTrackerCode()
 		 $phpAds_config
 		,$trackerid;
 		 
-	$buffer = "<img src='".$phpAds_config['url_prefix']."/adconversion.php?trackerid=".$trackerid."' width='1' height='1'>";
+	$buffer = "<img src='".$phpAds_config['url_prefix']."/adconversion.php?trackerid=".$trackerid."' width='1' height='1' border='0'>";
 
 	return $buffer;
 }

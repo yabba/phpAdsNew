@@ -1,4 +1,4 @@
-<?php // $Revision: 1.5 $
+<?php // $Revision: 1.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -20,7 +20,14 @@ require ("lib-statistics.inc.php");
 
 
 // Register input variables
-phpAds_registerGlobal ('expand', 'collapse', 'hideinactive', 'listorder', 'orderdirection', 'period');
+phpAds_registerGlobal (
+	 'collapse'
+	,'expand'
+	,'hideinactive'
+	,'listorder'
+	,'orderdirection'
+	,'period'
+);
 
 
 // Security check
@@ -28,7 +35,9 @@ phpAds_checkAccess(phpAds_Admin);
 
 
 // Set default values
-if (!isset($period)) $period = '';
+if (!isset($period))
+	$period = '';
+
 $tabindex = 1;
 
 
@@ -187,7 +196,8 @@ while ($row_banners = phpAds_dbFetchArray($res_banners))
 	$res_stats = phpAds_dbQuery("
 		SELECT
 			sum(views) as views,
-			sum(clicks) as clicks
+			sum(clicks) as clicks,
+			sum(conversions) as conversions
 		FROM 
 			".$phpAds_config['tbl_adstats']."
 		WHERE
@@ -197,6 +207,7 @@ while ($row_banners = phpAds_dbFetchArray($res_banners))
 	if ($row_stats = phpAds_dbFetchArray($res_stats))
 	{
 		$banners[$row_banners['bannerid']]['clicks'] = $row_stats['clicks'];
+		$banners[$row_banners['bannerid']]['conversions'] = $row_stats['conversions'];
 		$banners[$row_banners['bannerid']]['views'] = $row_stats['views'];
 	}
 }
@@ -286,16 +297,18 @@ if (isset($clients) && is_array($clients) && count($clients) > 0)
 
 
 
-$totalviews = 0;
 $totalclicks = 0;
+$totalconversions = 0;
+$totalviews = 0;
 
 if (isset($clients) && is_array($clients) && count($clients) > 0)
 {
 	// Calculate statistics for clients
 	for (reset($clients);$key=key($clients);next($clients))
 	{
-		$clientviews = 0;
 		$clientclicks = 0;
+		$clientconversions = 0;
+		$clientviews = 0;
 		
 		if (isset($clients[$key]['campaigns']) && sizeof ($clients[$key]['campaigns']) > 0)
 		{
@@ -304,31 +317,37 @@ if (isset($clients) && is_array($clients) && count($clients) > 0)
 			// Calculate statistics for campaigns
 			for (reset($campaigns);$ckey=key($campaigns);next($campaigns))
 			{
-				$campaignviews = 0;
 				$campaignclicks = 0;
+				$campaignconversions = 0;
+				$campaignviews = 0;
 				
 				if (isset($campaigns[$ckey]['banners']) && sizeof ($campaigns[$ckey]['banners']) > 0)
 				{
 					$banners = $campaigns[$ckey]['banners'];
 					for (reset($banners);$bkey=key($banners);next($banners))
 					{
-						$campaignviews += $banners[$bkey]['views'];
 						$campaignclicks += $banners[$bkey]['clicks'];
+						$campaignconversions += $banners[$bkey]['conversions'];
+						$campaignviews += $banners[$bkey]['views'];
 					}
 				}
 				
-				$clientviews += $campaignviews;
 				$clientclicks += $campaignclicks;
+				$clientconversions += $campaignconversions;
+				$clientviews += $campaignviews;
 				
-				$clients[$key]['campaigns'][$ckey]['views'] = $campaignviews;
 				$clients[$key]['campaigns'][$ckey]['clicks'] = $campaignclicks;
+				$clients[$key]['campaigns'][$ckey]['conversions'] = $campaignconversions;
+				$clients[$key]['campaigns'][$ckey]['views'] = $campaignviews;
 			}
 		}
 		
-		$totalviews += $clientviews;
 		$totalclicks += $clientclicks;
+		$totalviews += $clientconversions;
+		$totalviews += $clientviews;
 		
 		$clients[$key]['clicks'] = $clientclicks;
+		$clients[$key]['conversions'] = $clientconversions;
 		$clients[$key]['views'] = $clientviews;
 	}
 	
@@ -338,31 +357,26 @@ if (isset($clients) && is_array($clients) && count($clients) > 0)
 
 
 
+echo "\t\t\t\t<form action='".$HTTP_SERVER_VARS['PHP_SELF']."'>\n";
 
-echo "<form action='".$HTTP_SERVER_VARS['PHP_SELF']."'>";
-
-echo "<select name='period' onChange='this.form.submit();' accesskey='".$keyList."' tabindex='".($tabindex++)."'>";
-	echo "<option value=''".($period == '' ? ' selected' : '').">".$strCollectedAll."</option>";
-	echo "<option value='t'".($period == 't' ? ' selected' : '').">".$strCollectedToday."</option>";
-	echo "<option value='w'".($period == 'w' ? ' selected' : '').">".$strCollected7Days."</option>";
-	echo "<option value='m'".($period == 'm' ? ' selected' : '').">".$strCollectedMonth."</option>";
-echo "</select>";
+echo "\t\t\t\t<select name='period' onChange='this.form.submit();' accesskey='".$keyList."' tabindex='".($tabindex++)."'>\n";
+echo "\t\t\t\t\t<option value=''".($period == '' ? ' selected' : '').">".$strCollectedAll."</option>\n";
+echo "\t\t\t\t\t<option value='t'".($period == 't' ? ' selected' : '').">".$strCollectedToday."</option>\n";
+echo "\t\t\t\t\t<option value='w'".($period == 'w' ? ' selected' : '').">".$strCollected7Days."</option>\n";
+echo "\t\t\t\t\t<option value='m'".($period == 'm' ? ' selected' : '').">".$strCollectedMonth."</option>\n";
+echo "\t\t\t\t</select>\n";
 
 phpAds_ShowBreak();
-echo "</form>";
+echo "\t\t\t\t</form>\n";
 
 
-
-
-
-
-if ($clientshidden > 0 || $totalviews > 0 || $totalclicks > 0)
+if ($clientshidden > 0 || $totalviews > 0 || $totalclicks > 0 || $totalconversions > 0)
 {
 	echo "<br><br>";
-	echo "<table border='0' width='100%' cellpadding='0' cellspacing='0'>";	
+	echo "<table border='0' width='100%' cellpadding='0' cellspacing='0'>";
 	
 	echo "<tr height='25'>";
-	echo '<td height="25" width="40%"><b>&nbsp;&nbsp;<a href="stats-global-advertiser.php?listorder=name">'.$GLOBALS['strName'].'</a>';
+	echo '<td height="25" width="30%"><b>&nbsp;&nbsp;<a href="stats-global-advertiser.php?listorder=name">'.$GLOBALS['strName'].'</a>';
 	if (($listorder == "name") || ($listorder == ""))
 	{
 		if  (($orderdirection == "") || ($orderdirection == "down"))
@@ -377,8 +391,8 @@ if ($clientshidden > 0 || $totalviews > 0 || $totalclicks > 0)
 		}
 		echo '</a>';
 	}
-	echo '</b></td>';
-	echo '<td height="25"><b><a href="stats-global-advertiser.php?listorder=id">'.$GLOBALS['strID'].'</a>';
+	echo "</b></td>";
+	echo "<td height='25' align='".$phpAds_TextAlignRight."'><b><a href='stats-global-advertiser.php?listorder=id'>".$GLOBALS['strID']."</a>";
 	if ($listorder == "id")
 	{
 		if  (($orderdirection == "") || ($orderdirection == "down"))
@@ -393,13 +407,15 @@ if ($clientshidden > 0 || $totalviews > 0 || $totalclicks > 0)
 		}
 		echo '</a>';
 	}
-	echo '</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>';
+	echo '</b></td>';
 	echo "<td height='25' align='".$phpAds_TextAlignRight."'><b>".$GLOBALS['strViews']."</b></td>";
 	echo "<td height='25' align='".$phpAds_TextAlignRight."'><b>".$GLOBALS['strClicks']."</b></td>";
-	echo "<td height='25' align='".$phpAds_TextAlignRight."'><b>".$GLOBALS['strCTRShort']."</b>&nbsp;&nbsp;</td>";
+	echo "<td height='25' align='".$phpAds_TextAlignRight."'><b>".$GLOBALS['strCTRShort']."</b></td>";
+	echo "<td height='25' align='".$phpAds_TextAlignRight."'><b>".$GLOBALS['strConversions']."</b></td>";
+	echo "<td height='25' align='".$phpAds_TextAlignRight."'><b>".$GLOBALS['strCNVRShort']."</b></td>";
 	echo "</tr>";
 	
-	echo "<tr height='1'><td colspan='5' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
+	echo "<tr height='1'><td colspan='7' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
 	
 	
 	$i=0;
@@ -426,16 +442,22 @@ if ($clientshidden > 0 || $totalviews > 0 || $totalclicks > 0)
 		echo "</td>";
 		
 		// ID
-		echo "<td height='25'>".$client['clientid']."</td>";
+		echo "<td height='25' align='".$phpAds_TextAlignRight."'>".$client['clientid']."</td>";
 		
-		// Button 1
+		// Views
 		echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($client['views'])."</td>";
 		
-		// Empty
+		// Clicks
 		echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($client['clicks'])."</td>";
 		
-		// Button 3
-		echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_buildCTR($client['views'], $client['clicks'])."&nbsp;&nbsp;</td>";
+		// CTR
+		echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_buildCTR($client['views'], $client['clicks'])."</td>";
+		
+		// Conversions
+		echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($client['conversions'])."</td>";
+		
+		// CNVR
+		echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_buildCTR($client['clicks'], $client['conversions'])."</td>";
 		
 		
 		
@@ -448,7 +470,7 @@ if ($clientshidden > 0 || $totalviews > 0 || $totalclicks > 0)
 				// Divider
 				echo "<tr height='1'>";
 				echo "<td ".($i%2==0?"bgcolor='#F6F6F6'":"")."><img src='images/spacer.gif' width='1' height='1'></td>";
-				echo "<td colspan='5' bgcolor='#888888'><img src='images/break-l.gif' height='1' width='100%'></td>";
+				echo "<td colspan='7' bgcolor='#888888'><img src='images/break-l.gif' height='1' width='100%'></td>";
 				echo "</tr>";
 				
 				// Icon & name
@@ -475,16 +497,22 @@ if ($clientshidden > 0 || $totalviews > 0 || $totalclicks > 0)
 				echo "</td>";
 				
 				// ID
-				echo "<td height='25'>".$campaigns[$ckey]['clientid']."</td>";
+				echo "<td height='25' align='".$phpAds_TextAlignRight."'>".$campaigns[$ckey]['campaignid']."</td>";
 				
-				// Button 1
+				// Views
 				echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($campaigns[$ckey]['views'])."</td>";
 				
-				// Button 2
+				// Clicks
 				echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($campaigns[$ckey]['clicks'])."</td>";
 				
-				// Button 3
-				echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_buildCTR($campaigns[$ckey]['views'], $campaigns[$ckey]['clicks'])."&nbsp;&nbsp;</td>";
+				// CTR
+				echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_buildCTR($campaigns[$ckey]['views'], $campaigns[$ckey]['clicks'])."</td>";
+				
+				// Conversions
+				echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($campaigns[$ckey]['conversions'])."</td>";
+				
+				// CNVR
+				echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_buildCTR($campaigns[$ckey]['clicks'], $campaigns[$ckey]['conversions'])."</td>";
 				
 				
 				
@@ -502,7 +530,7 @@ if ($clientshidden > 0 || $totalviews > 0 || $totalclicks > 0)
 						// Divider
 						echo "<tr height='1'>";
 						echo "<td ".($i%2==0?"bgcolor='#F6F6F6'":"")."><img src='images/spacer.gif' width='1' height='1'></td>";
-						echo "<td colspan='4' bgcolor='#888888'><img src='images/break-l.gif' height='1' width='100%'></td>";
+						echo "<td colspan='6' bgcolor='#888888'><img src='images/break-l.gif' height='1' width='100%'></td>";
 						echo "</tr>";
 						
 						// Icon & name
@@ -535,39 +563,29 @@ if ($clientshidden > 0 || $totalviews > 0 || $totalclicks > 0)
 						echo "&nbsp;<a href='stats-banner-history.php?clientid=".$client['clientid']."&campaignid=".$campaigns[$ckey]['clientid']."&bannerid=".$banners[$bkey]['bannerid']."'>".$name."</a></td>";
 						
 						// ID
-						echo "<td height='25'>".$banners[$bkey]['bannerid']."</td>";
+						echo "<td height='25' align='".$phpAds_TextAlignRight."'>".$banners[$bkey]['bannerid']."</td>";
 						
-						// Empty
+						// Views
 						echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($banners[$bkey]['views'])."</td>";
 						
-						// Button 2
+						// Clicks
 						echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($banners[$bkey]['clicks'])."</td>";
 						
-						// Button 1
-						echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_buildCTR($banners[$bkey]['views'], $banners[$bkey]['clicks'])."&nbsp;&nbsp;</td>";
+						// CTR
+						echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_buildCTR($banners[$bkey]['views'], $banners[$bkey]['clicks'])."</td>";
+
+						// Conversions
+						echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($banners[$bkey]['conversions'])."</td>";
+						
+						// CNVR
+						echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_buildCTR($banners[$bkey]['clicks'], $banners[$bkey]['conversions'])."</td>";
 					}
 				}
 			}
 		}
 		
-/* CANNOT HAVE BANNERS WITHOUT ADVERTISERS ANYMORE...
 
-		if (isset ($client['banners']) && sizeof($client['banners']) > 0)
-		{
-			// Divider
-			echo "<tr height='1'><td colspan='1'></td><td colspan='3' bgcolor='#888888'><img src='images/break-l.gif' height='1' width='100%'></td></tr>";
-			
-			echo "<tr height='25' ".($i%2==0?"bgcolor='#F6F6F6'":"").">";
-			echo "<td height='25'>$strBannersWithoutCampaign</td>";
-			echo "<td height='25'>&nbsp;-&nbsp;</td>";
-			echo "<td>&nbsp;</td>";
-			echo "<td>&nbsp;</td>";
-			echo "<td>&nbsp;</td>";
-			echo "</tr>";
-		}
-*/	
-
-		echo "<tr height='1'><td colspan='5' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
+		echo "<tr height='1'><td colspan='7' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
 		$i++;
 	}
 	
@@ -576,12 +594,14 @@ if ($clientshidden > 0 || $totalviews > 0 || $totalclicks > 0)
 	echo "<td height='25'>&nbsp;</td>";
 	echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($totalviews)."</td>";
 	echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($totalclicks)."</td>";
-	echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_buildCTR($totalviews, $totalclicks)."&nbsp;&nbsp;</td>";
+	echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_buildCTR($totalviews, $totalclicks)."</td>";
+	echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_formatNumber($totalconversions)."</td>";
+	echo "<td height='25' align='".$phpAds_TextAlignRight."'>".phpAds_buildCTR($totalclicks, $totalconversions)."</td>";
 	echo "</tr>";
-	echo "<tr height='1'><td colspan='5' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
+	echo "<tr height='1'><td colspan='7' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
 	
 	
-	echo "<tr><td height='25' colspan='3' align='".$phpAds_TextAlignLeft."' nowrap>";
+	echo "<tr><td height='25' colspan='4' align='".$phpAds_TextAlignLeft."' nowrap>";
 	
 	if ($hideinactive == true)
 	{
@@ -595,7 +615,7 @@ if ($clientshidden > 0 || $totalviews > 0 || $totalclicks > 0)
 		echo "&nbsp;<a href='stats-global-advertiser.php?period=".$period."&amp;hideinactive=1'>".$strHideInactiveAdvertisers."</a>";
 	}
 	
-	echo "</td><td height='25' colspan='2' align='".$phpAds_TextAlignRight."' nowrap>";
+	echo "</td><td height='25' colspan='3' align='".$phpAds_TextAlignRight."' nowrap>";
 	echo "<img src='images/triangle-d.gif' align='absmiddle' border='0'>";
 	echo "&nbsp;<a href='stats-global-advertiser.php?period=".$period."&amp;expand=all' accesskey='".$keyExpandAll."'>".$strExpandAll."</a>";
 	echo "&nbsp;&nbsp;|&nbsp;&nbsp;";

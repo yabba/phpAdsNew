@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -37,9 +37,9 @@ require (phpAds_path."/libraries/lib-cache.inc.php");
 /*********************************************************/
 
 phpAds_registerGlobal (
-	 'trackerid'
-	,'block'
+	 'block'
 	,'capping'
+	,'trackerid'
 );
 
 
@@ -48,10 +48,10 @@ phpAds_registerGlobal (
 /* Main code                                             */
 /*********************************************************/
 
-// Determine the cookie ID
-$cookieid = phpAds_getCookieID();
-// Send the cookie ID
-phpAds_setCookie("phpAds_id", $cookieid, time()+365*24*60*60);
+// Determine the user ID
+$userid = phpAds_getUniqueUserID(false);
+// Send the user ID
+//phpAds_setCookie("phpAds_id", $userid, time()+365*24*60*60);
 
 if ($phpAds_config['block_adconversions'] == 0 ||
    ($phpAds_config['block_adconversions'] > 0 && 
@@ -61,7 +61,7 @@ if ($phpAds_config['block_adconversions'] == 0 ||
 	if ($phpAds_config['log_adconversions'])
 	{
 		phpAds_dbConnect();
-		phpAds_logConversion($cookieid, $trackerid);
+		phpAds_logConversion($userid, $trackerid);
 	}
 	
 	// Send block cookies

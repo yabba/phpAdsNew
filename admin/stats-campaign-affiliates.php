@@ -1,4 +1,4 @@
-<?php // $Revision: 2.6 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -23,10 +23,7 @@ require ("lib-zones.inc.php");
 
 // Register input variables
 phpAds_registerGlobal (
-	 'bannerid'
-	,'campaignid'
-	,'clientid'
-	,'collapse'
+	 'collapse'
 	,'distributiontype'
 	,'expand'
 	,'listorder'
@@ -41,7 +38,7 @@ phpAds_checkAccess(phpAds_Admin+phpAds_Client);
 // Check to see if they are switching...
 if (isset($distributiontype) && ($distributiontype == 's') )
 {
-	Header("Location: stats-banner-sources.php?clientid=".$clientid."&campaignid=".$campaignid."&bannerid=".$bannerid);
+	Header("Location: stats-campaign-sources.php?clientid=".$clientid."&campaignid=".$campaignid);
 	exit;
 }
 
@@ -53,22 +50,22 @@ if (isset($distributiontype) && ($distributiontype == 's') )
 
 if (!isset($listorder))
 {
-	if (isset($Session['prefs']['stats-banner-affiliates.php']['listorder']))
-		$listorder = $Session['prefs']['stats-banner-affiliates.php']['listorder'];
+	if (isset($Session['prefs']['stats-campaign-affiliates.php']['listorder']))
+		$listorder = $Session['prefs']['stats-campaign-affiliates.php']['listorder'];
 	else
 		$listorder = '';
 }
 
 if (!isset($orderdirection))
 {
-	if (isset($Session['prefs']['stats-banner-affiliates.php']['orderdirection']))
-		$orderdirection = $Session['prefs']['stats-banner-affiliates.php']['orderdirection'];
+	if (isset($Session['prefs']['stats-campaign-affiliates.php']['orderdirection']))
+		$orderdirection = $Session['prefs']['stats-campaign-affiliates.php']['orderdirection'];
 	else
 		$orderdirection = '';
 }
 
-if (isset($Session['prefs']['stats-banner-affiliates.php']['nodes']))
-	$node_array = explode (",", $Session['prefs']['stats-banner-affiliates.php']['nodes']);
+if (isset($Session['prefs']['stats-campaign-affiliates.php']['nodes']))
+	$node_array = explode (",", $Session['prefs']['stats-campaign-affiliates.php']['nodes']);
 else
 	$node_array = array();
 
@@ -76,13 +73,13 @@ else
 /* HTML framework                                        */
 /*********************************************************/
 
-if (isset($Session['prefs']['stats-campaign-banners.php']['listorder']))
-	$navorder = $Session['prefs']['stats-campaign-banners.php']['listorder'];
+if (isset($Session['prefs']['stats-advertiser-campaigns.php']['listorder']))
+	$navorder = $Session['prefs']['stats-advertiser-campaigns.php']['listorder'];
 else
 	$navorder = '';
 
-if (isset($Session['prefs']['stats-campaign-banners.php']['orderdirection']))
-	$navdirection = $Session['prefs']['stats-campaign-banners.php']['orderdirection'];
+if (isset($Session['prefs']['stats-advertiser-campaigns.php']['orderdirection']))
+	$navdirection = $Session['prefs']['stats-advertiser-campaigns.php']['orderdirection'];
 else
 	$navdirection = '';
 
@@ -92,30 +89,23 @@ if (phpAds_isUser(phpAds_Client))
 	{
 		$res = phpAds_dbQuery(
 			"SELECT *".
-			" FROM ".$phpAds_config['tbl_banners'].
-			" WHERE campaignid=".$campaignid.
-			phpAds_getBannerListOrder ($navorder, $navdirection)
+			" FROM ".$phpAds_config['tbl_campaigns'].
+			" WHERE clientid = ".phpAds_getUserID().
+			phpAds_getCampaignListOrder ($navorder, $navdirection)
 		) or phpAds_sqlDie();
 		
 		while ($row = phpAds_dbFetchArray($res))
 		{
 			phpAds_PageContext (
-				phpAds_buildBannerName ($row['bannerid'], $row['description'], $row['alt']),
-				"stats-banner-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&bannerid=".$row['bannerid'],
-				$bannerid == $row['bannerid']
+				phpAds_buildName ($row['campaignid'], $row['campaignname']),
+				"stats-campaign-affiliates.php?clientid=".$clientid."&campaignid=".$row['campaignid'],
+				$campaignid == $row['campaignid']
 			);
 		}
 		
-		$sections[] = "1.2.2.1";
-		if (phpAds_isAllowed(phpAds_ModifyBanner)) $sections[] = "1.2.2.2";
-		$sections[] = "1.2.2.4";
-		
-		phpAds_PageHeader("1.2.2.4");
-			echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;".phpAds_getCampaignName($campaignid);
-			echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
-			echo "<img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;<b>".phpAds_getBannerName($bannerid)."</b><br><br>";
-			echo phpAds_buildBannerCode($bannerid)."<br><br><br><br>";
-			phpAds_ShowSections($sections);
+		phpAds_PageHeader("1.2.3");
+			echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<b>".phpAds_getCampaignName($campaignid)."</b><br><br><br>";
+			phpAds_ShowSections(array("1.2.1", "1.2.2", "1.2.3", "1.2.4"));
 	}
 	else
 	{
@@ -145,14 +135,11 @@ if (phpAds_isUser(phpAds_Admin))
 	phpAds_PageShortcut($strClientProperties, 'advertiser-edit.php?clientid='.$clientid, 'images/icon-advertiser.gif');
 	phpAds_PageShortcut($strCampaignProperties, 'campaign-edit.php?clientid='.$clientid.'&campaignid='.$campaignid, 'images/icon-campaign.gif');
 	
-	phpAds_PageHeader("2.1.2.2.2");
+	phpAds_PageHeader("2.1.2.3");
 		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentClientName($campaignid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
-		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;".phpAds_getCampaignName($campaignid);
-		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
-		echo "<img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;<b>".phpAds_getBannerName($bannerid)."</b><br><br>";
-		echo phpAds_buildBannerCode($bannerid)."<br><br><br><br>";
-		phpAds_ShowSections(array("2.1.2.2.1", "2.1.2.2.2"));
+		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<b>".phpAds_getCampaignName($campaignid)."</b><br><br><br>";
+		phpAds_ShowSections(array("2.1.2.1", "2.1.2.2", "2.1.2.3", "2.1.2.4"));
 }
 
 
@@ -206,7 +193,7 @@ while ($row_zones = phpAds_dbFetchArray($res_zones))
 	}
 }
 
-// Check to see if this banner's campaign is anonymous
+// Check to see if this campaign is anonymous
 $anonymous = false;
 $res_campaign = phpAds_dbQuery(
 	"SELECT anonymous".
@@ -226,8 +213,10 @@ $res_stats = phpAds_dbQuery(
 	",sum(views) as views".
 	",sum(clicks) as clicks".
 	",sum(conversions) as conversions".
-	" FROM ".$phpAds_config['tbl_adstats'].
-	" WHERE bannerid=".$bannerid.
+	" FROM ".$phpAds_config['tbl_adstats']." AS s".
+	",".$phpAds_config['tbl_banners']." AS b".
+	" WHERE b.bannerid=s.bannerid".
+	" AND b.campaignid=".$campaignid.
 	" GROUP BY zoneid"
 ) or phpAds_sqlDie();
 
@@ -346,35 +335,35 @@ if ($totalviews > 0 || $totalclicks > 0 || $totalconversions > 0)
 	echo "<tr height='25'>";
 	echo "<td height='25' width='40%'>\n";
 	
-	echo "<b>&nbsp;&nbsp;<a href='stats-banner-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&listorder=name'>".$GLOBALS['strName']."</a>";
+	echo "<b>&nbsp;&nbsp;<a href='stats-campaign-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&listorder=name'>".$GLOBALS['strName']."</a>";
 
 	if (($listorder == "name") || ($listorder == ""))
 	{
 		if  (($orderdirection == "") || ($orderdirection == "down"))
 		{
-			echo " <a href='stats-banner-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&orderdirection=up'><img src='images/caret-ds.gif' border='0' alt='' title=''></a>";
+			echo " <a href='stats-campaign-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&orderdirection=up'><img src='images/caret-ds.gif' border='0' alt='' title=''></a>";
 		}
 		else
 		{
-			echo " <a href='stats-banner-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&orderdirection=down'><img src='images/caret-u.gif' border='0' alt='' title=''></a>";
+			echo " <a href='stats-campaign-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&orderdirection=down'><img src='images/caret-u.gif' border='0' alt='' title=''></a>";
 		}
 	}
 	
 	echo "</b>";
 	echo '</td>';
 	
-	echo "<td height='25'><b><a href='stats-banner-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&listorder=id'>".$GLOBALS['strID']."</a>";
+	echo "<td height='25'><b><a href='stats-campaign-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&listorder=id'>".$GLOBALS['strID']."</a>";
 	
 	if ($listorder == "id")
 	{
 		if  (($orderdirection == "") || ($orderdirection == "down"))
 		{
-			echo " <a href='stats-banner-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&orderdirection=up'>";
+			echo " <a href='stats-campaign-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&orderdirection=up'>";
 			echo '<img src="images/caret-ds.gif" border="0" alt="" title="">';
 		}
 		else
 		{
-			echo " <a href='stats-banner-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&orderdirection=down'>";
+			echo " <a href='stats-campaign-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&orderdirection=down'>";
 			echo '<img src="images/caret-u.gif" border="0" alt="" title="">';
 		}
 		echo '</a>';
@@ -410,9 +399,9 @@ if ($totalviews > 0 || $totalclicks > 0 || $totalconversions > 0)
 				if (isset($affiliate['zones']) && !$anonymous)
 				{
 					if ($affiliate['expand'] == '1')
-						echo "&nbsp;<a href='stats-banner-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&collapse=".$affiliate['affiliateid']."'><img src='images/triangle-d.gif' align='absmiddle' border='0'></a>&nbsp;";
+						echo "&nbsp;<a href='stats-campaign-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&collapse=".$affiliate['affiliateid']."'><img src='images/triangle-d.gif' align='absmiddle' border='0'></a>&nbsp;";
 					else
-						echo "&nbsp;<a href='stats-banner-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&expand=".$affiliate['affiliateid']."'><img src='images/".$phpAds_TextDirection."/triangle-l.gif' align='absmiddle' border='0'></a>&nbsp;";
+						echo "&nbsp;<a href='stats-campaign-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&expand=".$affiliate['affiliateid']."'><img src='images/".$phpAds_TextDirection."/triangle-l.gif' align='absmiddle' border='0'></a>&nbsp;";
 				}
 				else
 					echo "&nbsp;<img src='images/spacer.gif' height='16' width='16'>&nbsp;";
@@ -546,10 +535,10 @@ if ($totalviews > 0 || $totalclicks > 0 || $totalconversions > 0)
 	echo "\t\t\t\t<tr>\n";
 	echo "\t\t\t\t\t<td colspan='7' align='".$phpAds_TextAlignRight."' nowrap>";
 	echo "<img src='images/triangle-d.gif' align='absmiddle' border='0'>";
-	echo "&nbsp;<a href='stats-banner-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&expand=all' accesskey='".$keyExpandAll."'>".$strExpandAll."</a>";
+	echo "&nbsp;<a href='stats-campaign-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&expand=all' accesskey='".$keyExpandAll."'>".$strExpandAll."</a>";
 	echo "&nbsp;&nbsp;|&nbsp;&nbsp;";
 	echo "<img src='images/".$phpAds_TextDirection."/triangle-l.gif' align='absmiddle' border='0'>";
-	echo "&nbsp;<a href='stats-banner-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&expand=none' accesskey='".$keyCollapseAll."'>".$strCollapseAll."</a>";
+	echo "&nbsp;<a href='stats-campaign-affiliates.php?clientid=".$clientid."&campaignid=".$campaignid."&expand=none' accesskey='".$keyCollapseAll."'>".$strCollapseAll."</a>";
 	echo "</td>\n";
 	echo "\t\t\t\t</tr>";
 
@@ -568,9 +557,9 @@ else
 /* Store preferences                                     */
 /*********************************************************/
 
-$Session['prefs']['stats-banner-affiliates.php']['listorder'] = $listorder;
-$Session['prefs']['stats-banner-affiliates.php']['orderdirection'] = $orderdirection;
-$Session['prefs']['stats-banner-affiliates.php']['nodes'] = implode (",", $node_array);
+$Session['prefs']['stats-campaign-affiliates.php']['listorder'] = $listorder;
+$Session['prefs']['stats-campaign-affiliates.php']['orderdirection'] = $orderdirection;
+$Session['prefs']['stats-campaign-affiliates.php']['nodes'] = implode (",", $node_array);
 
 phpAds_SessionDataStore();
 

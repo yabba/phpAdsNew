@@ -1,4 +1,4 @@
-<?php // $Revision: 2.11 $
+<?php // $Revision: 2.12 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -61,10 +61,10 @@ phpAds_registerGlobal (
 /* Main code                                             */
 /*********************************************************/
 
-// Determine the cookie ID
-$cookieid = phpAds_getCookieID();
-// Send the cookie ID
-phpAds_setCookie("phpAds_id", $cookieid, time()+365*24*60*60);
+// Determine the user ID
+$userid = phpAds_getUniqueUserID();
+// Send the user ID
+phpAds_setCookie("phpAds_id", $userid, time()+365*24*60*60);
 
 
 $url = parse_url($phpAds_config['url_prefix']);
@@ -137,7 +137,7 @@ if ($found)
 	   	$HTTP_COOKIE_VARS['phpAds_blockView'][$row['bannerid']] <= time())))
 	{
 		if ($phpAds_config['log_adviews'])
-			phpAds_logImpression ($cookieid, $row['bannerid'], $row['zoneid'], $source);
+			phpAds_logImpression ($userid, $row['bannerid'], $row['zoneid'], $source);
 		
 		// Send block cookies
 		if ($phpAds_config['block_adviews'] > 0)

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -80,7 +80,7 @@ if (isset($submit))
 		$new_tracker = false;
 	}
 	
-	Header("Location: tracker-include.php?clientid=".$clientid."&trackerid=".$trackerid);
+	Header("Location: tracker-campaigns.php?clientid=".$clientid."&trackerid=".$trackerid);
 	exit;
 }
 
@@ -116,7 +116,7 @@ if ($trackerid != "")
 	{
 		phpAds_PageContext (
 			phpAds_buildName ($row['trackerid'], $row['trackername']),
-			"tracker-edit.php?clientid=".$clientid."&trackerid=".$row['trackerid'],
+			"tracker-invocation.php?clientid=".$clientid."&trackerid=".$row['trackerid'],
 			$trackerid == $row['trackerid']
 		);
 	}

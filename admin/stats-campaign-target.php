@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -64,9 +64,9 @@ if (phpAds_isUser(phpAds_Client))
 			);
 		}
 		
-		phpAds_PageHeader("1.2.3");
+		phpAds_PageHeader("1.2.4");
 			echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<b>".phpAds_getCampaignName($campaignid)."</b><br><br><br>";
-			phpAds_ShowSections(array("1.2.1", "1.2.2", "1.2.3"));
+			phpAds_ShowSections(array("1.2.1", "1.2.2", "1.2.3", "1.2.4"));
 	}
 	else
 	{
@@ -96,11 +96,11 @@ if (phpAds_isUser(phpAds_Admin))
 	phpAds_PageShortcut($strClientProperties, 'advertiser-edit.php?clientid='.$clientid, 'images/icon-advertiser.gif');
 	phpAds_PageShortcut($strCampaignProperties, 'campaign-edit.php?clientid='.$clientid.'&campaignid='.$campaignid, 'images/icon-campaign.gif');
 	
-	phpAds_PageHeader("2.1.2.3");
+	phpAds_PageHeader("2.1.2.4");
 		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentClientName($campaignid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<b>".phpAds_getCampaignName($campaignid)."</b><br><br><br>";
-		phpAds_ShowSections(array("2.1.2.1", "2.1.2.2", "2.1.2.3"));
+		phpAds_ShowSections(array("2.1.2.1", "2.1.2.2", "2.1.2.3", "2.1.2.4"));
 }
 
 

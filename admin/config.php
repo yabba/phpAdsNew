@@ -1,4 +1,4 @@
-<?php // $Revision: 2.9 $
+<?php // $Revision: 2.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -150,7 +150,8 @@ $phpAds_nav = array (
 		          "2.1.2.2.1.1"		=> 	array("stats-banner-daily.php?clientid=$clientid&campaignid=$campaignid&bannerid=$bannerid&day=$day" => $strDailyStats),
 		          "2.1.2.2.1.2"		=> 	array("stats-banner-daily-hosts.php?clientid=$clientid&campaignid=$campaignid&bannerid=$bannerid&day=$day" => $strHosts),
     	        "2.1.2.2.2" 		=> 	array("stats-banner-affiliates.php?clientid=$clientid&campaignid=$campaignid&bannerid=$bannerid" => $strDistribution),
-    	      "2.1.2.3"		 		=> 	array("stats-campaign-target.php?clientid=$clientid&campaignid=$campaignid" => $strTargetStats),
+    	      "2.1.2.3"		 		=> 	array("stats-campaign-affiliates.php?clientid=$clientid&campaignid=$campaignid" => $strDistribution),
+    	      "2.1.2.4"		 		=> 	array("stats-campaign-target.php?clientid=$clientid&campaignid=$campaignid" => $strTargetStats),
 		  "2.2"						=>  array("stats-global-history.php" => $strGlobalHistory),
 		    "2.2.1"					=> 	array("stats-global-daily.php?day=$day" => $strDailyStats),
 		    "2.2.2"					=> 	array("stats-global-daily-hosts.php?day=$day" => $strHosts),
@@ -173,18 +174,19 @@ $phpAds_nav = array (
 		    "4.1.3"					=> 	array("advertiser-campaigns.php?clientid=$clientid" => $strCampaignOverview),
 		      "4.1.3.1"				=>  array("campaign-edit.php?clientid=$clientid" => $strAddCampaign),
 		      "4.1.3.2"				=>	array("campaign-edit.php?clientid=$clientid&campaignid=$campaignid" => $strCampaignProperties),
-		      "4.1.3.3"				=> 	array("campaign-zone.php?clientid=$clientid&campaignid=$campaignid" => $strLinkedZones),
-		      "4.1.3.4"				=> 	array("campaign-banners.php?clientid=$clientid&campaignid=$campaignid" => $strBannerOverview),
+		      "4.1.3.3"				=> 	array("campaign-banners.php?clientid=$clientid&campaignid=$campaignid" => $strBannerOverview),
+		      "4.1.3.4"				=> 	array("campaign-zone.php?clientid=$clientid&campaignid=$campaignid" => $strLinkedZones),
 		        "4.1.3.4.1"			=> 	array("banner-edit.php?clientid=$clientid&campaignid=$campaignid" => $strAddBanner),
 		        "4.1.3.4.2"			=> 	array("banner-edit.php?clientid=$clientid&campaignid=$campaignid&bannerid=$bannerid" => $strBannerProperties),
 		        "4.1.3.4.3"			=> 	array("banner-acl.php?clientid=$clientid&campaignid=$campaignid&bannerid=$bannerid" => $strModifyBannerAcl),
 		        "4.1.3.4.4"			=> 	array("banner-zone.php?clientid=$clientid&campaignid=$campaignid&bannerid=$bannerid" => $strLinkedZones),
 			    "4.1.3.4.5"			=>  array("banner-swf.php?clientid=$clientid&campaignid=$campaignid&bannerid=$bannerid" => $strConvertSWFLinks),
 			    "4.1.3.4.6"			=>  array("banner-append.php?clientid=$clientid&campaignid=$campaignid&bannerid=$bannerid" => $strAppendOthers),
+		      "4.1.3.5"				=> 	array("campaign-trackers.php?clientid=$clientid&campaignid=$campaignid" => $strLinkedTrackers),
 		    "4.1.4"					=> 	array("advertiser-trackers.php?clientid=$clientid" => $strTrackerOverview),
 		      "4.1.4.1"				=>  array("tracker-edit.php?clientid=$clientid" => $strAddTracker),
 		      "4.1.4.2"				=>	array("tracker-edit.php?clientid=$clientid&trackerid=$trackerid" => $strTrackerProperties),
-		      "4.1.4.3"				=> 	array("tracker-include.php?clientid=$clientid&trackerid=$trackerid" => $strLinkedCampaigns),
+		      "4.1.4.3"				=> 	array("tracker-campaigns.php?clientid=$clientid&trackerid=$trackerid" => $strLinkedCampaigns),
 		      "4.1.4.4"				=> 	array("tracker-invocation.php?clientid=$clientid&trackerid=$trackerid" => $strInvocationcode),
 		  "4.2" 					=> 	array("affiliate-index.php" => $strAffiliatesAndZones),
 		    "4.2.1" 				=> 	array("affiliate-edit.php" => $strAddNewAffiliate),
@@ -220,7 +222,9 @@ $phpAds_nav = array (
 		        "1.2.2.1.2"			=> 	array("stats-banner-daily-hosts.php?clientid=$clientid&campaignid=$campaignid&bannerid=$bannerid&day=$day" => $strHosts),
 		      "1.2.2.2"				=> 	array("banner-edit.php?clientid=$clientid&campaignid=$campaignid&bannerid=$bannerid" => $strBannerProperties),
 			  "1.2.2.3"				=>  array("banner-swf.php?clientid=$clientid&campaignid=$campaignid&bannerid=$bannerid" => $strConvertSWFLinks),
-    	    "1.2.3"					=> 	array("stats-campaign-target.php?clientid=$clientid&campaignid=$campaignid" => $strTargetStats),
+    	      "1.2.2.4" 			=> 	array("stats-banner-affiliates.php?clientid=$clientid&campaignid=$campaignid&bannerid=$bannerid" => $strDistribution),
+    	    "1.2.3"		 			=> 	array("stats-campaign-affiliates.php?clientid=$clientid&campaignid=$campaignid" => $strDistribution),
+    	    "1.2.4"					=> 	array("stats-campaign-target.php?clientid=$clientid&campaignid=$campaignid" => $strTargetStats),
 		"3"							=>  array("report-index.php" => $strReports)
 	),
 

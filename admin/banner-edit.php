@@ -1,4 +1,4 @@
-<?php // $Revision: 2.8 $
+<?php // $Revision: 2.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -826,7 +826,7 @@ if ($bannerid != '')
 			echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 			echo "<img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;<b>".phpAds_getBannerName($bannerid)."</b><br><br>";
 			echo phpAds_buildBannerCode($bannerid)."<br><br><br><br>";
-			phpAds_ShowSections(array("1.2.2.1","1.2.2.2"));
+			phpAds_ShowSections(array("1.2.2.1","1.2.2.2","1.2.2.4"));
 	}
 	
 	
