@@ -1,4 +1,4 @@
-<?php // $Revision: 1.8 $
+<?php // $Revision: 1.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -44,7 +44,7 @@ if (is_array($row))
 		}
 		else
 		{
-			if($row["format"] == "url")
+			if($row["format"] == "url" || $row["format"] == "web")
 			{
 				Header("Location: $row[banner]");
 				log_adview($row["bannerID"], $row["clientID"]);
