@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -75,7 +75,7 @@ while ($row = phpAds_dbFetchArray($res))
 }
 
 phpAds_PageShortcut($strClientProperties, 'client-edit.php?clientid='.phpAds_getParentID($campaignid), 'images/icon-client.gif');
-phpAds_PageShortcut($strStats, 'stats-campaign-banners.php?campaignid='.$campaignid, 'images/icon-statistics.gif');
+phpAds_PageShortcut($strCampaignHistory, 'stats-campaign-history.php?campaignid='.$campaignid, 'images/icon-statistics.gif');
 
 
 
