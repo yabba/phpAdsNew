@@ -1,4 +1,4 @@
-<?php // $Revision: 1.5 $
+<?php // $Revision: 1.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -465,7 +465,7 @@ else
 								echo "<img src='images/icon-banner-stored-d.gif' align='absmiddle'>";
 						}
 						
-						echo "&nbsp;<a href='banner-edit.php?clientid=".$client['clientid']."&campaignid=".$campaigns[$ckey]['clientid']."&bannerid=".$banners[$bkey]['bannerid']."'>".$name."</a></td>\n";
+						echo "&nbsp;<a href='banner-edit.php?clientid=".$client['clientid']."&campaignid=".$campaigns[$ckey]['campaignid']."&bannerid=".$banners[$bkey]['bannerid']."'>".$name."</a></td>\n";
 						
 						// ID
 						echo "\t\t\t\t\t<td height='25'>".$banners[$bkey]['bannerid']."</td>\n";
