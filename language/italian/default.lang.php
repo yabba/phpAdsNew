@@ -1,4 +1,4 @@
-<?php // $Revision: 2.9 $
+<?php // $Revision: 2.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -348,7 +348,7 @@ $GLOBALS['strBrowser'] 						= "Browser";
 $GLOBALS['strOS'] 							= "Sistema operativo";
 $GLOBALS['strCountry'] 						= "Stato";
 $GLOBALS['strContinent'] 					= "Continente";
-$GLOBALS['strReferer'] 						= "Indirizzo pagina di provenienza";
+$GLOBALS['strReferer'] 						= "Pagina di provenienza";
 $GLOBALS['strDeliveryLimitations']			= "Limitazioni consegna";
 $GLOBALS['strDeliveryCapping']				= "Limitazioni numero consegne";
 $GLOBALS['strTimeCapping']					= "Una volta consegnato il banner, non mostrarlo allo stesso utente per:";

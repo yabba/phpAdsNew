@@ -1,4 +1,4 @@
-<?php // $Revision: 2.7 $
+<?php // $Revision: 2.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -44,10 +44,21 @@ $type_list['clientip']	= $strClientIP;
 $type_list['domain']	= $strDomain;
 $type_list['language']	= $strLanguage;
 
-if ($phpAds_config['geotracking_type'] != 0)
+// Get geotargeting info
+if ($phpAds_config['geotracking_type'] != '')
 {
-	$type_list['country']	= $strCountry;
-	$type_list['continent']	= $strContinent;
+	$phpAds_geoPlugin = phpAds_path."/libraries/geotargeting/geo-".$phpAds_config['geotracking_type'].".inc.php";
+	
+	if (@file_exists($phpAds_geoPlugin))
+	{
+		@include_once ($phpAds_geoPlugin);
+		
+		eval ('$'.'info = phpAds_'.$phpAds_geoPluginID.'_getInfo();');
+		
+		if ($info['country']) $type_list['country']	= $strCountry;
+		if ($info['region']) $type_list['region'] == $strUSState;
+		if ($info['continent']) $type_list['continent']	= $strContinent;
+	}
 }
 
 $type_list['browser']   = $strBrowser;
@@ -250,35 +261,32 @@ elseif (isset($submit))
 	}
 	
 	
-	if ($phpAds_config['log_beacon'])
+	// Set time limit
+	if (isset($time))
 	{
-		// Set time limit
-		if (isset($time))
-		{
-			$block = 0;
-			if ($time['second'] != '-') $block += (int)$time['second'];
-			if ($time['minute'] != '-') $block += (int)$time['minute'] * 60;
-			if ($time['hour'] != '-') 	$block += (int)$time['hour'] * 3600;
-		}
-		else
-			$block = 0;
-		
-		// Set capping
-		if (isset($cap) && $cap != '-')
-			$cap = (int)$cap;
-		else
-			$cap = 0;
-		
-		
-		$res = phpAds_dbQuery("
-			UPDATE
-				".$phpAds_config['tbl_banners']."
-			SET
-				block='".$block."', capping='".$cap."'
-			WHERE
-				bannerid='".$bannerid."'
-		") or phpAds_sqlDie();
+		$block = 0;
+		if ($time['second'] != '-') $block += (int)$time['second'];
+		if ($time['minute'] != '-') $block += (int)$time['minute'] * 60;
+		if ($time['hour'] != '-') 	$block += (int)$time['hour'] * 3600;
 	}
+	else
+		$block = 0;
+	
+	// Set capping
+	if (isset($cap) && $cap != '-')
+		$cap = (int)$cap;
+	else
+		$cap = 0;
+	
+	
+	$res = phpAds_dbQuery("
+		UPDATE
+			".$phpAds_config['tbl_banners']."
+		SET
+			block='".$block."', capping='".$cap."'
+		WHERE
+			bannerid='".$bannerid."'
+	") or phpAds_sqlDie();
 	
 	
 	// Rebuild cache
