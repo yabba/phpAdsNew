@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -297,7 +297,7 @@ if (isset($clients) && is_array($clients) && count($clients) > 0)
 {
 	reset ($clients);
 	while (list ($key, $client) = each ($clients))
-		if (count($client['campaigns']) == 0 && $client['hideinactive'] > 0)
+		if (isset($client['campaigns']) && count($client['campaigns']) == 0 && $client['hideinactive'] > 0)
 		{
 			$clientshidden++;
 			unset($clients[$key]);

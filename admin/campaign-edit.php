@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -127,7 +127,7 @@ if (isset($submit))
 			$active = "f";
 	
 	
-	$new_campaign = $camapignid == 'null';
+	$new_campaign = $campaignid == 'null';
 	
 	$query = "
 		REPLACE INTO

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -35,6 +35,11 @@ if ($phpAds_config['compatibility_mode'])
 	$phpAds_config['tbl_userlog'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_userlog'];
 	$phpAds_config['tbl_cache'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_cache'];
 }
+
+// Disable delayed inserts when not using MyISAM tables
+if ($phpAds_config['table_type'] != 'MYISAM')
+	$phpAds_config['insert_delayed'] = false;
+
 
 
 /*********************************************************/
