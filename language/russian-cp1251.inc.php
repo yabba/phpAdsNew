@@ -1,4 +1,4 @@
-<?php // $Revision: 1.22 $
+<?php // $Revision: 1.23 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -244,7 +244,7 @@ $GLOBALS['strDays']						= "Дни";
 $GLOBALS['strHistory']					= "История";
 $GLOBALS['strAverage']					= "В среднем";
 $GLOBALS['strDuplicateClientName']		= "Указанное имя пользователя уже существует, пожалуйста введите другое имя.";
-$GLOBALS['strAllowClientDisableBanner'] = "Allow this user to de-activate his own banners";
-$GLOBALS['strAllowClientActivateBanner'] = "Allow this user to activate his own banners";
+$GLOBALS['strAllowClientDisableBanner'] = "Разрешить этому пользователю деактивировать его баннеры";
+$GLOBALS['strAllowClientActivateBanner'] = "Разрешить этому пользователю активировать его баннеры";
 
 ?>
