@@ -1,4 +1,4 @@
-<?php // $Revision: 2.6 $
+<?php // $Revision: 2.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -219,34 +219,6 @@ function phpAds_getTrackerListOrder ($ListOrder, $OrderDirection)
 			break;
 		default:
 			$sqlTableOrder = ' ORDER BY trackername';
-	}
-	if 	($sqlTableOrder != '')
-	{
-		$sqlTableOrder .= phpAds_getOrderDirection($OrderDirection);
-	}
-	return ($sqlTableOrder);
-}
-
-// Order for $phpAds_config['tbl_markers']
-function phpAds_getMarkerListOrder ($ListOrder, $OrderDirection)
-{
-	$sqlTableOrder = '';
-	switch ($ListOrder)
-	{
-		case 'name':
-			$sqlTableOrder = ' ORDER BY description';
-			break;
-		case 'id':
-			$sqlTableOrder = ' ORDER BY markerid';
-			break;
-		case 'adview':
-			break;
-		case 'adclick':
-			break;
-		case 'ctr':
-			break;
-		default:
-			$sqlTableOrder = ' ORDER BY description';
 	}
 	if 	($sqlTableOrder != '')
 	{

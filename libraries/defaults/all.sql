@@ -1,18 +1,15 @@
+-- Table structure for table 'phpads_acls'
 
 
-
--- Table structure for table 'phpads_userlog'
-
-
-CREATE TABLE phpads_userlog (
-   userlogid mediumint(9) NOT NULL AUTO_INCREMENT,
-   timestamp int(11) DEFAULT '0' NOT NULL,
-   usertype tinyint(4) DEFAULT '0' NOT NULL,
-   userid mediumint(9) DEFAULT '0' NOT NULL,
-   action mediumint(9) DEFAULT '0' NOT NULL,
-   object mediumint(9),
-   details blob,
-   PRIMARY KEY (userlogid)
+CREATE TABLE phpads_acls (
+   bannerid mediumint(9) DEFAULT '0' NOT NULL,
+   logical set('and','or') NOT NULL,
+   type varchar(16) NOT NULL,
+   comparison char(2) DEFAULT '==' NOT NULL,
+   data text NOT NULL,
+   executionorder int(10) unsigned DEFAULT '0' NOT NULL,
+   KEY bannerid (bannerid),
+   UNIQUE bannerid_executionorder (bannerid,executionorder)
 );
 
 
@@ -32,56 +29,6 @@ CREATE TABLE phpads_affiliates (
    publiczones enum('t','f') DEFAULT 'f' NOT NULL,
    PRIMARY KEY (affiliateid)
 );
-
-
--- Table structure for table 'phpads_cache'
-
-
-CREATE TABLE phpads_cache (
-   cacheid varchar(255) NOT NULL,
-   content blob NOT NULL,
-   PRIMARY KEY (cacheid)
-);
-
-
--- Table structure for table 'phpads_zones'
-
-
-CREATE TABLE phpads_zones (
-   zoneid mediumint(9) NOT NULL AUTO_INCREMENT,
-   affiliateid mediumint(9),
-   zonename varchar(245) NOT NULL,
-   description varchar(255) NOT NULL,
-   delivery smallint(6) DEFAULT '0' NOT NULL,
-   zonetype smallint(6) DEFAULT '0' NOT NULL,
-   what blob NOT NULL,
-   width smallint(6) DEFAULT '0' NOT NULL,
-   height smallint(6) DEFAULT '0' NOT NULL,
-   chain blob NOT NULL,
-   prepend blob NOT NULL,
-   append blob NOT NULL,
-   appendtype tinyint(4) DEFAULT '0' NOT NULL,
-   PRIMARY KEY (zoneid),
-   KEY zonenameid (zonename,zoneid)
-);
-
-
--- Table structure for table 'phpads_adviews'
-
-
-CREATE TABLE phpads_adviews (
-   cookieid varchar(32) NOT NULL,
-   bannerid mediumint(9) DEFAULT '0' NOT NULL,
-   zoneid mediumint(9) DEFAULT '0' NOT NULL,
-   t_stamp timestamp(14),
-   host varchar(255) NOT NULL,
-   source varchar(50) NOT NULL,
-   country char(2) NOT NULL,
-   KEY bannerid_date (bannerid,t_stamp),
-   KEY date (t_stamp),
-   KEY cookie (cookieid)
-);
-
 
 
 -- Table structure for table 'phpads_adclicks'
@@ -117,31 +64,37 @@ CREATE TABLE phpads_adconversions (
 );
 
 
-CREATE TABLE phpads_conversionlog (
-   conversionlogid mediumint(9) NOT NULL DEFAULT 0,
-   campaignid mediumint(9) DEFAULT '0' NOT NULL,
-   cookieid varchar(32) NOT NULL,
-   t_stamp timestamp(14),
-   host varchar(255) NOT NULL,
-   country char(2) NOT NULL,
-   action enum('view','click') NULL,
-   action_bannerid mediumint(9) DEFAULT '0' NOT NULL,
-   action_zoneid mediumint(9) DEFAULT '0' NOT NULL,
-   action_t_stamp timestamp(14),
-   action_host varchar(255) NOT NULL,
-   action_source varchar(50) NOT NULL,
-   action_country char(2) NOT NULL,
+-- Table structure for table 'phpads_adstats'
+
+
+CREATE TABLE phpads_adstats (
+  views int(11) DEFAULT '0' NOT NULL,
+  clicks int(11) DEFAULT '0' NOT NULL,
+  conversions int(11) DEFAULT '0' NOT NULL,
+  day date DEFAULT '0000-00-00' NOT NULL,
+  hour tinyint(4) DEFAULT '0' NOT NULL,
+  bannerid smallint(6) DEFAULT '0' NOT NULL,
+  zoneid smallint(6) DEFAULT '0' NOT NULL,
+  source varchar(50) NOT NULL,
+  PRIMARY KEY (day,hour,bannerid,zoneid,source),
+  KEY bannerid_day (bannerid,day)
 );
 
 
--- Table structure for table 'phpads_images'
+-- Table structure for table 'phpads_adviews'
 
 
-CREATE TABLE phpads_images (
-   filename varchar(128) NOT NULL,
-   contents mediumblob NOT NULL,
+CREATE TABLE phpads_adviews (
+   cookieid varchar(32) NOT NULL,
+   bannerid mediumint(9) DEFAULT '0' NOT NULL,
+   zoneid mediumint(9) DEFAULT '0' NOT NULL,
    t_stamp timestamp(14),
-   PRIMARY KEY (filename)
+   host varchar(255) NOT NULL,
+   source varchar(50) NOT NULL,
+   country char(2) NOT NULL,
+   KEY bannerid_date (bannerid,t_stamp),
+   KEY date (t_stamp),
+   KEY cookie (cookieid)
 );
 
 
@@ -183,23 +136,13 @@ CREATE TABLE phpads_banners (
 
 
 
--- Table structure for table 'phpads_clients'
+-- Table structure for table 'phpads_cache'
 
 
-CREATE TABLE phpads_clients (
-   clientid mediumint(9) NOT NULL AUTO_INCREMENT,
-   clientname varchar(255) NOT NULL,
-   contact varchar(255),
-   email varchar(64) NOT NULL,
-   clientusername varchar(64) NOT NULL,
-   clientpassword varchar(64) NOT NULL,
-   permissions mediumint(9),
-   language varchar(64),
-   report enum('t','f') DEFAULT 't' NOT NULL,
-   reportinterval mediumint(9) DEFAULT '7' NOT NULL,
-   reportlastdate date DEFAULT '0000-00-00' NOT NULL,
-   reportdeactivate enum('t','f') DEFAULT 't' NOT NULL,
-   PRIMARY KEY (clientid)
+CREATE TABLE phpads_cache (
+   cacheid varchar(255) NOT NULL,
+   content blob NOT NULL,
+   PRIMARY KEY (cacheid)
 );
 
 
@@ -225,18 +168,6 @@ CREATE TABLE phpads_campaigns (
 );
 
 
--- Table structure for table 'phpads_trackers'
-
-
-CREATE TABLE phpads_trackers (
-   trackerid mediumint(9) NOT NULL AUTO_INCREMENT,
-   trackername varchar(255) NOT NULL,
-   description varchar(255) NOT NULL,
-   clientid mediumint(9) DEFAULT '0' NOT NULL,
-   PRIMARY KEY (trackerid)
-);
-
-
 -- Table structure for table 'phpads_campaigns_trackers'
 
 
@@ -248,61 +179,24 @@ CREATE TABLE phpads_campaigns_trackers (
 );
 
 
--- Table structure for table 'phpads_session'
+-- Table structure for table 'phpads_clients'
 
 
-CREATE TABLE phpads_session (
-   sessionid varchar(32) NOT NULL,
-   sessiondata blob NOT NULL,
-   lastused timestamp(14),
-   PRIMARY KEY (sessionid)
+CREATE TABLE phpads_clients (
+   clientid mediumint(9) NOT NULL AUTO_INCREMENT,
+   clientname varchar(255) NOT NULL,
+   contact varchar(255),
+   email varchar(64) NOT NULL,
+   clientusername varchar(64) NOT NULL,
+   clientpassword varchar(64) NOT NULL,
+   permissions mediumint(9),
+   language varchar(64),
+   report enum('t','f') DEFAULT 't' NOT NULL,
+   reportinterval mediumint(9) DEFAULT '7' NOT NULL,
+   reportlastdate date DEFAULT '0000-00-00' NOT NULL,
+   reportdeactivate enum('t','f') DEFAULT 't' NOT NULL,
+   PRIMARY KEY (clientid)
 );
-
-
-
--- Table structure for table 'phpads_acls'
-
-CREATE TABLE phpads_acls (
-   bannerid mediumint(9) DEFAULT '0' NOT NULL,
-   logical set('and','or') NOT NULL,
-   type varchar(16) NOT NULL,
-   comparison char(2) DEFAULT '==' NOT NULL,
-   data text NOT NULL,
-   executionorder int(10) unsigned DEFAULT '0' NOT NULL,
-   KEY bannerid (bannerid),
-   UNIQUE bannerid_executionorder (bannerid,executionorder)
-);
-
-
-
--- Table structure for table 'phpads_adstats'
-
-
-CREATE TABLE phpads_adstats (
-  views int(11) DEFAULT '0' NOT NULL,
-  clicks int(11) DEFAULT '0' NOT NULL,
-  day date DEFAULT '0000-00-00' NOT NULL,
-  hour tinyint(4) DEFAULT '0' NOT NULL,
-  bannerid smallint(6) DEFAULT '0' NOT NULL,
-  zoneid smallint(6) DEFAULT '0' NOT NULL,
-  source varchar(50) NOT NULL,
-  PRIMARY KEY (day,hour,bannerid,zoneid,source),
-  KEY bannerid_day (bannerid,day)
-);
-
-
-
--- Table structure for table 'phpads_targetstats'
-
-CREATE TABLE phpads_targetstats (
-   day date DEFAULT '0000-00-00' NOT NULL,
-   campaignid smallint(6) DEFAULT '0' NOT NULL,
-   target int(11) DEFAULT '0' NOT NULL,
-   views int(11) DEFAULT '0' NOT NULL,
-   modified tinyint(4) DEFAULT '0' NOT NULL,
-   PRIMARY KEY (day,clientid)
-);
-
 
 
 -- Table structure for table 'phpads_config'
@@ -375,4 +269,110 @@ CREATE TABLE phpads_config (
    maintenance_timestamp int(11) DEFAULT '0',
    PRIMARY KEY (configid)
 );
+
+
+-- Table structure for table 'phpads_conversionlog'
+
+
+CREATE TABLE phpads_conversionlog (
+   conversionlogid mediumint(9) NOT NULL DEFAULT 0,
+   campaignid mediumint(9) DEFAULT '0' NOT NULL,
+   cookieid varchar(32) NOT NULL,
+   t_stamp timestamp(14),
+   host varchar(255) NOT NULL,
+   country char(2) NOT NULL,
+   action enum('view','click') NULL,
+   action_bannerid mediumint(9) DEFAULT '0' NOT NULL,
+   action_zoneid mediumint(9) DEFAULT '0' NOT NULL,
+   action_t_stamp timestamp(14),
+   action_host varchar(255) NOT NULL,
+   action_source varchar(50) NOT NULL,
+   action_country char(2) NOT NULL,
+);
+
+
+-- Table structure for table 'phpads_images'
+
+
+CREATE TABLE phpads_images (
+   filename varchar(128) NOT NULL,
+   contents mediumblob NOT NULL,
+   t_stamp timestamp(14),
+   PRIMARY KEY (filename)
+);
+
+
+-- Table structure for table 'phpads_session'
+
+
+CREATE TABLE phpads_session (
+   sessionid varchar(32) NOT NULL,
+   sessiondata blob NOT NULL,
+   lastused timestamp(14),
+   PRIMARY KEY (sessionid)
+);
+
+
+-- Table structure for table 'phpads_targetstats'
+
+
+CREATE TABLE phpads_targetstats (
+   day date DEFAULT '0000-00-00' NOT NULL,
+   campaignid smallint(6) DEFAULT '0' NOT NULL,
+   target int(11) DEFAULT '0' NOT NULL,
+   views int(11) DEFAULT '0' NOT NULL,
+   modified tinyint(4) DEFAULT '0' NOT NULL,
+   PRIMARY KEY (day,clientid)
+);
+
+
+
+-- Table structure for table 'phpads_trackers'
+
+
+CREATE TABLE phpads_trackers (
+   trackerid mediumint(9) NOT NULL AUTO_INCREMENT,
+   trackername varchar(255) NOT NULL,
+   description varchar(255) NOT NULL,
+   clientid mediumint(9) DEFAULT '0' NOT NULL,
+   PRIMARY KEY (trackerid)
+);
+
+
+-- Table structure for table 'phpads_userlog'
+
+
+CREATE TABLE phpads_userlog (
+   userlogid mediumint(9) NOT NULL AUTO_INCREMENT,
+   timestamp int(11) DEFAULT '0' NOT NULL,
+   usertype tinyint(4) DEFAULT '0' NOT NULL,
+   userid mediumint(9) DEFAULT '0' NOT NULL,
+   action mediumint(9) DEFAULT '0' NOT NULL,
+   object mediumint(9),
+   details blob,
+   PRIMARY KEY (userlogid)
+);
+
+
+-- Table structure for table 'phpads_zones'
+
+
+CREATE TABLE phpads_zones (
+   zoneid mediumint(9) NOT NULL AUTO_INCREMENT,
+   affiliateid mediumint(9),
+   zonename varchar(245) NOT NULL,
+   description varchar(255) NOT NULL,
+   delivery smallint(6) DEFAULT '0' NOT NULL,
+   zonetype smallint(6) DEFAULT '0' NOT NULL,
+   what blob NOT NULL,
+   width smallint(6) DEFAULT '0' NOT NULL,
+   height smallint(6) DEFAULT '0' NOT NULL,
+   chain blob NOT NULL,
+   prepend blob NOT NULL,
+   append blob NOT NULL,
+   appendtype tinyint(4) DEFAULT '0' NOT NULL,
+   PRIMARY KEY (zoneid),
+   KEY zonenameid (zonename,zoneid)
+);
+
 

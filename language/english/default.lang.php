@@ -1,4 +1,4 @@
-<?php // $Revision: 2.15 $
+<?php // $Revision: 2.16 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -284,9 +284,6 @@ $GLOBALS['strConfirmDeleteTrackers']	= "Do you really want to delete this tracke
 $GLOBALS['strDeleteAllTrackers']		= "Delete all trackers";
 $GLOBALS['strTrackerProperties']		= "Tracker properties";
 $GLOBALS['strTrackerOverview']			= "Tracker overview";
-
-// Markers (General)
-$GLOBALS['strMarkerOverview']			= "Marker overview";
 
 // Banners (General)
 $GLOBALS['strBanner'] 				= "Banner";
