@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -37,7 +37,6 @@ phpAds_ConfigFileUpdateExport();
 // Include needed libraries
 require ("lib-permissions.inc.php");
 require ("lib-gui.inc.php");
-require ("lib-install.inc.php");
 require ("lib-languages.inc.php");
 require ("lib-install-db.inc.php");
 require ("lib-statistics.inc.php");
