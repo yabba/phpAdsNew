@@ -1,4 +1,4 @@
-<?php // $Revision: 1.9 $
+<?php // $Revision: 1.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -283,6 +283,11 @@ if (isset($affiliateid) && $affiliateid != '')
 	{
 		$affiliate = phpAds_dbFetchArray($res);
 	}
+}
+else
+{
+	$affiliate['name'] = $strDefault;
+	$affiliate['permissions'] = 0;
 }
 
 ?>
