@@ -1,4 +1,4 @@
-<?php // $Revision: 1.57 $
+<?php // $Revision: 1.58 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -855,7 +855,7 @@ function view_raw($what, $clientID=0, $target='', $source='', $withtext=0, $cont
 					$outputbuffer .= '<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].$randomstring.'\''.$targettag.$status.'><img src=\''.$row['banner'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\'></a>';
 				
 				if ($withtext && !empty($row['bannertext']))
-					$outputbuffer .= '<br>\n<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.'>'.$row['bannertext'].'</a>';
+					$outputbuffer .= '<br><a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.$status.'>'.$row['bannertext'].'</a>';
 			}
 			elseif ($row['format'] == 'web')
 			{
@@ -867,7 +867,7 @@ function view_raw($what, $clientID=0, $target='', $source='', $withtext=0, $cont
 					$outputbuffer .= '<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.$status.'><img src=\''.$row['banner'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\'></a>';
 				
 				if ($withtext && !empty($row['bannertext']))
-					$outputbuffer .= '<br>\n<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.'>'.$row['bannertext'].'</a>';
+					$outputbuffer .= '<br><a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.$status.'>'.$row['bannertext'].'</a>';
 			}
 			else
 			{
@@ -879,7 +879,7 @@ function view_raw($what, $clientID=0, $target='', $source='', $withtext=0, $cont
 					$outputbuffer .= '<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.$status.'><img src=\''.$phpAds_url_prefix.'/adview.php?bannerID='.$row['bannerID'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\'></a>';
 				
 				if ($withtext && !empty($row['bannertext']))
-					$outputbuffer .= '<br>\n<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.'>'.$row['bannertext'].'</a>';
+					$outputbuffer .= '<br><a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.$status.'>'.$row['bannertext'].'</a>';
 			}
 			
 			// Log this AdView
