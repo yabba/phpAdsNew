@@ -1,4 +1,4 @@
-<?php // $Revision: 1.28 $
+<?php // $Revision: 1.29 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -113,6 +113,7 @@ if (isset($submit))
 				$final["height"] = $mysql_height;
 			}
 			$final["alt"] = addslashes($mysql_alt);
+			$final["status"] = addslashes($mysql_status);
 			$final["bannertext"] = addslashes($mysql_bannertext);
 			$final["url"] = $mysql_url;
 			break;
@@ -134,6 +135,7 @@ if (isset($submit))
 			}
 			$final["format"] = "web";
 			$final["alt"] = addslashes($web_alt);
+			$final["status"] = addslashes($web_status);
 			$final["bannertext"] = addslashes($web_bannertext);
 			$final["url"] = $web_url;
 			break;
@@ -143,6 +145,7 @@ if (isset($submit))
 			$final["format"] = "url";
 			$final["banner"] = $url_banner;
 			$final["alt"] = addslashes($url_alt);
+			$final["status"] = addslashes($url_status);
 			$final["bannertext"] = addslashes($url_bannertext);
 			$final["url"] = $url_url;
 			break;
@@ -212,7 +215,7 @@ if (isset($submit))
 		// Cut trailing commas
 		$values_fields = ereg_replace(", $", "", $values_fields);
 		$values = ereg_replace(", $", "", $values);
-   		
+		
 		// Execute query
 		$sql_query = "
 			INSERT INTO
@@ -310,7 +313,10 @@ if ($bannerID != '')
 		$type = $row["format"];
 	
 	if (isset($row['alt']))
-		$row['alt'] 		= htmlentities(stripslashes($row['alt']));
+		$row['alt']			= htmlentities(stripslashes($row['alt']));
+	
+	if (isset($row['status']))
+		$row['status']		= htmlentities(stripslashes($row['status']));
 	
 	if (isset($row['bannertext']))
 		$row['bannertext'] 	= htmlentities(stripslashes($row['bannertext']));
@@ -323,6 +329,7 @@ else
 	phpAds_PageHeader("4.1.1");   
 	
 	$row['alt'] = "";
+	$row['status'] = "";
 	$row['bannertext'] = "";
 	$row['url'] = "";
 }
@@ -372,32 +379,32 @@ if (!isset($type))
 
 <script language='Javascript'>
 <!--
-    function show(n)
-    {
+	function show(n)
+	{
 		mysqlObject = findObj ('mysqlForm');
 		htmlObject = findObj ('htmlForm');
 		urlObject = findObj ('urlForm');
 		webObject = findObj ('webForm');
-
-        ss="none"; sh="none"; su="none"; sw="none"
-        if (n=='mysql') {
-          ss="";
-        } else if (n=='web') {
-          sw="";
-        } else if (n=='url') {
-          su="";
-        } else {
-          sh="";
-        }
 		
-        if (mysqlObject) mysqlObject.style.display=ss; 
-        if (htmlObject)  htmlObject.style.display=sh; 
-        if (urlObject)   urlObject.style.display=su; 
+		ss="none"; sh="none"; su="none"; sw="none"
+		if (n=='mysql') {
+			ss="";
+		} else if (n=='web') {
+			sw="";
+		} else if (n=='url') {
+			su="";
+		} else {
+			sh="";
+		}
+		
+		if (mysqlObject) mysqlObject.style.display=ss; 
+		if (htmlObject)  htmlObject.style.display=sh; 
+		if (urlObject)   urlObject.style.display=su; 
 		if (webObject)   webObject.style.display=sw;
-    }
+	}
 //-->
 </script>
-    
+
 
 
 
@@ -440,7 +447,7 @@ if (!isset($type))
 	</tr>	
 </table>
 <br><br>
-<?php }?>	
+<?php }?>
 
 
 <?php if ($show_sql) {?>
@@ -455,7 +462,7 @@ if (!isset($type))
 	<?php }?>
 	<tr><td height='1' colspan='3' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>
 	<tr><td height='10' colspan='3'>&nbsp;</td></tr>
-
+	
 	<tr>
 		<td width='30'>&nbsp;</td>
 		<td width='200'><?php echo $strNewBannerFile;?></td>
@@ -468,7 +475,7 @@ if (!isset($type))
 	<tr>
 		<td width='30'>&nbsp;</td>
 		<td width='200'><?php echo $strURL;?></td>
-    	<td><input size="35" type="text" name="mysql_url" style="width:350px;" value="<?php if (isset($type) && $type == "mysql") echo $row["url"];?>"></td>
+		<td><input size="35" type="text" name="mysql_url" style="width:350px;" value="<?php if (isset($type) && $type == "mysql") echo $row["url"];?>"></td>
 	</tr>
 	<tr>
 		<td><img src='images/spacer.gif' height='1' width='100%'></td>
@@ -478,6 +485,15 @@ if (!isset($type))
 		<td width='30'>&nbsp;</td>
 		<td width='200'><?php echo $strAlt;?></td>
 		<td><input size="35" type="text" name="mysql_alt" style="width:350px;" value="<?php if (isset($type) && $type == "mysql") echo $row["alt"];?>"></td>
+	</tr>
+	<tr>
+		<td><img src='images/spacer.gif' height='1' width='100%'></td>
+		<td colspan='2'><img src='images/break-l.gif' height='1' width='200' vspace='6'></td>
+	</tr>
+	<tr>
+		<td width='30'>&nbsp;</td>
+		<td width='200'><?php echo $strStatusText;?></td>
+		<td><input size="35" type="text" name="mysql_status" style="width:350px;" value="<?php if (isset($type) && $type == "mysql") echo $row["status"];?>"></td>
 	</tr>
 	<tr>
 		<td><img src='images/spacer.gif' height='1' width='100%'></td>
@@ -536,7 +552,7 @@ if (!isset($type))
 	<tr>
 		<td width='30'>&nbsp;</td>
 		<td width='200'><?php echo $strURL;?></td>
-    	<td><input size="35" type="text" name="web_url" style="width:350px;" value="<?php if (isset($type) && $type == "web") echo $row["url"];?>"></td>
+		<td><input size="35" type="text" name="web_url" style="width:350px;" value="<?php if (isset($type) && $type == "web") echo $row["url"];?>"></td>
 	</tr>
 	<tr>
 		<td><img src='images/spacer.gif' height='1' width='100%'></td>
@@ -546,6 +562,15 @@ if (!isset($type))
 		<td width='30'>&nbsp;</td>
 		<td width='200'><?php echo $strAlt;?></td>
 		<td><input size="35" type="text" name="web_alt" style="width:350px;" value="<?php if (isset($type) && $type == "web") echo $row["alt"];?>"></td>
+	</tr>
+	<tr>
+		<td><img src='images/spacer.gif' height='1' width='100%'></td>
+		<td colspan='2'><img src='images/break-l.gif' height='1' width='200' vspace='6'></td>
+	</tr>
+	<tr>
+		<td width='30'>&nbsp;</td>
+		<td width='200'><?php echo $strStatusText;?></td>
+		<td><input size="35" type="text" name="web_status" style="width:350px;" value="<?php if (isset($type) && $type == "web") echo $row["status"];?>"></td>
 	</tr>
 	<tr>
 		<td><img src='images/spacer.gif' height='1' width='100%'></td>
@@ -613,6 +638,15 @@ if (!isset($type))
 		<td width='30'>&nbsp;</td>
 		<td width='200'><?php echo $strAlt;?></td>
 		<td><input size="35" type="text" name="url_alt" style="width:350px;" value="<?php if (isset($type) && $type == "url") echo $row["alt"];?>"></td>
+	</tr>
+	<tr>
+		<td><img src='images/spacer.gif' height='1' width='100%'></td>
+		<td colspan='2'><img src='images/break-l.gif' height='1' width='200' vspace='6'></td>
+	</tr>
+	<tr>
+		<td width='30'>&nbsp;</td>
+		<td width='200'><?php echo $strStatusText;?></td>
+		<td><input size="35" type="text" name="url_status" style="width:350px;" value="<?php if (isset($type) && $type == "url") echo $row["status"];?>"></td>
 	</tr>
 	<tr>
 		<td><img src='images/spacer.gif' height='1' width='100%'></td>

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.56 $
+<?php // $Revision: 1.57 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -43,6 +43,7 @@ function phpAds_buildQuery ($part, $numberofparts, $precondition)
 				$phpAds_tbl_banners.width as width,
 				$phpAds_tbl_banners.height as height,
 				$phpAds_tbl_banners.alt as alt,
+				$phpAds_tbl_banners.status as status,
 				$phpAds_tbl_banners.bannertext as bannertext,
 				$phpAds_tbl_banners.url as url,
 				$phpAds_tbl_banners.weight as weight,
@@ -448,7 +449,7 @@ function get_banner($what, $clientID, $context=0, $source='', $allowhtml=true)
 		'time'				=>	$date['hours']);
 	
 	$maxindex = sizeof($rows);
-
+	
 	while ($weightsum && sizeof($rows))
 	{
 		$low = 0;
@@ -762,6 +763,18 @@ function view_raw($what, $clientID=0, $target='', $source='', $withtext=0, $cont
 			else
 				$targettag = '';
 			
+			if ($row['status'] != '')
+			{
+				$status = stripslashes ($row['status']);
+				$status = str_replace("\"", "\&quot;", $status);
+				$status = str_replace("'", "\\'", $status);
+				$status = " onMouseOver=\"self.status='".$status."';return true;\" onMouseOut=\"self.status='';return true;\"";
+			}
+			else
+				$status = '';
+			
+			
+			
 			if($row['format'] == 'html')
 			{
 				// HTML banner
@@ -837,9 +850,9 @@ function view_raw($what, $clientID=0, $target='', $source='', $withtext=0, $cont
 				}
 				
 				if (empty($row['url']))
-					$outputbuffer .= '<img src=\''.$row['banner'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\'>';
+					$outputbuffer .= '<img src=\''.$row['banner'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\''.$status.'>';
 				else
-					$outputbuffer .= '<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].$randomstring.'\''.$targettag.'><img src=\''.$row['banner'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\'></a>';
+					$outputbuffer .= '<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].$randomstring.'\''.$targettag.$status.'><img src=\''.$row['banner'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\'></a>';
 				
 				if ($withtext && !empty($row['bannertext']))
 					$outputbuffer .= '<br>\n<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.'>'.$row['bannertext'].'</a>';
@@ -849,9 +862,9 @@ function view_raw($what, $clientID=0, $target='', $source='', $withtext=0, $cont
 				// Banner stored on webserver
 				
 				if (empty($row['url']))
-					$outputbuffer .= '<img src=\''.$row['banner'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\'>';
+					$outputbuffer .= '<img src=\''.$row['banner'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\''.$status.'>';
 				else
-					$outputbuffer .= '<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.'><img src=\''.$row['banner'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\'></a>';
+					$outputbuffer .= '<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.$status.'><img src=\''.$row['banner'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\'></a>';
 				
 				if ($withtext && !empty($row['bannertext']))
 					$outputbuffer .= '<br>\n<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.'>'.$row['bannertext'].'</a>';
@@ -861,9 +874,9 @@ function view_raw($what, $clientID=0, $target='', $source='', $withtext=0, $cont
 				// Banner stored in MySQL
 				
 				if (empty($row['url']))
-					$outputbuffer .= '<img src=\''.$phpAds_url_prefix.'/adview.php?bannerID='.$row['bannerID'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\'>';
+					$outputbuffer .= '<img src=\''.$phpAds_url_prefix.'/adview.php?bannerID='.$row['bannerID'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\''.$status.'>';
 				else
-					$outputbuffer .= '<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.'><img src=\''.$phpAds_url_prefix.'/adview.php?bannerID='.$row['bannerID'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\'></a>';
+					$outputbuffer .= '<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.$status.'><img src=\''.$phpAds_url_prefix.'/adview.php?bannerID='.$row['bannerID'].'\' width=\''.$row['width'].'\' height=\''.$row['height'].'\' alt=\''.$row['alt'].'\' border=\'0\'></a>';
 				
 				if ($withtext && !empty($row['bannertext']))
 					$outputbuffer .= '<br>\n<a href=\''.$phpAds_url_prefix.'/adclick.php?bannerID='.$row['bannerID'].'\''.$targettag.'>'.$row['bannertext'].'</a>';
