@@ -1,4 +1,4 @@
-<?php // $Revision: 2.10 $
+<?php // $Revision: 2.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -18,7 +18,9 @@ define ('LIBPRIORITY_INCLUDED', true);
 
 
 // Defaults
-define('phpAds_CurrentHour', date('H'));
+define('phpAds_CurrentTimestamp', phpAds_dbResult(phpAds_dbQuery("SELECT UNIX_TIMESTAMP(NOW()) as now"),0,'now'));
+define('phpAds_CurrentHour', date('H',phpAds_CurrentTimestamp));
+define('phpAds_CurrentDay', mktime(0,0,0,date('m',phpAds_CurrentTimestamp),date('d',phpAds_CurrentTimestamp),date('Y',phpAds_CurrentTimestamp)));
 $debuglog = '';
 
 
@@ -27,9 +29,9 @@ function phpAds_PriorityGetImpressions($days, $offset)
 	global $phpAds_config;
 	
 	$offset = $offset * (60 * 60 * 24);
-	
-	$begin = date('Ymd', phpAds_makeTimestamp(mktime (0, 0, 0, date('m'), date('d'), date('Y')), - 1 - $offset));
-	$end   = date('Ymd', phpAds_makeTimestamp(mktime (0, 0, 0, date('m'), date('d'), date('Y')), - (60 * 60 * 24 * $days) - $offset));
+
+	$begin = date('Ymd', phpAds_makeTimestamp(phpAds_CurrentDay, - 1 - $offset));
+	$end   = date('Ymd', phpAds_makeTimestamp(phpAds_CurrentDay, - (60 * 60 * 24 * $days) - $offset));
 	
 	$query = "
 		SELECT SUM(views) as sum_views
@@ -55,8 +57,8 @@ function phpAds_PriorityGetHourlyProfile($days, $offset)
 	// Determine days
 	$offset = $offset * (60 * 60 * 24);
 	
-	$begin = date('Ymd', phpAds_makeTimestamp(mktime (0, 0, 0, date('m'), date('d'), date('Y')), - 1 - $offset));
-	$end   = date('Ymd', phpAds_makeTimestamp(mktime (0, 0, 0, date('m'), date('d'), date('Y')), - (60 * 60 * 24 * $days) - $offset));
+	$begin = date('Ymd', phpAds_makeTimestamp(phpAds_CurrentDay, - 1 - $offset));
+	$end   = date('Ymd', phpAds_makeTimestamp(phpAds_CurrentDay, - (60 * 60 * 24 * $days) - $offset));
 	
 	$query = "
 		SELECT hour, SUM(views) AS sum_views
@@ -95,7 +97,7 @@ function phpAds_PriorityPredictProfile($campaigns, $banners)
 	
 	if ($days_running > 0)
 	{
-		$now = mktime (0, 0, 0, date('m'), date('d'), date('Y'));
+		$now = phpAds_CurrentDay;
 		$days_running = $now - $days_running + (date('I', $days_running) - date('I', $now)) * 60;
 		$days_running = round ($days_running / (60 * 60 * 24)) - 1;
 	}
@@ -222,7 +224,7 @@ function phpAds_PriorityPredictProfile($campaigns, $banners)
 	
 	
 	
-	$begin = date('Ymd', mktime (0, 0, 0, date('m'), date('d'), date('Y')));
+	$begin = date('Ymd', phpAds_CurrentDay);
 	
 	$query = "
 		SELECT hour, SUM(views) AS sum_views
@@ -543,8 +545,7 @@ function phpAds_PriorityPrepareBanners()
 	
 	
 	// Get statistics
-	$begin = date ('Ymd', mktime (0, 0, 0, date('m'), date('d'), date('Y')));
-	$end   = date ('Ymd', mktime (phpAds_CurrentHour, 0, 0, date('m'), date('d'), date('Y')) - 1);
+	$begin = date ('Ymd', phpAds_CurrentDay);
 	
 	$query = "
 		SELECT bannerid, SUM(views) as sum_views

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.10 $
+<?php // $Revision: 1.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -145,7 +145,7 @@ function phpAds_countViews($begin_timestamp, $end_timestamp, $day, $hour)
 	    {
 			$stat_query = "UPDATE ".$phpAds_config['tbl_adstats'].
 							" SET views=views+".$view_row['views'].
-							" WHERE day=".$day.
+							" WHERE day='".$day."'".
 							" AND hour=".$hour.
 							" AND bannerid=".$view_row['bannerid'].
 							" AND zoneid=".$view_row['zoneid'].
@@ -193,7 +193,7 @@ function phpAds_countClicks($begin_timestamp, $end_timestamp, $day, $hour)
 	    if (phpAds_dbAffectedRows($stat_result) < 1)
 	    {
 		    $stat_query = "INSERT INTO ".$phpAds_config['tbl_adstats'].
-		    				" SET day=".$day.
+		    				" SET day='".$day."'".
 		    				",hour=".$hour.
 		    				",bannerid=".$click_row['bannerid'].
 		    				",zoneid=".$click_row['zoneid'].
@@ -405,7 +405,7 @@ function phpAds_countConversions($begin_timestamp, $end_timestamp, $day, $hour)
 	    if (phpAds_dbAffectedRows($stat_result) < 1)
 	    {
 		    $stat_query = "INSERT INTO ".$phpAds_config['tbl_adstats'].
-		    				" SET day=".$day.
+		    				" SET day='".$day."'".
 		    				",hour=".$hour.
 		    				",bannerid=".$conversion_row['action_bannerid'].
 		    				",zoneid=".$conversion_row['action_zoneid'].

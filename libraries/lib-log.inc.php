@@ -1,4 +1,4 @@
-<?php // $Revision: 2.10 $
+<?php // $Revision: 2.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -48,7 +48,7 @@ function phpads_logCheckHost()
 /* Log an impression                                     */
 /*********************************************************/
 
-function phpAds_logImpression ($cookieid, $bannerid, $zoneid, $source)
+function phpAds_logImpression ($userid, $bannerid, $zoneid, $source)
 {
 	global $HTTP_SERVER_VARS, $phpAds_config, $phpAds_geo;
 	
@@ -63,14 +63,14 @@ function phpAds_logImpression ($cookieid, $bannerid, $zoneid, $source)
 		
 		phpAds_dbQuery(
 			"INSERT ".($phpAds_config['insert_delayed'] ? 'DELAYED' : '')." INTO ".$phpAds_config['tbl_adviews'].
-			"(cookieid".
+			"(userid".
 			",bannerid".
 			",zoneid".
 			",host".
 			",source".
 			",country)".
 			" VALUES ".
-			"('".$cookieid."'".
+			"('".$userid."'".
 			",".$bannerid.
 			",".$zoneid.
 			",'".$log_host."'".
@@ -84,7 +84,7 @@ function phpAds_logImpression ($cookieid, $bannerid, $zoneid, $source)
 /* Log a click                                          */
 /*********************************************************/
 
-function phpAds_logClick($cookieid, $bannerid, $zoneid, $source)
+function phpAds_logClick($userid, $bannerid, $zoneid, $source)
 {
 	global $HTTP_SERVER_VARS, $phpAds_config, $phpAds_geo;
 	
@@ -99,14 +99,14 @@ function phpAds_logClick($cookieid, $bannerid, $zoneid, $source)
 		
 		phpAds_dbQuery(
 			"INSERT ".($phpAds_config['insert_delayed'] ? 'DELAYED' : '')." INTO ".$phpAds_config['tbl_adclicks'].
-			"(cookieid".
+			"(userid".
 			",bannerid".
 			",zoneid".
 			",host".
 			",source".
 			",country)".
 			" VALUES ".
-			"('".$cookieid."'".
+			"('".$userid."'".
 			",".$bannerid.
 			",".$zoneid.
 			",'".$log_host."'".
@@ -120,27 +120,25 @@ function phpAds_logClick($cookieid, $bannerid, $zoneid, $source)
 /* Log a conversion                                      */
 /*********************************************************/
 
-function phpAds_logConversion($cookieid, $trackerid)
+function phpAds_logConversion($userid, $trackerid)
 {
 	global $HTTP_SERVER_VARS, $phpAds_config, $phpAds_geo;
 	
 	// Check if host is on list of hosts to ignore
 	if ($host = phpads_logCheckHost())
 	{
-		$log_source = $phpAds_config['log_source'] ? $source : '';
-		
 		$log_country = $phpAds_config['geotracking_stats'] && $phpAds_geo && $phpAds_geo['country'] ? $phpAds_geo['country'] : '';
 		$log_host    = $phpAds_config['log_hostname'] ? $HTTP_SERVER_VARS['REMOTE_HOST'] : '';
 		$log_host    = $phpAds_config['log_iponly'] ? $HTTP_SERVER_VARS['REMOTE_ADDR'] : $log_host;
 		
 		phpAds_dbQuery(
 			"INSERT ".($phpAds_config['insert_delayed'] ? 'DELAYED' : '')." INTO ".$phpAds_config['tbl_adconversions'].
-			"(cookieid".
+			"(userid".
 			",trackerid".
 			",host".
 			",country)".
 			" VALUES ".
-			"('".$cookieid."'".
+			"('".$userid."'".
 			",".$trackerid.
 			",'".$log_host."'".
 			",'".$log_country."')"

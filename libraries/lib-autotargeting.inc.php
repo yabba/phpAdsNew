@@ -1,4 +1,4 @@
-<?php // $Revision: 2.8 $
+<?php // $Revision: 2.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -415,46 +415,37 @@ function phpAds_TargetStatsSaveViews()
 	global $phpAds_config;
 	
 	$campaigns	= array();
-	$day		= date('Ymd', phpAds_makeTimestamp(mktime (0, 0, 0, date('m'), date('d'), date('Y')), -(60 * 60 * 24)));
-	$begin		= $day.'000000';
-	$end		= $day.'235959';
 
 	// Get total views
-	$query = "
-		SELECT
-			SUM(views) AS sum_views
-		FROM
-			".$phpAds_config['tbl_adstats']."
-		WHERE
-			day = ".$day."
-	";
+	$res = phpAds_dbQuery(
+		"SELECT SUM(views) AS sum_views".
+		",day".
+		" FROM ".$phpAds_config['tbl_adstats'].
+		" WHERE day=DATE_SUB(NOW(), INTERVAL 1 DAY)".
+		" GROUP BY day"
+	);
 
-	$sum_views = phpAds_dbResult(phpAds_dbQuery($query), 0, 'sum_views');
+	$sum_views = phpAds_dbResult($res, 0, 'sum_views');
+	$day = phpAds_dbResult($res, 0, 'day');
 	$totalviews = 0;
 
-	$res = phpAds_dbQuery("
-		SELECT
-			campaignid
-		FROM
-			".$phpAds_config['tbl_targetstats']."
-		WHERE
-			day = ".$day." AND
-			campaignid > 0
-		");
+	$res = phpAds_dbQuery(
+		"SELECT campaignid".
+		" FROM ".$phpAds_config['tbl_targetstats'].
+		" WHERE day='".$day."'".
+		" AND campaignid>0"
+	);
 	
 	while ($row = phpAds_dbFetchArray($res))
 	{
-		$query = "
-			SELECT
-				SUM(views) AS sum_views
-			FROM
-				".$phpAds_config['tbl_adstats']." AS v,
-				".$phpAds_config['tbl_banners']." AS b
-			WHERE
-				v.day = ".$day." AND
-				b.bannerid = v.bannerid AND
-				b.campaignid = ".$row['campaignid']."
-		";
+		$query =
+			"SELECT SUM(views) AS sum_views".
+			" FROM ".$phpAds_config['tbl_adstats']." AS v".
+			",".$phpAds_config['tbl_banners']." AS b".
+			" WHERE v.day='".$day."'".
+			" AND b.bannerid = v.bannerid".
+			" AND b.campaignid = ".$row['campaignid']
+		;
 
 		$views = (int)phpAds_dbResult(phpAds_dbQuery($query), 0, 'sum_views');
 		$totalviews += $views;
@@ -467,24 +458,20 @@ function phpAds_TargetStatsSaveViews()
 	{
 		if ($campaignid)
 		{
-			phpAds_dbQuery("
-				UPDATE 
-					".$phpAds_config['tbl_targetstats']."
-				SET
-					views = ".$views."
-				WHERE
-					campaignid = ".$campaignid." AND
-					day = ".$day."
-				");
+			phpAds_dbQuery(
+				"UPDATE ".$phpAds_config['tbl_targetstats'].
+				" SET views=".$views.
+				" WHERE campaignid=".$campaignid.
+				" AND day='".$day."'"
+			);
 		}
 		else
 		{
-			phpAds_dbQuery("
-				INSERT INTO ".$phpAds_config['tbl_targetstats']."
-					(day, campaignid, target, views)
-				VALUES
-					(".$day.", ".$campaignid.", 0, ".$views.")
-				");
+			phpAds_dbQuery(
+				"INSERT INTO ".$phpAds_config['tbl_targetstats'].
+				" (day, campaignid, target, views)".
+				" VALUES ('".$day."',".$campaignid.",0,".$views.")"
+			);
 		}
 	}
 }

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.12 $
+<?php // $Revision: 2.13 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -27,7 +27,7 @@ function view_raw($what, $clientid = 0, $campaignid = 0, $target = '', $source =
 	global $phpAds_config, $HTTP_SERVER_VARS;
 	global $phpAds_followedChain;
 	
-	$cookieid = phpAds_getCookieID();
+	$userid = phpAds_getUniqueUserID();
 	$outputbuffer = '';
 	
 	
@@ -141,6 +141,12 @@ function view_raw($what, $clientid = 0, $campaignid = 0, $target = '', $source =
 		else
 			$outputbuffer = preg_replace ("#\[bannertext\](.*)\[\/bannertext\]#", '', $outputbuffer);
 		
+		// Web banner..
+		if ($row['storagetype'] == 'web')
+		{
+			if ($HTTP_SERVER_VARS['SERVER_PORT'] == 443) $phpAds_config['type_web_url'] = str_replace ('http://', 'https://', $phpAds_config['type_web_url']);
+			$outputbuffer = str_replace ('{image_url_prefix}', $phpAds_config['type_web_url'], $outputbuffer);
+		}
 		
 		// HTML/URL banner options
 		if ($row['storagetype'] == 'html' || 
@@ -219,14 +225,14 @@ function view_raw($what, $clientid = 0, $campaignid = 0, $target = '', $source =
 		}
 		else
 		{
-			$outputbuffer .= '<div id="beacon_'.$row['bannerid'].'" style="width: 0px; height: 0px; overflow: hidden;">';
+			//$outputbuffer .= '<div id="beacon_'.$row['bannerid'].'" style="width: 0px; height: 0px; overflow: hidden;">';
 			$outputbuffer .= '<img src=\''.$phpAds_config['url_prefix'].'/adlog.php?bannerid='.$row['bannerid'].'&amp;clientid='.$row['clientid'].'&amp;campaignid='.$row['campaignid'].'&amp;zoneid='.$row['zoneid'].'&amp;source='.$source.'&amp;block='.$row['block'].'&amp;capping='.$row['capping'].'&amp;cb='.md5(uniqid('', 1)).'\' width=\'0\' height=\'0\' alt=\'\' style=\'width: 0px; height: 0px;\'>';
-			$outputbuffer .= '</div>';
+			//$outputbuffer .= '</div>';
 		}
 		
 		// Prepare impression logging
 		if ($phpAds_config['log_adviews'] && !$phpAds_config['log_beacon'])
-			phpAds_logImpression ($cookieid, $row['bannerid'], $row['zoneid'], $source);
+			phpAds_logImpression ($userid, $row['bannerid'], $row['zoneid'], $source);
 		
 		
 		// Return banner

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -59,7 +59,7 @@ $res = phpAds_dbQuery ("
 	UPDATE
 		".$phpAds_config['tbl_config']."
 	SET
-		maintenance_timestamp = '".time()."'
+		maintenance_timestamp = UNIX_TIMESTAMP(NOW())
 ");
 
 

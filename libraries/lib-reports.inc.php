@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -106,7 +106,7 @@ function phpAds_SendMaintenanceReport ($clientid, $first_unixtimestamp, $last_un
 			// Fetch all banners belonging to campaign
 			$res_banners = phpAds_dbQuery(
 				"SELECT".
-				"bannerid".
+				" bannerid".
 				",campaignid".
 				",URL".
 				",active".

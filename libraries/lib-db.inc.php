@@ -1,4 +1,4 @@
-<?php // $Revision: 2.6 $
+<?php // $Revision: 2.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -34,7 +34,6 @@ if ($phpAds_config['compatibility_mode'])
 	$phpAds_config['tbl_clients'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_clients'];
 	$phpAds_config['tbl_config'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_config'];
 	$phpAds_config['tbl_conversionlog'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_conversionlog'];
-	$phpAds_config['tbl_conversionrules'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_conversionrules'];
 	$phpAds_config['tbl_images'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_images'];
 	$phpAds_config['tbl_session'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_session'];
 	$phpAds_config['tbl_targetstats'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_targetstats'];
