@@ -1,4 +1,4 @@
-// $Id:
+// $Id: admin.php,v 1.4 2001/02/14 21:28:23 phord Exp $
 
 <?
 if (isset($pageid) && $pageid =="client")
