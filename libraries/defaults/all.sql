@@ -175,27 +175,37 @@ CREATE TABLE phpads_clients (
    clientname varchar(255) NOT NULL,
    contact varchar(255),
    email varchar(64) NOT NULL,
+   clientusername varchar(64) NOT NULL,
+   clientpassword varchar(64) NOT NULL,
+   permissions mediumint(9),
+   language varchar(64),
+   report enum('t','f') DEFAULT 't' NOT NULL,
+   reportinterval mediumint(9) DEFAULT '7' NOT NULL,
+   reportlastdate date DEFAULT '0000-00-00' NOT NULL,
+   reportdeactivate enum('t','f') DEFAULT 't' NOT NULL,
+   PRIMARY KEY (clientid)
+);
+
+
+-- Table structure for table 'phpads_campaigns'
+
+
+CREATE TABLE phpads_campaigns (
+   campaignid mediumint(9) NOT NULL AUTO_INCREMENT,
+   campaignname varchar(255) NOT NULL,
+   clientid mediumint(9) DEFAULT '0' NOT NULL,
    views mediumint(9),
    clicks mediumint(9),
    conversions mediumint(9),
-   clientusername varchar(64) NOT NULL,
-   clientpassword varchar(64) NOT NULL,
    expire date DEFAULT '0000-00-00',
    activate date DEFAULT '0000-00-00',
-   permissions mediumint(9),
-   language varchar(64),
    active enum('t','f') DEFAULT 't' NOT NULL,
    priority enum('h','m','l') DEFAULT 'l' NOT NULL,
    weight tinyint(4) DEFAULT '1' NOT NULL,
    target int(11) DEFAULT '0' NOT NULL,   
    optimise enum('t','f') DEFAULT 'f' NOT NULL,
    anonymous enum('t','f') DEFAULT 'f' NOT NULL,
-   parent mediumint(9) DEFAULT '0' NOT NULL,
-   report enum('t','f') DEFAULT 't' NOT NULL,
-   reportinterval mediumint(9) DEFAULT '7' NOT NULL,
-   reportlastdate date DEFAULT '0000-00-00' NOT NULL,
-   reportdeactivate enum('t','f') DEFAULT 't' NOT NULL,
-   PRIMARY KEY (clientid)
+   PRIMARY KEY (campaignid)
 );
 
 

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.11 $
+<?php // $Revision: 2.12 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -360,9 +360,9 @@ $extra .= "<img src='images/spacer.gif' height='1' width='160' vspace='2'><br>";
 $extra .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 $extra .= "<select name='moveto' style='width: 110;'>";
 
-$res = phpAds_dbQuery("SELECT * FROM ".$phpAds_config['tbl_clients']." WHERE parent != 0 AND clientid != '".$campaignid."'") or phpAds_sqlDie();
+$res = phpAds_dbQuery("SELECT * FROM ".$phpAds_config['tbl_campaigns']." WHERE campaignid != '".$campaignid."'") or phpAds_sqlDie();
 while ($row = phpAds_dbFetchArray($res))
-	$extra .= "<option value='".$row['clientid']."'>".phpAds_buildClientName($row['clientid'], $row['clientname'])."</option>";
+	$extra .= "<option value='".$row['campaignid']."'>".phpAds_buildName($row['campaignid'], $row['campaignname'])."</option>";
 
 $extra .= "</select>&nbsp;<input type='image' name='moveto' src='images/".$phpAds_TextDirection."/go_blue.gif'><br>";
 $extra .= "<img src='images/break.gif' height='1' width='160' vspace='4'><br>";
@@ -383,9 +383,9 @@ $extra .= "</form>";
 
 
 phpAds_PageHeader("4.1.3.4.3", $extra);
-	echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentName($campaignid);
+	echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentClientName($campaignid);
 	echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
-	echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;".phpAds_getClientName($campaignid);
+	echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;".phpAds_getCampaignName($campaignid);
 	echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 	echo "<img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;<b>".phpAds_getBannerName($bannerid)."</b><br><br>";
 	echo phpAds_buildBannerCode($bannerid)."<br><br><br><br>";

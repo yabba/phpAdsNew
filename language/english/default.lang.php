@@ -1,4 +1,4 @@
-<?php // $Revision: 2.13 $
+<?php // $Revision: 2.14 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -114,6 +114,12 @@ $GLOBALS['strCollectedAll']			= "All collected statistics";
 $GLOBALS['strCollectedToday']		= "Statistics for today only";
 $GLOBALS['strCollected7Days']		= "Statistics for the last 7 days only";
 $GLOBALS['strCollectedMonth']		= "Statistics for this month only";
+
+// Priority
+$GLOBALS['strPriority']				= "Priority";
+$GLOBALS['strPriorityLevel']		= "Priority level";
+$GLOBALS['strPriorityTargeting']	= "Distribution";
+$GLOBALS['strPriorityOptimisation']	= "Miscellaneous";
 
 
 
@@ -237,26 +243,34 @@ $GLOBALS['strConfirmDeleteCampaign']		= "Do you really want to delete this campa
 $GLOBALS['strConfirmResetCampaignStats']		= "Do you really want to delete all existing statistics for this campaign?";
 $GLOBALS['strHideInactiveCampaigns']		= "Hide inactive campaigns";
 $GLOBALS['strInactiveCampaignsHidden']		= "inactive campaign(s) hidden";
+$GLOBALS['strContractDetails']		= "Contract details";
+$GLOBALS['strInventoryDetails']		= "Inventory details";
+$GLOBALS['strPriorityInformation']	= "Priority information";
+$GLOBALS['strPriorityHigh']			= "High - Paid campaigns";
+$GLOBALS['strPriorityMedium']		= "Medium - Wholesale and remnant campaigns";
+$GLOBALS['strPriorityLow']			= "Low - House and unpaid campaigns";
 
 
 // Campaign properties
-$GLOBALS['strDontExpire']			= "Don't expire this campaign on a specific date";
-$GLOBALS['strActivateNow'] 			= "Activate this campaign immediately";
-$GLOBALS['strLow']				= "Low";
-$GLOBALS['strHigh']				= "High";
+$GLOBALS['strDontExpire']				= "Don't expire this campaign on a specific date";
+$GLOBALS['strActivateNow'] 				= "Activate this campaign immediately";
+$GLOBALS['strLow']						= "Low";
+$GLOBALS['strHigh']						= "High";
 $GLOBALS['strExpirationDate']			= "Expiration date";
 $GLOBALS['strActivationDate']			= "Activation date";
 $GLOBALS['strViewsPurchased'] 			= "AdViews remaining";
 $GLOBALS['strClicksPurchased'] 			= "AdClicks remaining";
-$GLOBALS['strConversionsPurchased'] 	= "AdSales remaining";
-$GLOBALS['strCampaignWeight']			= "Campaign weight";
-$GLOBALS['strHighPriority']			= "Show banners in this campaign with high priority.<br>If you use this option phpAdsNew will try to distribute the number of AdViews evenly over the course of the day.";
-$GLOBALS['strLowPriority']			= "Show banner in this campaign with low priority.<br> This campaign is used to show the left over AdViews which aren't used by high priority campaigns.";
-$GLOBALS['strTargetLimitAdViews']		= "Limit the number of AdViews to";
-$GLOBALS['strTargetPerDay']			= "per day.";
-$GLOBALS['strPriorityAutoTargeting']		= "Distribute the remaining AdViews evenly over the remaining number of days. The target number of AdViews will be set accordingly every day.";
-$GLOBALS['strCampaignWarningNoWeight'] = "The priority of this campaign has been set to low, \nbut the weight is set to zero or it has not been \nspecified. This will cause the campaign to be \ndeactivated and it's banners won't be delivered \nuntil the weight has been set to a valid number. \n\nAre you sure you want to continue?";
-$GLOBALS['strCampaignWarningNoTarget'] = "The priority of this campaign has been set to high, \nbut the target number of AdViews are not specified. \nThis will cause the campaign to be deactivated and \nit's banners won't be delivered until a valid target \nnumber of AdViews has been set. \n\nAre you sure you want to continue?";
+$GLOBALS['strConversionsPurchased'] 	= "AdConversions remaining";
+$GLOBALS['strCampaignWeight']			= "None - Set the campaign weight to";
+$GLOBALS['strOptimise']					= "Optimise delivery of this campaign.";
+$GLOBALS['strAnonymous']				= "Hide the advertiser and publisher of this campaign.";
+$GLOBALS['strHighPriority']				= "Show banners in this campaign with high priority.<br>If you use this option phpAdsNew will try to distribute the number of AdViews evenly over the course of the day.";
+$GLOBALS['strLowPriority']				= "Show banner in this campaign with low priority.<br> This campaign is used to show the left over AdViews which aren't used by high priority campaigns.";
+$GLOBALS['strTargetLimitAdViews']		= "Manual - Limit the number of AdViews to";
+$GLOBALS['strTargetPerDay']				= "per day.";
+$GLOBALS['strPriorityAutoTargeting']	= "Automatic - Distribute the remaining AdViews evenly over the remaining number of days.";
+$GLOBALS['strCampaignWarningNoWeight'] 	= "The priority of this campaign has been set to low, \nbut the weight is set to zero or it has not been \nspecified. This will cause the campaign to be \ndeactivated and it's banners won't be delivered \nuntil the weight has been set to a valid number. \n\nAre you sure you want to continue?";
+$GLOBALS['strCampaignWarningNoTarget'] 	= "The priority of this campaign has been set to high, \nbut the target number of AdViews are not specified. \nThis will cause the campaign to be deactivated and \nit's banners won't be delivered until a valid target \nnumber of AdViews has been set. \n\nAre you sure you want to continue?";
 
 
 

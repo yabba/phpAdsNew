@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -94,7 +94,7 @@ function Plugin_ClienthistoryExecute($clientid, $delimiter=",")
 		$stats [$row_banners['day']]['clicks'] = $row_banners['adclicks'];
 	}
 	
-	echo $strClient.": ".strip_tags(phpAds_getClientName ($clientid))."\n\n";
+	echo $strClient.": ".strip_tags(phpAds_getClientName($clientid))."\n\n";
 	echo $strDay.$delimiter.$strViews.$delimiter.$strClicks.$delimiter.$strCTRShort."\n";
 	
 	$totalclicks = 0;

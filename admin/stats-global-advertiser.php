@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -91,43 +91,48 @@ else
 // Get clients & campaign and build the tree
 if (phpAds_isUser(phpAds_Admin))
 {
-	$res_clients = phpAds_dbQuery("
-		SELECT 
-			*
-		FROM 
-			".$phpAds_config['tbl_clients']."
-		".phpAds_getListOrder ($listorder, $orderdirection)."
-		") or phpAds_sqlDie();
+	$res_clients = phpAds_dbQuery(
+		"SELECT *".
+		" FROM ".$phpAds_config['tbl_clients'].
+		phpAds_getClientListOrder ($listorder, $orderdirection)
+	) or phpAds_sqlDie();
+	
+	$res_campaigns = phpAds_dbQuery(
+		"SELECT *".
+		" FROM ".$phpAds_config['tbl_campaigns'].
+		phpAds_getCampaignListOrder ($listorder, $orderdirection)
+	) or phpAds_sqlDie();
 }
 else
 {
-	$res_clients = phpAds_dbQuery("
-		SELECT 
-			*
-		FROM 
-			".$phpAds_config['tbl_clients']."
-		WHERE
-			clientid = ".phpAds_getUserID()." OR
-			parent = ".phpAds_getUserID()."
-		".phpAds_getListOrder ($listorder, $orderdirection)."
-		") or phpAds_sqlDie();
+	$res_clients = phpAds_dbQuery(
+		"SELECT *".
+		" FROM ".$phpAds_config['tbl_clients'].
+		" WHERE clientid=".$Session['clientid'].
+		phpAds_getClientListOrder ($listorder, $orderdirection)
+	) or phpAds_sqlDie();
+	
+	$res_campaigns = phpAds_dbQuery(
+		"SELECT *".
+		" FROM ".$phpAds_config['tbl_campaigns'].
+		" WHERE clientid=".$Session['clientid'].
+		phpAds_getCampaignListOrder ($listorder, $orderdirection)
+	) or phpAds_sqlDie();
 }
 
 while ($row_clients = phpAds_dbFetchArray($res_clients))
 {
-	if ($row_clients['parent'] == 0)
-	{
-		$clients[$row_clients['clientid']] = $row_clients;
-		$clients[$row_clients['clientid']]['expand'] = 0;
-		$clients[$row_clients['clientid']]['count'] = 0;
-		$clients[$row_clients['clientid']]['hideinactive'] = 0;
-	}
-	else
-	{
-		$campaigns[$row_clients['clientid']] = $row_clients;
-		$campaigns[$row_clients['clientid']]['expand'] = 0;
-		$campaigns[$row_clients['clientid']]['count'] = 0;
-	}
+	$clients[$row_clients['clientid']] = $row_clients;
+	$clients[$row_clients['clientid']]['expand'] = 0;
+	$clients[$row_clients['clientid']]['count'] = 0;
+	$clients[$row_clients['clientid']]['hideinactive'] = 0;
+}
+
+while ($row_campaigns = phpAds_dbFetchArray($res_campaigns))
+{
+		$campaigns[$row_campaigns['campaignid']] = $row_campaigns;
+		$campaigns[$row_campaigns['campaignid']]['expand'] = 0;
+		$campaigns[$row_campaigns['campaignid']]['count'] = 0;
 }
 
 switch ($period)
@@ -466,7 +471,7 @@ if ($clientshidden > 0 || $totalviews > 0 || $totalclicks > 0)
 				else
 					echo "<img src='images/icon-campaign-d.gif' align='absmiddle'>&nbsp;";
 				
-				echo "<a href='stats-campaign-history.php?clientid=".$client['clientid']."&campaignid=".$campaigns[$ckey]['clientid']."'>".$campaigns[$ckey]['clientname']."</td>";
+				echo "<a href='stats-campaign-history.php?clientid=".$client['clientid']."&campaignid=".$campaigns[$ckey]['campaignid']."'>".$campaigns[$ckey]['campaignname']."</td>";
 				echo "</td>";
 				
 				// ID

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -44,20 +44,16 @@ else
 
 
 // Get other clients
-$res = phpAds_dbQuery("
-	SELECT
-		*
-	FROM
-		".$phpAds_config['tbl_clients']."
-	WHERE
-		parent = 0
-	".phpAds_getListOrder ($navorder, $navdirection)."
-") or phpAds_sqlDie();
+$res = phpAds_dbQuery(
+	"SELECT *".
+	" FROM ".$phpAds_config['tbl_clients'].
+	phpAds_getClientListOrder ($navorder, $navdirection)
+) or phpAds_sqlDie();
 
 while ($row = phpAds_dbFetchArray($res))
 {
 	phpAds_PageContext (
-		phpAds_buildClientName ($row['clientid'], $row['clientname']),
+		phpAds_buildName ($row['clientid'], $row['clientname']),
 		"advertiser-campaigns.php?clientid=".$row['clientid'],
 		$clientid == $row['clientid']
 	);
@@ -111,24 +107,20 @@ else
 /*********************************************************/
 
 // Get clients & campaign and build the tree
-$res_clients = phpAds_dbQuery("
-	SELECT 
-		*,
-		DATE_FORMAT(expire, '$date_format') AS expire_f,
-		DATE_FORMAT(activate, '$date_format') AS activate_f
-	FROM 
-		".$phpAds_config['tbl_clients']."
-	WHERE
-		parent = ".$clientid."
-	".phpAds_getListOrder ($listorder, $orderdirection)."
-") or phpAds_sqlDie();
+$res_campaigns = phpAds_dbQuery(
+	"SELECT *".
+	",DATE_FORMAT(expire, '$date_format') AS expire_f".
+	",DATE_FORMAT(activate, '$date_format') AS activate_f".
+	" FROM ".$phpAds_config['tbl_campaigns'].
+	" WHERE clientid=".$clientid.
+	phpAds_getCampaignListOrder ($listorder, $orderdirection)
+) or phpAds_sqlDie();
 
-
-while ($row_clients = phpAds_dbFetchArray($res_clients))
+while ($row_campaigns = phpAds_dbFetchArray($res_campaigns))
 {
-	$campaigns[$row_clients['clientid']] = $row_clients;
-	$campaigns[$row_clients['clientid']]['expand'] = 0;
-	$campaigns[$row_clients['clientid']]['count'] = 0;
+	$campaigns[$row_campaigns['clientid']] = $row_campaigns;
+	$campaigns[$row_campaigns['clientid']]['expand'] = 0;
+	$campaigns[$row_campaigns['clientid']]['count'] = 0;
 }
 
 
@@ -309,7 +301,7 @@ else
 		else
 			echo "<img src='images/icon-campaign-d.gif' align='absmiddle'>&nbsp;";
 		
-		echo "<a href='campaign-edit.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['clientid']."'>".$campaigns[$ckey]['clientname']."</td>";
+		echo "<a href='campaign-edit.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['campaignid']."'>".$campaigns[$ckey]['campaignname']."</td>";
 		echo "</td>";
 		
 		// ID
@@ -318,19 +310,19 @@ else
 		// Button 1
 		echo "<td height='25' align='".$phpAds_TextAlignRight."'>";
 		if ($campaigns[$ckey]['expand'] == '1' || !isset($campaigns[$ckey]['banners']))
-			echo "<a href='banner-edit.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['clientid']."'><img src='images/icon-banner-new.gif' border='0' align='absmiddle' alt='$strCreate'>&nbsp;$strCreate</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+			echo "<a href='banner-edit.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['campaignid']."'><img src='images/icon-banner-new.gif' border='0' align='absmiddle' alt='$strCreate'>&nbsp;$strCreate</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 		else
 			echo "&nbsp;";
 		echo "</td>";
 		
 		// Button 2
 		echo "<td height='25' align='".$phpAds_TextAlignRight."'>";
-		echo "<a href='campaign-banners.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['clientid']."'><img src='images/icon-overview.gif' border='0' align='absmiddle' alt='$strOverview'>&nbsp;$strOverview</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+		echo "<a href='campaign-banners.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['campaignid']."'><img src='images/icon-overview.gif' border='0' align='absmiddle' alt='$strOverview'>&nbsp;$strOverview</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 		echo "</td>";
 		
 		// Button 3
 		echo "<td height='25' align='".$phpAds_TextAlignRight."'>";
-		echo "<a href='campaign-delete.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['clientid']."&returnurl=advertiser-campaigns.php'".phpAds_DelConfirm($strConfirmDeleteCampaign)."><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+		echo "<a href='campaign-delete.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['campaignid']."&returnurl=advertiser-campaigns.php'".phpAds_DelConfirm($strConfirmDeleteCampaign)."><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 		echo "</td></tr>";
 		
 		if ($campaigns[$ckey]['expand'] == '1' && isset($campaigns[$ckey]['banners']))

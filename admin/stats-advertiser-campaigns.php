@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -55,20 +55,16 @@ if (phpAds_isUser(phpAds_Admin))
 	else
 		$navdirection = '';
 	
-	$res = phpAds_dbQuery("
-		SELECT
-			*
-		FROM
-			".$phpAds_config['tbl_clients']."
-		WHERE
-			parent = 0
-		".phpAds_getListOrder ($navorder, $navdirection)."
-	") or phpAds_sqlDie();
+	$res = phpAds_dbQuery(
+		"SELECT *".
+		" FROM ".$phpAds_config['tbl_clients'].
+		phpAds_getClientListOrder ($navorder, $navdirection)
+	) or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
 	{
 		phpAds_PageContext (
-			phpAds_buildClientName ($row['clientid'], $row['clientname']),
+			phpAds_buildName ($row['clientid'], $row['clientname']),
 			"stats-advertiser-campaigns.php?clientid=".$row['clientid'],
 			$clientid == $row['clientid']
 		);
@@ -140,21 +136,18 @@ else
 /* Main code                                             */
 /*********************************************************/
 
-$res_campaigns = phpAds_dbQuery("
-	SELECT 
-		*
-	FROM 
-		".$phpAds_config['tbl_clients']."
-	WHERE
-		parent = ".$clientid."
-	".phpAds_getListOrder ($listorder, $orderdirection)."
-") or phpAds_sqlDie();
+$res_campaigns = phpAds_dbQuery(
+	"SELECT *".
+	" FROM ".$phpAds_config['tbl_campaigns'].
+	" WHERE clientid=".$clientid.
+	phpAds_getCampaignListOrder ($listorder, $orderdirection)
+) or phpAds_sqlDie();
 
 while ($row_campaigns = phpAds_dbFetchArray($res_campaigns))
 {
-	$campaigns[$row_campaigns['clientid']] = $row_campaigns;
-	$campaigns[$row_campaigns['clientid']]['expand'] = 0;
-	$campaigns[$row_campaigns['clientid']]['count'] = 0;
+	$campaigns[$row_campaigns['campaignid']] = $row_campaigns;
+	$campaigns[$row_campaigns['campaignid']]['expand'] = 0;
+	$campaigns[$row_campaigns['campaignid']]['count'] = 0;
 }
 
 
@@ -374,7 +367,7 @@ if ($campaignshidden > 0 || $totalviews > 0 || $totalclicks > 0)
 		else
 			echo "<img src='images/icon-campaign-d.gif' align='absmiddle'>&nbsp;";
 		
-		echo "<a href='stats-campaign-history.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['clientid']."'>".$campaigns[$ckey]['clientname']."</td>";
+		echo "<a href='stats-campaign-history.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['campaignid']."'>".$campaigns[$ckey]['campaignname']."</td>";
 		echo "</td>";
 		
 		// ID

@@ -26,6 +26,7 @@ $phpAds_config['tbl_adconversions'] = 'phpads_adconversions';
 $phpAds_config['tbl_adstats'] = 'phpads_adstats';
 $phpAds_config['tbl_banners'] = 'phpads_banners';
 $phpAds_config['tbl_clients'] = 'phpads_clients';
+$phpAds_config['tbl_campaigns'] = 'phpads_campaigns';
 $phpAds_config['tbl_session'] = 'phpads_session';
 $phpAds_config['tbl_acls'] = 'phpads_acls';
 $phpAds_config['tbl_zones'] = 'phpads_zones';

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -44,7 +44,7 @@ if (phpAds_isUser(phpAds_Client))
 		") or phpAds_sqlDie();
 	$row = phpAds_dbFetchArray($result);
 	
-	if ($row["campaignid"] == '' || phpAds_getUserID() != phpAds_getParentID ($row["campaignid"]))
+	if ($row["campaignid"] == '' || phpAds_getUserID() != phpAds_getParentClientID ($row["campaignid"]))
 	{
 		phpAds_PageHeader("1");
 		phpAds_Die ($strAccessDenied, $strNotAdmin);
@@ -106,9 +106,9 @@ if (phpAds_isUser(phpAds_Admin))
 	$extra .= "<br><br>";
 	
 	phpAds_PageHeader("2.1.2.2.1", $extra);
-		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentName($campaignid);
+		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentClientName($campaignid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
-		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;".phpAds_getClientName($campaignid);
+		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;".phpAds_getCampaignName($campaignid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 		echo "<img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;<b>".phpAds_getBannerName($bannerid)."</b><br><br>";
 		echo phpAds_buildBannerCode($bannerid)."<br><br><br><br>";
@@ -121,7 +121,7 @@ if (phpAds_isUser(phpAds_Client))
 	if (phpAds_isAllowed(phpAds_ModifyBanner)) $sections[] = "1.2.2.2";
 	
 	phpAds_PageHeader("1.2.2.1");
-		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;".phpAds_getClientName($campaignid);
+		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;".phpAds_getCampaignName($campaignid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 		echo "<img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;<b>".phpAds_getBannerName($bannerid)."</b><br><br>";
 		echo phpAds_buildBannerCode($bannerid)."<br><br><br><br>";

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -30,17 +30,15 @@ phpAds_checkAccess(phpAds_Admin+phpAds_Client);
 
 if (phpAds_isUser(phpAds_Client))
 {
-	$result = phpAds_dbQuery("
-		SELECT
-			clientid
-		FROM
-			".$phpAds_config['tbl_banners']."
-		WHERE
-			bannerid = '$bannerid'
-		") or phpAds_sqlDie();
+	$result = phpAds_dbQuery(
+		"SELECT campaignid".
+		" FROM ".$phpAds_config['tbl_banners'].
+		" WHERE bannerid=".$bannerid
+	) or phpAds_sqlDie();
+	
 	$row = phpAds_dbFetchArray($result);
 	
-	if ($row["campaignid"] == '' || phpAds_getUserID() != phpAds_getParentID ($row["clientid"]))
+	if ($row["campaignid"] == '' || phpAds_getUserID() != phpAds_getParentClientID ($row["campaignid"]))
 	{
 		phpAds_PageHeader("1");
 		phpAds_Die ($strAccessDenied, $strNotAdmin);
@@ -90,9 +88,9 @@ if (phpAds_isUser(phpAds_Admin))
 	
 	
 	phpAds_PageHeader("2.1.2.2.1.2");
-		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentName($campaignid);
+		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentClientName($campaignid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
-		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;".phpAds_getClientName($campaignid);
+		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;".phpAds_getCampaignName($campaignid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 		echo "<img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;".phpAds_getBannerName($bannerid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
@@ -104,7 +102,7 @@ if (phpAds_isUser(phpAds_Admin))
 if (phpAds_isUser(phpAds_Client))
 {
 	phpAds_PageHeader("1.2.2.1.2");
-		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;".phpAds_getClientName($campaignid);
+		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;".phpAds_getCampaignName($campaignid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 		echo "<img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;".phpAds_getBannerName($bannerid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";

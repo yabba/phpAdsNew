@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -50,14 +50,14 @@ function phpAds_warningMail ($campaign)
 			
 			
 			// Build email
-			$Subject = $strViewsClicksConversionsLow.": ".$campaign["clientname"];
+			$Subject = $strViewsClicksConversionsLow.": ".$campaign['campaignname'];
 			
 			$Body    = "$strMailHeader\n";
 			$Body 	.= "$strWarnClientTxt\n";
 			$Body 	.= "$strMailNothingLeft\n\n";
 			$Body   .= "$strMailFooter";
 			
-			$Body    = str_replace ("{clientname}", $campaign["clientname"], $Body);
+			$Body    = str_replace ("{clientname}", $campaign['campaignname'], $Body);
 			$Body	 = str_replace ("{contact}", $client["contact"], $Body);
 			$Body    = str_replace ("{adminfullname}", $phpAds_config['admin_fullname'], $Body);
 			$Body    = str_replace ("{limit}", $phpAds_config['warn_limit'], $Body);
@@ -113,7 +113,7 @@ function phpAds_deactivateMail ($campaign)
 			
 			
 			// Build email
-			$Subject = $strMailSubjectDeleted.": ".$campaign["clientname"];
+			$Subject = $strMailSubjectDeleted.": ".$campaign['campaignname'];
 			
 			$Body  = $strMailHeader."\n";
 			$Body .= $strMailClientDeactivated;

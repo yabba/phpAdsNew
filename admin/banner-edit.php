@@ -1,4 +1,4 @@
-<?php // $Revision: 2.6 $
+<?php // $Revision: 2.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -52,7 +52,7 @@ if (phpAds_isUser(phpAds_Client))
 			") or phpAds_sqlDie();
 		$row = phpAds_dbFetchArray($result);
 		
-		if ($row["campaignid"] == '' || phpAds_getUserID() != phpAds_getParentID ($row["campaignid"]))
+		if ($row["campaignid"] == '' || phpAds_getUserID() != phpAds_getParentClientID ($row["campaignid"]))
 		{
 			phpAds_PageHeader("1");
 			phpAds_Die ($strAccessDenied, $strNotAdmin);
@@ -614,7 +614,7 @@ if (isset($submit))
 			break;
 	}
 	
-	$final['clientid'] = $campaignid;
+	$final['campaignid'] = $campaignid;
 	$final['bannerid'] = $bannerid;
 	
 	$final['appendtype'] = isset($final['appendtype']) ? addslashes($final['appendtype']) : '';
@@ -800,9 +800,9 @@ if ($bannerid != '')
 		$extra .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 		$extra .= "<select name='moveto' style='width: 110;'>";
 		
-		$res = phpAds_dbQuery("SELECT * FROM ".$phpAds_config['tbl_clients']." WHERE parent != 0 AND clientid != '".$campaignid."'") or phpAds_sqlDie();
+		$res = phpAds_dbQuery("SELECT * FROM ".$phpAds_config['tbl_campaigns']." WHERE campaignid != '".$campaignid."'") or phpAds_sqlDie();
 		while ($others = phpAds_dbFetchArray($res))
-			$extra .= "<option value='".$others['clientid']."'>".phpAds_buildClientName($others['clientid'], $others['clientname'])."</option>";
+			$extra .= "<option value='".$others['campaignid']."'>".phpAds_buildName($others['campaignid'], $others['campaignname'])."</option>";
 		
 		$extra .= "</select>&nbsp;<input type='image' name='moveto' src='images/".$phpAds_TextDirection."/go_blue.gif'><br>";
 		$extra .= "<img src='images/break.gif' height='1' width='160' vspace='4'><br>";
@@ -811,9 +811,9 @@ if ($bannerid != '')
 		
 		
 		phpAds_PageHeader("4.1.3.4.2", $extra);
-			echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentName($campaignid);
+			echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentClientName($campaignid);
 			echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
-			echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;".phpAds_getClientName($campaignid);
+			echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;".phpAds_getCampaignName($campaignid);
 			echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 			echo "<img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;<b>".phpAds_getBannerName($bannerid)."</b><br><br>";
 			echo phpAds_buildBannerCode($bannerid)."<br><br><br><br>";
@@ -822,7 +822,7 @@ if ($bannerid != '')
 	else
 	{
 		phpAds_PageHeader("1.2.2.2");
-			echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;".phpAds_getClientName($campaignid);
+			echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;".phpAds_getCampaignName($campaignid);
 			echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 			echo "<img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;<b>".phpAds_getBannerName($bannerid)."</b><br><br>";
 			echo phpAds_buildBannerCode($bannerid)."<br><br><br><br>";
@@ -866,9 +866,9 @@ if ($bannerid != '')
 else
 {
 	phpAds_PageHeader("4.1.3.4.1");
-		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentName($campaignid);
+		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentClientName($campaignid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
-		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;".phpAds_getClientName($campaignid);
+		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;".phpAds_getCampaignName($campaignid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 		echo "<img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;<b>".$strUntitled."</b><br><br><br>";
 		phpAds_ShowSections(array("4.1.3.4.1"));

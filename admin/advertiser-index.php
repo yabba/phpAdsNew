@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -79,43 +79,48 @@ else
 // Get clients & campaign and build the tree
 if (phpAds_isUser(phpAds_Admin))
 {
-	$res_clients = phpAds_dbQuery("
-		SELECT 
-			*
-		FROM 
-			".$phpAds_config['tbl_clients']."
-		".phpAds_getListOrder ($listorder, $orderdirection)."
-		") or phpAds_sqlDie();
+	$res_clients = phpAds_dbQuery(
+		"SELECT *".
+		" FROM ".$phpAds_config['tbl_clients'].
+		phpAds_getClientListOrder ($listorder, $orderdirection)
+	) or phpAds_sqlDie();
+	
+	$res_campaigns = phpAds_dbQuery(
+		"SELECT *".
+		" FROM ".$phpAds_config['tbl_campaigns'].
+		phpAds_getCampaignListOrder ($listorder, $orderdirection)
+	) or phpAds_sqlDie();
 }
 else
 {
-	$res_clients = phpAds_dbQuery("
-		SELECT 
-			*
-		FROM 
-			".$phpAds_config['tbl_clients']."
-		WHERE
-			clientid = ".$Session["clientid"]." OR
-			parent = ".$Session["clientid"]."
-		".phpAds_getListOrder ($listorder, $orderdirection)."
-		") or phpAds_sqlDie();
+	$res_clients = phpAds_dbQuery(
+		"SELECT *".
+		" FROM ".$phpAds_config['tbl_clients'].
+		" WHERE clientid=".$Session['clientid'].
+		phpAds_getClientListOrder ($listorder, $orderdirection)
+	) or phpAds_sqlDie();
+	
+	$res_campaigns = phpAds_dbQuery(
+		"SELECT *".
+		" FROM ".$phpAds_config['tbl_campaigns'].
+		" WHERE clientid=".$Session['clientid'].
+		phpAds_getCampaignListOrder ($listorder, $orderdirection)
+	) or phpAds_sqlDie();
 }
 
 while ($row_clients = phpAds_dbFetchArray($res_clients))
 {
-	if ($row_clients['parent'] == 0)
-	{
-		$clients[$row_clients['clientid']] = $row_clients;
-		$clients[$row_clients['clientid']]['expand'] = 0;
-		$clients[$row_clients['clientid']]['count'] = 0;
-		$clients[$row_clients['clientid']]['hideinactive'] = 0;
-	}
-	else
-	{
-		$campaigns[$row_clients['clientid']] = $row_clients;
-		$campaigns[$row_clients['clientid']]['expand'] = 0;
-		$campaigns[$row_clients['clientid']]['count'] = 0;
-	}
+	$clients[$row_clients['clientid']] = $row_clients;
+	$clients[$row_clients['clientid']]['expand'] = 0;
+	$clients[$row_clients['clientid']]['count'] = 0;
+	$clients[$row_clients['clientid']]['hideinactive'] = 0;
+}
+
+while ($row_campaigns = phpAds_dbFetchArray($res_campaigns))
+{
+		$campaigns[$row_campaigns['campaignid']] = $row_campaigns;
+		$campaigns[$row_campaigns['campaignid']]['expand'] = 0;
+		$campaigns[$row_campaigns['campaignid']]['count'] = 0;
 }
 
 
@@ -378,7 +383,7 @@ else
 					else
 						echo "<img src='images/icon-campaign-d.gif' align='absmiddle'>&nbsp;";
 					
-					echo "<a href='campaign-edit.php?clientid=".$client['clientid']."&campaignid=".$campaigns[$ckey]['clientid']."'>".$campaigns[$ckey]['clientname']."</td>";
+					echo "<a href='campaign-edit.php?clientid=".$client['clientid']."&campaignid=".$campaigns[$ckey]['campaignid']."'>".$campaigns[$ckey]['campaignname']."</td>";
 					echo "</td>";
 					
 					// ID
@@ -387,19 +392,19 @@ else
 					// Button 1
 					echo "<td height='25'>";
 					if ($campaigns[$ckey]['expand'] == '1' || !isset($campaigns[$ckey]['banners']))
-						echo "<a href='banner-edit.php?clientid=".$client['clientid']."&campaignid=".$campaigns[$ckey]['clientid']."'><img src='images/icon-banner-new.gif' border='0' align='absmiddle' alt='$strCreate'>&nbsp;$strCreate</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+						echo "<a href='banner-edit.php?clientid=".$client['clientid']."&campaignid=".$campaigns[$ckey]['campaignid']."'><img src='images/icon-banner-new.gif' border='0' align='absmiddle' alt='$strCreate'>&nbsp;$strCreate</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 					else
 						echo "&nbsp;";
 					echo "</td>";
 					
 					// Button 2
 					echo "<td height='25'>";
-					echo "<a href='campaign-banners.php?clientid=".$client['clientid']."&campaignid=".$campaigns[$ckey]['clientid']."'><img src='images/icon-overview.gif' border='0' align='absmiddle' alt='$strOverview'>&nbsp;$strOverview</a>&nbsp;&nbsp;";
+					echo "<a href='campaign-banners.php?clientid=".$client['clientid']."&campaignid=".$campaigns[$ckey]['campaignid']."'><img src='images/icon-overview.gif' border='0' align='absmiddle' alt='$strOverview'>&nbsp;$strOverview</a>&nbsp;&nbsp;";
 					echo "</td>";
 					
 					// Button 3
 					echo "<td height='25'>";
-					echo "<a href='campaign-delete.php?clientid=".$client['clientid']."&campaignid=".$campaigns[$ckey]['clientid']."&returnurl=advertiser-index.php'".phpAds_DelConfirm($strConfirmDeleteCampaign)."><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+					echo "<a href='campaign-delete.php?clientid=".$client['clientid']."&campaignid=".$campaigns[$ckey]['campaignid']."&returnurl=advertiser-index.php'".phpAds_DelConfirm($strConfirmDeleteCampaign)."><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 					echo "</td></tr>";
 					
 					
@@ -523,11 +528,11 @@ echo "</table>";
 
 
 // total number of clients
-$res_clients 		  = phpAds_dbQuery("SELECT count(*) AS count FROM ".$phpAds_config['tbl_clients']." WHERE parent = 0") or phpAds_sqlDie();
-$res_campaigns 		  = phpAds_dbQuery("SELECT count(*) AS count FROM ".$phpAds_config['tbl_clients']." WHERE parent > 0") or phpAds_sqlDie();
-$res_active_campaigns = phpAds_dbQuery("SELECT count(*) AS count FROM ".$phpAds_config['tbl_clients']." WHERE parent > 0 AND active='t'");
+$res_clients 		  = phpAds_dbQuery("SELECT count(*) AS count FROM ".$phpAds_config['tbl_clients']) or phpAds_sqlDie();
+$res_campaigns 		  = phpAds_dbQuery("SELECT count(*) AS count FROM ".$phpAds_config['tbl_campaigns']) or phpAds_sqlDie();
+$res_active_campaigns = phpAds_dbQuery("SELECT count(*) AS count FROM ".$phpAds_config['tbl_campaigns']." WHERE active='t'");
 $res_total_banners 	  = phpAds_dbQuery("SELECT count(*) AS count FROM ".$phpAds_config['tbl_banners']);
-$res_active_banners   = phpAds_dbQuery("SELECT count(*) AS count FROM ".$phpAds_config['tbl_banners']." as b, ".$phpAds_config['tbl_clients']." as c WHERE b.campaignid=c.clientid AND c.active='t' AND b.active='t'");
+$res_active_banners   = phpAds_dbQuery("SELECT count(*) AS count FROM ".$phpAds_config['tbl_banners']." as b, ".$phpAds_config['tbl_campaigns']." as c WHERE b.campaignid=c.campaignid AND c.active='t' AND b.active='t'");
 
 
 echo "<br><br><br><br>";

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -22,20 +22,16 @@ require	(phpAds_path."/libraries/lib-warnings.inc.php");
 /* and expiration dates					 				 */
 /*********************************************************/
 
-$res_clients = phpAds_dbQuery("
-	SELECT
-		clientid,
-		clientname,
-		contact,
-		email,
-		language,
-		reportdeactivate
-	FROM
-		".$phpAds_config['tbl_clients']."
-	WHERE
-		parent = 0
-	
-	") or die($strLogErrorClients);
+$res_clients = phpAds_dbQuery(
+	"SELECT".
+	" clientid".
+	",clientname".
+	",contact".
+	",email".
+	",language".
+	",reportdeactivate".
+	" FROM ".$phpAds_config['tbl_clients']
+) or die($strLogErrorClients);
 
 while($client = phpAds_dbFetchArray($res_clients))
 {
@@ -47,23 +43,21 @@ while($client = phpAds_dbFetchArray($res_clients))
 	
 	
 	// Send Query
-	$res_campaigns = phpAds_dbQuery("
-		SELECT
-			clientid,
-			clientname,
-			parent,
-			views,
-			clicks,
-			expire,
-			UNIX_TIMESTAMP(expire) as expire_st,
-			activate,
-			UNIX_TIMESTAMP(activate) as activate_st,
-			active
-		FROM
-			".$phpAds_config['tbl_clients']."
-		WHERE
-			parent = ".$client['clientid']."
-		") or die($strLogErrorClients);
+	$res_campaigns = phpAds_dbQuery(
+		"SELECT".
+		" campaignid".
+		",campaignname".
+		",clientid".
+		",views".
+		",clicks".
+		",expire".
+		",UNIX_TIMESTAMP(expire) as expire_st".
+		",activate".
+		",UNIX_TIMESTAMP(activate) as activate_st".
+		",active".
+		" FROM ".$phpAds_config['tbl_campaigns'].
+		" WHERE clientid=".$client['clientid']
+	) or die($strLogErrorClients);
 	
 	
 	while($campaign = phpAds_dbFetchArray($res_campaigns))
@@ -82,14 +76,14 @@ while($client = phpAds_dbFetchArray($res_clients))
 		if ($campaign["active"] != $active)
 		{
 			if ($active == "t")
-				phpAds_userlogAdd (phpAds_actionActiveCampaign, $campaign['clientid']);
+				phpAds_userlogAdd (phpAds_actionActiveCampaign, $campaign['campaignid']);
 			else
 			{
-				phpAds_userlogAdd (phpAds_actionDeactiveCampaign, $campaign['clientid']);
+				phpAds_userlogAdd (phpAds_actionDeactiveCampaign, $campaign['campaignid']);
 				phpAds_deactivateMail ($campaign);
 			}
 			
-			phpAds_dbQuery("UPDATE ".$phpAds_config['tbl_clients']." SET active='$active' WHERE clientid=".$campaign['clientid']);
+			phpAds_dbQuery("UPDATE ".$phpAds_config['tbl_campaigns']." SET active='$active' WHERE campaignid=".$campaign['campaignid']);
 		}
 	}
 }

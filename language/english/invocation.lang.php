@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -36,7 +36,8 @@ $GLOBALS['strAbbrSeconds']			= "sec";
 
 // Common Invocation Parameters
 $GLOBALS['strInvocationWhat']			= "Banner selection";
-$GLOBALS['strInvocationClientID']		= "Advertiser or campaign";
+$GLOBALS['strInvocationClientID']		= "Advertiser";
+$GLOBALS['strInvocationCampaignID']		= "Campaign";
 $GLOBALS['strInvocationTarget']			= "Target frame";
 $GLOBALS['strInvocationSource']			= "Source";
 $GLOBALS['strInvocationWithText']		= "Show text below banner";

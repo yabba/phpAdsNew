@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -79,20 +79,17 @@ function phpAds_IsBannerInZone ($bannerid, $zoneid, $what = '')
 /* Determine if a campaign included in a zone            */
 /*********************************************************/
 
-function phpAds_IsCampaignInZone ($clientid, $zoneid, $what = '')
+function phpAds_IsCampaignInZone ($campaignid, $zoneid, $what = '')
 {
 	global $phpAds_config;
 	
 	if ($what == '')
 	{
-		$res = phpAds_dbQuery("
-			SELECT
-				*
-			FROM
-				".$phpAds_config['tbl_zones']."
-			WHERE
-				zoneid = '$zoneid'
-		") or phpAds_sqlDie();
+		$res = phpAds_dbQuery(
+			"SELECT what".
+			" FROM ".$phpAds_config['tbl_zones'].
+			" WHERE zoneid=".$zoneid
+		) or phpAds_sqlDie();
 		
 		if ($zone = phpAds_dbFetchArray($res))
 			$what = $zone['what'];
@@ -103,8 +100,8 @@ function phpAds_IsCampaignInZone ($clientid, $zoneid, $what = '')
 	
 	for ($k=0; $k < count($what_array); $k++)
 	{
-		if (substr($what_array[$k],0,9) == "clientid:" && 
-		    substr($what_array[$k],9) == $clientid)
+		if (substr($what_array[$k],0,11) == "campaignid:" && 
+		    substr($what_array[$k],11) == $campaignid)
 		{
 			return (true);
 		}
@@ -199,20 +196,17 @@ function phpAds_ToggleBannerInZone ($bannerid, $zoneid)
 /* Add a campaign to a zone                              */
 /*********************************************************/
 
-function phpAds_ToggleCampaignInZone ($clientid, $zoneid)
+function phpAds_ToggleCampaignInZone ($campaignid, $zoneid)
 {
 	global $phpAds_config;
 	
 	if (isset($zoneid) && $zoneid != '')
 	{
-		$res = phpAds_dbQuery("
-			SELECT
-				*
-			FROM
-				".$phpAds_config['tbl_zones']."
-			WHERE
-				zoneid = '$zoneid'
-			") or phpAds_sqlDie();
+		$res = phpAds_dbQuery(
+			"SELECT what".
+			" FROM ".$phpAds_config['tbl_zones'].
+			" WHERE zoneid=".$zoneid
+		) or phpAds_sqlDie();
 		
 		if (phpAds_dbNumRows($res))
 		{
@@ -228,8 +222,8 @@ function phpAds_ToggleCampaignInZone ($clientid, $zoneid)
 			
 			for ($k=0; $k < count($what_array); $k++)
 			{
-				if (substr($what_array[$k],0,9) == "clientid:" && 
-				    substr($what_array[$k],9) == $clientid)
+				if (substr($what_array[$k],0,11) == "campaignid:" && 
+				    substr($what_array[$k],11) == $campaignid)
 				{
 					// Remove from array
 					unset ($what_array[$k]);
@@ -241,7 +235,7 @@ function phpAds_ToggleCampaignInZone ($clientid, $zoneid)
 			if ($available == false)
 			{
 				// Add to array
-				$what_array[] = 'clientid:'.$clientid;
+				$what_array[] = "campaignid:".$campaignid;
 				$changed = true;
 			}
 			
@@ -251,14 +245,11 @@ function phpAds_ToggleCampaignInZone ($clientid, $zoneid)
 				$zone['what'] = implode (",", $what_array);
 				
 				// Store string back into database
-				$res = phpAds_dbQuery("
-					UPDATE
-						".$phpAds_config['tbl_zones']."
-					SET 
-						what = '".$zone['what']."'
-					WHERE
-						zoneid = '$zoneid'
-					") or phpAds_sqlDie();
+				$res = phpAds_dbQuery(
+					"UPDATE ".$phpAds_config['tbl_zones'].
+					" SET what = '".$zone['what']."'".
+					" WHERE zoneid=".$zoneid
+				) or phpAds_sqlDie();
 				
 				// Rebuild cache
 				if (!defined('LIBVIEWCACHE_INCLUDED')) 

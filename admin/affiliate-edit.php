@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -626,7 +626,7 @@ $res = phpAds_dbQuery("SELECT * FROM ".$phpAds_config['tbl_affiliates']." WHERE 
 while ($row = phpAds_dbFetchArray($res))
 	$unique_users[] = $row['username'];
 
-$res = phpAds_dbQuery("SELECT * FROM ".$phpAds_config['tbl_clients']." WHERE clientusername != '' AND parent = 0");
+$res = phpAds_dbQuery("SELECT * FROM ".$phpAds_config['tbl_clients']." WHERE clientusername != ''");
 while ($row = phpAds_dbFetchArray($res))
 	$unique_users[] = $row['clientusername'];
 

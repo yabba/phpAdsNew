@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -22,7 +22,12 @@ require ("lib-size.inc.php");
 
 
 // Register input variables
-phpAds_registerGlobal ('listorder', 'orderdirection', 'submit', 'includezone');
+phpAds_registerGlobal (
+	 'listorder'
+	,'orderdirection'
+	,'submit'
+	,'includezone'
+);
 
 
 // Security check
@@ -39,15 +44,13 @@ if (isset($submit))
 	$previouszone = array();
 	
 	// Get all zones
-	$res = phpAds_dbQuery("
-		SELECT 
-			zoneid,
-			what
-		FROM 
-			".$phpAds_config['tbl_zones']."
-		WHERE
-			zonetype = ".phpAds_ZoneCampaign."
-	") or phpAds_sqlDie();
+	$res = phpAds_dbQuery(
+		"SELECT".
+		" zoneid".
+		",what".
+		" FROM ".$phpAds_config['tbl_zones'].
+		" WHERE zonetype = ".phpAds_ZoneCampaign
+	) or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
 		$previouszone[$row['zoneid']] = (phpAds_IsCampaignInZone ($campaignid, $row['zoneid'], $row['what']));
@@ -106,22 +109,19 @@ else
 
 
 // Get other campaigns
-$res = phpAds_dbQuery("
-	SELECT
-		*
-	FROM
-		".$phpAds_config['tbl_clients']."
-	WHERE
-		parent = ".$clientid."
-	".phpAds_getListOrder ($navorder, $navdirection)."
-");
+$res = phpAds_dbQuery(
+	"SELECT *".
+	" FROM ".$phpAds_config['tbl_campaigns'].
+	" WHERE clientid = ".$clientid.
+	phpAds_getCampaignListOrder ($navorder, $navdirection)
+) or phpAds_sqlDie();
 
 while ($row = phpAds_dbFetchArray($res))
 {
 	phpAds_PageContext (
-		phpAds_buildClientName ($row['clientid'], $row['clientname']),
-		"campaign-zone.php?clientid=".$clientid."&campaignid=".$row['clientid'],
-		$campaignid == $row['clientid']
+		phpAds_buildName ($row['campaignid'], $row['campaignname']),
+		"campaign-zone.php?clientid=".$clientid."&campaignid=".$row['campaignid'],
+		$campaignid == $row['campaignid']
 	);
 }
 
@@ -142,9 +142,14 @@ $extra .= "<img src='images/spacer.gif' height='1' width='160' vspace='2'><br>";
 $extra .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 $extra .= "<select name='moveto' style='width: 110;'>";
 
-$res = phpAds_dbQuery("SELECT * FROM ".$phpAds_config['tbl_clients']." WHERE parent = 0 AND clientid != ".phpAds_getParentID ($campaignid)) or phpAds_sqlDie();
+$res = phpAds_dbQuery(
+	"SELECT *".
+	" FROM ".$phpAds_config['tbl_clients'].
+	" WHERE clientid!=".phpAds_getParentClientID ($campaignid)
+) or phpAds_sqlDie();
+
 while ($row = phpAds_dbFetchArray($res))
-	$extra .= "<option value='".$row['clientid']."'>".phpAds_buildClientName($row['clientid'], $row['clientname'])."</option>";
+	$extra .= "<option value='".$row['clientid']."'>".phpAds_buildName($row['clientid'], $row['clientname'])."</option>";
 
 $extra .= "</select>&nbsp;<input type='image' src='images/".$phpAds_TextDirection."/go_blue.gif'><br>";
 $extra .= "<img src='images/break.gif' height='1' width='160' vspace='4'><br>";
@@ -154,9 +159,9 @@ $extra .= "</form>";
 
 
 phpAds_PageHeader("4.1.3.3", $extra);
-	echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentName($campaignid);
+	echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentClientName($campaignid);
 	echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
-	echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<b>".phpAds_getClientName($campaignid)."</b><br><br><br>";
+	echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<b>".phpAds_getCampaignName($campaignid)."</b><br><br><br>";
 	phpAds_ShowSections(array("4.1.3.2", "4.1.3.3", "4.1.3.4"));
 
 

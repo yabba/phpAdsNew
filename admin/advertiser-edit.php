@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -21,9 +21,22 @@ require ("lib-languages.inc.php");
 
 
 // Register input variables
-phpAds_registerGlobal ('errormessage', 'clientname', 'contact', 'email', 'clientlanguage', 'clientreportlastdate', 
-					   'clientreportprevious', 'clientreportdeactivate', 'clientreport', 'clientreportinterval', 
-					   'clientusername', 'clientpassword', 'clientpermissions', 'submit');
+phpAds_registerGlobal (
+	 'errormessage'
+	,'clientname'
+	,'contact'
+	,'email'
+	,'clientlanguage'
+	,'clientreportlastdate'
+	,'clientreportprevious'
+	,'clientreportdeactivate'
+	,'clientreport'
+	,'clientreportinterval'
+	,'clientusername'
+	,'clientpassword'
+	,'clientpermissions'
+	,'submit'
+);
 
 
 // Security check
@@ -58,16 +71,13 @@ if (isset($submit))
 	
 	
 	// Get previous values
-	if (isset($clientid))
+	if (isset($clientid) && ($clientid != ''))
 	{
-		$res = phpAds_dbQuery("
-			SELECT
-				*
-			FROM
-				".$phpAds_config['tbl_clients']."
-			WHERE
-				clientid = '".$clientid."'
-			") or phpAds_sqlDie();
+		$res = phpAds_dbQuery(
+			"SELECT *".
+			" FROM ".$phpAds_config['tbl_clients'].
+			" WHERE clientid=".$clientid
+		) or phpAds_sqlDie();
 		
 		if (phpAds_dbNumRows($res))
 		{
@@ -290,20 +300,16 @@ if ($clientid != "")
 		
 		
 		// Get other clients
-		$res = phpAds_dbQuery("
-			SELECT
-				*
-			FROM
-				".$phpAds_config['tbl_clients']."
-			WHERE
-				parent = 0
-			".phpAds_getListOrder ($navorder, $navdirection)."
-		") or phpAds_sqlDie();
+		$res = phpAds_dbQuery(
+			"SELECT *".
+			" FROM ".$phpAds_config['tbl_clients'].
+			phpAds_getClientListOrder ($navorder, $navdirection)
+		) or phpAds_sqlDie();
 		
 		while ($row = phpAds_dbFetchArray($res))
 		{
 			phpAds_PageContext (
-				phpAds_buildClientName ($row['clientid'], $row['clientname']),
+				phpAds_buildName ($row['clientid'], $row['clientname']),
 				"advertiser-edit.php?clientid=".$row['clientid'],
 				$clientid == $row['clientid']
 			);

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -45,7 +45,7 @@ $res_clients = phpAds_dbQuery("
 	FROM
 		".$phpAds_config['tbl_clients']."
 	WHERE
-		parent = 0 AND report='t'
+		report='t'
 	");
 
 

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -54,22 +54,20 @@ function phpAds_SendMaintenanceReport ($clientid, $first_unixtimestamp, $last_un
 	
 	
 	// Get Client information
-	$res_client = phpAds_dbQuery("
-		SELECT
-			clientid,
-			clientname,
-			contact,
-			email,
-			language,
-			report,
-			reportinterval,
-			reportlastdate,
-			UNIX_TIMESTAMP(reportlastdate) AS reportlastdate_t
-		FROM
-			".$phpAds_config['tbl_clients']."
-		WHERE
-			clientid='".$clientid."'
-		");
+	$res_client = phpAds_dbQuery(
+		"SELECT".
+		" clientid".
+		",clientname".
+		",contact".
+		",email".
+		",language".
+		",report".
+		",reportinterval".
+		",reportlastdate".
+		",UNIX_TIMESTAMP(reportlastdate) AS reportlastdate_t".
+		" FROM ".$phpAds_config['tbl_clients'].
+		" WHERE clientid=".$clientid
+	);
 	
 	if (phpAds_dbNumRows($res_client) > 0)
 	{
@@ -85,11 +83,12 @@ function phpAds_SendMaintenanceReport ($clientid, $first_unixtimestamp, $last_un
 		$active_campaigns = false;
 		$log = "";
 		
-		// Fetch all campaings belonging to client
+		// Fetch all campaigns belonging to client
 		
-		$res_campaigns = phpAds_dbQuery("SELECT".
-			" clientid".
-			",clientname".
+		$res_campaigns = phpAds_dbQuery(
+			"SELECT".
+			" campaignid".
+			",campaignname".
 			",views".
 			",clicks".
 			",conversions".
@@ -98,31 +97,28 @@ function phpAds_SendMaintenanceReport ($clientid, $first_unixtimestamp, $last_un
 			",activate".
 			",UNIX_TIMESTAMP(activate) as activate_st".
 			",active".
-			" FROM ".$phpAds_config['tbl_clients'].
-			" WHERE parent = ".$client['clientid'])
+			" FROM ".$phpAds_config['tbl_campaigns'].
+			" WHERE clientid=".$client['clientid'])
 		or die($strLogErrorClients);
 		
 		while($campaign = phpAds_dbFetchArray($res_campaigns))
 		{
 			// Fetch all banners belonging to campaign
-			$res_banners = phpAds_dbQuery("
-				SELECT
-					bannerid,
-					campaignid,
-					URL,
-					active,
-					description,
-					alt
-				FROM
-					".$phpAds_config['tbl_banners']."
-				WHERE
-					campaignid = ".$campaign['clientid']."
-				") or die($strLogErrorBanners);
-			
+			$res_banners = phpAds_dbQuery(
+				"SELECT".
+				"bannerid".
+				",campaignid".
+				",URL".
+				",active".
+				",description".
+				",alt".
+				" FROM ".$phpAds_config['tbl_banners'].
+				" WHERE campaignid=".$campaign['campaignid']
+			) or die($strLogErrorBanners);
 			
 			$active_banners = false;
 		    
-			$log .= "\n".$strCampaign."  ".strip_tags(phpAds_buildClientName ($campaign['clientid'], $campaign['clientname']))."\n";
+			$log .= "\n".$strCampaign."  ".strip_tags(phpAds_buildName ($campaign['campaignid'], $campaign['campaignname']))."\n";
 			$log .= "=======================================================\n\n";
 			
 			while($row_banners = phpAds_dbFetchArray($res_banners))
@@ -147,12 +143,13 @@ function phpAds_SendMaintenanceReport ($clientid, $first_unixtimestamp, $last_un
 						$log .= $strViews." (".$strTotal."):    ".$adviews."\n";
 						
 						// Fetch all adviews belonging to banner belonging to client, grouped by day
-			            $res_adviews = phpAds_dbQuery("SELECT".
+			            $res_adviews = phpAds_dbQuery(
+			            	"SELECT".
 			            	" SUM(views) as qnt".
 			            	",DATE_FORMAT(day, '$date_format') as t_stamp_f".
 			            	",TO_DAYS(day) AS the_day".
 			            	" FROM ".$phpAds_config['tbl_adstats'].
-			            	" WHERE bannerid = ".$row_banners['bannerid'].
+			            	" WHERE bannerid=".$row_banners['bannerid'].
 			            	" AND views>0".
 			            	" AND UNIX_TIMESTAMP(day)>=".$first_unixtimestamp.
 			            	" AND UNIX_TIMESTAMP(day)<".$last_unixtimestamp.

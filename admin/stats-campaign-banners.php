@@ -1,4 +1,4 @@
-<?php // $Revision: 2.6 $
+<?php // $Revision: 2.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -85,29 +85,26 @@ else
 
 if (phpAds_isUser(phpAds_Client))
 {
-	if (phpAds_getUserID() == phpAds_getParentID ($campaignid))
+	if (phpAds_getUserID() == phpAds_getParentClientID ($campaignid))
 	{
-		$res = phpAds_dbQuery("
-			SELECT
-				*
-			FROM
-				".$phpAds_config['tbl_clients']."
-			WHERE
-				parent = ".phpAds_getUserID()."
-			".phpAds_getListOrder ($navorder, $navdirection)."
-		") or phpAds_sqlDie();
+		$res = phpAds_dbQuery(
+			"SELECT *".
+			" FROM ".$phpAds_config['tbl_campaigns'].
+			" WHERE clientid = ".phpAds_getUserID().
+			phpAds_getCampaignListOrder ($navorder, $navdirection)
+		) or phpAds_sqlDie();
 		
 		while ($row = phpAds_dbFetchArray($res))
 		{
 			phpAds_PageContext (
-				phpAds_buildClientName ($row['clientid'], $row['clientname']),
-				"stats-campaign-banners.php?clientid=".$clientid."&campaignid=".$row['clientid'],
-				$campaignid == $row['clientid']
+				phpAds_buildName ($row['campaignid'], $row['campaignname']),
+				"stats-campaign-banners.php?clientid=".$clientid."&campaignid=".$row['campaignid'],
+				$campaignid == $row['campaignid']
 			);
 		}
 		
 		phpAds_PageHeader("1.2.2");
-			echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<b>".phpAds_getClientName($campaignid)."</b><br><br><br>";
+			echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<b>".phpAds_getCampaignName($campaignid)."</b><br><br><br>";
 			phpAds_ShowSections(array("1.2.1", "1.2.2", "1.2.3"));
 	}
 	else
@@ -119,22 +116,19 @@ if (phpAds_isUser(phpAds_Client))
 
 if (phpAds_isUser(phpAds_Admin))
 {
-	$res = phpAds_dbQuery("
-		SELECT
-			*
-		FROM
-			".$phpAds_config['tbl_clients']."
-		WHERE
-			parent = ".$clientid."
-		".phpAds_getListOrder ($navorder, $navdirection)."
-	") or phpAds_sqlDie();
+	$res = phpAds_dbQuery(
+		"SELECT *".
+		" FROM ".$phpAds_config['tbl_campaigns'].
+		" WHERE clientid = ".$clientid.
+		phpAds_getCampaignListOrder ($navorder, $navdirection)
+	) or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
 	{
 		phpAds_PageContext (
-			phpAds_buildClientName ($row['clientid'], $row['clientname']),
-			"stats-campaign-banners.php?clientid=".$clientid."&campaignid=".$row['clientid'],
-			$campaignid == $row['clientid']
+			phpAds_buildName ($row['campaignid'], $row['campaignname']),
+			"stats-campaign-banners.php?clientid=".$clientid."&campaignid=".$row['campaignid'],
+			$campaignid == $row['campaignid']
 		);
 	}
 	
@@ -142,9 +136,9 @@ if (phpAds_isUser(phpAds_Admin))
 	phpAds_PageShortcut($strCampaignProperties, 'campaign-edit.php?clientid='.$clientid.'&campaignid='.$campaignid, 'images/icon-campaign.gif');
 	
 	phpAds_PageHeader("2.1.2.2");
-		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentName($campaignid);
+		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentClientName($campaignid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
-		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<b>".phpAds_getClientName($campaignid)."</b><br><br><br>";
+		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<b>".phpAds_getCampaignName($campaignid)."</b><br><br><br>";
 		phpAds_ShowSections(array("2.1.2.1", "2.1.2.2", "2.1.2.3"));
 }
 
@@ -654,9 +648,9 @@ if (count($order_array) > 0)
 		echo "<tr><td height='1' colspan='2' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
 	}
 	
-	list($desc,$enddate,$daysleft)=days_left($campaignid);
-	$adclicksleft = adclicks_left($campaignid);
-	$adviewsleft  = adviews_left($campaignid);
+	list($desc,$enddate,$daysleft) = phpAds_getDaysLeft($campaignid);
+	$adclicksleft = phpAds_getAdClicksLeft($campaignid);
+	$adviewsleft  = phpAds_getAdViewsLeft($campaignid);
 	
 	echo "<tr><td height='25'>".$strTotalViews.": <b>".phpAds_formatNumber($totaladviews)."</b></td>";
 	echo "<td height='25'>".$strViewCredits.": <b>".$adviewsleft."</b></td></tr>";

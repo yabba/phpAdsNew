@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -40,12 +40,9 @@ function phpAds_DeleteCampaign($campaignid)
 	global $phpAds_config;
 	
 	// Delete Campaign
-	$res = phpAds_dbQuery("
-		DELETE FROM
-			".$phpAds_config['tbl_clients']."
-		WHERE
-			clientid = '$campaignid'
-	") or phpAds_sqlDie();
+	$res = phpAds_dbQuery("DELETE FROM ".$phpAds_config['tbl_campaigns'].
+		" WHERE campaignid = '".$campaignid."'"
+	) or phpAds_sqlDie();
 	
 	
 	// Loop through each banner
@@ -101,16 +98,16 @@ elseif (isset($clientid) && $clientid != '')
 	// No campaign specified, delete all campaigns for this client
 	$res_campaigns = phpAds_dbQuery("
 		SELECT
-			clientid
+			campaignid
 		FROM
-			".$phpAds_config['tbl_clients']."
+			".$phpAds_config['tbl_campaigns']."
 		WHERE
-			parent = ".$clientid."
+			clientid = ".$clientid."
 	");
 	
 	while ($row = phpAds_dbFetchArray($res_campaigns))
 	{
-		phpAds_DeleteCampaign($row['clientid']);
+		phpAds_DeleteCampaign($row['campaignid']);
 	}
 }
 

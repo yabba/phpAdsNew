@@ -1,4 +1,4 @@
-<?php // $Revision: 2.6 $
+<?php // $Revision: 2.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -35,14 +35,41 @@ else
 
 function phpAds_GenerateInvocationCode()
 {
-	global $phpAds_config;
-	global $codetype, $what, $acid, $source, $target;
-	global $withText, $template, $refresh, $uniqueid;
-	global $width, $height, $website, $ilayer;
-	global $popunder, $left, $top, $timeout, $delay, $delay_type;
-	global $transparent, $resize, $block, $blockcampaign, $raw;
-	global $hostlanguage, $toolbars, $location, $menubar, $status;
-	global $resizable, $scrollbars;
+	global
+		 $phpAds_config
+		,$codetype
+		,$what
+		,$clientid
+		,$campaignid
+		,$source
+		,$target
+		,$withText
+		,$template
+		,$refresh
+		,$uniqueid
+		,$width
+		,$height
+		,$website
+		,$ilayer
+		,$popunder
+		,$left
+		,$top
+		,$timeout
+		,$delay
+		,$delay_type
+		,$transparent
+		,$resize
+		,$block
+		,$blockcampaign
+		,$raw
+		,$hostlanguage
+		,$toolbars
+		,$location
+		,$menubar
+		,$status
+		,$resizable
+		,$scrollbars
+	;
 	
 	// Check if affiliate is on the same server
 	if (isset($website) && $website != '')
@@ -72,8 +99,11 @@ function phpAds_GenerateInvocationCode()
 	if (isset($what) && $what != '')
 		$parameters['what'] = "what=".str_replace (",+", ",_", $what);
 	
-	if (isset($acid) && strlen($acid) && $acid != '0')
-		$parameters['acid'] = "clientid=".$acid;
+	if (isset($clientid) && strlen($clientid) && $clientid != '0')
+		$parameters['clientid'] = "clientid=".$clientid;
+	
+	if (isset($campaignid) && strlen($campaignid) && $campaignid != '0')
+		$parameters['campaignid'] = "campaignid=".$campaignid;
 	
 	if (isset($source) && $source != '')
 		$parameters['source'] = "source=".urlencode($source);
@@ -327,7 +357,8 @@ function phpAds_GenerateInvocationCode()
 	// Remote invocation using XML-RPC
 	if ($codetype=='xmlrpc')
 	{
-		if (!isset($acid) || $acid == '') $acid = 0;
+		if (!isset($clientid) || $clientid == '') $clientid = 0;
+		if (!isset($campaignid) || $campaignid == '') $campaignid = 0;
 		
 		$params = parse_url($phpAds_config['url_prefix']);
 		
@@ -339,7 +370,7 @@ function phpAds_GenerateInvocationCode()
 				$buffer .= "    require('lib-xmlrpc-class.inc.php');\n";
 				$buffer .= "    \$xmlrpcbanner = new phpAds_XmlRpc('$params[host]', '$params[path]'".
 					(isset($params['port']) ? ", '$params[port]'" : "").");\n";
-				$buffer .= "    \$xmlrpcbanner->view('$what', $acid, '$target', '$source', '$withText');\n";
+				$buffer .= "    \$xmlrpcbanner->view('$what', $clientid, $campaignid, '$target', '$source', '$withText');\n";
 				$buffer .= "?".">\n";
 				break;
 		}
@@ -407,16 +438,45 @@ function phpAds_GenerateInvocationCode()
 
 function phpAds_placeInvocationForm($extra = '', $zone_invocation = false)
 {
-	global $phpAds_config, $phpAds_TextDirection, $HTTP_SERVER_VARS;
-	global $submitbutton, $generate;
-	global $codetype, $what, $acid, $source, $target;
-	global $withText, $template, $refresh, $uniqueid;
-	global $width, $height, $ilayer;
-	global $popunder, $left, $top, $timeout, $delay, $delay_type;
-	global $transparent, $resize, $block, $blockcampaign, $raw;
-	global $hostlanguage, $toolbars, $location, $menubar, $status;
-	global $layerstyle, $resizable, $scrollbars;
-	global $tabindex;
+	global
+		 $HTTP_SERVER_VARS
+		,$acid
+		,$block
+		,$blockcampaign
+		,$codetype
+		,$delay
+		,$delay_type
+		,$generate
+		,$height
+		,$hostlanguage
+		,$ilayer
+		,$layerstyle
+		,$left
+		,$location
+		,$menubar
+		,$phpAds_config
+		,$phpAds_TextDirection
+		,$popunder
+		,$raw
+		,$refresh
+		,$resizable
+		,$resize
+		,$scrollbars
+		,$source
+		,$status
+		,$submitbutton
+		,$tabindex
+		,$target
+		,$template
+		,$timeout
+		,$toolbars
+		,$top
+		,$transparent
+		,$uniqueid
+		,$what
+		,$width
+		,$withText
+	;
 	
 	
 	
@@ -601,26 +661,49 @@ function phpAds_placeInvocationForm($extra = '', $zone_invocation = false)
 		// Acid
 		if (!$zone_invocation && isset($show['acid']) && $show['acid'] == true)
 		{
-			echo "<tr bgcolor='#F6F6F6'><td width='30'>&nbsp;</td>";
-			echo "<td width='200'>".$GLOBALS['strInvocationClientID']."</td><td width='370'>";
-			echo "<select name='acid' style='width:350px;' tabindex='".($tabindex++)."'>";
-				echo "<option value='0'>-</option>";
+			// Display available advertisers...
+			echo "<tr bgcolor='#F6F6F6'><td width='30'>&nbsp;</td>\n";
+			echo "<td width='200'>".$GLOBALS['strInvocationClientID']."</td><td width='370'>\n";
+			echo "<select name='clientid' style='width:350px;' tabindex='".($tabindex++)."'>\n";
+				echo "<option value='0'>-</option>\n";
 			
-			$res = phpAds_dbQuery("
-				SELECT
-					*
-				FROM
-					".$phpAds_config['tbl_clients']."
-				");
+			$res = phpAds_dbQuery(
+				"SELECT clientid, clientname".
+				" FROM ".$phpAds_config['tbl_clients']
+			) or phpAds_sqlDie();
 				
-				while ($row = phpAds_dbFetchArray($res))
-				{
-					echo "<option value='".$row['clientid']."'".($acid == $row['clientid'] ? ' selected' : '').">";
-					echo phpAds_buildClientName ($row['clientid'], $row['clientname']);
-					echo "</option>";
-				}
+			while ($row = phpAds_dbFetchArray($res))
+			{
+				echo "<option value='".$row['clientid']."'".($acid == $row['clientid'] ? ' selected' : '').">";
+				echo phpAds_buildName ($row['clientid'], $row['clientname']);
+				echo "</option>\n";
+			}
 			
-			echo "</select>";
+			echo "</select>\n";
+			echo "</td></tr>";
+			echo "<tr bgcolor='#F6F6F6'><td height='10' colspan='3'>&nbsp;</td></tr>";
+			echo "<tr height='1'><td colspan='3' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
+			echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>";
+
+			// Display available campaigns...
+			echo "<tr bgcolor='#F6F6F6'><td width='30'>&nbsp;</td>\n";
+			echo "<td width='200'>".$GLOBALS['strInvocationClientID']."</td><td width='370'>\n";
+			echo "<select name='campaignid' style='width:350px;' tabindex='".($tabindex++)."'>\n";
+				echo "<option value='0'>-</option>\n";
+			
+			$res = phpAds_dbQuery(
+				"SELECT campaignid, campaignname".
+				" FROM ".$phpAds_config['tbl_campaigns']
+			) or phpAds_sqlDie();
+				
+			while ($row = phpAds_dbFetchArray($res))
+			{
+				echo "<option value='".$row['campaignid']."'".($acid == $row['campaignid'] ? ' selected' : '').">";
+				echo phpAds_buildName ($row['campaignid'], $row['campaignname']);
+				echo "</option>\n";
+			}
+			
+			echo "</select>\n";
 			echo "</td></tr>";
 			echo "<tr bgcolor='#F6F6F6'><td height='10' colspan='3'>&nbsp;</td></tr>";
 			echo "<tr height='1'><td colspan='3' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -27,23 +27,19 @@ phpAds_TargetStatsSaveViews();
 
 
 // Get campaigns that need autotargeting
-$res = phpAds_dbQuery("
-	SELECT
-		clientid,
-		clientname,
-		views,
-		UNIX_TIMESTAMP(expire) AS expire
-	FROM
-		".$phpAds_config['tbl_clients']."
-	WHERE
-		parent > 0 AND
-		active AND
-		expire > NOW() AND
-		views > 0 AND
-		weight = 0
-	ORDER BY
-		clientid
-	");
+$res = phpAds_dbQuery(
+	"SELECT".
+	" campaignid".
+	",campaignname".
+	",views".
+	",UNIX_TIMESTAMP(expire) AS expire".
+	" FROM ".$phpAds_config['tbl_campaigns'].
+	" WHERE active='t'".
+	" AND expire>NOW()".
+	" AND views>0".
+	" AND weight=0".
+	" ORDER BY clientid"
+);
 
 
 if (phpAds_dbNumRows($res))

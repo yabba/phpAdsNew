@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -83,29 +83,22 @@ function phpAds_getCampaignArray()
 	
 	if (phpAds_isUser(phpAds_Client))
 	{
-		$res = phpAds_dbQuery("
-			SELECT
-				*
-			FROM
-				".$phpAds_config['tbl_clients']."
-			WHERE
-				parent = ".phpAds_getUserID()."
-		");
+		$res = phpAds_dbQuery(
+			"SELECT *".
+			" FROM ".$phpAds_config['tbl_campaigns'].
+			" WHERE clientid=".phpAds_getUserID()
+		);
 	}
 	else
 	{
-		$res = phpAds_dbQuery("
-			SELECT
-				*
-			FROM
-				".$phpAds_config['tbl_clients']."
-			WHERE
-				parent > 0
-		");
+		$res = phpAds_dbQuery(
+			"SELECT *".
+			" FROM ".$phpAds_config['tbl_campaigns']
+		);
 	}
 	
 	while ($row = phpAds_dbFetchArray($res))
-		$campaignArray[$row['clientid']] = phpAds_buildClientName ($row['clientid'], $row['clientname']);
+		$campaignArray[$row['campaignid']] = phpAds_buildName ($row['campaignid'], $row['campaignname']);
 	
 	return ($campaignArray);
 }
@@ -114,17 +107,13 @@ function phpAds_getClientArray()
 {
 	global $phpAds_config;
 	
-	$res = phpAds_dbQuery("
-		SELECT
-			*
-		FROM
-			".$phpAds_config['tbl_clients']."
-		WHERE
-			parent = 0
-	");
+	$res = phpAds_dbQuery(
+		"SELECT *".
+		" FROM ".$phpAds_config['tbl_clients']
+	);
 	
 	while ($row = phpAds_dbFetchArray($res))
-		$clientArray[$row['clientid']] = phpAds_buildClientName ($row['clientid'], $row['clientname']);
+		$clientArray[$row['clientid']] = phpAds_buildName ($row['clientid'], $row['clientname']);
 	
 	return ($clientArray);
 }
@@ -155,7 +144,7 @@ function phpAds_getZoneArray()
 	}
 	
 	while ($row = phpAds_dbFetchArray($res))
-		$zoneArray[$row['zoneid']] = phpAds_buildClientName ($row['zoneid'], $row['zonename']);
+		$zoneArray[$row['zoneid']] = phpAds_buildName ($row['zoneid'], $row['zonename']);
 	
 	return ($zoneArray);
 }

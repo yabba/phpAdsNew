@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -46,29 +46,26 @@ else
 
 if (phpAds_isUser(phpAds_Client))
 {
-	if (phpAds_getUserID() == phpAds_getParentID ($campaignid))
+	if (phpAds_getUserID() == phpAds_getParentClientID ($campaignid))
 	{
-		$res = phpAds_dbQuery("
-			SELECT
-				*
-			FROM
-				".$phpAds_config['tbl_clients']."
-			WHERE
-				parent = ".phpAds_getUserID()."
-			".phpAds_getListOrder ($navorder, $navdirection)."
-		") or phpAds_sqlDie();
+		$res = phpAds_dbQuery(
+			"SELECT *".
+			" FROM ".$phpAds_config['tbl_campaigns'].
+			" WHERE clientid = ".phpAds_getUserID().
+			phpAds_getCampaignListOrder ($navorder, $navdirection)
+		) or phpAds_sqlDie();
 		
 		while ($row = phpAds_dbFetchArray($res))
 		{
 			phpAds_PageContext (
-				phpAds_buildClientName ($row['clientid'], $row['clientname']),
-				"stats-campaign-history.php?clientid=".$clientid."&campaignid=".$row['clientid'],
-				$campaignid == $row['clientid']
+				phpAds_buildName ($row['campaignid'], $row['campaignname']),
+				"stats-campaign-history.php?clientid=".$clientid."&campaignid=".$row['campaignid'],
+				$campaignid == $row['campaignid']
 			);
 		}
 		
 		phpAds_PageHeader("1.2.1");
-			echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<b>".phpAds_getClientName($campaignid)."</b><br><br><br>";
+			echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<b>".phpAds_getCampaignName($campaignid)."</b><br><br><br>";
 			phpAds_ShowSections(array("1.2.1", "1.2.2", "1.2.3"));
 	}
 	else
@@ -80,22 +77,19 @@ if (phpAds_isUser(phpAds_Client))
 
 if (phpAds_isUser(phpAds_Admin))
 {
-	$res = phpAds_dbQuery("
-		SELECT
-			*
-		FROM
-			".$phpAds_config['tbl_clients']."
-		WHERE
-			parent = ".$clientid."
-		".phpAds_getListOrder ($navorder, $navdirection)."
-	") or phpAds_sqlDie();
+	$res = phpAds_dbQuery(
+		"SELECT	*".
+		" FROM ".$phpAds_config['tbl_campaigns'].
+		" WHERE clientid=".$clientid.
+		phpAds_getCampaignListOrder ($navorder, $navdirection)
+	) or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
 	{
 		phpAds_PageContext (
-			phpAds_buildClientName ($row['clientid'], $row['clientname']),
-			"stats-campaign-history.php?clientid=".$clientid."&campaignid=".$row['clientid'],
-			$campaignid == $row['clientid']
+			phpAds_buildName ($row['campaignid'], $row['campaignname']),
+			"stats-campaign-history.php?clientid=".$clientid."&campaignid=".$row['campaignid'],
+			$campaignid == $row['campaignid']
 		);
 	}
 	
@@ -110,9 +104,9 @@ if (phpAds_isUser(phpAds_Admin))
 	$extra .= "<br><br>";
 	
 	phpAds_PageHeader("2.1.2.1", $extra);
-		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentName($campaignid);
+		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentClientName($campaignid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
-		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<b>".phpAds_getClientName($campaignid)."</b><br><br><br>";
+		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<b>".phpAds_getCampaignName($campaignid)."</b><br><br><br>";
 		phpAds_ShowSections(array("2.1.2.1", "2.1.2.2", "2.1.2.3"));
 }
 

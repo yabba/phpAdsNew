@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -16,6 +16,7 @@
 
 // Define defaults
 $clientCache = array();
+$campaignCache = array();
 $bannerCache = array();
 $zoneCache = array();
 $affiliateCache = array();
@@ -38,9 +39,9 @@ function phpAds_breakString ($str, $maxLen, $append = "...")
 /* Build the client name from ID and name                */
 /*********************************************************/
 
-function phpAds_buildClientName ($clientid, $clientName)
+function phpAds_buildName ($id, $name)
 {
-	return ("<span dir='".$GLOBALS['phpAds_TextDirection']."'>[id$clientid]</span> ".$clientName);
+	return ("<span dir='".$GLOBALS['phpAds_TextDirection']."'>[id$id]</span> ".$name);
 }
 
 
@@ -50,33 +51,25 @@ function phpAds_buildClientName ($clientid, $clientName)
 
 function phpAds_getClientName ($clientid)
 {
-	global $phpAds_config;
-	global $clientCache;
-	global $strUntitled;
-	
 	if ($clientid != '' && $clientid != 0)
 	{
-		if (isset($clientCache[$clientid]) && is_array($clientCache[$clientid]))
-		{
-			$row = $clientCache[$clientid];
-		}
-		else
-		{
-			$res = phpAds_dbQuery("
-			SELECT
-				*
-			FROM
-				".$phpAds_config['tbl_clients']."
-			WHERE
-				clientid = '$clientid'
-			") or phpAds_sqlDie();
-			
-			$row = phpAds_dbFetchArray($res);
-			
-			$clientCache[$clientid] = $row;
-		}
-		
-		return (phpAds_BuildClientName ($clientid, $row['clientname']));
+		$client_details = phpAds_getClientDetails($clientid);
+		return (phpAds_BuildName ($clientid, $client_details['clientname']));
+	}
+	else
+		return ($strUntitled);
+}
+
+/*********************************************************/
+/* Fetch the campaign name from the database             */
+/*********************************************************/
+
+function phpAds_getCampaignName ($campaignid)
+{
+	if ($campaignid != '' && $campaignid != 0)
+	{
+		$campaign_details = phpAds_getCampaignDetails($campaignid);
+		return (phpAds_BuildName ($campaignid, $campaign_details['campaignname']));
 	}
 	else
 		return ($strUntitled);
@@ -95,31 +88,28 @@ function phpAds_getOrderDirection ($ThisOrderDirection)
 	switch ($ThisOrderDirection)
 	{
 		case 'down':
-			$sqlOrderDirection .= ' ';
-			$sqlOrderDirection .= 'ASC';
+			$sqlOrderDirection .= ' ASC';
 			break;
 		case 'up':
-			$sqlOrderDirection .= ' ';
-			$sqlOrderDirection .= 'DESC';
+			$sqlOrderDirection .= ' DESC';
 			break;
 		default:
-			$sqlOrderDirection .= ' ';
-			$sqlOrderDirection .= 'ASC';
+			$sqlOrderDirection .= ' ASC';
 	}
 	return $sqlOrderDirection;
 }
 
 // Order for $phpAds_config['tbl_clients']
-function phpAds_getListOrder ($ListOrder, $OrderDirection)
+function phpAds_getClientListOrder ($ListOrder, $OrderDirection)
 {
 	$sqlTableOrder = '';
 	switch ($ListOrder)
 	{
 		case 'name':
-			$sqlTableOrder = 'ORDER BY clientname';
+			$sqlTableOrder = ' ORDER BY clientname';
 			break;
 		case 'id':
-			$sqlTableOrder = 'ORDER BY parent, clientid';
+			$sqlTableOrder = ' ORDER BY clientid';
 			break;
 		case 'adview':
 			break;
@@ -128,7 +118,35 @@ function phpAds_getListOrder ($ListOrder, $OrderDirection)
 		case 'ctr':
 			break;
 		default:
-			$sqlTableOrder = 'ORDER BY clientname';
+			$sqlTableOrder = ' ORDER BY clientname';
+	}
+	if 	($sqlTableOrder != '')
+	{
+		$sqlTableOrder .= phpAds_getOrderDirection($OrderDirection);
+	}
+	return ($sqlTableOrder);
+}
+
+// Order for $phpAds_config['tbl_campaigns']
+function phpAds_getCampaignListOrder ($ListOrder, $OrderDirection)
+{
+	$sqlTableOrder = '';
+	switch ($ListOrder)
+	{
+		case 'name':
+			$sqlTableOrder = ' ORDER BY campaignname';
+			break;
+		case 'id':
+			$sqlTableOrder = ' ORDER BY clientid,campaignid';
+			break;
+		case 'adview':
+			break;
+		case 'adclick':
+			break;
+		case 'ctr':
+			break;
+		default:
+			$sqlTableOrder = ' ORDER BY campaignname';
 	}
 	if 	($sqlTableOrder != '')
 	{
@@ -144,10 +162,10 @@ function phpAds_getBannerListOrder ($ListOrder, $OrderDirection)
 	switch ($ListOrder)
 	{
 		case 'name':
-			$sqlTableOrder = 'ORDER BY description';
+			$sqlTableOrder = ' ORDER BY description';
 			break;
 		case 'id':
-			$sqlTableOrder = 'ORDER BY bannerid';
+			$sqlTableOrder = ' ORDER BY bannerid';
 			break;
 		case 'adview':
 			break;
@@ -156,7 +174,7 @@ function phpAds_getBannerListOrder ($ListOrder, $OrderDirection)
 		case 'ctr':
 			break;
 		default:
-			$sqlTableOrder = 'ORDER BY description';
+			$sqlTableOrder = ' ORDER BY description';
 	}
 	if 	($sqlTableOrder != '')
 	{
@@ -171,16 +189,16 @@ function phpAds_getZoneListOrder ($ListOrder, $OrderDirection)
 	switch ($ListOrder)
 	{
 		case 'name':
-			$sqlTableOrder = 'ORDER BY zonename';
+			$sqlTableOrder = ' ORDER BY zonename';
 			break;
 		case 'id':
-			$sqlTableOrder = 'ORDER BY zoneid';
+			$sqlTableOrder = ' ORDER BY zoneid';
 			break;
 		case 'size':
 			$sqlTableOrder = 'ORDER BY width';
 			break;
 		default:
-			$sqlTableOrder = 'ORDER BY zonename';
+			$sqlTableOrder = ' ORDER BY zonename';
 	}
 	if 	($sqlTableOrder != '')
 	{
@@ -195,13 +213,13 @@ function phpAds_getAffiliateListOrder ($ListOrder, $OrderDirection)
 	switch ($ListOrder)
 	{
 		case 'name':
-			$sqlTableOrder = 'ORDER BY name';
+			$sqlTableOrder = ' ORDER BY name';
 			break;
 		case 'id':
-			$sqlTableOrder = 'ORDER BY affiliateid';
+			$sqlTableOrder = ' ORDER BY affiliateid';
 			break;
 		default:
-			$sqlTableOrder = 'ORDER BY name';
+			$sqlTableOrder = ' ORDER BY name';
 	}
 	if 	($sqlTableOrder != '')
 	{
@@ -215,32 +233,10 @@ function phpAds_getAffiliateListOrder ($ListOrder, $OrderDirection)
 /* Fetch the ID of the parent of a campaign              */
 /*********************************************************/
 
-function phpAds_getParentID ($clientid)
+function phpAds_getParentClientID ($campaignid)
 {
-	global $phpAds_config;
-	global $clientCache;
-	
-	if (isset($clientCache[$clientid]) && is_array($clientCache[$clientid]))
-	{
-		$row = $clientCache[$clientid];
-	}
-	else
-	{
-		$res = phpAds_dbQuery("
-			SELECT
-				*
-			FROM
-				".$phpAds_config['tbl_clients']."
-			WHERE
-				clientid = '$clientid'
-		") or phpAds_sqlDie();
-		
-		$row = phpAds_dbFetchArray($res);
-		
-		$clientCache[$clientid] = $row;
-	}
-	
-	return ($row['parent']);
+	$campaign_details = phpAds_getCampaignDetails($campaignid);
+	return $campaign_details['clientid'];
 }
 
 
@@ -249,32 +245,10 @@ function phpAds_getParentID ($clientid)
 /* Fetch the name of the parent of a campaign            */
 /*********************************************************/
 
-function phpAds_getParentName ($clientid)
+function phpAds_getParentClientName ($campaignid)
 {
-	global $phpAds_config;
-	global $clientCache;
-	
-	if (isset($clientCache[$clientid]) && is_array($clientCache[$clientid]))
-	{
-		$row = $clientCache[$clientid];
-	}
-	else
-	{
-		$res = phpAds_dbQuery("
-			SELECT
-				*
-			FROM
-				".$phpAds_config['tbl_clients']."
-			WHERE
-				clientid = '$clientid'
-		") or phpAds_sqlDie();
-		
-		$row = phpAds_dbFetchArray($res);
-		
-		$clientCache[$clientid] = $row;
-	}
-	
-	return (phpAds_getClientName ($row['parent']));
+	$campaign_details = phpAds_getCampaignDetails($campaignid);
+	return phpAds_getClientName($campaign_details['clientid']);
 }
 
 
@@ -796,5 +770,56 @@ function phpAds_makeTimestamp($start, $offset = 0)
 	
 	return $start + $offset + (date('I', $start) - date('I', $start + $offset)) * 60;
 }
+
+function phpAds_getClientDetails($clientid)
+{
+	global $phpAds_config;
+	global $clientCache;
+	
+	if (isset($clientCache[$clientid]) && is_array($clientCache[$clientid]))
+	{
+		$row = $clientCache[$clientid];
+	}
+	else
+	{
+		$res = phpAds_dbQuery(
+			"SELECT *".
+			" FROM ".$phpAds_config['tbl_clients'].
+			" WHERE clientid=".$clientid
+		) or phpAds_sqlDie();
+		
+		$row = phpAds_dbFetchArray($res);
+		
+		$clientCache[$clientid] = $row;
+	}
+	
+	return ($row);
+}
+
+function phpAds_getCampaignDetails($campaignid)
+{
+	global $phpAds_config;
+	global $campaignCache;
+	
+	if (isset($campaignCache[$campaignid]) && is_array($campaignCache[$campaignid]))
+	{
+		$row = $campaignCache[$campaignid];
+	}
+	else
+	{
+		$res = phpAds_dbQuery(
+			"SELECT *".
+			" FROM ".$phpAds_config['tbl_campaigns'].
+			" WHERE campaignid=".$campaignid
+		) or phpAds_sqlDie();
+		
+		$row = phpAds_dbFetchArray($res);
+		
+		$campaignCache[$campaignid] = $row;
+	}
+	
+	return ($row);
+}
+
 
 ?>

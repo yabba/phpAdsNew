@@ -1,4 +1,4 @@
-<?php // $Revision: 2.8 $
+<?php // $Revision: 2.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -145,8 +145,10 @@ function phpAds_upgradeData ()
 	phpAds_upgradeDisplayLimitations();
 	
 	// Split out Campaign and Advertiser information
-	phpAds_upgradeBannersCampaign();
-	phpAds_upgradeTargetStatsCampaign();
+	phpAds_upgradeSplitClientTable();
+	phpAds_upgradeSplitClientTableBanners();
+	phpAds_upgradeSplitClientTableTargetStats();
+	phpAds_upgradeSplitClientTableZone();
 	
 	// Create target stats form userlog
 	phpAds_upgradeTargetStats();
@@ -997,7 +999,7 @@ function phpAds_upgradeDisplayLimitations()
 	}
 }
 
-function phpAds_upgradeBannersCampaign()
+function phpAds_upgradeSplitClientTableBanners()
 {
 	global $phpAds_config;
 	
@@ -1029,7 +1031,7 @@ function phpAds_upgradeBannersCampaign()
 	}
 }
 
-function phpAds_upgradeTargetStatsCampaign()
+function phpAds_upgradeSplitClientTableTargetStats()
 {
 	global $phpAds_config;
 	
@@ -1060,6 +1062,132 @@ function phpAds_upgradeTargetStatsCampaign()
 		
 			// Delete old columns
 			phpAds_dbQuery("ALTER TABLE ".$phpAds_config['tbl_targetstats']." DROP COLUMN clientid");
+		}
+	}
+}
+
+function phpAds_upgradeSplitClientTableZone()
+{
+	global $phpAds_config;
+	
+	if (!isset($phpAds_config['config_version']) ||	$phpAds_config['config_version'] < 200.162)
+	{
+		$res = phpAds_dbQuery(
+			"SELECT zoneid,what".
+			" FROM ".$phpAds_config['tbl_zones']
+		);
+		
+		while ($row = phpAds_dbFetchArray($res))
+		{
+			$what = $row['what'];
+			
+			if (preg_match('#clientid:#i', $what) )
+			{
+				$changed = false;
+				$what_array = explode(",", $what);
+	
+				for ($k=0; $k < count($what_array); $k++)
+				{
+					if (substr($what_array[$k],0,9) == "clientid:")
+					{
+						$id = substr($what_array[$k],9);
+						$res2 = phpAds_dbQuery(
+							"SELECT campaignid".
+							" FROM ".$phpAds_config['tbl_campaigns'].
+							" WHERE campaignid=".$id
+						);
+						
+						// This is a campaign and not an advertiser
+						if (phpAds_dbNumRows($res2) > 0)
+						{
+							$what_array[$k] = "campaignid:".$id;
+							$changed = true;
+						}
+					}
+				}
+				
+				if ($changed)
+				{
+					$what = implode(",",$what_array);
+	
+					phpAds_dbQuery(
+						"UPDATE ".$phpAds_config['tbl_zones'].
+						" SET what='".$what."'".
+						" WHERE zoneid=".$row['zoneid']
+					);
+				}
+			}
+		}
+	}
+}
+
+function phpAds_upgradeSplitClientTable()
+{
+	global $phpAds_config;
+	
+	if (!isset($phpAds_config['config_version']) ||	$phpAds_config['config_version'] < 200.162)
+	{
+		$res = phpAds_dbQuery(
+			"DESCRIBE ".$phpAds_config['tbl_clients']
+		);
+		if (phpAds_dbNumRows($res) > 0)
+		{
+			$res = phpAds_dbQuery(
+				"SELECT * FROM ".$phpAds_config['tbl_clients'].
+				" WHERE parent > 0"
+			);
+			
+			while ($row = phpAds_dbFetchArray($res))
+			{
+				phpAds_dbQuery(
+					"INSERT INTO ".$phpAds_config['tbl_campaigns'].
+					" (campaignid".
+					",campaignname".
+					",views".
+					",clicks".
+					",conversions".
+					",expire".
+					",activate".
+					",active".
+					",weight".
+					",target".
+					",clientid".
+					",priority".
+					",optimise".
+					",anonymous)".
+					" VALUES ".
+					"('".$row['clientid']."'".
+					",'".$row['clientname']."'".
+					",'".$row['views']."'".
+					",'".$row['clicks']."'".
+					",'".$row['conversions']."'".
+					",'".$row['expire']."'".
+					",'".$row['activate']."'".
+					",'".$row['active']."'".
+					",'".$row['weight']."'".
+					",'".$row['target']."'".
+					",'".$row['parent']."'".
+					",'".$row['priority']."'".
+					",'".$row['optimise']."'".
+					",'".$row['anonymous']."')"
+				) or phpAds_sqlDie();
+			}
+			// Delete rows moved into campaign table
+			phpAds_dbQuery("DELETE FROM ".$phpAds_config['tbl_clients']." WHERE parent > 0");
+		
+			// Delete old columns
+			phpAds_dbQuery("ALTER TABLE ".$phpAds_config['tbl_clients']." DROP COLUMN views");
+			phpAds_dbQuery("ALTER TABLE ".$phpAds_config['tbl_clients']." DROP COLUMN clicks");
+			phpAds_dbQuery("ALTER TABLE ".$phpAds_config['tbl_clients']." DROP COLUMN expire");
+			phpAds_dbQuery("ALTER TABLE ".$phpAds_config['tbl_clients']." DROP COLUMN activate");
+			phpAds_dbQuery("ALTER TABLE ".$phpAds_config['tbl_clients']." DROP COLUMN active");
+			phpAds_dbQuery("ALTER TABLE ".$phpAds_config['tbl_clients']." DROP COLUMN weight");
+			phpAds_dbQuery("ALTER TABLE ".$phpAds_config['tbl_clients']." DROP COLUMN target");
+			phpAds_dbQuery("ALTER TABLE ".$phpAds_config['tbl_clients']." DROP COLUMN parent");
+			phpAds_dbQuery("ALTER TABLE ".$phpAds_config['tbl_clients']." DROP COLUMN conversions");
+			phpAds_dbQuery("ALTER TABLE ".$phpAds_config['tbl_clients']." DROP COLUMN priority");
+			phpAds_dbQuery("ALTER TABLE ".$phpAds_config['tbl_clients']." DROP COLUMN optimise");
+			phpAds_dbQuery("ALTER TABLE ".$phpAds_config['tbl_clients']." DROP COLUMN anonymous");
 		}
 	}
 }

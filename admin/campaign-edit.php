@@ -1,4 +1,4 @@
-<?php // $Revision: 2.12 $
+<?php // $Revision: 2.13 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -29,7 +29,7 @@ phpAds_registerGlobal (
 	,'activateMonth'
 	,'activateYear'
 	,'anonymous'
-	,'clientname'
+	,'campaignname'
 	,'expire'
 	,'expireSet'
 	,'expireDay'
@@ -166,39 +166,38 @@ if (isset($submit))
 	
 	$new_campaign = $campaignid == 'null';
 	
-	$query = "REPLACE INTO ".$phpAds_config['tbl_clients']."
-			(clientid,
-			clientname,
-			parent,
-			views,
-			clicks,
-			conversions,
-			expire,
-			activate,
-			active,
-			priority,
-			weight,
-			target,
-			optimise,
-			anonymous)
-		VALUES
-			('$campaignid',
-			'$clientname',
-			'$clientid',
-			'$views',
-			'$clicks',
-			'$conversions',
-			'$expire',
-			'$activate',
-			'$active',
-			'$priority',
-			'$weight',
-			'$targetviews',
-			'$optimise',
-			'$anonymous')";
-	
-	
-	$res = phpAds_dbQuery($query) or phpAds_sqlDie();  
+	phpAds_dbQuery(
+		"REPLACE INTO ".$phpAds_config['tbl_campaigns'].
+		" (campaignid".
+		",campaignname".
+		",clientid".
+		",views".
+		",clicks".
+		",conversions".
+		",expire".
+		",activate".
+		",active".
+		",priority".
+		",weight".
+		",target".
+		",optimise".
+		",anonymous)".
+		" VALUES".
+		" (".$campaignid.
+		",'".$campaignname."'".
+		",".$clientid.
+		",".$views.
+		",".$clicks.
+		",".$conversions.
+		",'".$expire."'".
+		",'".$activate."'".
+		",'".$active."'".
+		",'".$priority."'".
+		",".$weight.
+		",".$targetviews.
+		",'".$optimise."'".
+		",'".$anonymous."')"
+	) or phpAds_sqlDie();  
 	
 	// Get ID of campaign
 	if ($campaignid == "null")
@@ -220,12 +219,9 @@ if (isset($submit))
 		if (is_array($targetviews))
 			list($targetviews, ) = $targetviews;
 		
-		phpAds_dbQuery("
-			UPDATE ".$phpAds_config['tbl_clients']."
-			SET
-				target = ".$targetviews."
-			WHERE
-				clientid = ".$campaignid
+		phpAds_dbQuery("UPDATE ".$phpAds_config['tbl_campaigns'].
+			" SET target = ".$targetviews.
+			" WHERE campaignid = ".$campaignid
 		);
 	}
 	
@@ -233,17 +229,14 @@ if (isset($submit))
 	{
 		// We are moving a client to a campaign
 		// Update banners
-		$res = phpAds_dbQuery("
-			UPDATE
-				".$phpAds_config['tbl_banners']."
-			SET
-				campaignid='".$campaignid."'
-			WHERE
-				campaignid='".$clientid."'
-			") or phpAds_sqlDie();
+		$res = phpAds_dbQuery(
+			"UPDATE ".$phpAds_config['tbl_banners'].
+			" SET campaignid=".$campaignid.
+			" WHERE campaignid=".$clientid
+		) or phpAds_sqlDie();
 		
 		// Force priority recalculation
-		$new_campaing = false;
+		$new_campaign = false;
 	}
 	
 	
@@ -318,22 +311,19 @@ if ($campaignid != "")
 	
 	
 	// Get other campaigns
-	$res = phpAds_dbQuery("
-		SELECT
-			*
-		FROM
-			".$phpAds_config['tbl_clients']."
-		WHERE
-			parent = ".$clientid."
-		".phpAds_getListOrder ($navorder, $navdirection)."
-	");
+	$res = phpAds_dbQuery(
+		"SELECT *".
+		" FROM ".$phpAds_config['tbl_campaigns'].
+		" WHERE clientid = ".$clientid.
+		phpAds_getCampaignListOrder ($navorder, $navdirection)
+	) or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
 	{
 		phpAds_PageContext (
-			phpAds_buildClientName ($row['clientid'], $row['clientname']),
-			"campaign-edit.php?clientid=".$clientid."&campaignid=".$row['clientid'],
-			$campaignid == $row['clientid']
+			phpAds_buildName ($row['campaignid'], $row['campaignname']),
+			"campaign-edit.php?clientid=".$clientid."&campaignid=".$row['campaignid'],
+			$campaignid == $row['campaignid']
 		);
 	}
 	
@@ -354,9 +344,14 @@ if ($campaignid != "")
 	$extra .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	$extra .= "<select name='moveto' style='width: 110;'>";
 	
-	$res = phpAds_dbQuery("SELECT * FROM ".$phpAds_config['tbl_clients']." WHERE parent = 0 AND clientid != ".phpAds_getParentID ($campaignid)) or phpAds_sqlDie();
+	$res = phpAds_dbQuery(
+		"SELECT *".
+		" FROM ".$phpAds_config['tbl_clients'].
+		" WHERE clientid!=".phpAds_getParentClientID($campaignid)
+	) or phpAds_sqlDie();
+	
 	while ($row = phpAds_dbFetchArray($res))
-		$extra .= "<option value='".$row['clientid']."'>".phpAds_buildClientName($row['clientid'], $row['clientname'])."</option>";
+		$extra .= "<option value='".$row['clientid']."'>".phpAds_buildName($row['clientid'], $row['clientname'])."</option>";
 	
 	$extra .= "</select>&nbsp;<input type='image' src='images/".$phpAds_TextDirection."/go_blue.gif'><br>";
 	$extra .= "<img src='images/break.gif' height='1' width='160' vspace='4'><br>";
@@ -366,9 +361,9 @@ if ($campaignid != "")
 	
 	
 	phpAds_PageHeader("4.1.3.2", $extra);
-		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentName($campaignid);
+		echo "<img src='images/icon-advertiser.gif' align='absmiddle'>&nbsp;".phpAds_getParentClientName($campaignid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
-		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<b>".phpAds_getClientName($campaignid)."</b><br><br><br>";
+		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;<b>".phpAds_getCampaignName($campaignid)."</b><br><br><br>";
 		phpAds_ShowSections(array("4.1.3.2", "4.1.3.3", "4.1.3.4"));
 }
 else
@@ -474,22 +469,19 @@ if ($campaignid != "" || (isset($move) && $move == 't'))
 else
 {
 	// New campaign
-	$res = phpAds_dbQuery("
-		SELECT
-			*
-		FROM
-			".$phpAds_config['tbl_clients']."
-		WHERE
-			clientid = '".$clientid."'
-	");
+	$res = phpAds_dbQuery(
+		"SELECT clientname".
+		" FROM ".$phpAds_config['tbl_clients'].
+		" WHERE clientid=".$clientid
+	);
 	
 	if ($client = phpAds_dbFetchArray($res))
-		$row["clientname"] = $client['clientname'].' - ';
+		$row['campaignname'] = $client['clientname'].' - ';
 	else
-		$row["clientname"] = '';
+		$row["campaignname"] = '';
 	
 	
-	$row["clientname"] .= $strDefault;
+	$row["campaignname"] .= $strDefault;
 	$row["views"] 		= '';
 	$row["clicks"] 		= '';
 	$row["conversions"] = '';
@@ -622,7 +614,7 @@ echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>"."\n";
 echo "<tr>"."\n";
 echo "\t"."<td width='30'>&nbsp;</td>"."\n";
 echo "\t"."<td width='200'>".$strName."</td>"."\n";
-echo "\t"."<td><input onBlur='phpAds_formPriorityUpdate(this.form);' class='flat' type='text' name='clientname' size='35' style='width:350px;' value='".phpAds_htmlQuotes($row["clientname"])."' tabindex='".($tabindex++)."'></td>"."\n";
+echo "\t"."<td><input onBlur='phpAds_formPriorityUpdate(this.form);' class='flat' type='text' name='campaignname' size='35' style='width:350px;' value='".phpAds_htmlQuotes($row['campaignname'])."' tabindex='".($tabindex++)."'></td>"."\n";
 echo "</tr>"."\n";
 echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>"."\n";
 
@@ -803,22 +795,31 @@ echo "</form>"."\n";
 // Get unique affiliate
 $unique_names = array();
 
-$res = phpAds_dbQuery("SELECT * FROM ".$phpAds_config['tbl_clients']." WHERE parent = ".$clientid." AND clientid != '".$campaignid."'");
-while ($row = phpAds_dbFetchArray($res))
-	$unique_names[] = $row['clientname'];
+$query = 
+	"SELECT campaignname".
+	" FROM ".$phpAds_config['tbl_campaigns'].
+	" WHERE clientid=".$clientid
+;
 
+if (isset($campaignid) && ($campaignid > 0))
+	$query .= " AND campaignid!=".$campaignid;
+
+$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+
+while ($row = phpAds_dbFetchArray($res))
+	$unique_names[] = $row['campaignname'];
 ?>
 
 <script language='JavaScript'>
 <!--
-	phpAds_formSetRequirements('clientname', '<?php echo addslashes($strName); ?>', true, 'unique');
+	phpAds_formSetRequirements('campaignname', '<?php echo addslashes($strName); ?>', true, 'unique');
 	phpAds_formSetRequirements('views', '<?php echo addslashes($strViewsPurchased); ?>', false, 'number+');
 	phpAds_formSetRequirements('clicks', '<?php echo addslashes($strClicksPurchased); ?>', false, 'number+');
 	phpAds_formSetRequirements('conversions', '<?php echo addslashes($strConversionsPurchased); ?>', false, 'number+');
 	phpAds_formSetRequirements('weight', '<?php echo addslashes($strCampaignWeight); ?>', false, 'number+');
 	phpAds_formSetRequirements('targetviews', '<?php echo addslashes($strTargetLimitAdviews.' x '.$strTargetPerDay); ?>', false, 'number+');
 	
-	phpAds_formSetUnique('clientname', '|<?php echo addslashes(implode('|', $unique_names)); ?>|');
+	phpAds_formSetUnique('campaignname', '|<?php echo addslashes(implode('|', $unique_names)); ?>|');
 
 
 	

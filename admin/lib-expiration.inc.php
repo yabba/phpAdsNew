@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -18,24 +18,22 @@
 /* Determine the AdViews left before expiration          */
 /*********************************************************/
 
-function adviews_left ($clientid)
+function phpAds_getAdViewsLeft($campaignid)
 {
 	global $phpAds_config;
 	global $strUnlimited;
 	
-	$client_query="
-		SELECT
-			views
-		FROM
-			".$phpAds_config['tbl_clients']."
-		WHERE 
-			clientid = ".$clientid;
+	$campaign_query =
+		"SELECT views".
+		" FROM ".$phpAds_config['tbl_campaigns'].
+		" WHERE campaignid=".$campaignid
+	) or phpAds_sqlDie();
 	
-	$res_client = phpAds_dbQuery($client_query);
+	$res_campaign = phpAds_dbQuery($campaign_query);
 	
-	if (phpAds_dbNumRows($res_client) == 1)
+	if (phpAds_dbNumRows($res_campaign) == 1)
 	{
-		$row = phpAds_dbFetchArray($res_client);
+		$row = phpAds_dbFetchArray($res_campaign);
 		$views = $row['views'];
 		
 		if ($views == -1)
@@ -51,24 +49,21 @@ function adviews_left ($clientid)
 /* Determine the AdClicks left before expiration         */
 /*********************************************************/
 
-function adclicks_left ($clientid)
+function phpAds_getAdClicksLeft($campaignid)
 {
 	global $phpAds_config;
 	global $strUnlimited;
 	
-	$client_query="
-		SELECT
-			clicks
-		FROM
-			".$phpAds_config['tbl_clients']."
-		WHERE 
-			clientid = ".$clientid;
+	$campaign_query = 
+		"SELECT clicks".
+		" FROM ".$phpAds_config['tbl_campaigns'].
+		" WHERE campaignid=".$campaignid;
 	
-	$res_client = phpAds_dbQuery($client_query);
+	$res_campaign = phpAds_dbQuery($campaign_query);
 	
-	if (phpAds_dbNumRows($res_client) == 1)
+	if (phpAds_dbNumRows($res_campaign) == 1)
 	{
-		$row = phpAds_dbFetchArray($res_client);
+		$row = phpAds_dbFetchArray($res_campaign);
 		$clicks = $row['clicks'];
 		
 		if ($clicks == -1)
@@ -77,7 +72,6 @@ function adclicks_left ($clientid)
 		return ($clicks);
 	}
 }
-
 
 
 /*********************************************************/
@@ -97,14 +91,14 @@ function adclicks_left ($clientid)
 /* left for alternate usage                              */
 /*                                                       */
 /* Usage:                                                */
-/* list($desc,$enddate,$daysleft)=days_left($clientid)   */
+/* list($desc,$enddate,$daysleft)=phpAds_getDaysLeft($clientid)   */
 /*                                                       */
 /* This function will temporarily not work properly, if  */
 /* statistics are reset or the amount of the credit in   */
 /* views or clicks or left days is modified              */
 /*********************************************************/
 
-function days_left($clientid)
+function phpAds_getDaysLeft($campaignid)
 {
 	global $phpAds_config;
 	global $date_format;
@@ -121,46 +115,46 @@ function days_left($clientid)
 	
 	
 	// Get client record
-	$client_query="
-		SELECT
-			views,
-			clicks,
-			expire,
-			DATE_FORMAT(expire, '".$date_format."') as expire_f,
-			TO_DAYS(expire)-TO_DAYS(NOW()) as days_left
-		FROM
-			".$phpAds_config['tbl_clients']."
-		WHERE 
-			clientid = ".$clientid;
-	$res_client = phpAds_dbQuery($client_query) or phpAds_sqlDie() ;
+	$campaign_query=
+		"SELECT".
+		" views".
+		",clicks".
+		",expire".
+		",DATE_FORMAT(expire, '".$date_format."') as expire_f".
+		",TO_DAYS(expire)-TO_DAYS(NOW()) as days_left".
+		" FROM ".$phpAds_config['tbl_campaigns'].
+		" WHERE campaignid=".$campaignid
+	;
+	
+	$res_campaign = phpAds_dbQuery($campaign_query) or phpAds_sqlDie() ;
 	
 	
-	if (phpAds_dbNumRows ($res_client) == 1)
+	if (phpAds_dbNumRows ($res_campaign) == 1)
 	{
-		$row_client = phpAds_dbFetchArray($res_client);
+		$row_campaign = phpAds_dbFetchArray($res_campaign);
 		
 		// Check if the expiration date is set
-		if ($row_client['expire'] != '0000-00-00' && $row_client['expire'] != '')
+		if ($row_campaign['expire'] != '0000-00-00' && $row_campaign['expire'] != '')
 		{
 			$expiration[] = array (
-				"days_left" => round($row_client["days_left"]),
-				"date"	  	=> $row_client["expire_f"],
+				"days_left" => round($row_campaign["days_left"]),
+				"date"	  	=> $row_campaign["expire_f"],
 				"absolute"  => true
 			);
 		}
 		
-		if ($row_client["views"] != -1)
+		if ($row_campaign["views"] != -1)
 		{
-           	$view_query="
-               	SELECT
-                   	SUM(views) as total_views,
-                    MAX(TO_DAYS(day))-TO_DAYS(NOW()) as days_since_last_view,
-                    TO_DAYS(NOW())-MIN(TO_DAYS(day)) as days_since_start
-                FROM
-                   	".$phpAds_config['tbl_banners']." AS b
-                    LEFT JOIN ".$phpAds_config['tbl_adstats']." AS v USING (bannerid)
-                WHERE
-                  	b.campaignid = $clientid";
+           	$view_query =
+           		"SELECT".
+           		" SUM(views) as total_views".
+           		",MAX(TO_DAYS(day))-TO_DAYS(NOW()) as days_since_last_view".
+           		",TO_DAYS(NOW())-MIN(TO_DAYS(day)) as days_since_start".
+           		" FROM ".$phpAds_config['tbl_banners']." AS b".
+           		" LEFT JOIN ".$phpAds_config['tbl_adstats']." AS v".
+           		" USING (bannerid)".
+           		" WHERE b.campaignid=".$campaignid
+           	;
 			
 			$res_views = phpAds_dbQuery($view_query) or phpAds_sqlDie();
 			if (phpAds_dbNumRows ($res_views) == 1)
@@ -177,9 +171,9 @@ function days_left($clientid)
 				
 				if (!empty ($row_views["total_views"]) && $row_views["total_views"] > 0)
 				{
-					$days_left = round ($row_client["views"] / ($row_views["total_views"] / $row_views["days_since_start"]));
+					$days_left = round ($row_campaign["views"] / ($row_views["total_views"] / $row_views["days_since_start"]));
 					
-					if ($row_client["views"] > 0)
+					if ($row_campaign["views"] > 0)
 					{
 						$estimated_end = strftime ($date_format, mktime (0, 0, 0, date("m"), date("d") + $days_left, date("Y")));
 						$expiration[] = array (
@@ -201,22 +195,23 @@ function days_left($clientid)
 			}
 		}
 		
-		if ($row_client["clicks"] != -1)
+		if ($row_campaign["clicks"] != -1)
 		{
-        	$click_query="
-            	SELECT
-                	SUM(clicks) as total_clicks,
-                    MAX(TO_DAYS(day))-TO_DAYS(NOW()) as days_since_last_click,
-                    TO_DAYS(NOW())-MIN(TO_DAYS(day)) as days_since_start
-				FROM
-					".$phpAds_config['tbl_adstats']."
-					LEFT JOIN ".$phpAds_config['tbl_banners']." USING (bannerid)
-				WHERE
-					campaignid = '$clientid' AND
-					clicks > 0";
+        	$click_query=
+        		"SELECT".
+        		" SUM(clicks) as total_clicks".
+        		",MAX(TO_DAYS(day))-TO_DAYS(NOW()) as days_since_last_click".
+        		",TO_DAYS(NOW())-MIN(TO_DAYS(day)) as days_since_start".
+        		" FROM ".$phpAds_config['tbl_adstats'].
+        		" LEFT JOIN ".$phpAds_config['tbl_banners'].
+        		" USING (bannerid)".
+        		" WHERE campaignid=".$clientid.
+        		" AND clicks > 0"
+        	;
 
         	$res_clicks = phpAds_dbQuery($click_query) or phpAds_sqlDie();
-			if (phpAds_dbNumRows($res_clicks) == 1)
+
+        	if (phpAds_dbNumRows($res_clicks) == 1)
 			{
 				$row_clicks = phpAds_dbFetchArray($res_clicks);
 				
@@ -230,9 +225,9 @@ function days_left($clientid)
 				
 				if (!empty ($row_clicks["total_clicks"]) && $row_clicks["total_clicks"] > 0)
 				{
-					$days_left = round($row_client["clicks"] / ($row_clicks["total_clicks"] / $row_clicks["days_since_start"]));
+					$days_left = round($row_campaign["clicks"] / ($row_clicks["total_clicks"] / $row_clicks["days_since_start"]));
 					
-					if ($row_client["clicks"] > 0)
+					if ($row_campaign["clicks"] > 0)
 					{
 						$estimated_end = strftime ($date_format, mktime (0, 0, 0, date("m"), date("d") + $days_left, date("Y")));
 						$expiration[] = array (
