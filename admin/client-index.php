@@ -1,4 +1,4 @@
-<?php // $Revision: 1.35 $
+<?php // $Revision: 1.36 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -30,11 +30,6 @@ phpAds_checkAccess(phpAds_Admin);
 
 phpAds_PageHeader("4.1");
 phpAds_ShowSections(array("4.1", "4.2", "4.3", "4.4"));
-
-if (isset($message))
-{
-	phpAds_ShowMessage($message);
-}
 
 
 
