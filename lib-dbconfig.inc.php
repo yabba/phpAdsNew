@@ -1,4 +1,4 @@
-<?php // $Revision: 1.40 $
+<?php // $Revision: 1.41 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -21,6 +21,7 @@ define ('LIBDBCONFIG_INCLUDED', true);
 $phpAds_version = 200.103;
 $phpAds_version_readable = "2 beta 7.1";
 $phpAds_productname = "phpAdsNew";
+$phpAds_dbmsname = "MySQL";
 
 $GLOBALS['phpAds_settings_information'] = array(
 	'dbhost' => 					array ('type' => 'string', 	'sql' => false),
