@@ -1,4 +1,4 @@
-<?php // $Revision: 1.9 $
+<?php // $Revision: 1.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -62,6 +62,10 @@ else
 	// in case settings are stored in the database
 	phpAds_LoadDbConfig();
 }
+
+
+// Disable GZIP compression
+$phpAds_config['gzip_compression'] = false;
 
 
 // First thing to do is clear the $Session variable to

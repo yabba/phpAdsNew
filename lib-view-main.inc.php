@@ -1,4 +1,4 @@
-<?php // $Revision: 1.9 $
+<?php // $Revision: 1.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -42,9 +42,12 @@ function view_raw($what, $clientid=0, $target='', $source='', $withtext=0, $cont
 	if (phpAds_dbConnect())
 	{
 		$found = false;
+		$first = true;
 		
-		while ($what != '' && $found == false)
+		while (($first || $what != '') && $found == false)
 		{
+			$first = false;
+
 			if (substr($what,0,5) == 'zone:')
 			{
 				if (!defined('LIBVIEWZONE_INCLUDED'))
