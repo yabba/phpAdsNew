@@ -1,4 +1,4 @@
-<?php // $Revision: 1.11 $
+<?php // $Revision: 1.12 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -132,7 +132,7 @@ if (isset($submitbutton))
 			SET
 				".join(', ', $sqlupdate)."
 			WHERE
-				zoneid=".$zoneid."
+				zoneid='".$zoneid."'
 			") or phpAds_sqlDie();
 		
 		// Do not redirect until not finished with zone appending, if present

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.24 $
+<?php // $Revision: 1.25 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -266,7 +266,7 @@ if (isset($submit))
 				language='".$language."',
 				password='".$password."'
 			WHERE
-				affiliateid=".$affiliateid."
+				affiliateid='".$affiliateid."'
 			") or phpAds_sqlDie();
 		
 		$Session['language'] = $language;
