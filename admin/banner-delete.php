@@ -1,4 +1,4 @@
-<?php // $Revision: 1.8 $
+<?php // $Revision: 1.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -71,6 +71,6 @@ if (isset($bannerid) && $bannerid != '')
 if ($phpAds_config['zone_cache'])
 	phpAds_RebuildZoneCache ();
 
-Header("Location: campaign-index.php?campaignid=$campaignid&message=".urlencode($strBannerDeleted));
+Header("Location: ".$returnurl."?campaignid=$campaignid");
 
 ?>

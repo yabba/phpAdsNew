@@ -1,4 +1,4 @@
-<?php // $Revision: 1.5 $
+<?php // $Revision: 1.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -87,6 +87,6 @@ if (isset($campaignid) && $campaignid != '')
 if ($phpAds_config['zone_cache'])
 	phpAds_RebuildZoneCache ();
 
-header("Location: client-index.php");
+header("Location: ".$returnurl);
 
 ?>

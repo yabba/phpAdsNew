@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -46,6 +46,6 @@ if (isset($affiliateid) && $affiliateid != '')
 		") or phpAds_sqlDie();
 }
 
-Header("Location: affiliate-index.php");
+Header("Location: ".$returnurl);
 
 ?>
