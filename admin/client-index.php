@@ -1,4 +1,4 @@
-<?php // $Revision: 1.34 $
+<?php // $Revision: 1.35 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -176,6 +176,12 @@ if (isset($campaigns) && is_array($campaigns) && count($campaigns) > 0)
 	
 	unset ($campaigns);
 }
+
+
+
+echo "<img src='images/icon-client.gif' border='0' align='absmiddle'>&nbsp;";
+echo "<a href='client-edit.php'>".$strAddClient."</a>&nbsp;&nbsp;";
+phpAds_ShowBreak();
 
 
 
@@ -443,10 +449,6 @@ else
 		}
 	}
 }
-
-echo "<tr height='25'><td colspan='5' height='25'>";
-echo "<img src='images/icon-client.gif' border='0' align='absmiddle'>&nbsp;<a href='client-edit.php'>$strAddClient</a>&nbsp;&nbsp;";
-echo "</td></tr>";
 
 echo "</table>";
 
