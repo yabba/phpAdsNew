@@ -1,4 +1,4 @@
-<?php // $Revision: 1.39 $
+<?php // $Revision: 1.40 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -14,7 +14,7 @@
 
 
 // Set character-set
-$GLOBALS['phpAds_CharSet'] = "koi8-r";
+$GLOBALS['phpAds_CharSet'] = "windows-1251";
 
 
 // Set translation strings
