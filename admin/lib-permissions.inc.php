@@ -1,4 +1,4 @@
-<?php // $Revision: 1.21 $
+<?php // $Revision: 1.22 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -226,9 +226,9 @@ function phpAds_Login()
 					WHERE
 						username = '$phpAds_username'
 						AND password = '$phpAds_password'
-					") or phpAds_sqlDie();
+					");
 				
-				if (phpAds_dbNumRows($res) > 0 && $phpAds_username != "" && $phpAds_password != "")
+				if ($res && phpAds_dbNumRows($res) > 0 && $phpAds_username != "" && $phpAds_password != "")
 				{
 					// User found with correct password
 					$row = phpAds_dbFetchArray($res);
