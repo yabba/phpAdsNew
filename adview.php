@@ -1,4 +1,4 @@
-<?php // $Revision: 1.37 $
+<?php // $Revision: 1.38 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -67,6 +67,8 @@ if (!isset($n)) $n = 'default';
 
 if (phpAds_dbConnect())
 {
+	mt_srand(floor((isset($n) && strlen($n) > 5 ? hexdec($n[0].$n[2].$n[3].$n[4].$n[5]): 1000000) * (double)microtime()));
+	
 	$found = false;
 	$first = true;
 	
