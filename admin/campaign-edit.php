@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -132,7 +132,7 @@ if (isset($submit))
 			") or mysql_die();
 	}
 	
-	Header("Location: client-index.php?message=".urlencode($message));
+	Header("Location: client-index.php?expand=$clientID&message=".urlencode($message));
 	exit;
 }
 
