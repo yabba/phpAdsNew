@@ -1,4 +1,4 @@
-<?php // $Revision: 1.80 $
+<?php // $Revision: 1.81 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -18,6 +18,10 @@
 require (phpAds_path."/lib-db.inc.php");
 require (phpAds_path."/lib-expire.inc.php");
 require (phpAds_path."/lib-log.inc.php");
+
+if ($phpAds_acl == '1')
+	require (phpAds_path."/lib-acl.inc.php");
+
 
 // Seed the random number generator
 mt_srand((double) microtime() * 1000000);
@@ -478,12 +482,8 @@ function phpAds_fetchBanner($what, $clientID, $context=0, $source='', $allowhtml
 		$phpAds_zone_used = false;
 	}
 	
-	// Include ACL code when needed
 	if ($phpAds_acl == '1')
 	{
-		// Include ACL code
-		require (phpAds_path."/lib-acl.inc.php");
-		
 		$date = getdate(time());
 		$request = array(
 			'remote_host'		=>	$REMOTE_ADDR,
