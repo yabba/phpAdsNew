@@ -1,4 +1,4 @@
-<?php // $Revision: 1.9 $
+<?php // $Revision: 1.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -13,7 +13,10 @@
 /************************************************************************/
 
 
-// Set character-set
+// Set text direction and characterset
+$GLOBALS['phpAds_TextDirection']  = "ltr";
+$GLOBALS['phpAds_TextAlignRight'] = "right";
+$GLOBALS['phpAds_TextAlignLeft']  = "left";
 $GLOBALS['phpAds_CharSet'] = "koi8-r";
 
 

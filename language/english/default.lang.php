@@ -1,4 +1,4 @@
-<?php // $Revision: 1.19 $
+<?php // $Revision: 1.20 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -13,6 +13,12 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
+
+
+// Set text direction and characterset
+$GLOBALS['phpAds_TextDirection']  = "ltr";
+$GLOBALS['phpAds_TextAlignRight'] = "right";
+$GLOBALS['phpAds_TextAlignLeft']  = "left";
 
 
 // Set translation strings
