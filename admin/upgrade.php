@@ -1,4 +1,4 @@
-<?php // $Revision: 1.16 $
+<?php // $Revision: 1.17 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -12,6 +12,11 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+
+
+// Set time limit
+if (!get_cfg_var ('safe_mode')) 
+	@set_time_limit (300);
 
 
 // Figure out our location
@@ -262,7 +267,24 @@ if (phpAds_isUser(phpAds_Admin))
 		
 		// Rebuild cache of all zones
 		phpAds_RebuildZoneCache();
+
+		// Check if priority recalculation is needed
+		list($banners, $priority_sum) = phpAds_dbFetchRow(phpAds_dbQuery("
+			SELECT
+				COUNT(bannerid),
+				SUM (priority)
+			FROM
+				".$phpAds_config['tbl_banners']."
+		"));
 		
+		if ($banners && !$priority_sum)
+		{
+			// Recalculate priority
+			include ("../lib-priority.inc.php");
+			
+			phpAds_PriorityCalculate();
+		}
+
 		// Send the output to the browser
 		flush();
 		
