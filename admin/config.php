@@ -1,4 +1,4 @@
-<?php // $Revision: 1.8 $
+<?php // $Revision: 1.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -16,6 +16,7 @@
 
 // Include required files
 require ("../config.inc.php");
+require ("lib-permissions.inc.php");
 require ("lib-gui.inc.php");
 require ("../view.inc.php");
 
@@ -31,7 +32,6 @@ if (!$link)
 }
 
 // Authorize the user and load user specific settings.
-require ("lib-permissions.inc.php");
 phpAds_Start();
 
 

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.9 $
+<?php // $Revision: 1.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -244,7 +244,7 @@ function phpAds_LoginScreen($message='')
 	phpAds_PageHeader(0);
 	if ($message != "") echo "<b>$message</b><br>";
 	?>
-	<form method="post" action="<?echo basename($GLOBALS["PHP_SELF"]); echo $GLOBALS["QUERY_STRING"] != "" ? "?".$GLOBALS["QUERY_STRING"] : "" ;?>" enctype="multipart/form-data">
+	<form method="post" action="<?echo basename($GLOBALS["PHP_SELF"]); echo $GLOBALS["QUERY_STRING"] != "" ? "?".$GLOBALS["QUERY_STRING"] : "" ;?>" >
 	<table>
 		<tr>
 			<td><?echo $GLOBALS["strUsername"];?>:</td>

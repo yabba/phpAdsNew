@@ -1,4 +1,4 @@
-<?php // $Revision: 1.10 $
+<?php // $Revision: 1.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -147,7 +147,13 @@ function phpAds_PageHeader($ID, $extra="")
 	
 	
 	// Send header with charset info
-	header ("Content-Type: text/html".($phpAds_CharSet != "" ? "; charset=".$phpAds_CharSet : ""));
+	if (isset($phpAds_CharSet) && $phpAds_CharSet != '')
+		header ("Content-Type: text/html; charset=$phpAds_CharSet");
+	else
+	{
+		$phpAds_CharSet = '';
+		header ("Content-Type: text/html");
+	}
 	
 	// Begin HTML
 	?>
