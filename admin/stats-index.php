@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -144,9 +144,12 @@ $res_banners = db_query("
 
 while ($row_banners = mysql_fetch_array($res_banners))
 {
-	$banners[$row_banners['bannerID']] = $row_banners;
-	$banners[$row_banners['bannerID']]['clicks'] = 0;
-	$banners[$row_banners['bannerID']]['views'] = 0;
+	if (isset($campaigns[$row_banners['clientID']]))
+	{
+		$banners[$row_banners['bannerID']] = $row_banners;
+		$banners[$row_banners['bannerID']]['clicks'] = 0;
+		$banners[$row_banners['bannerID']]['views'] = 0;
+	}
 }
 
 
@@ -171,8 +174,11 @@ if ($phpAds_compact_stats == 1)
 	
 	while ($row_stats = mysql_fetch_array($res_stats))
 	{
-		$banners[$row_stats['bannerID']]['clicks'] = $row_stats['clicks'];
-		$banners[$row_stats['bannerID']]['views'] = $row_stats['views'];
+		if (isset($banners[$row_stats['bannerID']]))
+		{
+			$banners[$row_stats['bannerID']]['clicks'] = $row_stats['clicks'];
+			$banners[$row_stats['bannerID']]['views'] = $row_stats['views'];
+		}
 	}
 }
 else
@@ -193,8 +199,11 @@ else
 	
 	while ($row_stats = mysql_fetch_array($res_stats))
 	{
-		$banners[$row_stats['bannerID']]['views'] = $row_stats['views'];
-		$banners[$row_stats['bannerID']]['clicks'] = 0;
+		if (isset($banners[$row_stats['bannerID']]))
+		{
+			$banners[$row_stats['bannerID']]['views'] = $row_stats['views'];
+			$banners[$row_stats['bannerID']]['clicks'] = 0;
+		}
 	}
 	
 	
@@ -214,7 +223,10 @@ else
 	
 	while ($row_stats = mysql_fetch_array($res_stats))
 	{
-		$banners[$row_stats['bannerID']]['clicks'] = $row_stats['clicks'];
+		if (isset($banners[$row_stats['bannerID']]))
+		{
+			$banners[$row_stats['bannerID']]['clicks'] = $row_stats['clicks'];
+		}
 	}
 }
 
