@@ -1,10 +1,10 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
 /* ===========                                                          */
 /*                                                                      */
-/* Copyright (c) 2000-2003 by the phpAdsNew developers                  */
+/* Copyright (c) 2000-2002 by the phpAdsNew developers                  */
 /* For more information visit: http://www.phpadsnew.com                 */
 /*                                                                      */
 /* This program is free software. You can redistribute it and/or modify */
@@ -20,7 +20,7 @@ $plugin_info_function		= "Plugin_AffiliatehistoryInfo";
 // Public info function
 function Plugin_AffiliatehistoryInfo()
 {
-	global $strAffiliateHistory, $strAffiliate, $strPluginAffiliate, $strDelimiter, $strUseQuotes;
+	global $strAffiliateHistory, $strAffiliate, $strPluginAffiliate, $strDelimiter;
 	
 	$plugininfo = array (
 		"plugin-name"			=> $strAffiliateHistory,
@@ -33,12 +33,11 @@ function Plugin_AffiliatehistoryInfo()
 			"campaignid"			=> array (
 				"title"					=> $strAffiliate,
 				"type"					=> "affiliateid-dropdown" ),
-			"delimiter"			=> array (
+			"delimiter"		=> array (
 				"title"					=> $strDelimiter,
-				"type"					=> "delimiter" ),
-			"quotes"			=> array (
-				"title"					=> $strUseQuotes,
-				"type"					=> "quotes" ) )
+				"type"					=> "edit",
+				"size"					=> 1,
+				"default"				=> "," ) )
 	);
 	
 	return ($plugininfo);
@@ -50,17 +49,12 @@ function Plugin_AffiliatehistoryInfo()
 /* Private plugin function                               */
 /*********************************************************/
 
-function Plugin_AffiliatehistoryExecute($affiliateid, $delimiter="t", $quotes="")
+function Plugin_AffiliatehistoryExecute($affiliateid, $delimiter=",")
 {
 	global $phpAds_config, $date_format;
 	global $strAffiliate, $strTotal, $strDay, $strViews, $strClicks, $strCTRShort;
 	
-	// Expand delimiter and quotes
-	if ($delimiter == 't')	$delimiter = "\t";
-	if ($quotes == '1')		$quotes = "'";
-	if ($quotes == '2')		$quotes = '"';
-	
-	header ("Content-type: application/csv\nContent-Disposition: \"inline; filename=publisherhistory.csv\"");
+	header ("Content-type: application/csv\nContent-Disposition: \"inline; filename=affiliatehistory.csv\"");
 	
 	$idresult = phpAds_dbQuery ("
 		SELECT
@@ -73,37 +67,33 @@ function Plugin_AffiliatehistoryExecute($affiliateid, $delimiter="t", $quotes=""
 	
 	while ($row = phpAds_dbFetchArray($idresult))
 	{
-		$zoneids[] = $row['zoneid'];
+		$zoneids[] = "zoneid = ".$row['zoneid'];
 	}
 	
 	
-	if (count($zoneids))
+	$res_query = "
+		SELECT
+			DATE_FORMAT(day, '".$date_format."') as day,
+			SUM(views) AS adviews,
+			SUM(clicks) AS adclicks
+		FROM
+			".$phpAds_config['tbl_adstats']."
+		WHERE
+			(".implode(' OR ', $zoneids).")
+		GROUP BY
+			day
+	";
+	
+	$res_banners = phpAds_dbQuery($res_query) or phpAds_sqlDie();
+	
+	while ($row_banners = phpAds_dbFetchArray($res_banners))
 	{
-		$res_query = "
-			SELECT
-				DATE_FORMAT(day, '".$date_format."') as day,
-				SUM(views) AS adviews,
-				SUM(clicks) AS adclicks
-			FROM
-				".$phpAds_config['tbl_adstats']."
-			WHERE
-				zoneid IN (".implode(', ', $zoneids).")
-			GROUP BY
-				day
-		";
-		
-		$res_banners = phpAds_dbQuery($res_query) or phpAds_sqlDie();
-		
-		while ($row_banners = phpAds_dbFetchArray($res_banners))
-		{
-			$stats [$row_banners['day']]['views'] = $row_banners['adviews'];
-			$stats [$row_banners['day']]['clicks'] = $row_banners['adclicks'];
-		}
+		$stats [$row_banners['day']]['views'] = $row_banners['adviews'];
+		$stats [$row_banners['day']]['clicks'] = $row_banners['adclicks'];
 	}
 	
-	echo $quotes.$strAffiliate.": ".strip_tags(phpAds_getAffiliateName ($affiliateid)).$quotes."\n\n";
-	echo $quotes.$strDay.$quotes.$delimiter.$quotes.$strViews.$quotes.$delimiter;
-	echo $quotes.$strClicks.$quotes.$delimiter.$quotes.$strCTRShort.$quotes."\n";
+	echo $strAffiliate.": ".strip_tags(phpAds_getAffiliateName ($affiliateid))."\n\n";
+	echo $strDay.$delimiter.$strViews.$delimiter.$strClicks.$delimiter.$strCTRShort."\n";
 	
 	$totalclicks = 0;
 	$totalviews = 0;
@@ -114,10 +104,10 @@ function Plugin_AffiliatehistoryExecute($affiliateid, $delimiter="t", $quotes=""
 		{
 			$row = array();
 			
-			$row[] = $quotes.$key.$quotes;
-			$row[] = $quotes.$stats[$key]['views'].$quotes;
-			$row[] = $quotes.$stats[$key]['clicks'].$quotes;
-			$row[] = $quotes.phpAds_buildCTR ($stats[$key]['views'], $stats[$key]['clicks']).$quotes;
+			$row[] = $key;
+			$row[] = $stats[$key]['views'];
+			$row[] = $stats[$key]['clicks'];
+			$row[] = phpAds_buildCTR ($stats[$key]['views'], $stats[$key]['clicks']);
 			
 			echo implode ($delimiter, $row)."\n";
 			
@@ -127,8 +117,7 @@ function Plugin_AffiliatehistoryExecute($affiliateid, $delimiter="t", $quotes=""
 	}
 	
 	echo "\n";
-	echo $quotes.$strTotal.$quotes.$delimiter.$quotes.$totalviews.$quotes.$delimiter;
-	echo $quotes.$totalclicks.$quotes.$delimiter.$quotes.phpAds_buildCTR ($totalviews, $totalclicks).$quotes."\n";
+	echo $strTotal.$delimiter.$totalviews.$delimiter.$totalclicks.$delimiter.phpAds_buildCTR ($totalviews, $totalclicks)."\n";
 }
 
 ?>
