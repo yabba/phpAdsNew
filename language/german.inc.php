@@ -1,4 +1,4 @@
-<?php // $Revision: 1.35 $
+<?php // $Revision: 1.36 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -230,7 +230,7 @@ $GLOBALS['strUntitled']					= "Unbenannt";
 $GLOBALS['strTotalCampaigns'] 			= "Gesamtzahl Kampagnen";
 $GLOBALS['strActiveCampaigns'] 			= "Aktive Kampagnen";
 
-$GLOBALS['strLinkedTo']					= "verkn&uuml;pft mit";
+$GLOBALS['strLinkedTo']					= "verknüpft mit";
 $GLOBALS['strSendAdvertisingReport']	= "Berichte über die Werbeaktivitäten per E-Mail versenden";
 $GLOBALS['strNoDaysBetweenReports']		= "Tage zwischen den Berichten";
 $GLOBALS['strSendDeactivationWarning']  = "Warnung senden, wenn eine Kampagne deaktiviert wird";
