@@ -1,4 +1,4 @@
-<?php // $Revision: 1.25 $
+<?php // $Revision: 1.26 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -112,7 +112,6 @@ $GLOBALS['strTotalClicks7Days'] = "Totaal AdClicks voorbije 7 dagen";
 $GLOBALS['strAvgViews7Days'] = "Gemiddelde AdViews voorbije 7 dagen";
 $GLOBALS['strAvgClicks7Days'] = "Gemiddelde AdClicks voorbije 7 dagen";
 $GLOBALS['strTopTenHosts'] = "Top tien hosts";
-$GLOBALS['strConfirmDeleteClient'] = "Bent u zeker dat u deze klant wil verwijdern ?";
 $GLOBALS['strClientIP'] = "IP adres bezoeker";
 $GLOBALS['strUserAgent'] = "User agent regexp";
 $GLOBALS['strWeekDay'] = "Weekdag (0 - 6)";
@@ -279,5 +278,13 @@ $GLOBALS['strOR']						= "OF"; // logical operator
 $GLOBALS['strOnlyDisplayWhen']			= "Toon deze banner alleen wanneer:";
 
 $GLOBALS['strStatusText']				= "Status Tekst";
+
+$GLOBALS['strConfirmDeleteClient'] 		= "Weet u zeker dat u deze klant wilt verwijderen?";
+$GLOBALS['strConfirmDeleteCampaign']	= "Weet u zeker dat u deze campagne wilt verwijderen?";
+$GLOBALS['strConfirmDeleteBanner']		= "Weet u zeker dat u deze banner wilt verwijderen?";
+$GLOBALS['strConfirmResetStats']		= "Weet u zeker dat u alle statistieken wilt wissen?";
+$GLOBALS['strConfirmResetCampaignStats']= "Weet u zeker dat u de statistieken wilt wissen voor deze campagne?";
+$GLOBALS['strConfirmResetClientStats']	= "Weet u zeker dat u de statistieken wilt wissen voor deze klant?";
+$GLOBALS['strConfirmResetBannerStats']	= "Weet u zeker dat u de statistieken wilt wizzen voor deze banner?";
 
 ?>

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.28 $
+<?php // $Revision: 1.29 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -114,7 +114,6 @@ $GLOBALS['strTotalClicks7Days'] = "Total AdClicks in past 7 days";
 $GLOBALS['strAvgViews7Days'] = "Average AdViews in past 7 days";
 $GLOBALS['strAvgClicks7Days'] = "Average AdClicks in past 7 days";
 $GLOBALS['strTopTenHosts'] = "Top ten requesting hosts";
-$GLOBALS['strConfirmDeleteClient'] = "Do you really want to delete this client?";
 $GLOBALS['strClientIP'] = "Client IP";
 $GLOBALS['strUserAgent'] = "User agent regexp";
 $GLOBALS['strWeekDay'] = "Week day (0 - 6)";
@@ -282,10 +281,11 @@ $GLOBALS['strOnlyDisplayWhen']			= "Only display this banner when:";
 
 $GLOBALS['strStatusText']				= "Status Text";
 
+$GLOBALS['strConfirmDeleteClient'] 		= "Do you really want to delete this client?";
 $GLOBALS['strConfirmDeleteCampaign']	= "Do you really want to delete this campaign?";
 $GLOBALS['strConfirmDeleteBanner']		= "Do you really want to delete this banner?";
 $GLOBALS['strConfirmResetStats']		= "Do you really want to reset all stats?";
-$GLOBALS['strConfirmResetCampaignStats']	= "Do you really want to reset stats for this campaign?";
+$GLOBALS['strConfirmResetCampaignStats']= "Do you really want to reset stats for this campaign?";
 $GLOBALS['strConfirmResetClientStats']	= "Do you really want to reset stats for this client?";
 $GLOBALS['strConfirmResetBannerStats']	= "Do you really want to reset stats for this banner?";
 

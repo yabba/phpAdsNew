@@ -1,4 +1,4 @@
-<?php // $Revision: 1.38 $
+<?php // $Revision: 1.39 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -117,7 +117,6 @@ $GLOBALS['strTotalClicks7Days'] = "Summe der AdClicks der letzten 7 Tage";
 $GLOBALS['strAvgViews7Days'] = "AdViews pro Tag (Durchschnitt der letzten 7 Tage)";
 $GLOBALS['strAvgClicks7Days'] = "AdClicks pro Tag (Durchschnitt der letzten 7 Tage)";
 $GLOBALS['strTopTenHosts'] = "Top 10 anfordernde IP-Adressen";
-$GLOBALS['strConfirmDeleteClient'] = "Möchten Sie diesen Kunden wirklich löschen?";
 $GLOBALS['strClientIP'] = "Kunden-IP";
 $GLOBALS['strUserAgent'] = "RegExp f&uuml;r Browser";
 $GLOBALS['strWeekDay'] = "Wochentag (0 - 6)";
@@ -127,13 +126,12 @@ $GLOBALS['strTime'] = "Time";
 $GLOBALS['strAllow'] = "Erlauben";
 $GLOBALS['strDeny'] = "Verweigern";
 $GLOBALS['strResetStats'] = "Statistik zur&uuml;cksetzen";
-$GLOBALS['strConfirmResetStats'] = "Wollen Sie wirklich die Statistik dieses Kunden zurücksetzen ?";
 $GLOBALS['strExpiration'] = "Ablaufdatum";
 $GLOBALS['strNoExpiration'] = "Kein Ablaufdatum festgesetzt";
 $GLOBALS['strDaysLeft'] = "Verbleibende Tage";
 $GLOBALS['strEstimated'] = "Gesch&auml;tztes Ablaufdatum";
 $GLOBALS['strConfirm'] = "Sind Sie sicher?";
-$GLOBALS['strBannerNoStats'] = "Keine Statistikdaten f&uuml;r diesen Banner gespeichert!";
+$GLOBALS['strBannerNoStats'] = "Keine Statistikdaten f&uuml;r dieses Banner gespeichert!";
 $GLOBALS['strWeek'] = "Kalenderwoche";
 $GLOBALS['strWeeklyStats'] = "Wochen&uuml;bersicht";
 $GLOBALS['strWeekDay'] = "Wochentag";
@@ -202,7 +200,7 @@ $GLOBALS['strShowClientsInactive']		= "Kunden mit inaktiven Banner anzeigen";
 $GLOBALS['strSize']						= "Gr&ouml;&szlig;e";
 
 $GLOBALS['strMonth'] 					= array("Januar", "Februar", "M&auml;rz", "April", "Mai", "Juni", "July", "August", "September", "Oktober", "November", "Dezember");
-$GLOBALS['strDontExpire']				= "Diesen Kampagne nicht an einem Ablaufdatum deaktivieren";
+$GLOBALS['strDontExpire']				= "Diese Kampagne nicht an einem Ablaufdatum deaktivieren";
 $GLOBALS['strActivateNow'] 				= "Kampagnen sofort aktivieren";
 $GLOBALS['strExpirationDate']			= "Ablaufdatum";
 $GLOBALS['strActivationDate']			= "Aktivierungsdatum";
@@ -218,6 +216,7 @@ $GLOBALS['strNoMoreViews']				= "die Zahl der gekauften AdViews erreicht wurde";
 $GLOBALS['strBanners'] 					= "Banner";
 $GLOBALS['strCampaigns']				= "Kampagnen";
 $GLOBALS['strCampaign']					= "Kampagne";
+$GLOBALS['strModifyCampaign']			= "Kampagne &auml;ndern";
 $GLOBALS['strName']						= "Name";
 $GLOBALS['strBannersWithoutCampaign']	= "Banner ohne Kampagne";
 $GLOBALS['strMoveToNewCampaign']		= "Zu einer anderen Kampagne verschieben";
@@ -269,20 +268,28 @@ $GLOBALS['strClientStats']				= "Kunden-Statistiken";
 $GLOBALS['strErrorOccurred']			= "Es ist ein Fehler aufgetreten";
 $GLOBALS['strAdReportSent']				= "Werbe-Report gesendet";
 
-$GLOBALS['strAutoChangeHTML']			= "Change HTML in order to log AdClicks";
+$GLOBALS['strAutoChangeHTML']			= "Modifiziere HTML zum Aufzeichnen der AdClicks";
 
-$GLOBALS['strZones']					= "Zones";
-$GLOBALS['strAddZone']					= "Create zone";
-$GLOBALS['strModifyZone']				= "Modify zone";
-$GLOBALS['strAddNewZone']				= "Add new zone";
+$GLOBALS['strZones']					= "Zonen";
+$GLOBALS['strAddZone']					= "Zone hinzuf&uuml;gen";
+$GLOBALS['strModifyZone']				= "Zone bearbeiten";
+$GLOBALS['strAddNewZone']				= "Neue Zone anlegen";
 
-$GLOBALS['strOverview']					= "Overview";
-$GLOBALS['strEqualTo']					= "is equal to";
-$GLOBALS['strDifferentFrom']			= "is different from";
-$GLOBALS['strAND']						= "AND";  // logical operator
-$GLOBALS['strOR']						= "OR"; // logical operator
-$GLOBALS['strOnlyDisplayWhen']			= "Only display this banner when:";
+$GLOBALS['strOverview']					= "&Uuml;bersicht";
+$GLOBALS['strEqualTo']					= "ist gleich mit";
+$GLOBALS['strDifferentFrom']			= "ist unterschiedlich von";
+$GLOBALS['strAND']						= "UND";  // logical operator
+$GLOBALS['strOR']						= "ODER"; // logical operator
+$GLOBALS['strOnlyDisplayWhen']			= "Dieses Banner wird nur angezeigt wenn:";
 
 $GLOBALS['strStatusText']				= "Status Text";
+
+$GLOBALS['strConfirmDeleteClient'] 		= "M&ouml;chten Sie diesen Kunden wirklich l&ouml;schen?";
+$GLOBALS['strConfirmDeleteCampaign']	= "M&ouml;chten Sie diese Kampagne wirklich l&ouml;schen?";
+$GLOBALS['strConfirmDeleteBanner']		= "M&ouml;chten Sie dieses Banner wirklich l&ouml;schen?";
+$GLOBALS['strConfirmResetStats']		= "Wollen Sie wirklich alle Statistikdaten zur&uuml;cksetzen?";
+$GLOBALS['strConfirmResetCampaignStats']= "Wollen Sie wirklich die Statistik diese Kampagne zur&uuml;cksetzen ?";
+$GLOBALS['strConfirmResetClientStats']	= "Wollen Sie wirklich die Statistik dieses Kunden zur&uuml;cksetzen ?";
+$GLOBALS['strConfirmResetBannerStats']	= "Wollen Sie wirklich die Statistik dieses Banners zur&uuml;cksetzen ?";
 
 ?>

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.33 $
+<?php // $Revision: 1.34 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -117,7 +117,6 @@ $GLOBALS['strTotalClicks7Days'] = "Totale dei click negli ultimi 7 giorni";
 $GLOBALS['strAvgViews7Days'] = "Media delle visualizzazioni negli ultimi 7 giorni";
 $GLOBALS['strAvgClicks7Days'] = "Media dei click negli ultimi 7 giorni";
 $GLOBALS['strTopTenHosts'] = "I 10 host da cui provengono le maggiori richieste";
-$GLOBALS['strConfirmDeleteClient'] = "Vuoi veramente cancellare questo cliente?";
 $GLOBALS['strClientIP'] = "IP Cliente";
 $GLOBALS['strUserAgent'] = "Espressione regolare del Browser";
 $GLOBALS['strWeekDay'] = "Giorno della settimana (0 - 6)";
@@ -127,7 +126,6 @@ $GLOBALS['strTime'] = "Ora";
 $GLOBALS['strAllow'] = "Consenti";
 $GLOBALS['strDeny'] = "Nega";
 $GLOBALS['strResetStats'] = "Azzera Statistiche";
-$GLOBALS['strConfirmResetStats'] = "Vuoi veramente azzerare le statistiche per questo cliente ?";
 $GLOBALS['strExpiration'] = "Termine";
 $GLOBALS['strNoExpiration'] = "Nessuna data di scadenza selezionata";
 $GLOBALS['strDaysLeft'] = "Giorni mancanti";
@@ -285,5 +283,13 @@ $GLOBALS['strOR']						= "OR"; // logical operator
 $GLOBALS['strOnlyDisplayWhen']			= "Only display this banner when:";
 
 $GLOBALS['strStatusText']				= "Status Text";
+
+$GLOBALS['strConfirmDeleteClient'] 		= "Vuoi veramente cancellare questo cliente?";
+$GLOBALS['strConfirmDeleteCampaign']	= "Do you really want to delete this campaign?";
+$GLOBALS['strConfirmDeleteBanner']		= "Do you really want to delete this banner?";
+$GLOBALS['strConfirmResetStats']		= "Do you really want to reset all stats?";
+$GLOBALS['strConfirmResetCampaignStats']= "Do you really want to reset stats for this campaign?";
+$GLOBALS['strConfirmResetClientStats']	= "Vuoi veramente azzerare le statistiche per questo cliente ?";
+$GLOBALS['strConfirmResetBannerStats']	= "Do you really want to reset stats for this banner?";
 
 ?>

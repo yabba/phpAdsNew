@@ -8,6 +8,7 @@ CVS			+ Added search capabilities  (Niels and Tobi Schulz)
 			  ftp emulation library provided by TOMO <groove@spencernetwork.org>  (Niels)
 			+ Added native support for flash banners, based on code of the 
 			  phpAdsPlus project by Dandra  (Niels)
+			+ Added a confirmation dialogbox, for deleting and resetting statistics (Helmut)
 
 			+ ACLs
 			  The ACL routines have been rewritten. This is a very big change and possibly

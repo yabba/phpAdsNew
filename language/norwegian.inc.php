@@ -1,4 +1,4 @@
-<?php // $Revision: 1.2 $
+<?php // $Revision: 1.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -116,7 +116,6 @@ $GLOBALS['strTotalClicks7Days'] = "Totalt ant bannerklikk siste 7 dager";
 $GLOBALS['strAvgViews7Days'] = "Gjennomsnittlig ant bannervisninger siste 7 dager";
 $GLOBALS['strAvgClicks7Days'] = "Gjennomsnittlig ant bannerklikk siste 7 dager";
 $GLOBALS['strTopTenHosts'] = "Top ti \"reklameinteresserte\" tjenere";
-$GLOBALS['strConfirmDeleteClient'] = "Vil du virkelig slette denne klienten?";
 $GLOBALS['strClientIP'] = "Klient IP";
 $GLOBALS['strUserAgent'] = "User agent regexp";
 $GLOBALS['strWeekDay'] = "Ukedag (0 - 6)";
@@ -126,7 +125,6 @@ $GLOBALS['strTime'] = "Tid";
 $GLOBALS['strAllow'] = "Tillat";
 $GLOBALS['strDeny'] = "Nekt";
 $GLOBALS['strResetStats'] = "Tilbakestill statistikk";
-$GLOBALS['strConfirmResetStats'] = "Vil du virkelig tilbakestille statistikken for denne klienten?";
 $GLOBALS['strExpiration'] = "Utløpsdato";
 $GLOBALS['strNoExpiration'] = "Ingen utløpsdato angitt";
 $GLOBALS['strDaysLeft'] = "Dager igjen";
@@ -284,5 +282,13 @@ $GLOBALS['strOR']						= "OR"; // logical operator
 $GLOBALS['strOnlyDisplayWhen']			= "Only display this banner when:";
 
 $GLOBALS['strStatusText']				= "Status Text";
+
+$GLOBALS['strConfirmDeleteClient'] 		= "Vil du virkelig slette denne klienten?";
+$GLOBALS['strConfirmDeleteCampaign']	= "Do you really want to delete this campaign?";
+$GLOBALS['strConfirmDeleteBanner']		= "Do you really want to delete this banner?";
+$GLOBALS['strConfirmResetStats']		= "Do you really want to reset all stats?";
+$GLOBALS['strConfirmResetCampaignStats']= "Do you really want to reset stats for this campaign?";
+$GLOBALS['strConfirmResetClientStats']	= "Vil du virkelig tilbakestille statistikken for denne klienten?";
+$GLOBALS['strConfirmResetBannerStats']	= "Do you really want to reset stats for this banner?";
 
 ?>

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.22 $
+<?php // $Revision: 1.23 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -114,7 +114,6 @@ $GLOBALS['strTotalClicks7Days'] = "Total de clicks nos últimos 7 dias";
 $GLOBALS['strAvgViews7Days'] = "Média de impressões nos últimos 7 dias";
 $GLOBALS['strAvgClicks7Days'] = "Média de clicks nos últimos 7 dias";
 $GLOBALS['strTopTenHosts'] = "10 servidores mais requisitantes";
-$GLOBALS['strConfirmDeleteClient'] = "Está certo que deseja deletar este cliente?";
 $GLOBALS['strClientIP'] = "IP do Cliente";
 $GLOBALS['strUserAgent'] = "Navegador do Usuário";
 $GLOBALS['strWeekDay'] = "Dia da Semana (Domingo:0 - Sábado:6)";
@@ -124,7 +123,6 @@ $GLOBALS['strTime'] = "Hora";
 $GLOBALS['strAllow'] = "Permitir";
 $GLOBALS['strDeny'] = "Bloquear";
 $GLOBALS['strResetStats'] = "Resetar Estatísticas";
-$GLOBALS['strConfirmResetStats'] = "Está certo que deseja resetar as estatísticas deste cliente?";
 $GLOBALS['strExpiration'] = "Expiração";
 $GLOBALS['strNoExpiration'] = "Sem data de expiração";
 $GLOBALS['strDaysLeft'] = "Dias restantes";
@@ -277,5 +275,13 @@ $GLOBALS['strOR']						= "OR"; // logical operator
 $GLOBALS['strOnlyDisplayWhen']			= "Only display this banner when:";
 
 $GLOBALS['strStatusText']				= "Status Text";
+
+$GLOBALS['strConfirmDeleteClient'] 		= "Está certo que deseja deletar este cliente?";
+$GLOBALS['strConfirmDeleteCampaign']	= "Do you really want to delete this campaign?";
+$GLOBALS['strConfirmDeleteBanner']		= "Do you really want to delete this banner?";
+$GLOBALS['strConfirmResetStats']		= "Do you really want to reset all stats?";
+$GLOBALS['strConfirmResetCampaignStats']= "Do you really want to reset stats for this campaign?";
+$GLOBALS['strConfirmResetClientStats']	= "Está certo que deseja resetar as estatísticas deste cliente?";
+$GLOBALS['strConfirmResetBannerStats']	= "Do you really want to reset stats for this banner?";
 
 ?>

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.37 $
+<?php // $Revision: 1.38 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -118,7 +118,6 @@ $GLOBALS['strTotalClicks7Days'] = "Всего кликов за неделю";
 $GLOBALS['strAvgViews7Days'] = "В среднем показов за неделю";
 $GLOBALS['strAvgClicks7Days'] = "В среднем кликов за неделю";
 $GLOBALS['strTopTenHosts'] = "Top ten адресов просматривавших баннеры";
-$GLOBALS['strConfirmDeleteClient'] = "Вы действительно хотите удалить этого клиента?";
 $GLOBALS['strClientIP'] = "IP Клиента";
 $GLOBALS['strUserAgent'] = "regexp строки User-agent";
 $GLOBALS['strWeekDay'] = "День недели (0 - 6) ((с воскресенья))";
@@ -127,7 +126,6 @@ $GLOBALS['strSource'] = "Источник";
 $GLOBALS['strTime'] = "Время";
 $GLOBALS['strAllow'] = "Доступ открыт для";
 $GLOBALS['strDeny'] = "Доступ закрыт для";
-$GLOBALS['strConfirmResetStats'] = "Вы действительно хотите обнулить статистику для этого клиента ?";
 $GLOBALS['strExpiration'] = "Expiration";
 $GLOBALS['strNoExpiration'] = "No expiration date set";
 $GLOBALS['strDaysLeft'] = "Осталось дней";
@@ -284,5 +282,13 @@ $GLOBALS['strOR']						= "OR"; // logical operator
 $GLOBALS['strOnlyDisplayWhen']			= "Показывать этот баннер только когда:";
 
 $GLOBALS['strStatusText']				= "Описание статуса";
+
+$GLOBALS['strConfirmDeleteClient'] 		= "Вы действительно хотите удалить этого клиента?";
+$GLOBALS['strConfirmDeleteCampaign']	= "Do you really want to delete this campaign?";
+$GLOBALS['strConfirmDeleteBanner']		= "Do you really want to delete this banner?";
+$GLOBALS['strConfirmResetStats']		= "Do you really want to reset all stats?";
+$GLOBALS['strConfirmResetCampaignStats']= "Do you really want to reset stats for this campaign?";
+$GLOBALS['strConfirmResetClientStats']	= "Вы действительно хотите обнулить статистику для этого клиента ?";
+$GLOBALS['strConfirmResetBannerStats']	= "Do you really want to reset stats for this banner?";
 
 ?>

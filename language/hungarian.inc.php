@@ -1,4 +1,4 @@
-<?php // $Revision: 1.22 $
+<?php // $Revision: 1.23 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -121,7 +121,6 @@ $GLOBALS['strTotalClicks7Days'] = "Összes kattintás az elmúlt 7 napban";
 $GLOBALS['strAvgViews7Days'] = "Átlagos bannermegjelenítés az elmult 7 napban";
 $GLOBALS['strAvgClicks7Days'] = "Átlagos kattintás az elmúlz 7 napban";
 $GLOBALS['strTopTenHosts'] = "A 10 leggyakoribb látogató";
-$GLOBALS['strConfirmDeleteClient'] = "Biztosan torolni szeretne a klienst?";
 $GLOBALS['strClientIP'] = "Kliens IP";
 $GLOBALS['strUserAgent'] = "Bongészõ regexp";
 $GLOBALS['strWeekDay'] = "Hét napja  (V:0 - Szo:6)";
@@ -132,7 +131,6 @@ $GLOBALS['strAllow'] = "Engedélyez";
 $GLOBALS['strDeny'] = "Tilt";
 
 $GLOBALS['strResetStats'] = "Statisztika törlése";
-$GLOBALS['strConfirmResetStats'] = "Biztos, hogy törölni akarja ennek a kliensnek a statisztikáit?";
 $GLOBALS['strExpiration'] = "Lejárat";
 $GLOBALS['strDaysLeft'] = "Nap van vissza";
 $GLOBALS['strEstimated'] = "Becsölt lejárati idõ";
@@ -288,5 +286,13 @@ $GLOBALS['strOR']						= "OR"; // logical operator
 $GLOBALS['strOnlyDisplayWhen']			= "Only display this banner when:";
 
 $GLOBALS['strStatusText']				= "Status Text";
+
+$GLOBALS['strConfirmDeleteClient'] 		= "Biztosan torolni szeretne a klienst?";
+$GLOBALS['strConfirmDeleteCampaign']	= "Do you really want to delete this campaign?";
+$GLOBALS['strConfirmDeleteBanner']		= "Do you really want to delete this banner?";
+$GLOBALS['strConfirmResetStats']		= "Do you really want to reset all stats?";
+$GLOBALS['strConfirmResetCampaignStats']= "Do you really want to reset stats for this campaign?";
+$GLOBALS['strConfirmResetClientStats']	= "Biztos, hogy törölni akarja ennek a kliensnek a statisztikáit?";
+$GLOBALS['strConfirmResetBannerStats']	= "Do you really want to reset stats for this banner?";
 
 ?>

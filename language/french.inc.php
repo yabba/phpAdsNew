@@ -1,4 +1,4 @@
-<?php // $Revision: 1.28 $
+<?php // $Revision: 1.29 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -114,7 +114,6 @@ $GLOBALS['strTotalClicks7Days'] = "Total des clics pour les 7 derniers jours";
 $GLOBALS['strAvgViews7Days'] = "Nombre moyen d'affichages pour les 7 derniers jours";
 $GLOBALS['strAvgClicks7Days'] = "Nombre moyen de clics pour les 7 derniers jours";
 $GLOBALS['strTopTenHosts'] = "Top 10 des machines clientes";
-$GLOBALS['strConfirmDeleteClient'] = "Voulez-vous vraiment supprimer ce client ?";
 $GLOBALS['strClientIP'] = "IP du client";
 $GLOBALS['strUserAgent'] = "Expression rationnelle du navigateur";
 $GLOBALS['strWeekDay'] = "Jour de la semaine (0 - 6)";
@@ -124,7 +123,6 @@ $GLOBALS['strTime'] = "Horaire";
 $GLOBALS['strAllow'] = "Permettre";
 $GLOBALS['strDeny'] = "Refuser";
 $GLOBALS['strResetStats'] = "Réinitialiser les statistiques";
-$GLOBALS['strConfirmResetStats'] = "Voulez-vous réellement réinitialiser les stats de ce client ?";
 $GLOBALS['strExpiration'] = "Expiration";
 $GLOBALS['strNoExpiration'] = "Pas de date d'expiration";
 $GLOBALS['strDaysLeft'] = "Jours restants";
@@ -281,5 +279,13 @@ $GLOBALS['strOR']						= "OR"; // logical operator
 $GLOBALS['strOnlyDisplayWhen']			= "Only display this banner when:";
 
 $GLOBALS['strStatusText']				= "Status Text";
+
+$GLOBALS['strConfirmDeleteClient']		= "Voulez-vous vraiment supprimer ce client ?";
+$GLOBALS['strConfirmDeleteCampaign']	= "Do you really want to delete this campaign?";
+$GLOBALS['strConfirmDeleteBanner']		= "Do you really want to delete this banner?";
+$GLOBALS['strConfirmResetStats']		= "Do you really want to reset all stats?";
+$GLOBALS['strConfirmResetCampaignStats']= "Do you really want to reset stats for this campaign?";
+$GLOBALS['strConfirmResetClientStats']	= "Voulez-vous réellement réinitialiser les stats de ce client ?";
+$GLOBALS['strConfirmResetBannerStats']	= "Do you really want to reset stats for this banner?";
 
 ?>

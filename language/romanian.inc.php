@@ -1,4 +1,4 @@
-<?php // $Revision: 1.12 $
+<?php // $Revision: 1.13 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -114,7 +114,6 @@ $GLOBALS['strTotalClicks7Days'] = "Total click-uri in ultimele 7 zile";
 $GLOBALS['strAvgViews7Days'] = "Media afisarilor in ultimele 7 zile";
 $GLOBALS['strAvgClicks7Days'] = "Media click-urilor in ultimele 7 zile";
 $GLOBALS['strTopTenHosts'] = "Topul masinilor cu cele mai multe solicitari";
-$GLOBALS['strConfirmDeleteClient'] = "Sigur vreti sa stergetiacest client?";
 $GLOBALS['strClientIP'] = "IP-ul client";
 $GLOBALS['strUserAgent'] = "Regexp browser";
 $GLOBALS['strWeekDay'] = "Ziua saptamanii (0 - 6)";
@@ -124,7 +123,6 @@ $GLOBALS['strTime'] = "Ora";
 $GLOBALS['strAllow'] = "Accepta";
 $GLOBALS['strDeny'] = "Respinge";
 $GLOBALS['strResetStats'] = "Resetare statistici";
-$GLOBALS['strConfirmResetStats'] = "Sigur vreti sa resetati statisticile pentru acest client?";
 $GLOBALS['strExpiration'] = "Expira";
 $GLOBALS['strNoExpiration'] = "Nu expira niciodata";
 $GLOBALS['strDaysLeft'] = "Zile ramase";
@@ -281,5 +279,13 @@ $GLOBALS['strOR']						= "OR"; // logical operator
 $GLOBALS['strOnlyDisplayWhen']			= "Only display this banner when:";
 
 $GLOBALS['strStatusText']				= "Status Text";
+
+$GLOBALS['strConfirmDeleteClient'] 		= "Sigur vreti sa stergetiacest client?";
+$GLOBALS['strConfirmDeleteCampaign']	= "Do you really want to delete this campaign?";
+$GLOBALS['strConfirmDeleteBanner']		= "Do you really want to delete this banner?";
+$GLOBALS['strConfirmResetStats']		= "Do you really want to reset all stats?";
+$GLOBALS['strConfirmResetCampaignStats']= "Do you really want to reset stats for this campaign?";
+$GLOBALS['strConfirmResetClientStats']	= "Sigur vreti sa resetati statisticile pentru acest client?";
+$GLOBALS['strConfirmResetBannerStats']	= "Do you really want to reset stats for this banner?";
 
 ?>
