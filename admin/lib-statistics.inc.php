@@ -1,4 +1,4 @@
-<?php // $Revision: 1.44 $
+<?php // $Revision: 1.45 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -480,6 +480,10 @@ function phpAds_buildBannerCode ($bannerid, $fullpreview = false)
 		}
 		else
 			$target = $row['target'];
+		
+		
+		// Replace url_prefix
+		$row['htmlcache'] = str_replace ('{url_prefix}', $phpAds_config['url_prefix'], $row['htmlcache']);
 		
 		
 		switch ($row['storagetype'])
