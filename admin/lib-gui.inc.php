@@ -1,4 +1,4 @@
-<?php // $Revision: 1.6 $
+<?php // $Revision: 1.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -199,7 +199,7 @@ function phpAds_PageFooter()
 	</td>
   </tr>
   <tr> 
-    <td colspan='6' class='topnav' height='20' bgcolor='#CCCCCC'>&nbsp;&nbsp;&nbsp;phpAdsNew 2.0beta2</td>
+    <td colspan='6' class='topnav' height='20' bgcolor='#CCCCCC'>&nbsp;&nbsp;&nbsp;phpAdsNew 2.0beta3</td>
   </tr>
 </table>
 <?
