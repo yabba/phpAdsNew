@@ -1,4 +1,4 @@
-<?php // $Id: lib-dbconfig.inc.php,v 1.1 2001/11/04 23:31:15 rakaz Exp $
+<?php // $Id: lib-dbconfig.inc.php,v 1.2 2001/11/11 11:42:49 rakaz Exp $
 
 /************************************************************************/
 /* phpPgAds                                                             */
@@ -15,7 +15,8 @@
 
 
 // Current phpAds version
-$phpAds_version = 200.061; // 2.0 beta 6.1
+$phpAds_version = 200.062; // 2 dev CM1
+$phpAds_version_readable = "2 dev 11112001/CM";
 
 $phpAds_settings_information = array(
 	'dbhost' => 					array ('type' => 'string', 	'sql' => false),
