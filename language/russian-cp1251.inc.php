@@ -1,4 +1,4 @@
-<?php // $Revision: 1.31 $
+<?php // $Revision: 1.32 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -105,8 +105,8 @@ $GLOBALS['strLogErrorClicks'] = "[phpAds] Ошибка доступа к БД кликов.";
 $GLOBALS['strLogErrorDisactivate'] = "[phpAds] Ошибка деактивации баннера.";
 $GLOBALS['strRatio'] = "Рейтинг кликабельности";
 $GLOBALS['strChooseBanner'] = "Выберите тип баннера.";
-$GLOBALS['strMySQLBanner'] = "Баннер с вашего компьютера помещается на сервер";
-$GLOBALS['strWebBanner'] = "Banner stored on the Webserver";
+$GLOBALS['strMySQLBanner'] = "Баннер с вашего компьютера помещается в базу данных на сервере";
+$GLOBALS['strWebBanner'] = "Баннер с вашего компьютера сохраняется в каталоге на веб-сервере";
 $GLOBALS['strURLBanner'] = "Баннер лежит где-то в Интернет";
 $GLOBALS['strHTMLBanner'] = "Текстовый баннер";
 $GLOBALS['strNewBannerFile'] = "Файл баннера на диске";
