@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -109,7 +109,7 @@ function phpAds_xmlrpcView ($msg)
 			{
 				case 'int':		$view_params[] = $p; break;
 				case 'boolean':	$view_params[] = $p ? 'true' : 'false'; break;
-				default:		$view_params[] = "'$p'"; break;
+				default:		$view_params[] = "'".addcslashes($p, "\0..\37'")."'"; break;
 			}
 		}
 		else
@@ -118,7 +118,7 @@ function phpAds_xmlrpcView ($msg)
 			// for the view arg queue
 
 			$view_arrays[] = phpAds_xmlrpcDecode($p);
-			$view_params[] = '$view_arrays['.(count(view_arrays)-1).']';
+			$view_params[] = '$view_arrays['.(count($view_arrays)-1).']';
 		}
 	}
 	

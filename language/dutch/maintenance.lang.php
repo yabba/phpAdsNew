@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -118,13 +118,14 @@ $GLOBALS['strNotAbleToCheck']			= "
 ";
 
 $GLOBALS['strForUpdatesLookOnWebsite']	= "
-	U gebruikt momenteen ".$phpAds_productname." ".$phpAds_version_readable.". 
 	Indien u wilt weten of er een nieuwere versie beschikbaar is, kijk dan op onze website.
 ";
 
-$GLOBALS['strClickToVisitWebsite']		= "
-	Klik hier om onze website te bezoeken
-";
+$GLOBALS['strClickToVisitWebsite']			= "Klik hier om onze website te bezoeken";
+$GLOBALS['strCurrentlyUsing'] 				= "U gebruikt momenteel";
+$GLOBALS['strRunningOn']				= "draaiend op";
+$GLOBALS['strAndPlain']					= "en";
+
 
 
 // Stats conversion
