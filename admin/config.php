@@ -1,4 +1,4 @@
-<?php // $Revision: 1.20 $
+<?php // $Revision: 1.21 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -16,6 +16,7 @@
 
 // Include required files
 require ("../config.inc.php");
+require ("../lib-db.inc.php");
 require ("lib-permissions.inc.php");
 require ("lib-gui.inc.php");
 require ("../view.inc.php");
