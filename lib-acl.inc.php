@@ -1,4 +1,4 @@
-<?php // $Revision: 1.8 $
+<?php // $Revision: 1.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -220,7 +220,8 @@ function phpAds_aclCheckSource($aclrow, $source)
 	if ($data == '')
 		return (true);
 	
-	$expression = ($data == "*" || strtolower($source) == strtolower($data));
+	$expression = ($data == "*" || strtolower($source) == strtolower($data) || 
+				   eregi('^'.str_replace('*', '[a-z0-9]*', $data).'$', $source));
 	$operator   = $aclrow['acl_ad'] == 'allow';
 	return ($expression == $operator);
 }
