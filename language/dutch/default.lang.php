@@ -1,4 +1,4 @@
-<?php // $Revision: 1.10 $
+<?php // $Revision: 1.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -393,5 +393,8 @@ $GLOBALS['strLast7Days']				= "Laatste 7 dagen";
 $GLOBALS['strDistribution']				= "Verdeling";
 $GLOBALS['strOther']					= "Andere";
 $GLOBALS['strUnknown']					= "Onbekend";
+
+$GLOBALS['strWelcomeTo']				= "Welkom bij";
+$GLOBALS['strEnterUsername']			= "Vul uw gebruikersnaam en wachtwoord in om in te loggen";
 
 ?>
