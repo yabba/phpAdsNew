@@ -1,4 +1,4 @@
-<?php // $Revision: 1.95 $
+<?php // $Revision: 1.96 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -711,7 +711,7 @@ function view_raw($what, $clientid=0, $target='', $source='', $withtext=0, $cont
 			$outputbuffer = str_replace ('%7Btimestamp%7D',	time(), $outputbuffer);
 			
 			// Replace random
-			while (eregi ('(%7B|{)random((%3A|:)([1-9]+)){0,1}(%7D|})', $outputbuffer, $matches))
+			while (eregi ('(%7B|\{)random((%3A|:)([1-9]+)){0,1}(%7D|})', $outputbuffer, $matches))
 			{
 				if ($matches[4])
 					$randomdigits = $matches[4];
