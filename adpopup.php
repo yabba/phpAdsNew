@@ -1,4 +1,4 @@
-<?php // $Revision: 2.6 $
+<?php // $Revision: 2.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -133,32 +133,49 @@ function enjavanateBanner ($output, $limit = 60)
 /* Register input variables                              */
 /*********************************************************/
 
-phpAds_registerGlobal ('what', 'clientid', 'clientID', 'context',
-					   'target', 'source', 'withtext', 'withText',
-					   'left', 'top', 'popunder', 'timeout', 'delay',
-					   'toolbars', 'location', 'menubar', 'status',
-					   'resizable', 'scrollbars');
+phpAds_registerGlobal (
+	 'campaignid'
+	,'clientid'
+	,'clientID'
+	,'context'
+	,'delay'
+	,'left'
+	,'location'
+	,'menubar'
+	,'popunder'
+	,'resizable'
+	,'scrollbars'
+	,'source'
+	,'status'
+	,'target'
+	,'timeout'
+	,'toolbars'
+	,'top'
+	,'what'
+	,'withtext'
+	,'withText'
+);
 
 
 /*********************************************************/
 /* Main code                                             */
 /*********************************************************/
 
+if (!isset($campaignid)) $campaignid = 0;
 if (isset($clientID) && !isset($clientid))	$clientid = $clientID;
-if (isset($withText) && !isset($withtext))  $withtext = $withText;
-
-if (!isset($what)) 		 $what = '';
 if (!isset($clientid)) 	 $clientid = 0;
-if (!isset($target)) 	 $target = '_new';
-if (!isset($withtext)) 	 $withtext = '';
 if (!isset($context)) 	 $context = '';
-
-if (!isset($toolbars))   $toolbars   = 0;
 if (!isset($location))	 $location   = 0;
 if (!isset($menubar))	 $menubar    = 0;
-if (!isset($status))	 $status     = 0;
 if (!isset($resizable))  $resizable  = 0;
 if (!isset($scrollbars)) $scrollbars = 0;
+if (!isset($source))	 $source = 0;
+if (!isset($status))	 $status     = 0;
+if (!isset($target)) 	 $target = '_new';
+if (!isset($toolbars))   $toolbars   = 0;
+if (!isset($what)) 		 $what = '';
+if (isset($withText) && !isset($withtext))  $withtext = $withText;
+if (!isset($withtext)) 	 $withtext = '';
 
 $source = phpAds_deriveSource($source);
 
@@ -168,7 +185,7 @@ if (isset($HTTP_REFERER)) unset($HTTP_REFERER);
 
 
 // Get the banner
-$output = view_raw ($what, $clientid, $target, $source, $withtext, $context);
+$output = view_raw ($what, $clientid, $campaignid, $target, $source, $withtext, $context);
 
 // Exit if no banner was fetched
 if (!$output['bannerid'])

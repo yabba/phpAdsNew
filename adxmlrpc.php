@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -57,6 +57,7 @@ function phpAds_xmlrpcView ($msg)
 		array('name' => 'remote_info',	'scalar' => false,	'type' => 'struct'),
 		array('name' => 'what',			'scalar' => true,	'type' => 'string'),
 		array('name' => 'clientid',		'scalar' => true,	'type' => 'int'),
+		array('name' => 'campaignid',	'scalar' => true,	'type' => 'int'),
 		array('name' => 'target',		'scalar' => true,	'type' => 'string'),
 		array('name' => 'source',		'scalar' => true,	'type' => 'string'),
 		array('name' => 'withtext',		'scalar' => true,	'type' => 'boolean'),

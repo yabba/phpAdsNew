@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -144,9 +144,18 @@ function phpAds_getUserAgent()
 /* Register input variables                              */
 /*********************************************************/
 
-phpAds_registerGlobal ('what', 'clientid', 'clientID', 'context',
-					   'target', 'source', 'withtext', 'withText',
-					   'layerstyle');
+phpAds_registerGlobal (
+	 'campaignid'
+	,'clientid'
+	,'clientID'
+	,'context'
+	,'layerstyle'
+	,'source'
+	,'target'
+	,'withtext'
+	,'withText'
+	,'what'
+);
 
 
 
@@ -157,14 +166,15 @@ phpAds_registerGlobal ('what', 'clientid', 'clientID', 'context',
 header("Content-type: application/x-javascript");
 require("libraries/lib-cache.inc.php");
 
-if (isset($clientID) && !isset($clientid)) $clientid = $clientID;
-if (isset($withText) && !isset($withtext)) $withtext = $withText;
-
-if (!isset($what)) $what = '';
+if (!isset($campaignid)) $campaignid = 0;
 if (!isset($clientid)) $clientid = 0;
-if (!isset($target)) $target = '';
-if (!isset($withtext)) $withtext = '';
+if (isset($clientID) && !isset($clientid)) $clientid = $clientID;
 if (!isset($context)) $context = '';
+if (!isset($source)) $source = '';
+if (!isset($target)) $target = '';
+if (!isset($what)) $what = '';
+if (isset($withText) && !isset($withtext)) $withtext = $withText;
+if (!isset($withtext)) $withtext = '';
 
 $source = phpAds_deriveSource($source);
 
@@ -182,7 +192,7 @@ $limitations = phpAds_getLayerLimitations();
 
 if ($limitations['compatible'])
 {
-	$output = view_raw ($what, $clientid, $target, $source, $withtext, $context, $limitations['richmedia']);
+	$output = view_raw ($what, $clientid, $campaignid, $target, $source, $withtext, $context, $limitations['richmedia']);
 	
 	// Exit if no matching banner was found
 	if (!$output) exit;

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -21,7 +21,7 @@ define ('LIBVIEWZONE_INCLUDED', true);
 /* Get a banner                                          */
 /*********************************************************/
 
-function phpAds_fetchBannerZone($remaining, $clientid, $context = 0, $source = '', $richmedia = true)
+function phpAds_fetchBannerZone($remaining, $clientid, $campaignid, $context = 0, $source = '', $richmedia = true)
 {
 	global $phpAds_config, $HTTP_COOKIE_VARS;
 	global $phpAds_followedChain;
@@ -196,7 +196,7 @@ function phpAds_fetchBannerZone($remaining, $clientid, $context = 0, $source = '
 					
 					// Excludelist campaigns
 					if ($postconditionSucces == true &&
-						isset($excludeCampaignID[$rows[$i]['clientid']]))
+						isset($excludeCampaignID[$rows[$i]['campaignid']]))
 						$postconditionSucces = false;
 					
 					// Includelist banners
@@ -208,7 +208,7 @@ function phpAds_fetchBannerZone($remaining, $clientid, $context = 0, $source = '
 					// Includelist campaigns
 					if ($postconditionSucces == true &&
 						sizeof($includeCampaignID) &&
-					    !isset ($includeCampaignID[$rows[$i]['clientid']]))
+					    !isset ($includeCampaignID[$rows[$i]['campaignid']]))
 						$postconditionSucces = false;
 					
 					// HTML or Flash banners

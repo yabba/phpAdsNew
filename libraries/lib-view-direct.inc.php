@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -21,7 +21,7 @@ define ('LIBVIEWDIRECT_INCLUDED', true);
 /* Get a banner                                          */
 /*********************************************************/
 
-function phpAds_fetchBannerDirect($remaining, $clientid = 0, $context = 0, $source = '', $richmedia = true)
+function phpAds_fetchBannerDirect($remaining, $clientid = 0, $campaignid = 0, $context = 0, $source = '', $richmedia = true)
 {
 	global $phpAds_config, $HTTP_COOKIE_VARS;
 	
@@ -52,7 +52,7 @@ function phpAds_fetchBannerDirect($remaining, $clientid = 0, $context = 0, $sour
 		$remaining = strtok('').($remaining != '' ? '|'.$remaining : '');
 	}
 	
-	$cacheid = 'what='.$what.'&clientid='.$clientid.'&remaining='.($remaining == '' ? 'true' : 'false');
+	$cacheid = 'what='.$what.'&clientid='.$clientid.'&campaignid='.$campaignid.'&remaining='.($remaining == '' ? 'true' : 'false');
 	
 	
 	
@@ -64,8 +64,10 @@ function phpAds_fetchBannerDirect($remaining, $clientid = 0, $context = 0, $sour
 	{
 		if (!defined('LIBVIEWQUERY_INCLUDED'))  include (phpAds_path.'/libraries/lib-view-query.inc.php');
 		
-		if ($clientid > 0)
-			$precondition = " AND (".$phpAds_config['tbl_clients'].".clientid = ".$clientid." OR ".$phpAds_config['tbl_clients'].".parent = ".$clientid.") ";
+		if ($campaignid > 0)
+			$precondition = " AND ".$phpAds_config['tbl_campaigns'].".campaignid=".$campaignid." ";
+		elseif ($clientid > 0)
+			$precondition = " AND ".$phpAds_config['tbl_campaigns'].".clientid=".$clientid." ";
 		else
 			$precondition = '';
 		

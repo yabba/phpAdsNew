@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -149,11 +149,28 @@ function phpAds_buildQuery ($part, $lastpart, $precondition)
 					if ($part_array[$k] != '' && $part_array[$k] != ' ')
 					{
 						if ($operator == 'OR')
-							$conditions .= "OR (".$phpAds_config['tbl_campaigns'].".campaignid='".trim($part_array[$k])."' OR ".$phpAds_config['tbl_campaigns'].".clientid='".trim($part_array[$k])."') ";
+							$conditions .= "OR ".$phpAds_config['tbl_campaigns'].".campaignid='".trim($part_array[$k])."' ";
 						elseif ($operator == 'AND')
-							$conditions .= "AND (".$phpAds_config['tbl_campaigns'].".campaignid='".trim($part_array[$k])."' OR ".$phpAds_config['tbl_campaigns'].".clientid='".trim($part_array[$k])."') ";
+							$conditions .= "AND ".$phpAds_config['tbl_campaigns'].".campaignid='".trim($part_array[$k])."' ";
 						else
-							$conditions .= "AND (".$phpAds_config['tbl_campaigns'].".campaignid!='".trim($part_array[$k])."' AND ".$phpAds_config['tbl_campaigns'].".clientid!='".trim($part_array[$k])."') ";
+							$conditions .= "AND ".$phpAds_config['tbl_campaigns'].".campaignid!='".trim($part_array[$k])."' ";
+					}
+					
+					$onlykeywords = false;
+				}
+				
+				// Client ID
+				elseif (substr($part_array[$k], 0, 9) == 'clientid:')
+				{
+					$part_array[$k] = substr($part_array[$k], 9);
+					if ($part_array[$k] != '' && $part_array[$k] != ' ')
+					{
+						if ($operator == 'OR')
+							$conditions .= "OR ".$phpAds_config['tbl_campaigns'].".clientid='".trim($part_array[$k])."' ";
+						elseif ($operator == 'AND')
+							$conditions .= "AND ".$phpAds_config['tbl_campaigns'].".clientid='".trim($part_array[$k])."' ";
+						else
+							$conditions .= "AND ".$phpAds_config['tbl_campaigns'].".clientid!='".trim($part_array[$k])."'  ";
 					}
 					
 					$onlykeywords = false;

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -77,9 +77,19 @@ function enjavanate ($str, $limit = 60)
 /* Register input variables                              */
 /*********************************************************/
 
-phpAds_registerGlobal ('what', 'clientid', 'clientID', 'context',
-					   'target', 'source', 'withtext', 'withText',
-					   'exclude', 'block');
+phpAds_registerGlobal (
+	 'block'
+	,'campaignid'
+	,'clientid'
+	,'clientID'
+	,'context'
+	,'exclude'
+	,'source'
+	,'target'
+	,'withtext'
+	,'withText'
+	,'what'
+);
 
 
 
@@ -87,15 +97,16 @@ phpAds_registerGlobal ('what', 'clientid', 'clientID', 'context',
 /* Main code                                             */
 /*********************************************************/
 
-if (isset($clientID) && !isset($clientid))	$clientid = $clientID;
-if (isset($withText) && !isset($withtext))  $withtext = $withText;
 
-if (!isset($what)) 		$what = '';
+if (!isset($campaignid)) $campaignid = 0;
+if (isset($clientID) && !isset($clientid))	$clientid = $clientID;
 if (!isset($clientid)) 	$clientid = 0;
-if (!isset($target)) 	$target = '';
-if (!isset($source))	$source = '';
-if (!isset($withtext)) 	$withtext = '';
 if (!isset($context)) 	$context = '';
+if (!isset($source))	$source = '';
+if (!isset($target)) 	$target = '';
+if (!isset($what)) 		$what = '';
+if (isset($withText) && !isset($withtext))  $withtext = $withText;
+if (!isset($withtext)) 	$withtext = '';
 
 $source = phpAds_deriveSource($source);
 
@@ -115,7 +126,7 @@ if (isset($referer) && $referer)
 
 
 // Get the banner
-$output = view_raw ($what, $clientid, $target, $source, $withtext, $context);
+$output = view_raw ($what, $clientid, $campaignid, $target, $source, $withtext, $context);
 
 // Show the banner
 header("Content-type: application/x-javascript");

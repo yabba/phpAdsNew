@@ -1,4 +1,4 @@
-<?php // $Revision: 2.11 $
+<?php // $Revision: 2.12 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -22,7 +22,7 @@ mt_srand(floor((isset($n) && strlen($n) > 5 ? hexdec($n[0].$n[2].$n[3].$n[4].$n[
 /* Create the HTML needed to display the banner          */
 /*********************************************************/
 
-function view_raw($what, $clientid = 0, $target = '', $source = '', $withtext = 0, $context = 0, $richmedia = true)
+function view_raw($what, $clientid = 0, $campaignid = 0, $target = '', $source = '', $withtext = 0, $context = 0, $richmedia = true)
 {
 	global $phpAds_config, $HTTP_SERVER_VARS;
 	global $phpAds_followedChain;
@@ -37,6 +37,15 @@ function view_raw($what, $clientid = 0, $target = '', $source = '', $withtext = 
 	{
 		$target = $clientid;
 		$clientid = 0;
+	}
+
+	// Not sure what this does, but replicated to campaignid...
+	// If $campaignid consists of alpha-numeric chars it is
+	// not the campaignid, but the target parameter.
+	if(!preg_match('#^[0-9]+$#', $campaignid))
+	{
+		$target = $campaignid;
+		$campaignid = 0;
 	}
 	
 	
@@ -59,7 +68,7 @@ function view_raw($what, $clientid = 0, $target = '', $source = '', $withtext = 
 				if (!defined('LIBVIEWZONE_INCLUDED'))
 					require (phpAds_path.'/libraries/lib-view-zone.inc.php');
 				
-				$row = phpAds_fetchBannerZone($what, $clientid, $context, $source, $richmedia);
+				$row = phpAds_fetchBannerZone($what, $clientid, $campaignid, $context, $source, $richmedia);
 			}
 			else
 			{
@@ -69,7 +78,7 @@ function view_raw($what, $clientid = 0, $target = '', $source = '', $withtext = 
 				if (!defined('LIBVIEWDIRECT_INCLUDED'))
 					require (phpAds_path.'/libraries/lib-view-direct.inc.php');
 				
-				$row = phpAds_fetchBannerDirect($what, $clientid, $context, $source, $richmedia);
+				$row = phpAds_fetchBannerDirect($what, $clientid, $campaignid, $context, $source, $richmedia);
 			}
 			
 			if (is_array ($row))
@@ -205,13 +214,13 @@ function view_raw($what, $clientid = 0, $target = '', $source = '', $withtext = 
 		if (isset($HTTP_SERVER_VARS['HTTP_USER_AGENT']) && preg_match("#Mozilla/(1|2|3|4)#", $HTTP_SERVER_VARS['HTTP_USER_AGENT']) && !preg_match("#compatible#", $HTTP_SERVER_VARS['HTTP_USER_AGENT']))
 		{
 			$outputbuffer .= '<layer id="beacon_'.$row['bannerid'].'" width="0" height="0" border="0" visibility="hide">';
-			$outputbuffer .= '<img src=\''.$phpAds_config['url_prefix'].'/adlog.php?bannerid='.$row['bannerid'].'&amp;clientid='.$row['clientid'].'&amp;zoneid='.$row['zoneid'].'&amp;source='.$source.'&amp;block='.$row['block'].'&amp;capping='.$row['capping'].'&amp;cb='.md5(uniqid('', 1)).'\' width=\'0\' height=\'0\' alt=\'\'>';
+			$outputbuffer .= '<img src=\''.$phpAds_config['url_prefix'].'/adlog.php?bannerid='.$row['bannerid'].'&amp;clientid='.$row['clientid'].'&amp;campaignid='.$row['campaignid'].'&amp;zoneid='.$row['zoneid'].'&amp;source='.$source.'&amp;block='.$row['block'].'&amp;capping='.$row['capping'].'&amp;cb='.md5(uniqid('', 1)).'\' width=\'0\' height=\'0\' alt=\'\'>';
 			$outputbuffer .= '</layer>';
 		}
 		else
 		{
 			$outputbuffer .= '<div id="beacon_'.$row['bannerid'].'" style="width: 0px; height: 0px; overflow: hidden;">';
-			$outputbuffer .= '<img src=\''.$phpAds_config['url_prefix'].'/adlog.php?bannerid='.$row['bannerid'].'&amp;clientid='.$row['clientid'].'&amp;zoneid='.$row['zoneid'].'&amp;source='.$source.'&amp;block='.$row['block'].'&amp;capping='.$row['capping'].'&amp;cb='.md5(uniqid('', 1)).'\' width=\'0\' height=\'0\' alt=\'\' style=\'width: 0px; height: 0px;\'>';
+			$outputbuffer .= '<img src=\''.$phpAds_config['url_prefix'].'/adlog.php?bannerid='.$row['bannerid'].'&amp;clientid='.$row['clientid'].'&amp;campaignid='.$row['campaignid'].'&amp;zoneid='.$row['zoneid'].'&amp;source='.$source.'&amp;block='.$row['block'].'&amp;capping='.$row['capping'].'&amp;cb='.md5(uniqid('', 1)).'\' width=\'0\' height=\'0\' alt=\'\' style=\'width: 0px; height: 0px;\'>';
 			$outputbuffer .= '</div>';
 		}
 		
@@ -228,7 +237,7 @@ function view_raw($what, $clientid = 0, $target = '', $source = '', $withtext = 
 					  'height' => $row['height'],
 					  'url' => $row['url'],
 					  'clientid' => $row['clientid'],
-					  'campaignid' => $row['clientid'])
+					  'campaignid' => $row['campaignid'])
 			  );
 	}
 	else
@@ -258,9 +267,9 @@ function view_raw($what, $clientid = 0, $target = '', $source = '', $withtext = 
 /* Display a banner                                      */
 /*********************************************************/
 
-function view($what, $clientid = 0, $target = '', $source = '', $withtext = 0, $context = 0, $richmedia = true)
+function view($what, $clientid = 0, $campaignid = 0, $target = '', $source = '', $withtext = 0, $context = 0, $richmedia = true)
 {
-	$output = view_raw($what, $clientid, "$target", "$source", $withtext, $context, $richmedia);
+	$output = view_raw($what, $clientid, $campaignid, "$target", "$source", $withtext, $context, $richmedia);
 	print($output['html']);
 	return($output['bannerid']);
 }

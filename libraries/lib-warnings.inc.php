@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -31,7 +31,11 @@ function phpAds_warningMail ($campaign)
 	if ($phpAds_config['warn_admin'] || $phpAds_config['warn_client'])
 	{
 		// Get the client which belongs to this campaign
-		$clientresult = phpAds_dbQuery("SELECT * FROM ".$phpAds_config['tbl_clients']." WHERE clientid=".$campaign['parent']);
+		$clientresult = phpAds_dbQuery(
+			"SELECT *".
+			" FROM ".$phpAds_config['tbl_clients'].
+			" WHERE clientid=".$campaign['clientid']
+		);
 		if ($client = phpAds_dbFetchArray($clientresult))
 		{
 			// Load config from the database
@@ -72,7 +76,7 @@ function phpAds_warningMail ($campaign)
 				phpAds_sendMail ($client['email'], $client['contact'], $Subject, $Body);
 				
 				if ($phpAds_config['userlog_email']) 
-					phpAds_userlogAdd (phpAds_actionWarningMailed, $campaign['clientid'], $Subject."\n\n".$Body);
+					phpAds_userlogAdd (phpAds_actionWarningMailed, $campaign['campaignid'], $Subject."\n\n".$Body);
 			}
 		}
 	}
@@ -92,7 +96,11 @@ function phpAds_deactivateMail ($campaign)
 	global $strBanner, $strMailNothingLeft, $strMailFooter, $strUntitled;
 	
 	
-	$clientresult = phpAds_dbQuery("SELECT * FROM ".$phpAds_config['tbl_clients']." WHERE clientid=".$campaign['parent']);
+	$clientresult = phpAds_dbQuery(
+		"SELECT *".
+		" FROM ".$phpAds_config['tbl_clients'].
+		" WHERE clientid=".$campaign['clientid']
+	);
 	if ($client = phpAds_dbFetchArray($clientresult))
 	{
 		if ($client["email"] != '' && $client["reportdeactivate"] == 't')
@@ -125,17 +133,15 @@ function phpAds_deactivateMail ($campaign)
 			$Body .= ".\n\n";
 			
 			
-			$res_banners = phpAds_dbQuery("
-				SELECT
-					bannerid,
-					url,
-					description,
-					alt
-				FROM
-					".$phpAds_config['tbl_banners']."
-				WHERE
-					campaignid = ".$campaign['clientid']."
-				");
+			$res_banners = phpAds_dbQuery(
+				"SELECT".
+				" bannerid".
+				",url".
+				",description".
+				",alt".
+				" FROM ".$phpAds_config['tbl_banners'].
+				" WHERE campaignid=".$campaign['campaignid']
+			);
 			
 			if (phpAds_dbNumRows($res_banners) > 0)
 			{
@@ -171,7 +177,7 @@ function phpAds_deactivateMail ($campaign)
 			phpAds_sendMail ($client['email'], $client['contact'], $Subject, $Body);
 			
 			if ($phpAds_config['userlog_email']) 
-				phpAds_userlogAdd (phpAds_actionDeactivationMailed, $campaign['clientid'], $Subject."\n\n".$Body);
+				phpAds_userlogAdd (phpAds_actionDeactivationMailed, $campaign['campaignid'], $Subject."\n\n".$Body);
 		}
 	}
 }

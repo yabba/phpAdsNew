@@ -1,4 +1,4 @@
-<?php // $Revision: 2.10 $
+<?php // $Revision: 2.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -46,8 +46,14 @@ require (phpAds_path."/libraries/lib-cache.inc.php");
 /* Register input variables                              */
 /*********************************************************/
 
-phpAds_registerGlobal ('clientid', 'clientID', 'what', 'source',
-					   'n');
+phpAds_registerGlobal (
+	 'campaignid'
+	,'clientid'
+	,'clientID'
+	,'source'
+	,'n'
+	,'what'
+);
 
 
 
@@ -64,10 +70,12 @@ phpAds_setCookie("phpAds_id", $cookieid, time()+365*24*60*60);
 $url = parse_url($phpAds_config['url_prefix']);
 
 
+if (!isset($campaignid)) $campaignid = 0;
 if (isset($clientID) && !isset($clientid)) $clientid = $clientID;
 if (!isset($clientid)) $clientid = 0;
-if (!isset($what)) $what = '';
 if (!isset($n)) $n = 'default';
+if (!isset($source)) $source = '';
+if (!isset($what)) $what = '';
 
 $source = phpAds_deriveSource($source);
 
@@ -95,7 +103,7 @@ if (phpAds_dbConnect())
 			if (!defined('LIBVIEWZONE_INCLUDED'))
 				require (phpAds_path.'/libraries/lib-view-zone.inc.php');
 			
-			$row = phpAds_fetchBannerZone($what, $clientid, '', $source, false);
+			$row = phpAds_fetchBannerZone($what, $clientid, $campaignid, '', $source, false);
 		}
 		else
 		{
@@ -105,7 +113,7 @@ if (phpAds_dbConnect())
 			if (!defined('LIBVIEWDIRECT_INCLUDED'))
 				require (phpAds_path.'/libraries/lib-view-direct.inc.php');
 			
-			$row = phpAds_fetchBannerDirect($what, $clientid, '', $source, false);
+			$row = phpAds_fetchBannerDirect($what, $clientid, $campaignid, '', $source, false);
 		}
 		
 		if (is_array ($row))

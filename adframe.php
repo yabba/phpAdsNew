@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -47,9 +47,20 @@ require (phpAds_path."/libraries/lib-cache.inc.php");
 /* Register input variables                              */
 /*********************************************************/
 
-phpAds_registerGlobal ('what', 'clientid', 'clientID', 'context',
-					   'target', 'source', 'withtext', 'withText',
-					   'refresh', 'resize', 'rewrite');
+phpAds_registerGlobal (
+	 'clientid'
+	,'clientID'
+	,'campaignid'
+	,'context'
+	,'source'
+	,'refresh'
+	,'resize'
+	,'rewrite'
+	,'target'
+	,'what'
+	,'withtext'
+	,'withText'
+);
 
 
 
@@ -57,15 +68,17 @@ phpAds_registerGlobal ('what', 'clientid', 'clientID', 'context',
 /* Main code                                             */
 /*********************************************************/
 
-if (isset($clientID) && !isset($clientid))	$clientid = $clientID;
-if (isset($withText) && !isset($withtext))  $withtext = $withText;
 
-if (!isset($what)) 		$what = '';
+if (!isset($campaignid)) $campaignid = 0;
+if (isset($clientID) && !isset($clientid))	$clientid = $clientID;
 if (!isset($clientid)) 	$clientid = 0;
-if (!isset($target)) 	$target = '_blank';
-if (!isset($withtext)) 	$withtext = '';
 if (!isset($context)) 	$context = '';
 if (!isset($rewrite))	$rewrite = 1;
+if (!isset($source))	$source = '';
+if (!isset($target)) 	$target = '_blank';
+if (!isset($what)) 		$what = '';
+if (isset($withText) && !isset($withtext))  $withtext = $withText;
+if (!isset($withtext)) 	$withtext = '';
 
 $source = phpAds_deriveSource($source);
 
@@ -75,7 +88,7 @@ if (isset($HTTP_REFERER)) unset($HTTP_REFERER);
 
 
 // Get the banner
-$banner = view_raw ($what, $clientid, $target, $source, $withtext, $context);
+$banner = view_raw ($what, $clientid, $campaignid, $target, $source, $withtext, $context);
 
 
 // Rewrite targets in HTML code to make sure they are 
