@@ -1,4 +1,4 @@
-<?php // $Revision: 1.11 $
+<?php // $Revision: 1.12 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -110,6 +110,7 @@ if ($command == 'start')
 	}
 	
 	echo "</td><td><img src='images/spacer.gif' width='30'></td></tr>";
+	echo "</table>";
 	echo "</body></html>";
 }
 
