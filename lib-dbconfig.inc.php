@@ -1,4 +1,4 @@
-<?php // $Revision: 1.49 $
+<?php // $Revision: 1.50 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -44,7 +44,6 @@ $GLOBALS['phpAds_settings_information'] = array(
 	'persistent_connections' =>		array ('type' => 'boolean', 'sql' => false),
 	'insert_delayed' => 			array ('type' => 'boolean', 'sql' => false),
 	'compatibility_mode' => 		array ('type' => 'boolean', 'sql' => false),
-	'db_sessions' => 				array ('type' => 'boolean', 'sql' => false),
 	'url_prefix' => 				array ('type' => 'string', 	'sql' => false),
 	'p3p_policies' => 				array ('type' => 'boolean', 'sql' => false),
 	'p3p_compact_policy' => 		array ('type' => 'string', 	'sql' => false),
