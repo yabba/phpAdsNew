@@ -1,4 +1,4 @@
-<?php // $Revision: 1.5 $
+<?php // $Revision: 1.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -202,7 +202,6 @@ function phpAds_aclCheckLanguage($aclrow)
 function phpAds_aclCheckSource($aclrow, $source)
 {
 	$data = $aclrow['acl_data'];
-	$source = $request['source'];
 	
 	$expression = ($data == "*" || strtolower($source) == strtolower($data));
 	$operator   = $aclrow['acl_ad'] == 'allow';
