@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -176,52 +176,6 @@ while ($click_row = phpAds_dbFetchArray($click_result))
 }
 $report .= "Counted ".$num_clicks." clicks in ".(time()-$time)." seconds.\n\n";
 
-//Process conversions...
-$num_conversions = 0;
-$time = time();
-$report .= "Counting the verbose conversions between ".$begin_timestamp." and ".$end_timestamp."...\n";
-$conversion_query = "SELECT".
-				" DATE_FORMAT(t_stamp, '%Y%m%d') as day".
-				",HOUR(t_stamp) as hour".
-				",bannerid".
-				",zoneid".
-				",source".
-				",count(*) as conversions".
-				" FROM ".$phpAds_config['tbl_adconversions'].
-				" WHERE t_stamp>=".$begin_timestamp.
-				" AND t_stamp<".$end_timestamp.
-				" GROUP BY day,hour,bannerid,zoneid,source";
-$conversion_result = phpAds_dbQuery($conversion_query)
-	or $report.= "Could not perform SQL: ".$conversion_query."\n";
-
-while ($conversion_row = phpAds_dbFetchArray($conversion_result))
-{
-	$stat_query = "UPDATE ".$phpAds_config['tbl_adstats'].
-					" SET conversions=conversions+".$click_row['conversions'].
-					" WHERE day=".$click_row['day'].
-					" AND hour=".$click_row['hour'].
-					" AND bannerid=".$click_row['bannerid'].
-					" AND zoneid=".$click_row['zoneid'].
-					" AND source='".$click_row['source']."'";
-    $stat_result = phpAds_dbQuery($stat_query)
-    	or $report.= " Could not perform SQL: ".$stat_query."\n";
-    
-    if (phpAds_dbAffectedRows($stat_result) < 1)
-    {
-	    $stat_query = "INSERT INTO ".$phpAds_config['tbl_adstats'].
-	    				" SET day=".$click_row['day'].
-	    				",hour=".$click_row['hour'].
-	    				",bannerid=".$click_row['bannerid'].
-	    				",zoneid=".$click_row['zoneid'].
-	    				",source='".$click_row['source']."'".
-	    				",conversions=".$click_row['conversions'];
-	    $stat_result = phpAds_dbQuery($stat_query)
-	    	or $report.= " Could not perform SQL: ".$stat_query."\n";
-    }
-    $num_conversions += $conversion_row['conversions'];
-}
-$report .= "Counted ".$num_conversions." conversions in ".(time()-$time)." seconds.\n\n";
-
 
 //Next, Subtract the number of views for a particular banner...
 $report .= "Decrementing High Priority Campaigns...\n";
@@ -308,9 +262,7 @@ while ($campaign_row = phpAds_dbFetchArray($campaign_result))
 		$conversion_query = "SELECT".
 						" COUNT(*) AS conversions".
 						" FROM ".$phpAds_config['tbl_adconversions'].
-						",".$phpAds_config['tbl_banners'].
-						" WHERE ".$phpAds_config['tbl_banners'].".bannerid=".$phpAds_config['tbl_adconversions'].".bannerid".
-						" AND ".$phpAds_config['tbl_banners'].".clientid=".$campaign_row['clientid'].
+						" WHERE campaignid=".$campaign_row['clientid'].
 						" AND t_stamp>=".$begin_timestamp.
 						" AND t_stamp<".$end_timestamp;
 		$conversion_result = phpAds_dbQuery($conversion_query)
@@ -391,13 +343,6 @@ if ($phpAds_config['compact_stats'])
 	
 	$delete_query = "DELETE".
 					" FROM ".$phpAds_config['tbl_adclicks'].
-					" WHERE t_stamp>=".$begin_timestamp.
-					" AND t_stamp<".$end_timestamp;
-	phpAds_dbQuery($delete_query)
-		or $report.= "Could not perform SQL: ".$delete_query."\n";
-
-	$delete_query = "DELETE".
-					" FROM ".$phpAds_config['tbl_adconversions'].
 					" WHERE t_stamp>=".$begin_timestamp.
 					" AND t_stamp<".$end_timestamp;
 	phpAds_dbQuery($delete_query)
