@@ -1,4 +1,4 @@
-<?php // $Revision: 1.21 $
+<?php // $Revision: 1.22 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -106,9 +106,12 @@ if (isset($submit))
 		}
 		
 		$permissions = 0;
-		for ($i=0;$i<sizeof($clientpermissions);$i++)
+		if (isset($clientpermissions) && is_array($clientpermissions))
 		{
-			$permissions += $clientpermissions[$i];
+			for ($i=0;$i<sizeof($clientpermissions);$i++)
+			{
+				$permissions += $clientpermissions[$i];
+			}
 		}
 		
 		if (!isset($clientreport)) $clientreport = false;
