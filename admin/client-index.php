@@ -1,4 +1,4 @@
-<?php // $Revision: 1.2 $
+<?php // $Revision: 1.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -291,7 +291,7 @@ for (reset($clients);$key=key($clients);next($clients))
 							}
 						}
 						
-						echo "&nbsp;<a href='banner-edit?bannerID=".$banners[$bkey]['bannerID']."&campaignID=".$campaigns[$ckey]['clientID']."'>".$name."</a></td>";
+						echo "&nbsp;<a href='banner-edit.php?bannerID=".$banners[$bkey]['bannerID']."&campaignID=".$campaigns[$ckey]['clientID']."'>".$name."</a></td>";
 						
 						// ID
 						echo "<td height='25'>".$banners[$bkey]['bannerID']."</td>";
