@@ -1,4 +1,4 @@
-<?php // $Revision: 1.15 $
+<?php // $Revision: 1.16 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -32,6 +32,9 @@ include ("lib-cache.inc.php");
 // Open a connection to the database
 phpAds_dbConnect();
 
+
+if (isset($clientID) && !isset($clientid))	$clientid = $clientID;
+if (isset($bannerID) && !isset($bannerid))	$bannerid = $bannerID;
 
 if (isset($bannerid) && !isset($what))
 {

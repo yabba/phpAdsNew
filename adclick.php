@@ -1,4 +1,4 @@
-<?php // $Revision: 1.13 $
+<?php // $Revision: 1.14 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -24,6 +24,7 @@ require ("lib-expire.inc.php");
 phpAds_dbConnect();
 
 
+if (isset($bannerID) && !isset($bannerid))	$bannerid = $bannerID;
 
 
 // Fetch BannerID
