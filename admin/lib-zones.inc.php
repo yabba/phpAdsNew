@@ -1,4 +1,4 @@
-<?php // $Revision: 1.19 $
+<?php // $Revision: 1.20 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -30,6 +30,7 @@ define ("phpAds_ZoneCampaign", 3);
 define ("phpAds_ZoneBanner", 0);
 define ("phpAds_ZoneInterstitial", 1);
 define ("phpAds_ZonePopup", 2);
+define ("phpAds_ZoneText", 3);
 
 
 
