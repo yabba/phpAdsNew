@@ -1,4 +1,4 @@
-// $Revision: 1.1 $
+// $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -26,6 +26,10 @@ function findObj(n, d) {
   if(!x && document.getElementById) x=document.getElementById(n); return x;
 }
 
+function openWindow(theURL,winName,features) {
+  window.open(theURL,winName,features);
+  return false;
+}
 
 
 /*********************************************************/
