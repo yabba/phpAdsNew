@@ -1,4 +1,4 @@
-<?php // $Revision: 1.33 $
+<?php // $Revision: 1.34 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -551,6 +551,18 @@ function view_raw($what, $clientID=0, $target="", $source="", $withtext=0, $cont
 					$outputbuffer .= "<img src=\"$row[banner]\" width=$row[width] height=$row[height] alt=\"$row[alt]\" border=0>";
 				else
 					$outputbuffer .= "<a href=\"$GLOBALS[phpAds_url_prefix]/click.php?bannerID=$row[bannerID]$randomstring\"$target><img src=\"$row[banner]\" width=$row[width] height=$row[height] alt=\"$row[alt]\" border=0></a>";
+				
+				if($withtext && !empty($row["bannertext"]))
+					$outputbuffer .= "<BR>\n<a href=\"$GLOBALS[phpAds_url_prefix]/click.php?bannerID=$row[bannerID]\"$target>".$row["bannertext"]."</a>";
+			}
+			elseif ($row["format"] == "web")
+			{
+				// Banner stored on webserver
+				
+				if (empty($row["url"]))
+					$outputbuffer .= "<img src=\"$row[banner]\" width=$row[width] height=$row[height] alt=\"$row[alt]\" border=0>";
+				else
+					$outputbuffer .= "<a href=\"$GLOBALS[phpAds_url_prefix]/click.php?bannerID=$row[bannerID]\"$target><img src=\"$row[banner]\" width=$row[width] height=$row[height] alt=\"$row[alt]\" border=0></a>";
 				
 				if($withtext && !empty($row["bannertext"]))
 					$outputbuffer .= "<BR>\n<a href=\"$GLOBALS[phpAds_url_prefix]/click.php?bannerID=$row[bannerID]\"$target>".$row["bannertext"]."</a>";

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.6 $
+<?php // $Revision: 1.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -43,7 +43,7 @@ if(mysql_num_rows($res) == 0)
 else
 {
 	$row = mysql_fetch_array($res);
-	if($row["format"] == "url")   // bkl
+	if($row["format"] == "url" || $row["format"] == "web")   // bkl
 	{
 		Header("Location: $row[banner]");
 	} 
