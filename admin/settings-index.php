@@ -1,4 +1,4 @@
-<?php // $Revision: 1.7 $
+<?php // $Revision: 1.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -14,36 +14,8 @@
 
 
 
-// Include required files
-require ("config.php");
-require ("lib-statistics.inc.php");
-
-
-
-/*********************************************************/
-/* Main code                                             */
-/*********************************************************/
-
-$res = phpAds_dbQuery("
-	SELECT
-		*
-	FROM
-		".$phpAds_config['tbl_banners']."
-	WHERE
-		bannerid = $bannerid
-	") or phpAds_sqlDie();
-
-
-
-if ($res)
-{
-	$row = phpAds_dbFetchArray($res);
-	
-	echo "<html><head><title>".phpAds_buildBannerName ($bannerid, $row['description'], $row['alt'])."</title></head>";
-	echo "<body marginheight='0' marginwidth='0' leftmargin='0' topmargin='0'>";
-	echo stripslashes ($row['banner']);
-	echo "</body></html>";
-}
-
+// Redirect to admin settings page
+header("Location: settings-db.php");
+exit;
 
 ?>

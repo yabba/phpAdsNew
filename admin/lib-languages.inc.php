@@ -1,4 +1,4 @@
-<?php // $Revision: 1.7 $
+<?php // $Revision: 1.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -14,36 +14,32 @@
 
 
 
-// Include required files
-require ("config.php");
-require ("lib-statistics.inc.php");
-
-
-
 /*********************************************************/
-/* Main code                                             */
+/* Returns available languages as array                  */
 /*********************************************************/
 
-$res = phpAds_dbQuery("
-	SELECT
-		*
-	FROM
-		".$phpAds_config['tbl_banners']."
-	WHERE
-		bannerid = $bannerid
-	") or phpAds_sqlDie();
-
-
-
-if ($res)
+function phpAds_AvailableLanguages()
 {
-	$row = phpAds_dbFetchArray($res);
+	$languages = array();
 	
-	echo "<html><head><title>".phpAds_buildBannerName ($bannerid, $row['description'], $row['alt'])."</title></head>";
-	echo "<body marginheight='0' marginwidth='0' leftmargin='0' topmargin='0'>";
-	echo stripslashes ($row['banner']);
-	echo "</body></html>";
+	$langdir = opendir("../language/");
+	while ($langfile = readdir($langdir))
+	{
+		if (is_dir("../language/$langfile"))
+		{
+			if (ereg("^([a-z0-9-]+)(_[a-z0-9-]+)?$", $langfile, $matches))
+			{
+				$languages[$langfile] = str_replace("- ", "-", 
+					ucwords(str_replace("-", "- ", $matches[1]))).
+					(empty($matches[2]) ? '' : ' ('.ucwords(substr($matches[2], 1)).')');
+			}
+		}
+	}
+	closedir($langdir);
+	
+	asort($languages, SORT_STRING);
+	
+	return $languages;
 }
-
 
 ?>
