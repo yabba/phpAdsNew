@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -36,7 +36,10 @@ function phpAds_SessionDataFetch()
 		}
 	}
 	else
+	{
+		$SessionID = '';
 		return (False);
+	}
 }
 
 
@@ -57,6 +60,8 @@ function phpAds_SessionStart()
 		
 		SetCookie("SessionID", $GLOBALS["SessionID"]);
 	}
+	
+	return $SessionID;
 }
 
 

@@ -2,6 +2,9 @@ phpAdsNew - ChangeLog
 
 v 2.0beta5		+ Added override setting for automatic GD detection  (Niels)
 			+ Added support for passing ISMAP click location  (Niels)
+			+ Clients can now deactivate their own banners if permitted  (Niels)
+			+ Clients can now activate their own banners if permitted  (Niels)
+			+ Added cookie check for Admin interface login  (Niels)
 
 			+ Changes to the database library
 			  - Replaced mysql_db_query with mysql_query  (Niels)
@@ -21,6 +24,7 @@ v 2.0beta5		+ Added override setting for automatic GD detection  (Niels)
 				
 			+ Misc bugfixes for beta4
 			  - Changed dhtml detection for Opera   (Niels)
+			  - Fixed some HTML for better compatibility with Mozilla  (Niels)
 			  - HTML banner preview popup fixed if banner is disabled  (Niels)
 			  - Function call-time pass-by-reference removed, 
 			    will be deprecated in future versions of PHP  (Niels)

@@ -6,6 +6,7 @@ in the next release (2.0):
   + Report plugins
   + Availability
   + Banner invocation script builder
+  + XML-RPC invocation
 
 Feature which should be implemented
 in the nearby future (2.1/2.2)
