@@ -1,4 +1,4 @@
-<?php // $Revision: 1.12 $
+<?php // $Revision: 1.13 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -113,6 +113,10 @@ if ($phpAds_config['zone_cache'])
 
 // Rebuild priorities
 phpAds_PriorityCalculate ();
+
+
+if (!isset($returnurl) && $returnurl == '')
+	$returnurl = 'client-index.php';
 
 header("Location: ".$returnurl);
 

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.14 $
+<?php // $Revision: 1.15 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -99,6 +99,10 @@ if ($phpAds_config['zone_cache'])
 
 // Rebuild priorities
 phpAds_PriorityCalculate ();
+
+
+if (!isset($returnurl) && $returnurl == '')
+	$returnurl = 'campaign-index.php';
 
 Header("Location: ".$returnurl."?clientid=".$clientid."&campaignid=".$campaignid);
 

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.2 $
+<?php // $Revision: 1.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -45,6 +45,9 @@ if (isset($affiliateid) && $affiliateid != '')
 			affiliateid = $affiliateid
 		") or phpAds_sqlDie();
 }
+
+if (!isset($returnurl) && $returnurl == '')
+	$returnurl = 'affiliate-index.php';
 
 Header("Location: ".$returnurl);
 
