@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -46,7 +46,7 @@ else
 
 if (phpAds_isUser(phpAds_Client))
 {
-	if (phpAds_getUserID() == phpAds_getParentClientID ($campaignid))
+	if (phpAds_getUserID() == phpAds_getCampaignParentClientID ($campaignid))
 	{
 		$res = phpAds_dbQuery(
 			"SELECT *".

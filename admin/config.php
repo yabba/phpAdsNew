@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -172,6 +172,17 @@ $phpAds_nav = array (
 		        "4.1.3.4.4"			=> 	array("banner-zone.php?clientid=$clientid&campaignid=$campaignid&bannerid=$bannerid" => $strLinkedZones),
 			    "4.1.3.4.5"			=>  array("banner-swf.php?clientid=$clientid&campaignid=$campaignid&bannerid=$bannerid" => $strConvertSWFLinks),
 			    "4.1.3.4.6"			=>  array("banner-append.php?clientid=$clientid&campaignid=$campaignid&bannerid=$bannerid" => $strAppendOthers),
+		    "4.1.4"					=> 	array("advertiser-trackers.php?clientid=$clientid" => $strTrackerOverview),
+		      "4.1.4.1"				=>  array("tracker-edit.php?clientid=$clientid" => $strAddTracker),
+		      "4.1.4.2"				=>	array("tracker-edit.php?clientid=$clientid&trackerid=$trackerid" => $strTrackerProperties),
+		      "4.1.4.3"				=> 	array("tracker-zone.php?clientid=$clientid&trackerid=$trackerid" => $strLinkedCampaigns),
+		      "4.1.4.4"				=> 	array("tracker-banners.php?clientid=$clientid&trackerid=$trackerid" => $strMarkerOverview),
+		        "4.1.4.4.1"			=> 	array("marker-edit.php?clientid=$clientid&trackerid=$trackerid" => $strAddMarker),
+		        "4.1.4.4.2"			=> 	array("marker-edit.php?clientid=$clientid&trackerid=$trackerid&markerid=$markerid" => $strMarkerProperties),
+		        "4.1.4.4.3"			=> 	array("marker-acl.php?clientid=$clientid&trackerid=$trackerid&markerid=$markerid" => $strModifyBannerAcl),
+		        "4.1.4.4.4"			=> 	array("marker-zone.php?clientid=$clientid&trackerid=$trackerid&markerid=$markerid" => $strLinkedZones),
+			    "4.1.4.4.5"			=>  array("marker-swf.php?clientid=$clientid&trackerid=$trackerid&markerid=$markerid" => $strConvertSWFLinks),
+			    "4.1.4.4.6"			=>  array("marker-append.php?clientid=$clientid&trackerid=$trackerid&markerid=$markerid" => $strAppendOthers),
 		  "4.2" 					=> 	array("affiliate-index.php" => $strAffiliatesAndZones),
 		    "4.2.1" 				=> 	array("affiliate-edit.php" => $strAddNewAffiliate),
 		    "4.2.2" 				=> 	array("affiliate-edit.php?affiliateid=$affiliateid" => $strAffiliateProperties),

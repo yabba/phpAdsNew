@@ -1,4 +1,4 @@
-<?php // $Revision: 2.14 $
+<?php // $Revision: 2.15 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -233,6 +233,7 @@ $GLOBALS['strModifyCampaign']			= "Modify campaign";
 $GLOBALS['strMoveToNewCampaign']		= "Move to a new campaign";
 $GLOBALS['strBannersWithoutCampaign']		= "Banners without a campaign";
 $GLOBALS['strDeleteAllCampaigns']		= "Delete all campaigns";
+$GLOBALS['strLinkedCampaigns']			= "Linked campaigns";
 $GLOBALS['strCampaignStats']			= "Campaign statistics";
 $GLOBALS['strCampaignProperties']		= "Campaign properties";
 $GLOBALS['strCampaignOverview']			= "Campaign overview";
@@ -273,6 +274,19 @@ $GLOBALS['strCampaignWarningNoWeight'] 	= "The priority of this campaign has bee
 $GLOBALS['strCampaignWarningNoTarget'] 	= "The priority of this campaign has been set to high, \nbut the target number of AdViews are not specified. \nThis will cause the campaign to be deactivated and \nit's banners won't be delivered until a valid target \nnumber of AdViews has been set. \n\nAre you sure you want to continue?";
 
 
+// Tracker
+$GLOBALS['strTrackerOverview']			= "Tracker overview";
+$GLOBALS['strAddTracker'] 				= "Add new tracker";
+$GLOBALS['strAddTracker_Key'] 			= "Add <u>n</u>ew tracker";
+$GLOBALS['strNoTrackers']				= "There are currently no trackers defined";
+$GLOBALS['strConfirmDeleteAllTrackers']	= "Do you really want to delete all trackers owned by this advertiser?";
+$GLOBALS['strConfirmDeleteTrackers']	= "Do you really want to delete this tracker?";
+$GLOBALS['strDeleteAllTrackers']		= "Delete all trackers";
+$GLOBALS['strTrackerProperties']		= "Tracker properties";
+$GLOBALS['strTrackerOverview']			= "Tracker overview";
+
+// Markers (General)
+$GLOBALS['strMarkerOverview']			= "Marker overview";
 
 // Banners (General)
 $GLOBALS['strBanner'] 				= "Banner";

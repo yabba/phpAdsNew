@@ -457,7 +457,7 @@ if (!isset($keyword))
 				echo "<img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;";
 			}
 			
-			echo "<a href='JavaScript:GoOpener(\"banner-edit.php?clientid=".phpAds_getParentClientID($row_banners['campaignid'])."&campaignid=".$row_banners['campaignid']."&bannerid=".$row_banners['bannerid']."\")'>".$name."</a>";
+			echo "<a href='JavaScript:GoOpener(\"banner-edit.php?clientid=".phpAds_getCampaignParentClientID($row_banners['campaignid'])."&campaignid=".$row_banners['campaignid']."&bannerid=".$row_banners['bannerid']."\")'>".$name."</a>";
 			echo "</td>";
 			
 			echo "<td height='25'>".$row_banners['bannerid']."</td>";
@@ -467,12 +467,12 @@ if (!isset($keyword))
 		   	
 			// Button 1
 			echo "<td height='25'>";
-			echo "<a href='JavaScript:GoOpener(\"banner-acl.php?clientid=".phpAds_getParentClientID($row_banners['campaignid'])."&campaignid=".$row_banners['campaignid']."&bannerid=".$row_banners['bannerid']."\")'><img src='images/icon-acl.gif' border='0' align='absmiddle' alt='$strACL'>&nbsp;$strACL</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+			echo "<a href='JavaScript:GoOpener(\"banner-acl.php?clientid=".phpAds_getCampaignParentClientID($row_banners['campaignid'])."&campaignid=".$row_banners['campaignid']."&bannerid=".$row_banners['bannerid']."\")'><img src='images/icon-acl.gif' border='0' align='absmiddle' alt='$strACL'>&nbsp;$strACL</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 			echo "</td>";
 			
 			// Button 2
 			echo "<td height='25'>";
-			echo "<a href='JavaScript:GoOpener(\"banner-delete.php?clientid=".phpAds_getParentClientID($row_banners['campaignid'])."&campaignid=".$row_banners['campaignid']."&bannerid=".$row_banners['bannerid']."\", true)'".phpAds_DelConfirm($strConfirmDeleteBanner)."><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+			echo "<a href='JavaScript:GoOpener(\"banner-delete.php?clientid=".phpAds_getCampaignParentClientID($row_banners['campaignid'])."&campaignid=".$row_banners['campaignid']."&bannerid=".$row_banners['bannerid']."\", true)'".phpAds_DelConfirm($strConfirmDeleteBanner)."><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 			echo "</td></tr>";
 			
 			$i++;

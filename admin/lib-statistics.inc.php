@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -70,6 +70,22 @@ function phpAds_getCampaignName ($campaignid)
 	{
 		$campaign_details = phpAds_getCampaignDetails($campaignid);
 		return (phpAds_BuildName ($campaignid, $campaign_details['campaignname']));
+	}
+	else
+		return ($strUntitled);
+}
+
+
+/*********************************************************/
+/* Fetch the tracker name from the database              */
+/*********************************************************/
+
+function phpAds_getTrackerName ($trackerid)
+{
+	if ($trackerid != '' && $trackerid != 0)
+	{
+		$tracker_details = phpAds_getTrackerDetails($trackerid);
+		return (phpAds_BuildName ($trackerid, $tracker_details['trackername']));
 	}
 	else
 		return ($strUntitled);
@@ -183,6 +199,62 @@ function phpAds_getBannerListOrder ($ListOrder, $OrderDirection)
 	return ($sqlTableOrder);
 }
 
+// Order for $phpAds_config['tbl_trackers']
+function phpAds_getTrackerListOrder ($ListOrder, $OrderDirection)
+{
+	$sqlTableOrder = '';
+	switch ($ListOrder)
+	{
+		case 'name':
+			$sqlTableOrder = ' ORDER BY trackername';
+			break;
+		case 'id':
+			$sqlTableOrder = ' ORDER BY clientid,trackerid';
+			break;
+		case 'adview':
+			break;
+		case 'adclick':
+			break;
+		case 'ctr':
+			break;
+		default:
+			$sqlTableOrder = ' ORDER BY trackername';
+	}
+	if 	($sqlTableOrder != '')
+	{
+		$sqlTableOrder .= phpAds_getOrderDirection($OrderDirection);
+	}
+	return ($sqlTableOrder);
+}
+
+// Order for $phpAds_config['tbl_markers']
+function phpAds_getMarkerListOrder ($ListOrder, $OrderDirection)
+{
+	$sqlTableOrder = '';
+	switch ($ListOrder)
+	{
+		case 'name':
+			$sqlTableOrder = ' ORDER BY description';
+			break;
+		case 'id':
+			$sqlTableOrder = ' ORDER BY markerid';
+			break;
+		case 'adview':
+			break;
+		case 'adclick':
+			break;
+		case 'ctr':
+			break;
+		default:
+			$sqlTableOrder = ' ORDER BY description';
+	}
+	if 	($sqlTableOrder != '')
+	{
+		$sqlTableOrder .= phpAds_getOrderDirection($OrderDirection);
+	}
+	return ($sqlTableOrder);
+}
+
 // Order for $phpAds_config['tbl_zones']
 function phpAds_getZoneListOrder ($ListOrder, $OrderDirection)
 {
@@ -233,12 +305,22 @@ function phpAds_getAffiliateListOrder ($ListOrder, $OrderDirection)
 /* Fetch the ID of the parent of a campaign              */
 /*********************************************************/
 
-function phpAds_getParentClientID ($campaignid)
+function phpAds_getCampaignParentClientID ($campaignid)
 {
 	$campaign_details = phpAds_getCampaignDetails($campaignid);
 	return $campaign_details['clientid'];
 }
 
+
+/*********************************************************/
+/* Fetch the ID of the parent of a tracker               */
+/*********************************************************/
+
+function phpAds_getTrackerParentClientID ($trackerid)
+{
+	$tracker_details = phpAds_getTrackerDetails($trackerid);
+	return $tracker_details['clientid'];
+}
 
 
 /*********************************************************/
@@ -816,6 +898,31 @@ function phpAds_getCampaignDetails($campaignid)
 		$row = phpAds_dbFetchArray($res);
 		
 		$campaignCache[$campaignid] = $row;
+	}
+	
+	return ($row);
+}
+
+function phpAds_getTrackerDetails($trackerid)
+{
+	global $phpAds_config;
+	global $trackerCache;
+	
+	if (isset($trackerCache[$trackerid]) && is_array($trackerCache[$trackerid]))
+	{
+		$row = $trackerCache[$trackerid];
+	}
+	else
+	{
+		$res = phpAds_dbQuery(
+			"SELECT *".
+			" FROM ".$phpAds_config['tbl_trackers'].
+			" WHERE trackerid=".$trackerid
+		) or phpAds_sqlDie();
+		
+		$row = phpAds_dbFetchArray($res);
+		
+		$trackerCache[$trackerid] = $row;
 	}
 	
 	return ($row);

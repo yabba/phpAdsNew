@@ -20,22 +20,24 @@ $phpAds_config['dbpassword'] = '';
 $phpAds_config['dbname'] = '';
 
 // Database table names
+$phpAds_config['tbl_acls'] = 'phpads_acls';
 $phpAds_config['tbl_adviews'] = 'phpads_adviews';
 $phpAds_config['tbl_adclicks'] = 'phpads_adclicks';
 $phpAds_config['tbl_adconversions'] = 'phpads_adconversions';
 $phpAds_config['tbl_adstats'] = 'phpads_adstats';
-$phpAds_config['tbl_banners'] = 'phpads_banners';
-$phpAds_config['tbl_clients'] = 'phpads_clients';
-$phpAds_config['tbl_campaigns'] = 'phpads_campaigns';
-$phpAds_config['tbl_session'] = 'phpads_session';
-$phpAds_config['tbl_acls'] = 'phpads_acls';
-$phpAds_config['tbl_zones'] = 'phpads_zones';
-$phpAds_config['tbl_config'] = 'phpads_config';
 $phpAds_config['tbl_affiliates'] = 'phpads_affiliates';
-$phpAds_config['tbl_images'] = 'phpads_images';
-$phpAds_config['tbl_userlog'] = 'phpads_userlog';
+$phpAds_config['tbl_banners'] = 'phpads_banners';
 $phpAds_config['tbl_cache'] = 'phpads_cache';
-$phpAds_config['tbl_targetstats'] = 'tbl_targetstats';
+$phpAds_config['tbl_campaigns'] = 'phpads_campaigns';
+$phpAds_config['tbl_clients'] = 'phpads_clients';
+$phpAds_config['tbl_config'] = 'phpads_config';
+$phpAds_config['tbl_images'] = 'phpads_images';
+$phpAds_config['tbl_markers'] = 'phpads_markers';
+$phpAds_config['tbl_session'] = 'phpads_session';
+$phpAds_config['tbl_targetstats'] = 'phpads_targetstats';
+$phpAds_config['tbl_trackers'] = 'phpads_trackers';
+$phpAds_config['tbl_userlog'] = 'phpads_userlog';
+$phpAds_config['tbl_zones'] = 'phpads_zones';
 
 // Database table name prefix
 $phpAds_config['table_prefix'] = 'phpads_';

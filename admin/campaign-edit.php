@@ -1,4 +1,4 @@
-<?php // $Revision: 2.13 $
+<?php // $Revision: 2.14 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -21,32 +21,32 @@ require ("lib-statistics.inc.php");
 
 // Register input variables
 phpAds_registerGlobal (
-	 'views'
-	,'clicks'
-	,'conversions'
-	,'activateSet'
-	,'activateDay'
+	 'activateDay'
 	,'activateMonth'
+	,'activateSet'
 	,'activateYear'
+	,'active_old'
 	,'anonymous'
 	,'campaignname'
+	,'clicks'
+	,'conversions'
 	,'expire'
-	,'expireSet'
 	,'expireDay'
 	,'expireMonth'
+	,'expireSet'
 	,'expireYear'
 	,'move'
 	,'optimise'
 	,'priority'
-	,'targetviews'
-	,'target_old'
-	,'weight_old'
-	,'active_old'
-	,'weight'
 	,'submit'
-	,'unlimitedviews'
+	,'target_old'
+	,'targetviews'
 	,'unlimitedclicks'
 	,'unlimitedconversions'
+	,'unlimitedviews'
+	,'views'
+	,'weight_old'
+	,'weight'
 );
 
 
@@ -347,7 +347,7 @@ if ($campaignid != "")
 	$res = phpAds_dbQuery(
 		"SELECT *".
 		" FROM ".$phpAds_config['tbl_clients'].
-		" WHERE clientid!=".phpAds_getParentClientID($campaignid)
+		" WHERE clientid!=".phpAds_getCampaignParentClientID($campaignid)
 	) or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
@@ -399,25 +399,22 @@ if ($campaignid != "" || (isset($move) && $move == 't'))
 	if (isset($move) && $move == 't')
 		if (isset($clientid) && $clientid != "") $ID = $clientid;
 	
-	$res = phpAds_dbQuery("
-		SELECT
-			*,
-			to_days(expire) as expire_day,
-			to_days(curdate()) as cur_date,
-			UNIX_TIMESTAMP(expire) as timestamp,
-			DATE_FORMAT(expire, '$date_format') as expire_f,
-			dayofmonth(expire) as expire_dayofmonth,
-			month(expire) as expire_month,
-			year(expire) as expire_year,
-			DATE_FORMAT(activate, '$date_format') as activate_f,
-			dayofmonth(activate) as activate_dayofmonth,
-			month(activate) as activate_month,
-			year(activate) as activate_year
-		FROM
-			".$phpAds_config['tbl_clients']."
-		WHERE
-			clientid = $ID
-		") or phpAds_sqlDie();
+	$res = phpAds_dbQuery(
+		"SELECT *".
+		",to_days(expire) as expire_day".
+		",to_days(curdate()) as cur_date".
+		",UNIX_TIMESTAMP(expire) as timestamp".
+		",DATE_FORMAT(expire, '$date_format') as expire_f".
+		",dayofmonth(expire) as expire_dayofmonth".
+		",month(expire) as expire_month".
+		",year(expire) as expire_year".
+		",DATE_FORMAT(activate, '$date_format') as activate_f".
+		",dayofmonth(activate) as activate_dayofmonth".
+		",month(activate) as activate_month".
+		",year(activate) as activate_year".
+		" FROM ".$phpAds_config['tbl_campaigns'].
+		" WHERE campaignid=".$ID
+	) or phpAds_sqlDie();
 		
 	$row = phpAds_dbFetchArray($res);
 	

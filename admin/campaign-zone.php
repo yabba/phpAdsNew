@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -145,7 +145,7 @@ $extra .= "<select name='moveto' style='width: 110;'>";
 $res = phpAds_dbQuery(
 	"SELECT *".
 	" FROM ".$phpAds_config['tbl_clients'].
-	" WHERE clientid!=".phpAds_getParentClientID ($campaignid)
+	" WHERE clientid!=".phpAds_getCampaignParentClientID ($campaignid)
 ) or phpAds_sqlDie();
 
 while ($row = phpAds_dbFetchArray($res))

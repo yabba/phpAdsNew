@@ -1,4 +1,4 @@
-<?php // $Revision: 1.5 $
+<?php // $Revision: 1.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -186,16 +186,16 @@ $num_conversions = 0;
 
 // Get campaign information
 $campaign_query = "SELECT".
-					" clientid".
+					" campaignid".
 					",active".
 					",views".
 					",clicks".
 					",conversions".
 					",UNIX_TIMESTAMP(expire) AS expire_st".
 					",UNIX_TIMESTAMP(activate) AS activate_st".
-					",parent".
-					",clientname".
-					" FROM ".$phpAds_config['tbl_clients'];
+					",clientid".
+					",campaignname".
+					" FROM ".$phpAds_config['tbl_campaigns'];
 $campaign_result = phpAds_dbQuery($campaign_query)
 	or $report.= "Could not perform SQL: ".$campaign_query."\n";
 				
@@ -214,7 +214,7 @@ while ($campaign_row = phpAds_dbFetchArray($campaign_result))
 						" FROM ".$phpAds_config['tbl_adviews'].
 						",".$phpAds_config['tbl_banners'].
 						" WHERE ".$phpAds_config['tbl_banners'].".bannerid=".$phpAds_config['tbl_adviews'].".bannerid".
-						" AND ".$phpAds_config['tbl_banners'].".campaignid=".$campaign_row['clientid'].
+						" AND ".$phpAds_config['tbl_banners'].".campaignid=".$campaign_row['campaignid'].
 						" AND t_stamp>=".$begin_timestamp.
 						" AND t_stamp<".$end_timestamp;
 		$view_result = phpAds_dbQuery($view_query)
@@ -239,7 +239,7 @@ while ($campaign_row = phpAds_dbFetchArray($campaign_result))
 						" FROM ".$phpAds_config['tbl_adclicks'].
 						",".$phpAds_config['tbl_banners'].
 						" WHERE ".$phpAds_config['tbl_banners'].".bannerid=".$phpAds_config['tbl_adclicks'].".bannerid".
-						" AND ".$phpAds_config['tbl_banners'].".campaignid=".$campaign_row['clientid'].
+						" AND ".$phpAds_config['tbl_banners'].".campaignid=".$campaign_row['campaignid'].
 						" AND t_stamp>=".$begin_timestamp.
 						" AND t_stamp<".$end_timestamp;
 		$click_result = phpAds_dbQuery($click_query)
@@ -262,7 +262,7 @@ while ($campaign_row = phpAds_dbFetchArray($campaign_result))
 		$conversion_query = "SELECT".
 						" COUNT(*) AS conversions".
 						" FROM ".$phpAds_config['tbl_adconversions'].
-						" WHERE campaignid=".$campaign_row['clientid'].
+						" WHERE campaignid=".$campaign_row['campaignid'].
 						" AND t_stamp>=".$begin_timestamp.
 						" AND t_stamp<".$end_timestamp;
 		$conversion_result = phpAds_dbQuery($conversion_query)
@@ -290,7 +290,7 @@ while ($campaign_row = phpAds_dbFetchArray($campaign_result))
 	// Check to see if we need to log a change in activation status...
 	if ($campaign_row['active'] != $active)
 	{
-		$report.= "Sending an email to the owner of campaign ".$campaign_row['clientid']."\n";
+		$report.= "Sending an email to the owner of campaign ".$campaign_row['campaignid']."\n";
 
 		if ($active == 'f')
 		{
@@ -311,16 +311,16 @@ while ($campaign_row = phpAds_dbFetchArray($campaign_result))
 		 ($active != $campaign_row['active']) )
 	{
 
-		$update_query = "UPDATE ".$phpAds_config['tbl_clients'].
+		$update_query = "UPDATE ".$phpAds_config['tbl_campaigns'].
 						" SET views=".$views.
 						",clicks=".$clicks.
 						",conversions=".$conversions.
 						",active='".$active."'".
-						" WHERE clientid=".$campaign_row['clientid'];
+						" WHERE campaignid=".$campaign_row['campaignid'];
 		phpAds_dbQuery($update_query)
 			or $report.= "Could not perform SQL: ".$update_query."\n";
 		
-		$report .= "Changing high priority campaign ".$campaign_row['clientid'].":\n";
+		$report .= "Changing high priority campaign ".$campaign_row['campaignid'].":\n";
 		$report .= "   Views:  from ".$campaign_row['views']." to ".$views."\n";
 		$report .= "   Clicks:  from ".$campaign_row['clicks']." to ".$clicks."\n";
 		$report .= "   Conversions:  from ".$campaign_row['conversions']." to ".$conversions."\n";

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -40,7 +40,7 @@ if (phpAds_isUser(phpAds_Client))
 		") or phpAds_sqlDie();
 	$row = phpAds_dbFetchArray($result);
 	
-	if ($row["campaignid"] == '' || phpAds_getUserID() != phpAds_getParentClientID ($row["campaignid"]))
+	if ($row["campaignid"] == '' || phpAds_getUserID() != phpAds_getCampaignParentClientID ($row["campaignid"]))
 	{
 		phpAds_PageHeader("1");
 		phpAds_Die ($strAccessDenied, $strNotAdmin);

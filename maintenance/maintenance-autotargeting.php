@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -38,7 +38,7 @@ $res = phpAds_dbQuery(
 	" AND expire>NOW()".
 	" AND views>0".
 	" AND weight=0".
-	" ORDER BY clientid"
+	" ORDER BY campaignid"
 );
 
 
@@ -64,14 +64,11 @@ if (phpAds_dbNumRows($res))
 		$phpAds_config['autotarget_factor'] = phpAds_AutoTargetingCaclulateFactor($profile, $report);
 		
 		// Save factor into db
-		phpAds_dbQuery("
-			UPDATE
-				".$phpAds_config['tbl_config']."
-			SET
-				autotarget_factor = ".$phpAds_config['autotarget_factor']."
-			WHERE
-				configid = 0
-			");
+		phpAds_dbQuery(
+			"UPDATE ".$phpAds_config['tbl_config'].
+			" SET autotarget_factor = ".$phpAds_config['autotarget_factor'].
+			" WHERE configid = 0"
+		);
 	}
 	elseif (!phpAds_AutoTargetingProfileSum($profile))
 	{
@@ -109,16 +106,13 @@ if (phpAds_dbNumRows($res))
 		else
 			$debuglog = 'no debug info available';
 		
-		phpAds_dbQuery("
-			UPDATE
-				".$phpAds_config['tbl_clients']."
-			SET
-				target = ".$target."
-			WHERE
-				clientid = ".$row['clientid']."
-		");
+		phpAds_dbQuery(
+			"UPDATE ".$phpAds_config['tbl_campaigns'].
+			" SET target=".$target.
+			" WHERE campaignid=".$row['campaignid']
+		);
 		
-		$report .= "\n<b>$row[clientname] [id$row[clientid]]:</b> $target $debuglog\n\n";
+		$report .= "\n<b>$row[campaignname] [id$row[clientid]]:</b> $target $debuglog\n\n";
 	}
 }
 

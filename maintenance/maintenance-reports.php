@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -35,18 +35,16 @@ require	(phpAds_path."/libraries/lib-reports.inc.php");
 /*                                                       */
 /*********************************************************/
 
-$res_clients = phpAds_dbQuery("
-	SELECT
-		clientid,
-		report,
-		reportinterval,
-		reportlastdate,
-		UNIX_TIMESTAMP(reportlastdate) AS reportlastdate_t
-	FROM
-		".$phpAds_config['tbl_clients']."
-	WHERE
-		report='t'
-	");
+$res_clients = phpAds_dbQuery(
+	"SELECT".
+	" clientid".
+	",report".
+	",reportinterval".
+	",reportlastdate".
+	",UNIX_TIMESTAMP(reportlastdate) AS reportlastdate_t".
+	" FROM ".$phpAds_config['tbl_clients'].
+	" WHERE report='t'"
+);
 
 
 while($client = phpAds_dbFetchArray($res_clients))

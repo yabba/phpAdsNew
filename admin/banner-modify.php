@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -52,7 +52,7 @@ if (isset($bannerid) && $bannerid != '')
 		phpAds_cacheDelete();
 		
 		// Get new clientid
-		$clientid = phpAds_getParentClientID ($moveto);
+		$clientid = phpAds_getCampaignParentClientID ($moveto);
 		
 		Header ("Location: ".$returnurl."?clientid=".$clientid."&campaignid=".$moveto."&bannerid=".$bannerid);
 	}
