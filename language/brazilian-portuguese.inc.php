@@ -1,4 +1,4 @@
-<?php // $Revision: 1.28 $
+<?php // $Revision: 1.29 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -309,5 +309,10 @@ $GLOBALS['strACL'] 						= "Limit";
 $GLOBALS['strNoMoveUp'] 				= "Impossível mover acima da primeira linha";
 $GLOBALS['strACLAdd'] 					= "Add new limitation";
 $GLOBALS['strNoLimitations']			= "No limitations";
+
+$GLOBALS['strLinkedZones']				= "Linked Zones";
+$GLOBALS['strNoZonesToLink']			= "There are no zones available to which this banner can be linked";
+
+$GLOBALS['strCustom']					= "Custom";
 
 ?>
