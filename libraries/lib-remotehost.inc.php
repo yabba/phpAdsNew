@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -40,7 +40,7 @@ if ($phpAds_config['proxy_lookup'])
 		$IP = explode (',', $IP);
 		$IP = trim($IP[count($IP) - 1]);
 		
-		if ($IP != 'unknown' || phpAds_PrivateSubnet($IP))
+		if ($IP && $IP != 'unknown' && !phpAds_PrivateSubnet($IP))
 		{
 			$HTTP_SERVER_VARS['REMOTE_ADDR'] = $IP;
 			$HTTP_SERVER_VARS['REMOTE_HOST'] = '';
@@ -119,7 +119,7 @@ function phpAds_matchSubnet($ip, $net, $mask)
 	elseif (!($mask = phpAds_ipAddrToInt($mask)))
 		return false;
 	
-	return (($ip & $mask) == ($net & $mask) ? true : false;
+	return ($ip & $mask) == ($net & $mask) ? true : false;
 }
 
 function phpAds_PrivateSubnet($ip)
@@ -131,7 +131,7 @@ function phpAds_PrivateSubnet($ip)
 	return (phpAds_matchSubnet($ip, '10.0.0.0', 8) || 
 		phpAds_matchSubnet($ip, '172.16.0.0', 12) ||
 		phpAds_matchSubnet($ip, '192.168.0.0', 16) ||
-		phpAds_matchSubnet($ip, '127.0.0.1', 32)
+		phpAds_matchSubnet($ip, '127.0.0.0', 24)
 		);
 }
 
