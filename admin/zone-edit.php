@@ -1,4 +1,4 @@
-<?php // $Revision: 1.12 $
+<?php // $Revision: 1.13 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -348,7 +348,7 @@ else
 		<td width='30'>&nbsp;</td>	
 		<td width='200'><?php echo $strSize;?></td>
 		<td>
-			<?
+			<?php
 				$exists = phpAds_sizeExists ($zone['width'], $zone['height']);
 				
 				echo "<table><tr><td>";
