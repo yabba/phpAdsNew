@@ -1,4 +1,4 @@
-<?php // $Revision: 1.45 $
+<?php // $Revision: 1.46 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -19,6 +19,9 @@
 $GLOBALS['phpAds_TextDirection']  			= "ltr";
 $GLOBALS['phpAds_TextAlignRight'] 			= "right";
 $GLOBALS['phpAds_TextAlignLeft']  			= "left";
+
+$GLOBALS['phpAds_DecimalPoint']				= '.';
+$GLOBALS['phpAds_ThousandsSeperator']		= ',';
 
 
 // Date & time configuration
