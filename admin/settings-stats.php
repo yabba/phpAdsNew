@@ -1,4 +1,4 @@
-<?php // $Revision: 2.8 $
+<?php // $Revision: 2.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -19,10 +19,30 @@ include ("lib-settings.inc.php");
 
 
 // Register input variables
-phpAds_registerGlobal ('ignore_hosts', 'warn_limit', 'admin_email_headers', 'log_beacon', 'compact_stats', 'log_adviews', 
-					   'log_adclicks', 'block_adviews', 'block_adclicks', 'warn_admin', 'warn_client', 'qmail_patch', 
-					   'auto_clean_tables', 'auto_clean_userlog', 'auto_clean_tables_interval', 
-					   'auto_clean_userlog_interval', 'geotracking_stats', 'log_hostname', 'log_source', 'log_iponly');
+phpAds_registerGlobal (
+	 'admin_email_headers'
+	,'auto_clean_tables'
+	,'auto_clean_tables_interval'
+	,'auto_clean_userlog'
+	,'auto_clean_userlog_interval'
+	,'block_adviews'
+	,'block_adclicks'
+	,'block_adconversions'
+	,'compact_stats'
+	,'geotracking_stats'
+	,'ignore_hosts'
+	,'log_adviews'
+	,'log_adclicks'
+	,'log_adconversions'
+	,'log_beacon'
+	,'log_hostname'
+	,'log_iponly'
+	,'log_source'
+	,'qmail_patch'
+	,'warn_admin'
+	,'warn_client'
+	,'warn_limit'
+);
 
 
 // Security check
@@ -39,6 +59,7 @@ if (isset($HTTP_POST_VARS) && count($HTTP_POST_VARS))
 	
 	phpAds_SettingsWriteAdd('log_adviews', isset($log_adviews));
 	phpAds_SettingsWriteAdd('log_adclicks', isset($log_adclicks));
+	phpAds_SettingsWriteAdd('log_adconversions', isset($log_adconversions));
 	
 	phpAds_SettingsWriteAdd('log_source', isset($log_source));
 	phpAds_SettingsWriteAdd('geotracking_stats', isset($geotracking_stats));
@@ -66,6 +87,8 @@ if (isset($HTTP_POST_VARS) && count($HTTP_POST_VARS))
 		phpAds_SettingsWriteAdd('block_adviews', $block_adviews);
 	if (isset($block_adclicks))
 		phpAds_SettingsWriteAdd('block_adclicks', $block_adclicks);
+	if (isset($block_adconversions))
+		phpAds_SettingsWriteAdd('block_adconversions', $block_adconversions);
 	
 	
 	
@@ -158,12 +181,17 @@ array (
 		array (
 			'type'    => 'checkbox',
 			'name'    => 'log_adviews',
-			'text'	  => $strLogAdviews,
+			'text'	  => $strLogAdViews,
 		),
 		array (
 			'type'    => 'checkbox',
 			'name'    => 'log_adclicks',
-			'text'	  => $strLogAdclicks,
+			'text'	  => $strLogAdClicks,
+		),
+		array (
+			'type'    => 'checkbox',
+			'name'    => 'log_adconversions',
+			'text'	  => $strLogAdConversions,
 		),
 		array (
 			'type'    => 'break',
@@ -229,7 +257,7 @@ array (
 		array (
 			'type' 	  => 'text', 
 			'name' 	  => 'block_adviews',
-			'text' 	  => $strBlockAdviews,
+			'text' 	  => $strBlockAdViews,
 			'size'    => 12,
 			'depends' => 'log_adviews==true',
 			'check'	  => 'number+',
@@ -240,9 +268,20 @@ array (
 		array (
 			'type' 	  => 'text', 
 			'name' 	  => 'block_adclicks',
-			'text' 	  => $strBlockAdclicks,
+			'text' 	  => $strBlockAdClicks,
 			'size'    => 12,
 			'depends' => 'log_adclicks==true',
+			'check'	  => 'number+',
+		),
+		array (
+			'type'    => 'break'
+		),
+		array (
+			'type' 	  => 'text', 
+			'name' 	  => 'block_adconversions',
+			'text' 	  => $strBlockAdConversions,
+			'size'    => 12,
+			'depends' => 'log_adconversions==true',
 			'check'	  => 'number+',
 		)
 	)
