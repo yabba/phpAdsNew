@@ -1,4 +1,4 @@
-<?php // $Revision: 1.7 $
+<?php // $Revision: 1.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -629,7 +629,7 @@ function phpAds_showDateEdit($name, $day=0, $month=0, $year=0, $edit=true)
 		{
 			?>
 			<td>
-				<input type="text" name="weight" size='25' value="<?php echo isset($row["weight"]) ? $row["weight"] : 1;?>">
+				<input type="text" name="weight" size='25' value="<?php echo isset($row["weight"]) ? $row["weight"] : $phpAds_default_campaign_weight;?>">
 			</td>
 			<?php
 		}
