@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -29,8 +29,8 @@ function phpAds_SendMaintenanceReport ($clientID, $first_unixtimestamp, $last_un
 	
 	
 	// Convert timestamps to SQL format
-	$last_sqltimestamp    = date ("YmdHIs", $last_unixtimestamp);
-	$first_sqltimestamp   = date ("YmdHIs", $first_unixtimestamp);
+	$last_sqltimestamp    = date ("YmdHis", $last_unixtimestamp);
+	$first_sqltimestamp   = date ("YmdHis", $first_unixtimestamp);
 	
 	
 	// Get Client information
