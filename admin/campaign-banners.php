@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -70,17 +70,17 @@ phpAds_PageShortcut($strCampaignHistory, 'stats-campaign-history.php?clientid='.
 
 
 
-$extra  = "<form action='campaign-modify.php'>";
-$extra .= "<input type='hidden' name='clientid' value='$clientid'>";
-$extra .= "<input type='hidden' name='campaignid' value='$campaignid'>";
-$extra .= "<input type='hidden' name='returnurl' value='campaign-banners.php'>";
-$extra .= "<br><br>";
-$extra .= "<b>$strModifyCampaign</b><br>";
-$extra .= "<img src='images/break.gif' height='1' width='160' vspace='4'><br>";
-$extra .= "<img src='images/icon-move-campaign.gif' align='absmiddle'>&nbsp;$strMoveTo<br>";
-$extra .= "<img src='images/spacer.gif' height='1' width='160' vspace='2'><br>";
-$extra .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-$extra .= "<select name='moveto' style='width: 110;'>";
+$extra  = "\t\t\t\t<form action='campaign-modify.php'>\n";
+$extra .= "\t\t\t\t<input type='hidden' name='clientid' value='$clientid'>\n";
+$extra .= "\t\t\t\t<input type='hidden' name='campaignid' value='$campaignid'>\n";
+$extra .= "\t\t\t\t<input type='hidden' name='returnurl' value='campaign-banners.php'>\n";
+$extra .= "\t\t\t\t<br><br>\n";
+$extra .= "\t\t\t\t<b>$strModifyCampaign</b><br>\n";
+$extra .= "\t\t\t\t<img src='images/break.gif' height='1' width='160' vspace='4'><br>\n";
+$extra .= "\t\t\t\t<img src='images/icon-move-campaign.gif' align='absmiddle'>&nbsp;$strMoveTo<br>\n";
+$extra .= "\t\t\t\t<img src='images/spacer.gif' height='1' width='160' vspace='2'><br>\n";
+$extra .= "\t\t\t\t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n";
+$extra .= "\t\t\t\t<select name='moveto' style='width: 110;'>\n";
 
 $res = phpAds_dbQuery(
 	"SELECT *".
@@ -89,12 +89,13 @@ $res = phpAds_dbQuery(
 ) or phpAds_sqlDie();
 
 while ($row = phpAds_dbFetchArray($res))
-	$extra .= "<option value='".$row['clientid']."'>".phpAds_buildName($row['clientid'], $row['clientname'])."</option>";
+	$extra .= "\t\t\t\t\t<option value='".$row['clientid']."'>".phpAds_buildName($row['clientid'], $row['clientname'])."</option>\n";
 
-$extra .= "</select>&nbsp;<input type='image' src='images/".$phpAds_TextDirection."/go_blue.gif'><br>";
-$extra .= "<img src='images/break.gif' height='1' width='160' vspace='4'><br>";
-$extra .= "<img src='images/icon-recycle.gif' align='absmiddle'>&nbsp;<a href='campaign-delete.php?clientid=".$clientid."&campaignid=".$campaignid."&returnurl=advertiser-index.php'".phpAds_DelConfirm($strConfirmDeleteCampaign).">$strDelete</a><br>";
-$extra .= "</form>";
+$extra .= "\t\t\t\t</select>&nbsp;\n";
+$extra .= "\t\t\t\t<input type='image' src='images/".$phpAds_TextDirection."/go_blue.gif'><br>\n";
+$extra .= "\t\t\t\t<img src='images/break.gif' height='1' width='160' vspace='4'><br>\n";
+$extra .= "\t\t\t\t<img src='images/icon-recycle.gif' align='absmiddle'>&nbsp;<a href='campaign-delete.php?clientid=".$clientid."&campaignid=".$campaignid."&returnurl=advertiser-index.php'".phpAds_DelConfirm($strConfirmDeleteCampaign).">$strDelete</a><br>\n";
+$extra .= "\t\t\t\t</form>";
 
 
 
@@ -189,11 +190,11 @@ for ($i=0; $i < $node_array_size;$i++)
 
 
 
-echo "<img src='images/icon-banner-new.gif' align='absmiddle'>&nbsp;";
-echo "<a href='banner-edit.php?clientid=".$clientid."&campaignid=".$campaignid."' accesskey='".$keyAddNew."'>".$strAddBanner_Key."</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+echo "\t\t\t\t<img src='images/icon-banner-new.gif' align='absmiddle'>&nbsp;";
+echo "<a href='banner-edit.php?clientid=".$clientid."&campaignid=".$campaignid."' accesskey='".$keyAddNew."'>".$strAddBanner_Key."</a>&nbsp;&nbsp;&nbsp;&nbsp;\n";
 phpAds_ShowBreak();
 
-echo "<br><br>";
+echo "\t\t\t\t<br><br>\n";
 echo "<table border='0' width='100%' cellpadding='0' cellspacing='0'>";	
 
 echo "<tr height='25'>";

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -118,9 +118,9 @@ $res_campaigns = phpAds_dbQuery(
 
 while ($row_campaigns = phpAds_dbFetchArray($res_campaigns))
 {
-	$campaigns[$row_campaigns['clientid']] = $row_campaigns;
-	$campaigns[$row_campaigns['clientid']]['expand'] = 0;
-	$campaigns[$row_campaigns['clientid']]['count'] = 0;
+	$campaigns[$row_campaigns['campaignid']] = $row_campaigns;
+	$campaigns[$row_campaigns['campaignid']]['expand'] = 0;
+	$campaigns[$row_campaigns['campaignid']]['count'] = 0;
 }
 
 
@@ -189,7 +189,7 @@ if (isset($banners) && is_array($banners) && count($banners) > 0)
 	reset ($banners);
 	while (list ($bkey, $banner) = each ($banners))
 		if ($hideinactive == false || $banner['active'] == 't')
-			$campaigns[$banner['clientid']]['banners'][$bkey] = $banner;
+			$campaigns[$banner['campaignid']]['banners'][$bkey] = $banner;
 	
 	unset ($banners);
 }
@@ -288,9 +288,9 @@ else
 		if (isset($campaigns[$ckey]['banners']))
 		{
 			if ($campaigns[$ckey]['expand'] == '1')
-				echo "<a href='advertiser-campaigns.php?clientid=".$clientid."&collapse=".$campaigns[$ckey]['clientid']."'><img src='images/triangle-d.gif' align='absmiddle' border='0'></a>&nbsp;";
+				echo "<a href='advertiser-campaigns.php?clientid=".$clientid."&collapse=".$campaigns[$ckey]['campaignid']."'><img src='images/triangle-d.gif' align='absmiddle' border='0'></a>&nbsp;";
 			else
-				echo "<a href='advertiser-campaigns.php?clientid=".$clientid."&expand=".$campaigns[$ckey]['clientid']."'><img src='images/".$phpAds_TextDirection."/triangle-l.gif' align='absmiddle' border='0'></a>&nbsp;";
+				echo "<a href='advertiser-campaigns.php?clientid=".$clientid."&expand=".$campaigns[$ckey]['campaignid']."'><img src='images/".$phpAds_TextDirection."/triangle-l.gif' align='absmiddle' border='0'></a>&nbsp;";
 		}
 		else
 			echo "<img src='images/spacer.gif' height='16' width='16' align='absmiddle'>&nbsp;";
@@ -305,7 +305,7 @@ else
 		echo "</td>";
 		
 		// ID
-		echo "<td height='25'>".$campaigns[$ckey]['clientid']."</td>";
+		echo "<td height='25'>".$campaigns[$ckey]['campaignid']."</td>";
 		
 		// Button 1
 		echo "<td height='25' align='".$phpAds_TextAlignRight."'>";
@@ -369,7 +369,7 @@ else
 						echo "<img src='images/icon-banner-stored-d.gif' align='absmiddle'>";
 				}
 				
-				echo "&nbsp;<a href='banner-edit.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['clientid']."&bannerid=".$banners[$bkey]['bannerid']."'>".$name."</a></td>";
+				echo "&nbsp;<a href='banner-edit.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['campaignid']."&bannerid=".$banners[$bkey]['bannerid']."'>".$name."</a></td>";
 				
 				// ID
 				echo "<td height='25'>".$banners[$bkey]['bannerid']."</td>";
@@ -379,12 +379,12 @@ else
 				
 				// Button 2
 				echo "<td height='25' align='".$phpAds_TextAlignRight."'>";
-				echo "<a href='banner-acl.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['clientid']."&bannerid=".$banners[$bkey]['bannerid']."'><img src='images/icon-acl.gif' border='0' align='absmiddle' alt='$strACL'>&nbsp;$strACL</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+				echo "<a href='banner-acl.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['campaignid']."&bannerid=".$banners[$bkey]['bannerid']."'><img src='images/icon-acl.gif' border='0' align='absmiddle' alt='$strACL'>&nbsp;$strACL</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 				echo "</td>";
 				
 				// Button 3
 				echo "<td height='25' align='".$phpAds_TextAlignRight."'>";
-				echo "<a href='banner-delete.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['clientid']."&bannerid=".$banners[$bkey]['bannerid']."&returnurl=advertiser-campaigns.php'".phpAds_DelConfirm($strConfirmDeleteBanner)."><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+				echo "<a href='banner-delete.php?clientid=".$clientid."&campaignid=".$campaigns[$ckey]['campaignid']."&bannerid=".$banners[$bkey]['bannerid']."&returnurl=advertiser-campaigns.php'".phpAds_DelConfirm($strConfirmDeleteBanner)."><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 				echo "</td></tr>";
 			}
 		}

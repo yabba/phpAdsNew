@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -399,7 +399,7 @@ else
 				echo "\t\t\t\t\t</td>\n";
 				
 				// ID
-				echo "\t\t\t\t\t<td height='25'>".$campaigns[$ckey]['clientid']."</td>\n";
+				echo "\t\t\t\t\t<td height='25'>".$campaigns[$ckey]['campaignid']."</td>\n";
 				
 				// Button 1
 				echo "\t\t\t\t\t<td height='25'>";

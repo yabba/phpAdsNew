@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -30,6 +30,7 @@ define ("phpAds_actionPriorityAutoTargeting", 11);
 define ("phpAds_actionDeactiveCampaign", 20);
 define ("phpAds_actionActiveCampaign", 21);
 define ("phpAds_actionAutoClean", 30);
+define ("phpAds_actionBatchStatistics", 40);
 
 
 $GLOBAL['phpAds_Usertype'] = 0;

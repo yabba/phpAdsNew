@@ -1,4 +1,4 @@
-<?php // $Revision: 2.9 $
+<?php // $Revision: 2.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -149,6 +149,9 @@ function phpAds_upgradeData ()
 	phpAds_upgradeSplitClientTableBanners();
 	phpAds_upgradeSplitClientTableTargetStats();
 	phpAds_upgradeSplitClientTableZone();
+	
+	// Make sure that a date and hour are in the stats generation columns
+	phpAds_upgradeHourlyStats();
 	
 	// Create target stats form userlog
 	phpAds_upgradeTargetStats();
@@ -1190,6 +1193,17 @@ function phpAds_upgradeSplitClientTable()
 			phpAds_dbQuery("ALTER TABLE ".$phpAds_config['tbl_clients']." DROP COLUMN anonymous");
 		}
 	}
+}
+
+function phpAds_upgradeHourlyStats()
+{
+	global $phpAds_config;
+	
+	phpAds_dbQuery(
+		"UPGRADE ".$phpAds_config['tbl_config'].
+		" SET statslasthour=HOUR(NOW())".
+		",statslastday=NOW()"
+	);
 }
 
 function phpAds_upgradeTargetStats ()

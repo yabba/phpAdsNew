@@ -177,7 +177,7 @@ CREATE TABLE phpads_campaigns_trackers (
    campaign_trackerid mediumint(9) NOT NULL AUTO_INCREMENT,
    campaignid mediumint(9) DEFAULT '0' NOT NULL,
    trackerid mediumint(9) DEFAULT '0' NOT NULL,
-   logstats enum('t','f') DEFAULT 'y' NOT NULL,
+   logstats enum('y','n') DEFAULT 'y' NOT NULL,
    PRIMARY KEY (campaign_trackerid)
 );
 

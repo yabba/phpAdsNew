@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -22,14 +22,15 @@ $GLOBALS['strAdministrator']				= "Administrator";
 
 $GLOBALS['strUserlog'] = array (
 	phpAds_actionAdvertiserReportMailed 	=> "Report for advertiser {id} send by e-mail",
-	phpAds_actionPublisherReportMailed 		=> "Report for publisher {id} send by e-mail",
-	phpAds_actionWarningMailed				=> "Deactivation warning for campaign {id} send by e-mail",
-	phpAds_actionDeactivationMailed			=> "Deactivation notification for campaign {id} send by e-mail",
-	phpAds_actionPriorityCalculation		=> "Priority recalculated",
-	phpAds_actionPriorityAutoTargeting		=> "Campaign targets recalculated",
-	phpAds_actionDeactiveCampaign			=> "Campaign {id} deactivated",
 	phpAds_actionActiveCampaign				=> "Campaign {id} activated",
-	phpAds_actionAutoClean					=> "Auto clean of database"
+	phpAds_actionAutoClean					=> "Auto clean of database",
+	phpAds_actionBatchStatistics			=> "Statistics compiled",
+	phpAds_actionDeactivationMailed			=> "Deactivation notification for campaign {id} send by e-mail",
+	phpAds_actionDeactiveCampaign			=> "Campaign {id} deactivated",
+	phpAds_actionPriorityAutoTargeting		=> "Campaign targets recalculated",
+	phpAds_actionPriorityCalculation		=> "Priority recalculated",
+	phpAds_actionPublisherReportMailed 		=> "Report for publisher {id} send by e-mail",
+	phpAds_actionWarningMailed				=> "Deactivation warning for campaign {id} send by e-mail"
 );
 
 ?>
