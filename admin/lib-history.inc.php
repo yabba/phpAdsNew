@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -45,43 +45,21 @@ $tabindex = 1;
 /* Determine span of statistics                          */
 /*********************************************************/
 
-if ($phpAds_config['compact_stats']) 
+$result = phpAds_dbQuery("
+	SELECT
+		UNIX_TIMESTAMP(MIN(day)) AS span,
+		TO_DAYS(NOW()) - TO_DAYS(MIN(day)) + 1 AS span_days
+	FROM
+		".$phpAds_config['tbl_adstats']."
+		".(isset($lib_history_where) ? 'WHERE '.$lib_history_where : '')."
+");
+
+if ($row = phpAds_dbFetchArray($result))
 {
-	$result = phpAds_dbQuery("
-		SELECT
-			UNIX_TIMESTAMP(MIN(day)) AS span,
-			TO_DAYS(NOW()) - TO_DAYS(MIN(day)) + 1 AS span_days
-		FROM
-			".$phpAds_config['tbl_adstats']."
-			".(isset($lib_history_where) ? 'WHERE '.$lib_history_where : '')."
-	");
-	
-	if ($row = phpAds_dbFetchArray($result))
-	{
-		$span 	     = $row['span'];
-		$span_days   = $row['span_days'];
-		$span_months = ((date('Y') - date('Y', $span)) * 12) + (date('m') - date('m', $span)) + 1;
-		$span_weeks  = (int)($span_days / 7) + ($span_days % 7 ? 1 : 0);
-	}
-}
-else
-{
-	$result = phpAds_dbQuery("
-		SELECT
-			UNIX_TIMESTAMP(MIN(t_stamp)) AS span,
-			TO_DAYS(NOW()) - TO_DAYS(MIN(t_stamp)) + 1 AS span_days
-		FROM
-			".$phpAds_config['tbl_adviews']."
-			".(isset($lib_history_where) ? 'WHERE '.$lib_history_where : '')."
-	");
-	
-	if ($row = phpAds_dbFetchArray($result))
-	{
-		$span 	     = $row['span'];
-		$span_days   = $row['span_days'];
-		$span_months = ((date('Y') - date('Y', $span)) * 12) + (date('m') - date('m', $span)) + 1;
-		$span_weeks  = (int)($span_days / 7) + ($span_days % 7 ? 1 : 0);
-	}
+	$span 	     = $row['span'];
+	$span_days   = $row['span_days'];
+	$span_months = ((date('Y') - date('Y', $span)) * 12) + (date('m') - date('m', $span)) + 1;
+	$span_weeks  = (int)($span_days / 7) + ($span_days % 7 ? 1 : 0);
 }
 
 if (isset($row['span']) && $row['span'] > 0)
@@ -148,57 +126,21 @@ if (isset($row['span']) && $row['span'] > 0)
 	/* Get total statistics                                  */
 	/*********************************************************/
 	
-	if ($phpAds_config['compact_stats']) 
-	{
-		$result = phpAds_dbQuery("
-			SELECT
-				SUM(views) AS sum_views,
-				SUM(clicks) AS sum_clicks
-			FROM
-				".$phpAds_config['tbl_adstats']."
-				".(isset($lib_history_where) ? 'WHERE '.$lib_history_where : '')."
-				".(isset($lib_history_source) ? 'AND '.$lib_history_source : '')."
-		");
-		
-		if ($row = phpAds_dbFetchArray($result))
-		{
-			$totals['views'] = $row['sum_views'];
-			$totals['clicks'] = $row['sum_clicks'];
-		}
-	}
-	else
-	{
-		$result = phpAds_dbQuery("
-			SELECT
-				COUNT(*) AS sum_views
-			FROM
-				".$phpAds_config['tbl_adviews']."
-				".(isset($lib_history_where) ? 'WHERE '.$lib_history_where : '')."
-				".(isset($lib_history_source) ? 'AND '.$lib_history_source : '')."
-		");
-		
-		if ($row = phpAds_dbFetchArray($result))
-		{
-			$totals['views'] = $row['sum_views'];
-		}
-		
-		
-		$result = phpAds_dbQuery("
-			SELECT
-				COUNT(*) AS sum_clicks
-			FROM
-				".$phpAds_config['tbl_adclicks']."
-				".(isset($lib_history_where) ? 'WHERE '.$lib_history_where : '')."
-				".(isset($lib_history_source) ? 'AND '.$lib_history_source : '')."
-		");
-		
-		if ($row = phpAds_dbFetchArray($result))
-		{
-			$totals['clicks'] = $row['sum_clicks'];
-		}
-	}
+	$result = phpAds_dbQuery("
+		SELECT
+			SUM(views) AS sum_views,
+			SUM(clicks) AS sum_clicks
+		FROM
+			".$phpAds_config['tbl_adstats']."
+			".(isset($lib_history_where) ? 'WHERE '.$lib_history_where : '')."
+			".(isset($lib_history_source) ? 'AND '.$lib_history_source : '')."
+	");
 	
-	
+	if ($row = phpAds_dbFetchArray($result))
+	{
+		$totals['views'] = $row['sum_views'];
+		$totals['clicks'] = $row['sum_clicks'];
+	}
 	
 	/*********************************************************/
 	/* Get different sources                                 */
@@ -206,147 +148,52 @@ if (isset($row['span']) && $row['span'] > 0)
 	
 	$sources = array();
 	
-	if ($phpAds_config['compact_stats']) 
-	{
-		$result = phpAds_dbQuery("
-			SELECT
-				DISTINCT source as source
-			FROM
-				".$phpAds_config['tbl_adstats']."
-				".(isset($lib_history_where) ? 'WHERE '.$lib_history_where : '')."
-		");
-		
-		while ($row = phpAds_dbFetchArray($result))
-		{
-			$sources[] = $row['source'];
-		}
-	}
-	else
-	{
-		$result = phpAds_dbQuery("
-			SELECT
-				DISTINCT source as source
-			FROM
-				".$phpAds_config['tbl_adviews']."
-				".(isset($lib_history_where) ? 'WHERE '.$lib_history_where : '')."
-		");
-		
-		while ($row = phpAds_dbFetchArray($result))
-		{
-			$sources[] = $row['source'];
-		}
-		
-		$result = phpAds_dbQuery("
-			SELECT
-				DISTINCT source as source
-			FROM
-				".$phpAds_config['tbl_adclicks']."
-				".(isset($lib_history_where) ? 'WHERE '.$lib_history_where : '')."
-		");
-		
-		while ($row = phpAds_dbFetchArray($result))
-		{
-			if (!in_array($row['source'], $sources))
-				$sources[] = $row['source'];
-		}
-	}
+	$result = phpAds_dbQuery("
+		SELECT
+			DISTINCT source as source
+		FROM
+			".$phpAds_config['tbl_adstats']."
+			".(isset($lib_history_where) ? 'WHERE '.$lib_history_where : '')."
+	");
 	
-	
+	while ($row = phpAds_dbFetchArray($result))
+	{
+		$sources[] = $row['source'];
+	}
 	
 	/*********************************************************/
 	/* Get statistics for selected period                    */
 	/*********************************************************/
 	
-	if ($phpAds_config['compact_stats']) 
-	{
-		// Get stats for selected period
-		$begin = date('Ymd', $begin_timestamp);
-		$end   = date('Ymd', $end_timestamp);
-		
-		$result = phpAds_dbQuery("
-			SELECT
-				sum(views) AS sum_views,
-				sum(clicks) AS sum_clicks,
-				DATE_FORMAT(day, '".$formatted."') AS date,
-				DATE_FORMAT(day, '".$unformatted."') AS date_u
-			FROM
-				".$phpAds_config['tbl_adstats']."
-			WHERE
-				day >= $begin AND day < $end
-				".(isset($lib_history_where) ? 'AND '.$lib_history_where : '')."
-				".(isset($lib_history_source) ? 'AND '.$lib_history_source : '')."
-			GROUP BY
-				date_u
-			ORDER BY
-				date_u DESC
-			LIMIT 
-				$returnlimit
-		");
-		
-		while ($row = phpAds_dbFetchArray($result))
-		{
-			$stats[$row['date']]['sum_views'] = $row['sum_views'];
-			$stats[$row['date']]['sum_clicks'] = $row['sum_clicks'];
-		}
-	}
-	else
-	{
-		// Get stats for selected period
-		$begin = date('YmdHis', $begin_timestamp);
-		$end   = date('YmdHis', $end_timestamp);
-		
-		$result = phpAds_dbQuery("
-			SELECT
-				COUNT(*) AS sum_views,
-				DATE_FORMAT(t_stamp, '".$formatted."') AS date,
-				DATE_FORMAT(t_stamp, '".$unformatted."') AS date_u
-			FROM
-				".$phpAds_config['tbl_adviews']."
-			WHERE
-				t_stamp >= $begin AND t_stamp < $end
-				".(isset($lib_history_where) ? 'AND '.$lib_history_where : '')."
-				".(isset($lib_history_source) ? 'AND '.$lib_history_source : '')."
-			GROUP BY
-				date_u
-			ORDER BY
-				date_u DESC
-			LIMIT 
-				$returnlimit
-		");
-		
-		while ($row = phpAds_dbFetchArray($result))
-		{
-			$stats[$row['date']]['sum_views'] = $row['sum_views'];
-			$stats[$row['date']]['sum_clicks'] = '0';
-		}
-		
-		
-		$result = phpAds_dbQuery("
-			SELECT
-				COUNT(*) AS sum_clicks,
-				DATE_FORMAT(t_stamp, '".$formatted."') AS date,
-				DATE_FORMAT(t_stamp, '".$unformatted."') AS date_u
-			FROM
-				".$phpAds_config['tbl_adclicks']."
-			WHERE
-				t_stamp >= $begin AND t_stamp < $end
-				".(isset($lib_history_where) ? 'AND '.$lib_history_where : '')."
-				".(isset($lib_history_source) ? 'AND '.$lib_history_source : '')."
-			GROUP BY
-				date_u
-			ORDER BY
-				date_u DESC
-			LIMIT 
-				$returnlimit
-		");
-		
-		while ($row = phpAds_dbFetchArray($result))
-		{
-			$stats[$row['date']]['sum_clicks'] = $row['sum_clicks'];
-		}
-	}
+	// Get stats for selected period
+	$begin = date('Ymd', $begin_timestamp);
+	$end   = date('Ymd', $end_timestamp);
 	
+	$result = phpAds_dbQuery("
+		SELECT
+			sum(views) AS sum_views,
+			sum(clicks) AS sum_clicks,
+			DATE_FORMAT(day, '".$formatted."') AS date,
+			DATE_FORMAT(day, '".$unformatted."') AS date_u
+		FROM
+			".$phpAds_config['tbl_adstats']."
+		WHERE
+			day >= $begin AND day < $end
+			".(isset($lib_history_where) ? 'AND '.$lib_history_where : '')."
+			".(isset($lib_history_source) ? 'AND '.$lib_history_source : '')."
+		GROUP BY
+			date_u
+		ORDER BY
+			date_u DESC
+		LIMIT 
+			$returnlimit
+	");
 	
+	while ($row = phpAds_dbFetchArray($result))
+	{
+		$stats[$row['date']]['sum_views'] = $row['sum_views'];
+		$stats[$row['date']]['sum_clicks'] = $row['sum_clicks'];
+	}
 	
 	/*********************************************************/
 	/* Main code                                             */

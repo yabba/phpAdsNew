@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -186,82 +186,29 @@ while ($row_banners = phpAds_dbFetchArray($res_banners))
 
 
 // Get the adviews/clicks for each banner
-if ($phpAds_config['compact_stats'])
+$res_stats = phpAds_dbQuery("
+	SELECT
+		s.bannerid as bannerid,
+		b.clientid as clientid,
+		sum(s.views) as views,
+		sum(s.clicks) as clicks
+	FROM 
+		".$phpAds_config['tbl_adstats']." as s,
+		".$phpAds_config['tbl_banners']." as b
+	WHERE
+		b.bannerid = s.bannerid
+	GROUP BY
+		s.bannerid
+	") or phpAds_sqlDie();
+
+while ($row_stats = phpAds_dbFetchArray($res_stats))
 {
-	$res_stats = phpAds_dbQuery("
-		SELECT
-			s.bannerid as bannerid,
-			b.clientid as clientid,
-			sum(s.views) as views,
-			sum(s.clicks) as clicks
-		FROM 
-			".$phpAds_config['tbl_adstats']." as s,
-			".$phpAds_config['tbl_banners']." as b
-		WHERE
-			b.bannerid = s.bannerid
-		GROUP BY
-			s.bannerid
-		") or phpAds_sqlDie();
-	
-	while ($row_stats = phpAds_dbFetchArray($res_stats))
+	if (isset($banners[$row_stats['bannerid']]))
 	{
-		if (isset($banners[$row_stats['bannerid']]))
-		{
-			$banners[$row_stats['bannerid']]['clicks'] = $row_stats['clicks'];
-			$banners[$row_stats['bannerid']]['views'] = $row_stats['views'];
-		}
+		$banners[$row_stats['bannerid']]['clicks'] = $row_stats['clicks'];
+		$banners[$row_stats['bannerid']]['views'] = $row_stats['views'];
 	}
 }
-else
-{
-	$res_stats = phpAds_dbQuery("
-		SELECT
-			v.bannerid as bannerid,
-			b.clientid as clientid,
-			count(v.bannerid) as views
-		FROM 
-			".$phpAds_config['tbl_adviews']." as v,
-			".$phpAds_config['tbl_banners']." as b
-		WHERE
-			b.bannerid = v.bannerid
-		GROUP BY
-			v.bannerid
-		") or phpAds_sqlDie();
-	
-	while ($row_stats = phpAds_dbFetchArray($res_stats))
-	{
-		if (isset($banners[$row_stats['bannerid']]))
-		{
-			$banners[$row_stats['bannerid']]['views'] = $row_stats['views'];
-			$banners[$row_stats['bannerid']]['clicks'] = 0;
-		}
-	}
-	
-	
-	$res_stats = phpAds_dbQuery("
-		SELECT
-			c.bannerid as bannerid,
-			b.clientid as clientid,
-			count(c.bannerid) as clicks
-		FROM 
-			".$phpAds_config['tbl_adclicks']." as c,
-			".$phpAds_config['tbl_banners']." as b
-		WHERE
-			b.bannerid = c.bannerid
-		GROUP BY
-			c.bannerid
-		") or phpAds_sqlDie();
-	
-	while ($row_stats = phpAds_dbFetchArray($res_stats))
-	{
-		if (isset($banners[$row_stats['bannerid']]))
-		{
-			$banners[$row_stats['bannerid']]['clicks'] = $row_stats['clicks'];
-		}
-	}
-}
-
-
 
 // Add ID found in expand to expanded nodes
 if (isset($expand) && $expand != '')

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -28,36 +28,18 @@ phpAds_checkAccess(phpAds_Admin);
 /* HTML framework                                        */
 /*********************************************************/
 
-if ($phpAds_config['compact_stats']) 
-{
-	$res = phpAds_dbQuery("
-		SELECT
-			DATE_FORMAT(day, '%Y%m%d') as date,
-			DATE_FORMAT(day, '$date_format') as date_formatted
-		FROM
-			".$phpAds_config['tbl_adstats']."
-		GROUP BY
-			day
-		ORDER BY
-			day DESC
-		LIMIT 7
-	") or phpAds_sqlDie();
-}
-else
-{
-	$res = phpAds_dbQuery("
-		 SELECT
-			DATE_FORMAT(t_stamp, '%Y%m%d') as date,
-			DATE_FORMAT(t_stamp, '$date_format') as date_formatted
-		 FROM
-			".$phpAds_config['tbl_adviews']."
-		 GROUP BY
-			date
-		 ORDER BY
-			date DESC
-		 LIMIT 7
-	") or phpAds_sqlDie();
-}
+$res = phpAds_dbQuery("
+	SELECT
+		DATE_FORMAT(day, '%Y%m%d') as date,
+		DATE_FORMAT(day, '$date_format') as date_formatted
+	FROM
+		".$phpAds_config['tbl_adstats']."
+	GROUP BY
+		day
+	ORDER BY
+		day DESC
+	LIMIT 7
+") or phpAds_sqlDie();
 
 while ($row = phpAds_dbFetchArray($res))
 {

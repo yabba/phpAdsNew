@@ -1,4 +1,4 @@
-<?php // $Revision: 2.6 $
+<?php // $Revision: 2.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -28,30 +28,15 @@ function phpAds_PriorityGetImpressions($days, $offset)
 	
 	$offset = $offset * (60 * 60 * 24);
 	
-	if ($phpAds_config['compact_stats'])
-	{
-		$begin = date('Ymd', phpAds_makeTimestamp(mktime (0, 0, 0, date('m'), date('d'), date('Y')), - 1 - $offset));
-		$end   = date('Ymd', phpAds_makeTimestamp(mktime (0, 0, 0, date('m'), date('d'), date('Y')), - (60 * 60 * 24 * $days) - $offset));
-		
-		$query = "
-			SELECT SUM(views) as sum_views
-			FROM ".$phpAds_config['tbl_adstats']."
-			WHERE day <= ".$begin."
-			AND day >= ".$end."
-		";
-	}
-	else
-	{
-		$begin = date('YmdHis', phpAds_makeTimestamp(mktime (0, 0, 0, date('m'), date('d'), date('Y')), - 1 - $offset));
-		$end   = date('YmdHis', phpAds_makeTimestamp(mktime (0, 0, 0, date('m'), date('d'), date('Y')), - (60 * 60 * 24 * $days) - $offset));
-		
-		$query = "
-			SELECT COUNT(*) as sum_views
-			FROM ".$phpAds_config['tbl_adviews']."
-			WHERE t_stamp <= ".$begin."
-			AND t_stamp >= ".$end."
-		";
-	}
+	$begin = date('Ymd', phpAds_makeTimestamp(mktime (0, 0, 0, date('m'), date('d'), date('Y')), - 1 - $offset));
+	$end   = date('Ymd', phpAds_makeTimestamp(mktime (0, 0, 0, date('m'), date('d'), date('Y')), - (60 * 60 * 24 * $days) - $offset));
+	
+	$query = "
+		SELECT SUM(views) as sum_views
+		FROM ".$phpAds_config['tbl_adstats']."
+		WHERE day <= ".$begin."
+		AND day >= ".$end."
+	";
 
 	$res = phpAds_dbQuery($query);
 	
@@ -70,32 +55,16 @@ function phpAds_PriorityGetHourlyProfile($days, $offset)
 	// Determine days
 	$offset = $offset * (60 * 60 * 24);
 	
-	if ($phpAds_config['compact_stats'])
-	{
-		$begin = date('Ymd', phpAds_makeTimestamp(mktime (0, 0, 0, date('m'), date('d'), date('Y')), - 1 - $offset));
-		$end   = date('Ymd', phpAds_makeTimestamp(mktime (0, 0, 0, date('m'), date('d'), date('Y')), - (60 * 60 * 24 * $days) - $offset));
-		
-		$query = "
-			SELECT hour, SUM(views) AS sum_views
-			FROM ".$phpAds_config['tbl_adstats']."
-			WHERE day <= ".$begin."
-			AND day >= ".$end."
-			GROUP BY hour
-		";
-	}
-	else
-	{
-		$begin = date('YmdHis', phpAds_makeTimestamp(mktime (0, 0, 0, date('m'), date('d'), date('Y')), - 1 - $offset));
-		$end   = date('YmdHis', phpAds_makeTimestamp(mktime (0, 0, 0, date('m'), date('d'), date('Y')), - (60 * 60 * 24 * $days) - $offset));
-		
-		$query = "
-			SELECT HOUR(t_stamp) AS hour, COUNT(*) AS sum_views
-			FROM ".$phpAds_config['tbl_adviews']."
-			WHERE t_stamp <= ".$begin."
-			AND t_stamp >= ".$end."
-			GROUP BY hour
-		";
-	}
+	$begin = date('Ymd', phpAds_makeTimestamp(mktime (0, 0, 0, date('m'), date('d'), date('Y')), - 1 - $offset));
+	$end   = date('Ymd', phpAds_makeTimestamp(mktime (0, 0, 0, date('m'), date('d'), date('Y')), - (60 * 60 * 24 * $days) - $offset));
+	
+	$query = "
+		SELECT hour, SUM(views) AS sum_views
+		FROM ".$phpAds_config['tbl_adstats']."
+		WHERE day <= ".$begin."
+		AND day >= ".$end."
+		GROUP BY hour
+	";
 	
 	$res = phpAds_dbQuery($query);
 	
@@ -121,16 +90,8 @@ function phpAds_PriorityPredictProfile($campaigns, $banners)
 	$profile_correction_executed = false;
 	
 	// Get the number of days running
-	if ($phpAds_config['compact_stats'])
-	{
-		$res = phpAds_dbQuery("SELECT UNIX_TIMESTAMP(MIN(day)) AS days_running FROM ".$phpAds_config['tbl_adstats']." WHERE day > 0 AND hour > 0 ORDER BY day LIMIT 1");
-		$days_running = phpAds_dbResult($res, 0, 'days_running');
-	}
-	else
-	{
-		$res = phpAds_dbQuery("SELECT UNIX_TIMESTAMP(MIN(t_stamp)) AS days_running FROM ".$phpAds_config['tbl_adviews']);
-		$days_running = phpAds_dbResult($res, 0, 'days_running');
-	}
+	$res = phpAds_dbQuery("SELECT UNIX_TIMESTAMP(MIN(day)) AS days_running FROM ".$phpAds_config['tbl_adstats']." WHERE day > 0 AND hour > 0 ORDER BY day LIMIT 1");
+	$days_running = phpAds_dbResult($res, 0, 'days_running');
 	
 	if ($days_running > 0)
 	{
@@ -259,33 +220,15 @@ function phpAds_PriorityPredictProfile($campaigns, $banners)
 	}
 	// END REPORTING
 	
+	$begin = date('Ymd', mktime (0, 0, 0, date('m'), date('d'), date('Y')));
 	
-	
-	if ($phpAds_config['compact_stats'])
-	{
-		$begin = date('Ymd', mktime (0, 0, 0, date('m'), date('d'), date('Y')));
-		
-		$query = "
-			SELECT hour, SUM(views) AS sum_views
-			FROM ".$phpAds_config['tbl_adstats']."
-			WHERE day = ".$begin."
-			AND hour < ".phpAds_CurrentHour."
-			GROUP BY hour
-		";
-	}
-	else
-	{
-		$begin = date('YmdHis', mktime (0, 0, 0, date('m'), date('d'), date('Y')));
-		$end   = date('YmdHis', mktime (phpAds_CurrentHour, 0, 0, date('m'), date('d'), date('Y')) - 1);
-		
-		$query = "
-			SELECT HOUR(t_stamp) AS hour, COUNT(*) AS sum_views
-			FROM ".$phpAds_config['tbl_adviews']."
-			WHERE t_stamp >= ".$begin."
-			AND t_stamp <= ".$end."
-			GROUP BY hour
-		";
-	}
+	$query = "
+		SELECT hour, SUM(views) AS sum_views
+		FROM ".$phpAds_config['tbl_adstats']."
+		WHERE day = ".$begin."
+		AND hour < ".phpAds_CurrentHour."
+		GROUP BY hour
+	";
 	
 	$res = phpAds_dbQuery($query);
 	
@@ -599,32 +542,16 @@ function phpAds_PriorityPrepareBanners()
 	
 	
 	// Get statistics
-	if ($phpAds_config['compact_stats'])
-	{
-		$begin = date ('Ymd', mktime (0, 0, 0, date('m'), date('d'), date('Y')));
-		$end   = date ('Ymd', mktime (phpAds_CurrentHour, 0, 0, date('m'), date('d'), date('Y')) - 1);
-		
-		$query = "
-			SELECT bannerid, SUM(views) as sum_views
-			FROM ".$phpAds_config['tbl_adstats']."
-			WHERE day = ".$begin."
-			AND hour < ".phpAds_CurrentHour."
-			GROUP BY bannerid
-		";
-	}
-	else
-	{
-		$begin = date ('YmdHis', mktime (0, 0, 0, date('m'), date('d'), date('Y')));
-		$end   = date ('YmdHis', mktime (phpAds_CurrentHour, 0, 0, date('m'), date('d'), date('Y')) - 1);
-		
-		$query = "
-			SELECT bannerid, count(*) as sum_views
-			FROM ".$phpAds_config['tbl_adviews']."
-			WHERE t_stamp >= ".$begin."
-			AND t_stamp <= ".$end."
-			GROUP BY bannerid
-		";
-	}
+	$begin = date ('Ymd', mktime (0, 0, 0, date('m'), date('d'), date('Y')));
+	$end   = date ('Ymd', mktime (phpAds_CurrentHour, 0, 0, date('m'), date('d'), date('Y')) - 1);
+	
+	$query = "
+		SELECT bannerid, SUM(views) as sum_views
+		FROM ".$phpAds_config['tbl_adstats']."
+		WHERE day = ".$begin."
+		AND hour < ".phpAds_CurrentHour."
+		GROUP BY bannerid
+	";
 	
 	$res = phpAds_dbQuery($query);
 	

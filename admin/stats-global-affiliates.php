@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -110,70 +110,25 @@ while ($row_zones = phpAds_dbFetchArray($res_zones))
 
 
 // Get the adviews/clicks for each banner
-if ($phpAds_config['compact_stats'])
+$res_stats = phpAds_dbQuery("
+	SELECT
+		zoneid,
+		sum(views) as views,
+		sum(clicks) as clicks
+	FROM 
+		".$phpAds_config['tbl_adstats']."
+	GROUP BY
+		zoneid
+	") or phpAds_sqlDie();
+
+while ($row_stats = phpAds_dbFetchArray($res_stats))
 {
-	$res_stats = phpAds_dbQuery("
-		SELECT
-			zoneid,
-			sum(views) as views,
-			sum(clicks) as clicks
-		FROM 
-			".$phpAds_config['tbl_adstats']."
-		GROUP BY
-			zoneid
-		") or phpAds_sqlDie();
-	
-	while ($row_stats = phpAds_dbFetchArray($res_stats))
+	if (isset($zones[$row_stats['zoneid']]))
 	{
-		if (isset($zones[$row_stats['zoneid']]))
-		{
-			$zones[$row_stats['zoneid']]['clicks'] = $row_stats['clicks'];
-			$zones[$row_stats['zoneid']]['views'] = $row_stats['views'];
-		}
+		$zones[$row_stats['zoneid']]['clicks'] = $row_stats['clicks'];
+		$zones[$row_stats['zoneid']]['views'] = $row_stats['views'];
 	}
 }
-else
-{
-	$res_stats = phpAds_dbQuery("
-		SELECT
-			zoneid,
-			count(*) as views
-		FROM 
-			".$phpAds_config['tbl_adviews']."
-		GROUP BY
-			zoneid
-		") or phpAds_sqlDie();
-	
-	while ($row_stats = phpAds_dbFetchArray($res_stats))
-	{
-		if (isset($zones[$row_stats['zoneid']]))
-		{
-			$zones[$row_stats['zoneid']]['views'] = $row_stats['views'];
-			$zones[$row_stats['zoneid']]['clicks'] = 0;
-		}
-	}
-	
-	
-	$res_stats = phpAds_dbQuery("
-		SELECT
-			zoneid,
-			count(*) as clicks
-		FROM 
-			".$phpAds_config['tbl_adclicks']."
-		GROUP BY
-			zoneid
-		") or phpAds_sqlDie();
-	
-	while ($row_stats = phpAds_dbFetchArray($res_stats))
-	{
-		if (isset($zones[$row_stats['zoneid']]))
-		{
-			$zones[$row_stats['zoneid']]['clicks'] = $row_stats['clicks'];
-		}
-	}
-}
-
-
 
 // Add ID found in expand to expanded nodes
 if (isset($expand) && $expand != '')

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -129,42 +129,23 @@ function phpAds_SendMaintenanceReport ($clientid, $first_unixtimestamp, $last_un
 						$log .= $strViews." (".$strTotal."):    ".$adviews."\n";
 						
 						// Fetch all adviews belonging to banner belonging to client, grouped by day
-						if ($phpAds_config['compact_stats'])
-				            $res_adviews = phpAds_dbQuery("
-				    			SELECT
-				    				SUM(views) as qnt,
-				    				DATE_FORMAT(day, '$date_format') as t_stamp_f,
-				    				TO_DAYS(day) AS the_day
-				    			FROM
-				    				".$phpAds_config['tbl_adstats']."
-				    			WHERE
-				    				bannerid = ".$row_banners['bannerid']." AND
-				                    views > 0 AND
-									UNIX_TIMESTAMP(day) >= $first_unixtimestamp AND
-									UNIX_TIMESTAMP(day) < $last_unixtimestamp
-				    			GROUP BY
-				    				day
-				    			ORDER BY
-				    				day DESC
-				    			") or die($strLogErrorViews);
-				        else
-				    		$res_adviews = phpAds_dbQuery("
-				    			SELECT
-				    				*,
-				    				count(*) as qnt,
-				    				DATE_FORMAT(t_stamp, '$date_format') as t_stamp_f,
-				    				TO_DAYS(t_stamp) AS the_day
-				    			FROM
-				    				".$phpAds_config['tbl_adviews']."
-				    			WHERE
-				    				bannerid = ".$row_banners['bannerid']." AND
-									t_stamp >= $first_sqltimestamp AND
-									t_stamp < $last_sqltimestamp
-				    			GROUP BY
-				    				the_day
-				    			ORDER BY
-				    				the_day DESC
-				    			") or die($strLogErrorViews);
+			            $res_adviews = phpAds_dbQuery("
+			    			SELECT
+			    				SUM(views) as qnt,
+			    				DATE_FORMAT(day, '$date_format') as t_stamp_f,
+			    				TO_DAYS(day) AS the_day
+			    			FROM
+			    				".$phpAds_config['tbl_adstats']."
+			    			WHERE
+			    				bannerid = ".$row_banners['bannerid']." AND
+			                    views > 0 AND
+								UNIX_TIMESTAMP(day) >= $first_unixtimestamp AND
+								UNIX_TIMESTAMP(day) < $last_unixtimestamp
+			    			GROUP BY
+			    				day
+			    			ORDER BY
+			    				day DESC
+			    			") or die($strLogErrorViews);
 				        
 						if (phpAds_dbNumRows($res_adviews))
 						{
@@ -191,41 +172,23 @@ function phpAds_SendMaintenanceReport ($clientid, $first_unixtimestamp, $last_un
 				        $log .= "\n".$strClicks." (".$strTotal."):   ".$adclicks."\n";
 						
 						// Fetch all adclicks belonging to banner belonging to client, grouped by day
-						if ($phpAds_config['compact_stats'])
-				            $res_adclicks = phpAds_dbQuery("
-				    			SELECT
-				    				SUM(clicks) as qnt,
-				    				DATE_FORMAT(day, '$date_format') as t_stamp_f,
-				    				TO_DAYS(day) AS the_day
-				    			FROM
-				    				".$phpAds_config['tbl_adstats']."
-				    			WHERE
-				    				bannerid = ".$row_banners['bannerid']." AND
-				                    clicks > 0 AND
-									UNIX_TIMESTAMP(day) >= $first_unixtimestamp AND
-									UNIX_TIMESTAMP(day) < $last_unixtimestamp
-				    			GROUP BY
-				    				day
-				    			ORDER BY
-				    				day DESC
-				    			") or die("$strLogErrorClicks ".phpAds_dbError());
-				        else
-				            $res_adclicks = phpAds_dbQuery("
-				    			SELECT
-				    				count(*) as qnt,
-				    				DATE_FORMAT(t_stamp, '$date_format') as t_stamp_f,
-				    				TO_DAYS(t_stamp) AS the_day
-				    			FROM
-				    				".$phpAds_config['tbl_adclicks']."
-				    			WHERE
-				    				bannerid = ".$row_banners['bannerid']." AND
-									t_stamp >= $first_sqltimestamp AND
-									t_stamp < $last_sqltimestamp
-				    			GROUP BY
-				    				the_day
-				    			ORDER BY
-				    				the_day DESC
-				    			") or die("$strLogErrorClicks ".phpAds_dbError());
+			            $res_adclicks = phpAds_dbQuery("
+			    			SELECT
+			    				SUM(clicks) as qnt,
+			    				DATE_FORMAT(day, '$date_format') as t_stamp_f,
+			    				TO_DAYS(day) AS the_day
+			    			FROM
+			    				".$phpAds_config['tbl_adstats']."
+			    			WHERE
+			    				bannerid = ".$row_banners['bannerid']." AND
+			                    clicks > 0 AND
+								UNIX_TIMESTAMP(day) >= $first_unixtimestamp AND
+								UNIX_TIMESTAMP(day) < $last_unixtimestamp
+			    			GROUP BY
+			    				day
+			    			ORDER BY
+			    				day DESC
+			    			") or die("$strLogErrorClicks ".phpAds_dbError());
 						
 						if (phpAds_dbNumRows($res_adviews))
 						{

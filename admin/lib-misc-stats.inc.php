@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -90,66 +90,24 @@ if ($type == 's')
 	
 	
 	// Get the adviews/clicks for each banner
-	if ($phpAds_config['compact_stats'])
+	$res_stats = phpAds_dbQuery("
+		SELECT
+			bannerid,
+			sum(views) as views,
+			sum(clicks) as clicks
+		FROM 
+			".$phpAds_config['tbl_adstats']."
+		GROUP BY
+			bannerid
+		") or phpAds_sqlDie();
+	
+	while ($row_stats = phpAds_dbFetchArray($res_stats))
 	{
-		$res_stats = phpAds_dbQuery("
-			SELECT
-				bannerid,
-				sum(views) as views,
-				sum(clicks) as clicks
-			FROM 
-				".$phpAds_config['tbl_adstats']."
-			GROUP BY
-				bannerid
-			") or phpAds_sqlDie();
+		$dimension = $banners[$row_stats['bannerid']]['width'].' x '.
+					 $banners[$row_stats['bannerid']]['height'];
 		
-		while ($row_stats = phpAds_dbFetchArray($res_stats))
-		{
-			$dimension = $banners[$row_stats['bannerid']]['width'].' x '.
-						 $banners[$row_stats['bannerid']]['height'];
-			
-			$dimensions[$dimension]['clicks'] += $row_stats['clicks'];
-			$dimensions[$dimension]['views'] += $row_stats['views'];
-		}
-	}
-	else
-	{
-		$res_stats = phpAds_dbQuery("
-			SELECT
-				bannerid,
-				count(bannerid) as views
-			FROM 
-				".$phpAds_config['tbl_adviews']."
-			GROUP BY
-				bannerid
-			") or phpAds_sqlDie();
-		
-		while ($row_stats = phpAds_dbFetchArray($res_stats))
-		{
-			$dimension = $banners[$row_stats['bannerid']]['width'].' x '.
-						 $banners[$row_stats['bannerid']]['height'];
-			
-			$dimensions[$dimension]['views'] += $row_stats['views'];
-		}
-		
-		
-		$res_stats = phpAds_dbQuery("
-			SELECT
-				bannerid,
-				count(bannerid) as clicks
-			FROM 
-				".$phpAds_config['tbl_adclicks']."
-			GROUP BY
-				bannerid
-			") or phpAds_sqlDie();
-		
-		while ($row_stats = phpAds_dbFetchArray($res_stats))
-		{
-			$dimension = $banners[$row_stats['bannerid']]['width'].' x '.
-						 $banners[$row_stats['bannerid']]['height'];
-			
-			$dimensions[$dimension]['clicks'] += $row_stats['clicks'];
-		}
+		$dimensions[$dimension]['clicks'] += $row_stats['clicks'];
+		$dimensions[$dimension]['views'] += $row_stats['views'];
 	}
 	
 	// Get totals

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.6 $
+<?php // $Revision: 2.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -130,51 +130,24 @@ while ($row_clients = phpAds_dbFetchArray($res_clients))
 	}
 }
 
-
-
-if (!$phpAds_config['compact_stats'])
+switch ($period)
 {
-	switch ($period)
-	{
-		case 't':	$timestamp	= mktime(0, 0, 0, date('m'), date('d'), date('Y'));
-					$limit 		= " AND t_stamp >= ".date('YmdHis', $timestamp);
-					break;
-				
-		case 'w':	$timestamp	= mktime(0, 0, 0, date('m'), date('d') - 6, date('Y'));
-					$limit 		= " AND t_stamp >= ".date('YmdHis', $timestamp);
-					break;
-				
-		case 'm':	$timestamp	= mktime(0, 0, 0, date('m'), 1, date('Y'));
-					$limit 		= " AND t_stamp >= ".date('YmdHis', $timestamp);
-					break;
-				
-		default:	$limit = '';
-					$period = '';
-					break;
-	}
+	case 't':	$timestamp	= mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+				$limit 		= " AND day >= ".date('Ymd', $timestamp);
+				break;
+			
+	case 'w':	$timestamp	= mktime(0, 0, 0, date('m'), date('d') - 6, date('Y'));
+				$limit 		= " AND day >= ".date('Ymd', $timestamp);
+				break;
+			
+	case 'm':	$timestamp	= mktime(0, 0, 0, date('m'), 1, date('Y'));
+				$limit 		= " AND day >= ".date('Ymd', $timestamp);
+				break;
+			
+	default:	$limit = '';
+				$period = '';
+				break;
 }
-else
-{
-	switch ($period)
-	{
-		case 't':	$timestamp	= mktime(0, 0, 0, date('m'), date('d'), date('Y'));
-					$limit 		= " AND day >= ".date('Ymd', $timestamp);
-					break;
-				
-		case 'w':	$timestamp	= mktime(0, 0, 0, date('m'), date('d') - 6, date('Y'));
-					$limit 		= " AND day >= ".date('Ymd', $timestamp);
-					break;
-				
-		case 'm':	$timestamp	= mktime(0, 0, 0, date('m'), 1, date('Y'));
-					$limit 		= " AND day >= ".date('Ymd', $timestamp);
-					break;
-				
-		default:	$limit = '';
-					$period = '';
-					break;
-	}
-}
-
 
 // Get the banners for each campaign
 $res_banners = phpAds_dbQuery("
@@ -206,59 +179,22 @@ while ($row_banners = phpAds_dbFetchArray($res_banners))
 	}
 	
 	
-	if (!$phpAds_config['compact_stats'])
+	$res_stats = phpAds_dbQuery("
+		SELECT
+			sum(views) as views,
+			sum(clicks) as clicks
+		FROM 
+			".$phpAds_config['tbl_adstats']."
+		WHERE
+			bannerid = ".$row_banners['bannerid'].$limit."
+		") or phpAds_sqlDie();
+	
+	if ($row_stats = phpAds_dbFetchArray($res_stats))
 	{
-		$res_stats = phpAds_dbQuery("
-			SELECT
-				count(*) as views
-			FROM 
-				".$phpAds_config['tbl_adviews']."
-			WHERE
-				bannerid = ".$row_banners['bannerid'].$limit."
-			") or phpAds_sqlDie();
-		
-		if ($row_stats = phpAds_dbFetchArray($res_stats))
-		{
-			$banners[$row_banners['bannerid']]['views'] = $row_stats['views'];
-			$banners[$row_banners['bannerid']]['clicks'] = 0;
-		}
-		
-		
-		$res_stats = phpAds_dbQuery("
-			SELECT
-				count(*) as clicks
-			FROM 
-				".$phpAds_config['tbl_adclicks']."
-			WHERE
-				bannerid = ".$row_banners['bannerid'].$limit."
-			") or phpAds_sqlDie();
-		
-		if ($row_stats = phpAds_dbFetchArray($res_stats))
-		{
-			$banners[$row_banners['bannerid']]['clicks'] = $row_stats['clicks'];
-		}
-	}
-	else
-	{
-		$res_stats = phpAds_dbQuery("
-			SELECT
-				sum(views) as views,
-				sum(clicks) as clicks
-			FROM 
-				".$phpAds_config['tbl_adstats']."
-			WHERE
-				bannerid = ".$row_banners['bannerid'].$limit."
-			") or phpAds_sqlDie();
-		
-		if ($row_stats = phpAds_dbFetchArray($res_stats))
-		{
-			$banners[$row_banners['bannerid']]['clicks'] = $row_stats['clicks'];
-			$banners[$row_banners['bannerid']]['views'] = $row_stats['views'];
-		}
+		$banners[$row_banners['bannerid']]['clicks'] = $row_stats['clicks'];
+		$banners[$row_banners['bannerid']]['views'] = $row_stats['views'];
 	}
 }
-
-
 
 // Add ID found in expand to expanded nodes
 if (isset($expand) && $expand != '')

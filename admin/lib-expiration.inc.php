@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -151,34 +151,16 @@ function days_left($clientid)
 		
 		if ($row_client["views"] != -1)
 		{
-			if ($phpAds_config['compact_stats']) 
-			{
-	           	$view_query="
-	               	SELECT
-	                   	SUM(views) as total_views,
-	                    MAX(TO_DAYS(day))-TO_DAYS(NOW()) as days_since_last_view,
-	                    TO_DAYS(NOW())-MIN(TO_DAYS(day)) as days_since_start
-	                FROM
-	                   	".$phpAds_config['tbl_banners']." AS b
-	                    LEFT JOIN ".$phpAds_config['tbl_adstats']." AS v USING (bannerid)
-	                WHERE
-	                  	b.clientid = $clientid";
-            }
-			else
-			{
-	            $view_query="
-					SELECT
-						count(*) as total_views,
-						MAX(TO_DAYS(v.t_stamp))-TO_DAYS(NOW()) as days_since_last_view,
-						TO_DAYS(NOW())-MIN(TO_DAYS(v.t_stamp)) as days_since_start
-					FROM
-						".$phpAds_config['tbl_adviews']." AS v, 
-						".$phpAds_config['tbl_banners']." AS b 
-					WHERE
-						b.clientid = $clientid 
-						AND
-						b.bannerid = v.bannerid";
-			}
+           	$view_query="
+               	SELECT
+                   	SUM(views) as total_views,
+                    MAX(TO_DAYS(day))-TO_DAYS(NOW()) as days_since_last_view,
+                    TO_DAYS(NOW())-MIN(TO_DAYS(day)) as days_since_start
+                FROM
+                   	".$phpAds_config['tbl_banners']." AS b
+                    LEFT JOIN ".$phpAds_config['tbl_adstats']." AS v USING (bannerid)
+                WHERE
+                  	b.clientid = $clientid";
 			
 			$res_views = phpAds_dbQuery($view_query) or phpAds_sqlDie();
 			if (phpAds_dbNumRows ($res_views) == 1)
@@ -221,36 +203,19 @@ function days_left($clientid)
 		
 		if ($row_client["clicks"] != -1)
 		{
-			if ($phpAds_config['compact_stats']) 
-            {
-            	$click_query="
-                	SELECT
-                    	SUM(clicks) as total_clicks,
-                        MAX(TO_DAYS(day))-TO_DAYS(NOW()) as days_since_last_click,
-                        TO_DAYS(NOW())-MIN(TO_DAYS(day)) as days_since_start
-					FROM
-						".$phpAds_config['tbl_adstats']."
-						LEFT JOIN ".$phpAds_config['tbl_banners']." USING (bannerid)
-					WHERE
-						clientid = '$clientid' AND
-						clicks > 0";
-			}
-			else
-			{
-				$click_query="
-					SELECT
-						count(*) as total_clicks,
-						MAX(TO_DAYS(c.t_stamp))- TO_DAYS(NOW()) as days_since_last_click,
-						TO_DAYS(NOW())-MIN(TO_DAYS(c.t_stamp)) as days_since_start
-					FROM
-						".$phpAds_config['tbl_adclicks']." AS c, 
-						".$phpAds_config['tbl_banners']." AS b 
-					WHERE 
-						b.clientid = $clientid AND
-						b.bannerid = c.bannerid";
-			}
-			
-			$res_clicks = phpAds_dbQuery($click_query) or phpAds_sqlDie();
+        	$click_query="
+            	SELECT
+                	SUM(clicks) as total_clicks,
+                    MAX(TO_DAYS(day))-TO_DAYS(NOW()) as days_since_last_click,
+                    TO_DAYS(NOW())-MIN(TO_DAYS(day)) as days_since_start
+				FROM
+					".$phpAds_config['tbl_adstats']."
+					LEFT JOIN ".$phpAds_config['tbl_banners']." USING (bannerid)
+				WHERE
+					clientid = '$clientid' AND
+					clicks > 0";
+
+        	$res_clicks = phpAds_dbQuery($click_query) or phpAds_sqlDie();
 			if (phpAds_dbNumRows($res_clicks) == 1)
 			{
 				$row_clicks = phpAds_dbFetchArray($res_clicks);

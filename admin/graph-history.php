@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -156,94 +156,34 @@ if ($period == 'm')
 /* Get statistics for selected period                    */
 /*********************************************************/
 
-if ($phpAds_config['compact_stats']) 
+// Get stats for selected period
+$begin = date('Ymd', $begin_timestamp);
+$end   = date('Ymd', $end_timestamp);
+
+$result = phpAds_dbQuery("
+	SELECT
+		sum(views) AS sum_views,
+		sum(clicks) AS sum_clicks,
+		DATE_FORMAT(day, '".$formatted."') AS date,
+		DATE_FORMAT(day, '".$unformatted."') AS date_u
+	FROM
+		".$phpAds_config['tbl_adstats']."
+	WHERE
+		day >= $begin AND day < $end
+		".(isset($where) ? 'AND '.$where : '')."
+	GROUP BY
+		date_u
+	ORDER BY
+		date_u DESC
+	LIMIT 
+		$returnlimit
+");
+
+while ($row = phpAds_dbFetchArray($result))
 {
-	// Get stats for selected period
-	$begin = date('Ymd', $begin_timestamp);
-	$end   = date('Ymd', $end_timestamp);
-	
-	$result = phpAds_dbQuery("
-		SELECT
-			sum(views) AS sum_views,
-			sum(clicks) AS sum_clicks,
-			DATE_FORMAT(day, '".$formatted."') AS date,
-			DATE_FORMAT(day, '".$unformatted."') AS date_u
-		FROM
-			".$phpAds_config['tbl_adstats']."
-		WHERE
-			day >= $begin AND day < $end
-			".(isset($where) ? 'AND '.$where : '')."
-		GROUP BY
-			date_u
-		ORDER BY
-			date_u DESC
-		LIMIT 
-			$returnlimit
-	");
-	
-	while ($row = phpAds_dbFetchArray($result))
-	{
-		$stats[$row['date']]['sum_views'] = $row['sum_views'];
-		$stats[$row['date']]['sum_clicks'] = $row['sum_clicks'];
-	}
+	$stats[$row['date']]['sum_views'] = $row['sum_views'];
+	$stats[$row['date']]['sum_clicks'] = $row['sum_clicks'];
 }
-else
-{
-	// Get stats for selected period
-	$begin = date('YmdHis', $begin_timestamp);
-	$end   = date('YmdHis', $end_timestamp);
-	
-	$result = phpAds_dbQuery("
-		SELECT
-			COUNT(*) AS sum_views,
-			DATE_FORMAT(t_stamp, '".$formatted."') AS date,
-			DATE_FORMAT(t_stamp, '".$unformatted."') AS date_u
-		FROM
-			".$phpAds_config['tbl_adviews']."
-		WHERE
-			t_stamp >= $begin AND t_stamp < $end
-			".(isset($where) ? 'AND '.$where : '')."
-		GROUP BY
-			date_u
-		ORDER BY
-			date_u DESC
-		LIMIT 
-			$returnlimit
-	");
-	
-	while ($row = phpAds_dbFetchArray($result))
-	{
-		$stats[$row['date']]['sum_views'] = $row['sum_views'];
-		$stats[$row['date']]['sum_clicks'] = '0';
-	}
-	
-	
-	$result = phpAds_dbQuery("
-		SELECT
-			COUNT(*) AS sum_clicks,
-			DATE_FORMAT(t_stamp, '".$formatted."') AS date,
-			DATE_FORMAT(t_stamp, '".$unformatted."') AS date_u
-		FROM
-			".$phpAds_config['tbl_adclicks']."
-		WHERE
-			t_stamp >= $begin AND t_stamp < $end
-			".(isset($where) ? 'AND '.$where : '')."
-		GROUP BY
-			date_u
-		ORDER BY
-			date_u DESC
-		LIMIT 
-			$returnlimit
-	");
-	
-	while ($row = phpAds_dbFetchArray($result))
-	{
-		$stats[$row['date']]['sum_clicks'] = $row['sum_clicks'];
-	}
-}
-
-
-
 
 /*********************************************************/
 /* Prepare data for graph                                */

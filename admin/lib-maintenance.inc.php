@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -25,25 +25,7 @@ function phpAds_MaintenanceSelection($section)
 	global $phpAds_config;
 	global $phpAds_TextDirection;
 	global $strChooseSection, $strPriority, $strCache, $strBanners, $strStats, $strStorage;
-	
-	
-	if ($phpAds_config['compact_stats'])
-	{
-		// Determine left over verbose stats
-		$viewresult = phpAds_dbQuery("SELECT COUNT(*) AS cnt FROM ".$phpAds_config['tbl_adviews']);
-		$viewrow = phpAds_dbFetchArray($viewresult);
-		if (isset($viewrow["cnt"]) && $viewrow["cnt"] != '')
-			$verboseviews = $viewrow["cnt"];
-		else
-			$verboseviews = 0;
-		
-		$clickresult = phpAds_dbQuery("SELECT COUNT(*) AS cnt FROM ".$phpAds_config['tbl_adclicks']);
-		$clickrow = phpAds_dbFetchArray($viewresult);
-		if (isset($clickrow["cnt"]) && $clickrow["cnt"] != '')
-			$verboseclicks = $clickrow["cnt"];
-		else
-			$verboseclicks = 0;
-	}
+
 ?>
 <script language="JavaScript">
 <!--
@@ -64,9 +46,6 @@ function maintenance_goto_section()
 	
 	echo "<option value='banners'".($section == 'banners' ? ' selected' : '').">".$strBanners."</option>";
 	echo "<option value='priority'".($section == 'priority' ? ' selected' : '').">".$strPriority."</option>";
-	
-	if ($phpAds_config['compact_stats'] && ($verboseviews > 0 || $verboseclicks > 0))
-		echo "<option value='stats'".($section == 'stats' ? ' selected' : '').">".$strStats."</option>";
 	
 	if ($phpAds_config['type_web_allow'] == true && (($phpAds_config['type_web_mode'] == 0 && 
 	    $phpAds_config['type_web_dir'] != '') || ($phpAds_config['type_web_mode'] == 1 && 

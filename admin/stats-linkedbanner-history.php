@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -72,28 +72,14 @@ if (phpAds_isUser(phpAds_Affiliate))
 
 if (phpAds_isUser(phpAds_Admin))
 {
-	if ($phpAds_config['compact_stats'])
-	{
-		$res = phpAds_dbQuery("
-			SELECT
-				DISTINCT bannerid
-			FROM
-				".$phpAds_config['tbl_adstats']."
-			WHERE
-				zoneid = '".$zoneid."'
-		") or phpAds_sqlDie();
-	}
-	else
-	{
-		$res = phpAds_dbQuery("
-			SELECT
-				DISTINCT bannerid
-			FROM
-				".$phpAds_config['tbl_adviews']."
-			WHERE
-				zoneid = '".$zoneid."'
-		") or phpAds_sqlDie();
-	}
+	$res = phpAds_dbQuery("
+		SELECT
+			DISTINCT bannerid
+		FROM
+			".$phpAds_config['tbl_adstats']."
+		WHERE
+			zoneid = '".$zoneid."'
+	") or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))
 	{

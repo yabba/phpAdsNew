@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -144,16 +144,8 @@ $campaigns_weight = phpAds_dbResult($res, 0, 'campaigns');
 
 
 // Get the number of days running
-if ($phpAds_config['compact_stats'])
-{
-	$res = phpAds_dbQuery("SELECT UNIX_TIMESTAMP(MIN(day)) AS days_running FROM ".$phpAds_config['tbl_adstats']." WHERE day > 0 AND hour > 0 ORDER BY day LIMIT 1");
-	$days_running = phpAds_dbResult($res, 0, 'days_running');
-}
-else
-{
-	$res = phpAds_dbQuery("SELECT UNIX_TIMESTAMP(MIN(t_stamp)) AS days_running FROM ".$phpAds_config['tbl_adviews']);
-	$days_running = phpAds_dbResult($res, 0, 'days_running');
-}
+$res = phpAds_dbQuery("SELECT UNIX_TIMESTAMP(MIN(day)) AS days_running FROM ".$phpAds_config['tbl_adstats']." WHERE day > 0 AND hour > 0 ORDER BY day LIMIT 1");
+$days_running = phpAds_dbResult($res, 0, 'days_running');
 
 if ($days_running > 0)
 {

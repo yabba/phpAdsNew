@@ -1,4 +1,4 @@
-<?php // $Revision: 2.6 $
+<?php // $Revision: 2.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -1046,6 +1046,7 @@ function phpAds_upgradeTargetStats ()
 				{
 					$campaigns[] = $campaignid;
 					
+					// We need to figure out how to upgrade to batch statistics...
 					if ($phpAds_config['compact_stats'])
 					{
 						$res_views = phpAds_dbQuery("
@@ -1083,6 +1084,7 @@ function phpAds_upgradeTargetStats ()
 			
 			if (count($campaigns))
 			{
+				// We need to figure out how to upgrade to batch statistics...
 				if ($phpAds_config['compact_stats'])
 				{
 					$res_views = phpAds_dbQuery("
@@ -1115,6 +1117,7 @@ function phpAds_upgradeTargetStats ()
 			}
 			else
 			{
+				// We need to figure out how to upgrade to batch statistics
 				if ($phpAds_config['compact_stats'])
 				{
 					$res_views = phpAds_dbQuery("

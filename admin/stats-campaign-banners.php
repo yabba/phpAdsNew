@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -166,80 +166,30 @@ $i = 0;
 $banners = array();
 $order_array = array();
 
-if ($phpAds_config['compact_stats'])
+$query = "
+	SELECT
+		".$phpAds_config['tbl_banners'].".bannerid,
+		".$phpAds_config['tbl_banners'].".description,
+		".$phpAds_config['tbl_banners'].".alt,
+		SUM(".$phpAds_config['tbl_adstats'].".views) AS adviews,
+		SUM(".$phpAds_config['tbl_adstats'].".clicks) AS adclicks
+	FROM
+		".$phpAds_config['tbl_banners']." LEFT JOIN 
+		".$phpAds_config['tbl_adstats']." USING (bannerid)
+	WHERE
+		".$phpAds_config['tbl_banners'].".clientid = $campaignid
+	GROUP BY
+		".$phpAds_config['tbl_banners'].".bannerid
+	";
+
+$res = phpAds_dbQuery($query) or phpAds_sqlDie();
+
+while ($row = phpAds_dbFetchArray($res))
 {
-	$query = "
-		SELECT
-			".$phpAds_config['tbl_banners'].".bannerid,
-			".$phpAds_config['tbl_banners'].".description,
-			".$phpAds_config['tbl_banners'].".alt,
-			SUM(".$phpAds_config['tbl_adstats'].".views) AS adviews,
-			SUM(".$phpAds_config['tbl_adstats'].".clicks) AS adclicks
-		FROM
-			".$phpAds_config['tbl_banners']." LEFT JOIN 
-			".$phpAds_config['tbl_adstats']." USING (bannerid)
-		WHERE
-			".$phpAds_config['tbl_banners'].".clientid = $campaignid
-		GROUP BY
-			".$phpAds_config['tbl_banners'].".bannerid
-		";
-	
-	$res = phpAds_dbQuery($query) or phpAds_sqlDie();
-	
-	while ($row = phpAds_dbFetchArray($res))
-	{
-		$banners[$row['bannerid']]['id'] = $row['bannerid'];
-		$banners[$row['bannerid']]['name'] = phpAds_buildBannerName ('', $row['description'], $row['alt']);
-		$banners[$row['bannerid']]['adviews'] = $row['adviews'];
-		$banners[$row['bannerid']]['adclicks'] = $row['adclicks'];
-	}
-}
-else
-{
-	$query = "
-		SELECT
-			".$phpAds_config['tbl_banners'].".bannerid,
-			".$phpAds_config['tbl_banners'].".description,
-			".$phpAds_config['tbl_banners'].".alt,
-			COUNT(".$phpAds_config['tbl_adviews'].".bannerid) AS adviews
-		FROM
-			".$phpAds_config['tbl_banners']." LEFT JOIN
-			".$phpAds_config['tbl_adviews']." USING (bannerid)
-		WHERE
-			".$phpAds_config['tbl_banners'].".clientid = $campaignid
-		GROUP BY
-			".$phpAds_config['tbl_banners'].".bannerid
-		";
-	
-	$res = phpAds_dbQuery($query) or phpAds_sqlDie();
-	
-	while ($row = phpAds_dbFetchArray($res))
-	{
-		$banners[$row['bannerid']]['id'] = $row['bannerid'];
-		$banners[$row['bannerid']]['name'] = phpAds_buildBannerName ('', $row['description'], $row['alt']);
-		$banners[$row['bannerid']]['adviews'] = $row['adviews'];
-	}
-	
-	$query = "
-		SELECT
-			".$phpAds_config['tbl_banners'].".bannerid,
-			COUNT(".$phpAds_config['tbl_adclicks'].".bannerid) AS adclicks
-		FROM
-			".$phpAds_config['tbl_banners']." LEFT JOIN 
-			".$phpAds_config['tbl_adclicks']." USING (bannerid)
-		WHERE
-			".$phpAds_config['tbl_banners'].".clientid = $campaignid
-		GROUP BY
-			".$phpAds_config['tbl_banners'].".bannerid
-		";
-	
-	$res = phpAds_dbQuery($query) or phpAds_sqlDie();
-	
-	while ($row = phpAds_dbFetchArray($res))
-	{
-		if (isset($banners[$row['bannerid']]))
-			$banners[$row['bannerid']]['adclicks'] = $row['adclicks'];
-	}
+	$banners[$row['bannerid']]['id'] = $row['bannerid'];
+	$banners[$row['bannerid']]['name'] = phpAds_buildBannerName ('', $row['description'], $row['alt']);
+	$banners[$row['bannerid']]['adviews'] = $row['adviews'];
+	$banners[$row['bannerid']]['adclicks'] = $row['adclicks'];
 }
 
 if (count($banners))

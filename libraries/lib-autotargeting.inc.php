@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -127,16 +127,8 @@ function phpAds_AutoTargetingPrepareProfile($weeks = 2)
 	$profile = array(0, 0, 0, 0, 0, 0, 0);
 	
 	// Get the number of days running
-	if ($phpAds_config['compact_stats'])
-	{
-		$res = phpAds_dbQuery("SELECT UNIX_TIMESTAMP(MIN(day)) AS days_running FROM ".$phpAds_config['tbl_adstats']." WHERE day > 0 AND hour > 0 ORDER BY day LIMIT 1");
-		$days_running = phpAds_dbResult($res, 0, 'days_running');
-	}
-	else
-	{
-		$res = phpAds_dbQuery("SELECT UNIX_TIMESTAMP(MIN(t_stamp)) AS days_running FROM ".$phpAds_config['tbl_adviews']);
-		$days_running = phpAds_dbResult($res, 0, 'days_running');
-	}
+	$res = phpAds_dbQuery("SELECT UNIX_TIMESTAMP(MIN(day)) AS days_running FROM ".$phpAds_config['tbl_adstats']." WHERE day > 0 AND hour > 0 ORDER BY day LIMIT 1");
+	$days_running = phpAds_dbResult($res, 0, 'days_running');
 
 	if ($days_running > 0)
 	{
@@ -155,46 +147,23 @@ function phpAds_AutoTargetingPrepareProfile($weeks = 2)
 			$weeks = floor($days_running / 7);
 	}
 
-	if ($phpAds_config['compact_stats'])
-	{
-		$begin   = date('Ymd', phpAds_makeTimestamp(phpAds_LastMidnight, - (60 * 60 * 24 * 7 * $weeks)));
-		$end   = date('Ymd', phpAds_makeTimestamp(phpAds_LastMidnight));
-		
-		$res_views = phpAds_dbQuery("
-			SELECT
-				SUM(views) AS sum_views,
-				DATE_FORMAT(day, '%w') AS dow
-			FROM
-				".$phpAds_config['tbl_adstats']."
-			WHERE
-				day >= $begin AND
-				day < $end
-			GROUP BY
-				dow
-			ORDER BY
-				dow
-			");
-	}
-	else
-	{
-		$begin   = date('YmdHis', phpAds_makeTimestamp(phpAds_LastMidnight, - (60 * 60 * 24 * 7 * $weeks)));
-		$end   = date('YmdHis', phpAds_makeTimestamp(phpAds_LastMidnight));
-		
-		$res_views = phpAds_dbQuery("
-			SELECT
-				COUNT(*) AS sum_views,
-				DATE_FORMAT(t_stamp, '%w') AS dow
-			FROM
-				".$phpAds_config['tbl_adviews']."
-			WHERE
-				t_stamp >= $begin AND
-				t_stamp < $end
-			GROUP BY
-				dow
-			ORDER BY
-				dow
-			");
-	}
+	$begin   = date('Ymd', phpAds_makeTimestamp(phpAds_LastMidnight, - (60 * 60 * 24 * 7 * $weeks)));
+	$end   = date('Ymd', phpAds_makeTimestamp(phpAds_LastMidnight));
+	
+	$res_views = phpAds_dbQuery("
+		SELECT
+			SUM(views) AS sum_views,
+			DATE_FORMAT(day, '%w') AS dow
+		FROM
+			".$phpAds_config['tbl_adstats']."
+		WHERE
+			day >= $begin AND
+			day < $end
+		GROUP BY
+			dow
+		ORDER BY
+			dow
+		");
 	
 	// Fill profile
 	while ($row = phpAds_dbFetchArray($res_views))
@@ -455,29 +424,14 @@ function phpAds_TargetStatsSaveViews()
 	$end		= $day.'235959';
 
 	// Get total views
-	if ($phpAds_config['compact_stats'])
-	{
-		$query = "
-			SELECT
-				SUM(views) AS sum_views
-			FROM
-				".$phpAds_config['tbl_adstats']."
-			WHERE
-				day = ".$day."
-		";
-	}
-	else
-	{
-		$query = "
-			SELECT
-				COUNT(*) AS sum_views
-			FROM
-				".$phpAds_config['tbl_adviews']."
-			WHERE
-				t_stamp >= ".$begin." AND
-				t_stamp <= ".$end."
-		";
-	}
+	$query = "
+		SELECT
+			SUM(views) AS sum_views
+		FROM
+			".$phpAds_config['tbl_adstats']."
+		WHERE
+			day = ".$day."
+	";
 
 	$sum_views = phpAds_dbResult(phpAds_dbQuery($query), 0, 'sum_views');
 	$totalviews = 0;
@@ -494,35 +448,17 @@ function phpAds_TargetStatsSaveViews()
 	
 	while ($row = phpAds_dbFetchArray($res))
 	{
-		if ($phpAds_config['compact_stats'])
-		{
-			$query = "
-				SELECT
-					SUM(views) AS sum_views
-				FROM
-					".$phpAds_config['tbl_adstats']." AS v,
-					".$phpAds_config['tbl_banners']." AS b
-				WHERE
-					v.day = ".$day." AND
-					b.bannerid = v.bannerid AND
-					b.clientid = ".$row['clientid']."
-			";
-		}
-		else
-		{
-			$query = "
-				SELECT
-					COUNT(*) AS sum_views
-				FROM
-					".$phpAds_config['tbl_adviews']." AS v,
-					".$phpAds_config['tbl_banners']." AS b
-				WHERE
-					v.t_stamp >= ".$begin." AND
-					v.t_stamp <= ".$end." AND
-					b.bannerid = v.bannerid AND
-					b.clientid = ".$row['clientid']."
-			";
-		}
+		$query = "
+			SELECT
+				SUM(views) AS sum_views
+			FROM
+				".$phpAds_config['tbl_adstats']." AS v,
+				".$phpAds_config['tbl_banners']." AS b
+			WHERE
+				v.day = ".$day." AND
+				b.bannerid = v.bannerid AND
+				b.clientid = ".$row['clientid']."
+		";
 
 		$views = (int)phpAds_dbResult(phpAds_dbQuery($query), 0, 'sum_views');
 		$totalviews += $views;

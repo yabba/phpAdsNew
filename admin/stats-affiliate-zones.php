@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -140,88 +140,31 @@ while ($row_zones = phpAds_dbFetchArray($res_zones))
 
 
 // Get the adviews/clicks for each banner
-if ($phpAds_config['compact_stats'])
+$res_stats = phpAds_dbQuery("
+	SELECT
+		s.zoneid as zoneid,
+		s.bannerid as bannerid,
+		sum(s.views) as views,
+		sum(s.clicks) as clicks
+	FROM 
+		".$phpAds_config['tbl_adstats']." as s,
+		".$phpAds_config['tbl_zones']." as z
+	WHERE
+		s.zoneid = z.zoneid AND
+		z.affiliateid = ".$affiliateid."
+	GROUP BY
+		zoneid, bannerid
+	") or phpAds_sqlDie();
+
+while ($row_stats = phpAds_dbFetchArray($res_stats))
 {
-	$res_stats = phpAds_dbQuery("
-		SELECT
-			s.zoneid as zoneid,
-			s.bannerid as bannerid,
-			sum(s.views) as views,
-			sum(s.clicks) as clicks
-		FROM 
-			".$phpAds_config['tbl_adstats']." as s,
-			".$phpAds_config['tbl_zones']." as z
-		WHERE
-			s.zoneid = z.zoneid AND
-			z.affiliateid = ".$affiliateid."
-		GROUP BY
-			zoneid, bannerid
-		") or phpAds_sqlDie();
-	
-	while ($row_stats = phpAds_dbFetchArray($res_stats))
+	if (isset($zones[$row_stats['zoneid']]))
 	{
-		if (isset($zones[$row_stats['zoneid']]))
-		{
-			$zones[$row_stats['zoneid']]['banners'][$row_stats['bannerid']]['bannerid'] = $row_stats['bannerid'];
-			$zones[$row_stats['zoneid']]['banners'][$row_stats['bannerid']]['clicks'] = $row_stats['clicks'];
-			$zones[$row_stats['zoneid']]['banners'][$row_stats['bannerid']]['views'] = $row_stats['views'];
-		}
+		$zones[$row_stats['zoneid']]['banners'][$row_stats['bannerid']]['bannerid'] = $row_stats['bannerid'];
+		$zones[$row_stats['zoneid']]['banners'][$row_stats['bannerid']]['clicks'] = $row_stats['clicks'];
+		$zones[$row_stats['zoneid']]['banners'][$row_stats['bannerid']]['views'] = $row_stats['views'];
 	}
 }
-else
-{
-	$res_stats = phpAds_dbQuery("
-		SELECT
-			s.zoneid as zoneid,
-			s.bannerid as bannerid,
-			count(s.bannerid) as views
-		FROM 
-			".$phpAds_config['tbl_adviews']." as s,
-			".$phpAds_config['tbl_zones']." as z
-		WHERE
-			s.zoneid = z.zoneid AND
-			z.affiliateid = ".$affiliateid."
-		GROUP BY
-			zoneid, bannerid
-		") or phpAds_sqlDie();
-	
-	while ($row_stats = phpAds_dbFetchArray($res_stats))
-	{
-		if (isset($zones[$row_stats['zoneid']]))
-		{
-			$zones[$row_stats['zoneid']]['banners'][$row_stats['bannerid']]['bannerid'] = $row_stats['bannerid'];
-			$zones[$row_stats['zoneid']]['banners'][$row_stats['bannerid']]['views'] = $row_stats['views'];
-			$zones[$row_stats['zoneid']]['banners'][$row_stats['bannerid']]['clicks'] = 0;
-		}
-	}
-	
-	
-	$res_stats = phpAds_dbQuery("
-		SELECT
-			s.zoneid as zoneid,
-			s.bannerid as bannerid,
-			count(s.bannerid) as clicks
-		FROM 
-			".$phpAds_config['tbl_adclicks']." as s,
-			".$phpAds_config['tbl_zones']." as z
-		WHERE
-			s.zoneid = z.zoneid AND
-			z.affiliateid = ".$affiliateid."
-		GROUP BY
-			zoneid, bannerid
-		") or phpAds_sqlDie();
-	
-	while ($row_stats = phpAds_dbFetchArray($res_stats))
-	{
-		if (isset($zones[$row_stats['zoneid']]))
-		{
-			$zones[$row_stats['zoneid']]['banners'][$row_stats['bannerid']]['bannerid'] = $row_stats['bannerid'];
-			$zones[$row_stats['zoneid']]['banners'][$row_stats['bannerid']]['clicks'] = $row_stats['clicks'];
-		}
-	}
-}
-
-
 
 // Add ID found in expand to expanded nodes
 if (isset($expand) && $expand != '')

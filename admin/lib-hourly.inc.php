@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -19,72 +19,25 @@
 /* Show hourly statistics                                */
 /*********************************************************/
 
-if ($phpAds_config['compact_stats'])
+$result = phpAds_dbQuery("
+	SELECT
+		hour,
+		SUM(views) AS views,
+		SUM(clicks) AS clicks
+	FROM
+		".$phpAds_config['tbl_adstats']."
+	WHERE
+		day = ".$day."
+		".(isset($lib_hourly_where) ? 'AND '.$lib_hourly_where : '')."
+	GROUP BY 
+		hour
+") or phpAds_sqlDie();
+
+
+while ($row = phpAds_dbFetchArray($result))
 {
-	$result = phpAds_dbQuery("
-		SELECT
-			hour,
-			SUM(views) AS views,
-			SUM(clicks) AS clicks
-		FROM
-			".$phpAds_config['tbl_adstats']."
-		WHERE
-			day = ".$day."
-			".(isset($lib_hourly_where) ? 'AND '.$lib_hourly_where : '')."
-		GROUP BY 
-			hour
-	") or phpAds_sqlDie();
-	
-	
-	while ($row = phpAds_dbFetchArray($result))
-	{
-		$views[$row['hour']] = $row['views'];
-		$clicks[$row['hour']] = $row['clicks'];
-	}
-}
-else
-{
-	$begin = date('YmdHis', mktime(0, 0, 0, substr($day, 4, 2), substr($day, 6, 2), substr($day, 0, 4)));
-	$end   = date('YmdHis', mktime(0, 0, 0, substr($day, 4, 2), substr($day, 6, 2) + 1, substr($day, 0, 4)));
-	
-	$result = phpAds_dbQuery("
-		SELECT
-			HOUR(t_stamp) AS hour,
-			COUNT(*) AS qnt
-		FROM
-			".$phpAds_config['tbl_adviews']."
-		WHERE
-			t_stamp >= $begin AND t_stamp < $end
-			".(isset($lib_hourly_where) ? 'AND '.$lib_hourly_where : '')."
-		GROUP BY 
-			hour
-	") or phpAds_sqlDie();
-	
-	
-	while ($row = phpAds_dbFetchArray($result))
-	{
-		$views[$row['hour']] = $row['qnt'];
-	}
-	
-	
-	$result = phpAds_dbQuery("
-		SELECT
-			HOUR(t_stamp) AS hour,
-			COUNT(*) AS qnt
-		FROM
-			".$phpAds_config['tbl_adclicks']."
-		WHERE
-			t_stamp >= $begin AND t_stamp < $end
-			".(isset($lib_hourly_where) ? 'AND '.$lib_hourly_where : '')."
-		GROUP BY 
-			hour
-	") or phpAds_sqlDie();
-	
-	
-	while ($row = phpAds_dbFetchArray($result))
-	{
-		$clicks[$row['hour']] = $row['qnt'];
-	}
+	$views[$row['hour']] = $row['views'];
+	$clicks[$row['hour']] = $row['clicks'];
 }
 
 echo "<br><br>";

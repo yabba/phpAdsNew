@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -102,76 +102,27 @@ if ($row_zone = phpAds_dbFetchArray($res_stats))
 	$zone = $row_zone;
 	
 	// Get the adviews/clicks for each banner
-	if ($phpAds_config['compact_stats'])
+	$res_stats = phpAds_dbQuery("
+		SELECT
+			bannerid,
+			SUM(views) AS views,
+			sum(clicks) AS clicks
+		FROM 
+			".$phpAds_config['tbl_adstats']."
+		WHERE
+			zoneid = '".$zoneid."'
+		GROUP BY
+			zoneid, bannerid
+	");
+	
+	while ($row_stats = phpAds_dbFetchArray($res_stats))
 	{
-		$res_stats = phpAds_dbQuery("
-			SELECT
-				bannerid,
-				SUM(views) AS views,
-				sum(clicks) AS clicks
-			FROM 
-				".$phpAds_config['tbl_adstats']."
-			WHERE
-				zoneid = '".$zoneid."'
-			GROUP BY
-				zoneid, bannerid
-		");
+		$linkedbanners[$row_stats['bannerid']]['bannerid'] = $row_stats['bannerid'];
+		$linkedbanners[$row_stats['bannerid']]['clicks'] = $row_stats['clicks'];
+		$linkedbanners[$row_stats['bannerid']]['views'] = $row_stats['views'];
 		
-		while ($row_stats = phpAds_dbFetchArray($res_stats))
-		{
-			$linkedbanners[$row_stats['bannerid']]['bannerid'] = $row_stats['bannerid'];
-			$linkedbanners[$row_stats['bannerid']]['clicks'] = $row_stats['clicks'];
-			$linkedbanners[$row_stats['bannerid']]['views'] = $row_stats['views'];
-			
-			$totalclicks += $row_stats['clicks'];
-			$totalviews  += $row_stats['views'];
-		}
-	}
-	else
-	{
-		$res_stats = phpAds_dbQuery("
-			SELECT
-				zoneid,
-				bannerid,
-				count(bannerid) as views
-			FROM 
-				".$phpAds_config['tbl_adviews']."
-			WHERE
-				zoneid = '".$zoneid."'
-			GROUP BY
-				zoneid, bannerid
-		");
-		
-		while ($row_stats = phpAds_dbFetchArray($res_stats))
-		{
-			$linkedbanners[$row_stats['bannerid']]['bannerid'] = $row_stats['bannerid'];
-			$linkedbanners[$row_stats['bannerid']]['clicks'] = 0;
-			$linkedbanners[$row_stats['bannerid']]['views'] = $row_stats['views'];
-			
-			$totalviews  += $row_stats['views'];
-		}
-		
-		
-		$res_stats = phpAds_dbQuery("
-			SELECT
-				zoneid,
-				bannerid,
-				count(bannerid) as clicks
-			FROM 
-				".$phpAds_config['tbl_adclicks']."
-			WHERE
-				zoneid = '".$zoneid."'
-			GROUP BY
-				zoneid, bannerid
-		");
-		
-		while ($row_stats = phpAds_dbFetchArray($res_stats))
-		{
-			$linkedbanners[$row_stats['bannerid']]['bannerid'] = $row_stats['bannerid'];
-			$linkedbanners[$row_stats['bannerid']]['clicks'] = $row_stats['clicks'];
-			
-			$totalclicks += $row_stats['clicks'];
-		}
+		$totalclicks += $row_stats['clicks'];
+		$totalviews  += $row_stats['views'];
 	}
 }
 

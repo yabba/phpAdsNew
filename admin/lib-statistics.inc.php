@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -707,94 +707,47 @@ function phpAds_totalStats($table, $column, $bannerid, $timeconstraint="")
 {
     global $phpAds_config;
     
-	if ($phpAds_config['compact_stats'])
+    $where = "";
+	
+    if (!empty($bannerid)) 
+    	$where = "WHERE bannerid = '$bannerid'";
+    
+	if (!empty($timeconstraint))
 	{
-	    $where = "";
+		if (!empty($bannerid))
+			$where .= " AND ";
+		else
+			$where = "WHERE ";
 		
-	    if (!empty($bannerid)) 
-        	$where = "WHERE bannerid = '$bannerid'";
-	    
-		if (!empty($timeconstraint))
+		if ($timeconstraint == "month")
 		{
-			if (!empty($bannerid))
-				$where .= " AND ";
-			else
-				$where = "WHERE ";
-			
-			if ($timeconstraint == "month")
-			{
-				$begin = date('Ymd', mktime(0, 0, 0, date('m'), 1, date('Y')));
-				$end   = date('Ymd', mktime(0, 0, 0, date('m') + 1, 1, date('Y')));
-				$where .= "day >= $begin AND day < $end";
-			}
-			elseif ($timeconstraint == "week")
-			{
-				$begin = date('Ymd', mktime(0, 0, 0, date('m'), date('d') - 6, date('Y')));
-				$end   = date('Ymd', mktime(0, 0, 0, date('m'), date('d') + 1, date('Y')));
-				$where .= "day >= $begin AND day < $end";
-			}
-			else
-			{
-				$begin = date('Ymd', mktime(0, 0, 0, date('m'), date('d'), date('Y')));
-			    
-				$where .= "day = $begin";
-			}
+			$begin = date('Ymd', mktime(0, 0, 0, date('m'), 1, date('Y')));
+			$end   = date('Ymd', mktime(0, 0, 0, date('m') + 1, 1, date('Y')));
+			$where .= "day >= $begin AND day < $end";
 		}
-		
-	    $res = phpAds_dbQuery("SELECT SUM($column) as qnt FROM ".$phpAds_config['tbl_adstats']." $where") or phpAds_sqlDie();
-	    
-		if (phpAds_dbNumRows ($res))
-	    { 
-	        $row = phpAds_dbFetchArray($res);
-			return ($row['qnt']);
+		elseif ($timeconstraint == "week")
+		{
+			$begin = date('Ymd', mktime(0, 0, 0, date('m'), date('d') - 6, date('Y')));
+			$end   = date('Ymd', mktime(0, 0, 0, date('m'), date('d') + 1, date('Y')));
+			$where .= "day >= $begin AND day < $end";
 		}
 		else
-			return (0);
+		{
+			$begin = date('Ymd', mktime(0, 0, 0, date('m'), date('d'), date('Y')));
+		    
+			$where .= "day = $begin";
+		}
+	}
+	
+    $res = phpAds_dbQuery("SELECT SUM($column) as qnt FROM ".$phpAds_config['tbl_adstats']." $where") or phpAds_sqlDie();
+    
+	if (phpAds_dbNumRows ($res))
+    { 
+        $row = phpAds_dbFetchArray($res);
+		return ($row['qnt']);
 	}
 	else
-	{
-	    $where = "";
-		
-	    if (!empty($bannerid)) 
-	        $where = "WHERE bannerid = '$bannerid'";
-	    
-		if (!empty($timeconstraint))
-		{
-			if (!empty($bannerid))
-				$where .= " AND ";
-			else
-				$where = "WHERE ";
-			
-			if ($timeconstraint == "month")
-			{
-				$begin = date('YmdHis', mktime(0, 0, 0, date('m'), 1, date('Y')));
-				$end   = date('YmdHis', mktime(0, 0, 0, date('m') + 1, 1, date('Y')));
-				$where .= "t_stamp >= $begin AND t_stamp < $end";
-			}
-			elseif ($timeconstraint == "week")
-			{
-				$begin = date('YmdHis', mktime(0, 0, 0, date('m'), date('d') - 6, date('Y')));
-				$end   = date('YmdHis', mktime(0, 0, 0, date('m'), date('d') + 1, date('Y')));
-				$where .= "t_stamp >= $begin AND t_stamp < $end";
-			}
-			else
-			{
-				$begin = date('YmdHis', mktime(0, 0, 0, date('m'), date('d'), date('Y')));
-				$end   = date('YmdHis', mktime(0, 0, 0, date('m'), date('d') + 1, date('Y')));
-				$where .= "t_stamp >= $begin AND t_stamp < $end";
-			}
-		}
-		
-	    $res = phpAds_dbQuery("SELECT count(*) as qnt FROM $table $where") or phpAds_sqlDie();
-    	
-		if (phpAds_dbNumRows ($res))
-	    {
-    	    $row = phpAds_dbFetchArray($res);
-			return ($row['qnt']);
-		}
-		else
-			return (0);
-    }
+		return (0);
 }
 
 function phpAds_totalClicks($bannerid="", $timeconstraint="")
