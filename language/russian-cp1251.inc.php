@@ -1,4 +1,4 @@
-<?php // $Revision: 1.42 $
+<?php // $Revision: 1.43 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -295,5 +295,16 @@ $GLOBALS['strClientsAndCampaigns']		= "Clients & Campaigns";
 $GLOBALS['strCampaignOverview']			= "Campaign overview";
 $GLOBALS['strReports']					= "Reports";
 $GLOBALS['strShowBanner']				= "Show banner";
+
+$GLOBALS['strIncludedBanners']			= "Linked banners";
+$GLOBALS['strProbability']				= "Probability";
+$GLOBALS['strInvocationcode']			= "Invocationcode";
+$GLOBALS['strSelectZoneType']			= "Please choose the type of linking banners";
+$GLOBALS['strBannerSelection']			= "Banner selection";
+$GLOBALS['strInteractive']				= "Interactive";
+$GLOBALS['strRawQueryString']			= "Raw querystring";
+
+$GLOBALS['strBannerWeight']				= "Banner weight";
+$GLOBALS['strCampaignWeight']			= "Campaign weight";
 
 ?>
