@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -433,7 +433,7 @@ function phpAds_TargetStatsSaveViews()
 				".$phpAds_config['tbl_adviews']."
 			WHERE
 				t_stamp >= ".$begin." AND
-				t_stamp <= ".$end." AND
+				t_stamp <= ".$end."
 		";
 	}
 
