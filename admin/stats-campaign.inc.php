@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -250,7 +250,6 @@ if (count($tmp_order) > 0)
 	{
 	    $adviews  = $tmp_views[$bannerID];
 	    $adclicks = $tmp_clicks[$bannerID];
-	    $adctr    = $tmp_ctr[$bannerID];
 		
 		if ($adclicks != 0 && $view == 'adclicks') continue;	// Don't show banners without adclicks
 		if ($adviews != 0 && $view == 'adviews') continue;	// Don't show banners without adclicks
@@ -346,9 +345,7 @@ if (count($tmp_order) > 0)
 				echo "<td height='25' align='left' nowrap>&nbsp;</td>";
 				echo "<td height='25' align='left' nowrap>$strViews: <b>$adviews</b></td>";
 				echo "<td height='25' align='left' nowrap>$strClicks: <b>$adclicks</b></td>";
-				echo "<td height='25' align='left' nowrap>$strRatio: <b>";
-				printf(" %.2f%%", $adctr);
-				echo "<b></td>";
+				echo "<td height='25' align='left' nowrap>$strRatio: <b>".phpAds_buildCTR($adviews, $adclicks)."<b></td>";
 				echo "</tr>";
 			}
 			else

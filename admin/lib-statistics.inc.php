@@ -1,4 +1,4 @@
-<?php // $Revision: 1.8 $
+<?php // $Revision: 1.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -288,8 +288,10 @@ function phpAds_buildBannerCode ($bannerID, $banner, $active, $format, $width, $
 
 function phpAds_buildCTR ($views, $clicks)
 {
+	global $phpAds_percentage_decimals;
+	
 	if ($views > 0)
-		$ctr = number_format($clicks/$views*100,2)."%";
+		$ctr = number_format(($clicks*100)/$views, $phpAds_percentage_decimals)."%";
 	else
 		$ctr="0.00%";
 		

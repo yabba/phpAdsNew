@@ -26,9 +26,13 @@ v 2.0beta5		+ Added override setting for automatic GD detection  (Niels)
 			  - Changed dhtml detection for Opera   (Niels)
 			  - Fixed some HTML for better compatibility with Mozilla  (Niels)
 			  - HTML banner preview popup fixed if banner is disabled  (Niels)
+			  - Fixed JavaScript error in client-edit.php  (Niels)
 			  - Function call-time pass-by-reference removed, 
 			    will be deprecated in future versions of PHP  (Niels)
 			  - Removed spaces after ?> in phpadsnew.inc.php (Thanks to Anonymous :-)
+			  - Made standard CTR calculation respect decimal settings  (Niels)
+			  - stats-index.php and stats-campaign now use standard CTR calculation  (Niels)
+			  
 
 
 v 2.0beta4		+ Updated GUI including a new logo  (Niels)

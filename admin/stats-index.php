@@ -1,4 +1,4 @@
-<?php // $Revision: 1.5 $
+<?php // $Revision: 1.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -543,48 +543,39 @@ if (isset($clients) && is_array($clients) && count($clients) > 0)
 	// stats today
 	$adviews = db_total_views("", "day");
 	$adclicks = db_total_clicks("", "day");
-	if ($adviews > 0)
-		$ctr = number_format($adclicks/$adviews*100,2);
-	else
-		$ctr="0.00";
+	$ctr = phpAds_buildCTR($adviews, $adclicks)
 ?>
 
   <tr><td height='25'><?echo $strToday;?></td>
   	  <td height='25'><?echo $strViews;?>: <b><?echo $adviews;?></b></td>
       <td height='25'><?echo $strClicks;?>: <b><?echo $adclicks;?></b></td>
-      <td height='25'><?echo $strCTRShort;?>: <b><?echo $ctr;?>%</b></td></tr>
+      <td height='25'><?echo $strCTRShort;?>: <b><?echo $ctr;?></b></td></tr>
   <tr height='1'><td colspan='4' bgcolor='#888888'><img src='images/break-el.gif' height='1' width='100%'></td></tr>
 
 <?
 	// stats this week
 	$adviews = db_total_views("", "week");
 	$adclicks = db_total_clicks("", "week");
-	if ($adviews > 0)
-		$ctr = number_format($adclicks/$adviews*100,2);
-	else
-		$ctr="0.00";
+	$ctr = phpAds_buildCTR($adviews, $adclicks)
 ?>
 
   <tr><td height='25'><?echo $strThisWeek;?></td>
    	  <td height='25'><?echo $strViews;?>: <b><?echo $adviews;?></b></td>
       <td height='25'><?echo $strClicks;?>: <b><?echo $adclicks;?></b></td>
-      <td height='25'><?echo $strCTRShort;?>: <b><?echo $ctr;?>%</b></td></tr>
+      <td height='25'><?echo $strCTRShort;?>: <b><?echo $ctr;?></b></td></tr>
   <tr height='1'><td colspan='4' bgcolor='#888888'><img src='images/break-el.gif' height='1' width='100%'></td></tr>
 
 <?
 	// stats this month
 	$adviews = db_total_views("", "month");
 	$adclicks = db_total_clicks("", "month");
-	if ($adviews > 0)
-		$ctr = number_format($adclicks/$adviews*100,2);
-	else
-		$ctr="0.00";
+	$ctr = phpAds_buildCTR($adviews, $adclicks)
 ?>
 
   <tr><td height='25'><?echo $strThisMonth;?></td>
   	  <td height='25'><?echo $strViews;?>: <b><?echo $adviews;?></b></td>
       <td height='25'><?echo $strClicks;?>: <b><?echo $adclicks;?></b></td>
-      <td height='25'><?echo $strCTRShort;?>: <b><?echo $ctr;?>%</b></td></tr>
+      <td height='25'><?echo $strCTRShort;?>: <b><?echo $ctr;?></b></td></tr>
   <tr height='1'><td colspan='4' bgcolor='#888888'><img src='images/break-el.gif' height='1' width='100%'></td></tr>
   
   
@@ -592,16 +583,13 @@ if (isset($clients) && is_array($clients) && count($clients) > 0)
 	// overall stats
 	$adviews = db_total_views();
 	$adclicks = db_total_clicks();
-	if ($adviews > 0)
-		$ctr = number_format($adclicks/$adviews*100,2);
-	else
-		$ctr="0.00";
+	$ctr = phpAds_buildCTR($adviews, $adclicks)
 ?>
 
   <tr><td height='25'><?echo $strOverall;?></td>
   	  <td height='25'><?echo $strViews;?>: <b><?echo $adviews;?></b></td>
       <td height='25'><?echo $strClicks;?>: <b><?echo $adclicks;?></b></td>
-      <td height='25'><?echo $strCTRShort;?>: <b><?echo $ctr;?>%</b></td></tr>
+      <td height='25'><?echo $strCTRShort;?>: <b><?echo $ctr;?></b></td></tr>
   <tr height='1'><td colspan='4' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>
   
 </table>   
