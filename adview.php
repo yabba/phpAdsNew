@@ -1,4 +1,4 @@
-<?php // $Revision: 1.29 $
+<?php // $Revision: 1.30 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -133,6 +133,16 @@ if ($found)
 	if ($row['block'] != '' && $row['block'] != '0')
 	{
 		SetCookie("phpAds_blockAd[".$row['bannerid']."]", time(), time() + $row['block'], '/');
+	}
+	
+	if ($row['capping'] != '' && $row['capping'] != '0')
+	{
+		if (isset($phpAds_capAd) && isset($phpAds_capAd[$row['bannerid']]))
+			$newcap = $phpAds_capAd[$row['bannerid']] + 1;
+		else
+			$newcap = 1;
+		
+		SetCookie("phpAds_capAd[".$row['bannerid']."]", $newcap, time()+31536000, '/');
 	}
 	
 	// Send bannerid headers

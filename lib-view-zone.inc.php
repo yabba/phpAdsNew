@@ -1,4 +1,4 @@
-<?php // $Revision: 1.6 $
+<?php // $Revision: 1.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -176,6 +176,13 @@ function phpAds_fetchBannerZone($remaining, $clientid, $context = 0, $source = '
 					// Blocked
 					if ($postconditionSucces == true &&
 						isset($GLOBALS['phpAds_blockAd'][$rows[$i]['bannerid']]))
+						$postconditionSucces = false;
+					
+					// Capped
+					if ($postconditionSucces == true &&
+						$rows[$i]['capping'] > 0 &&
+						isset($GLOBALS['phpAds_capAd'][$rows[$i]['bannerid']]) &&
+						$GLOBALS['phpAds_capAd'][$rows[$i]['bannerid']] >= $rows[$i]['capping'])
 						$postconditionSucces = false;
 					
 					

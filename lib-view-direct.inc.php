@@ -1,4 +1,4 @@
-<?php // $Revision: 1.6 $
+<?php // $Revision: 1.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -102,6 +102,19 @@ function phpAds_fetchBannerDirect($remaining, $clientid, $context = 0, $source =
 					{
 						// Blocked
 						if (isset($GLOBALS['phpAds_blockAd'][$rows[$i]['bannerid']]))
+						{
+							// Delete this row and adjust $prioritysum
+							$prioritysum -= $rows[$i]['priority'];
+							$rows[$i] = '';
+							
+							// Break out of the for loop to try again
+							break;
+						}
+						
+						// Capped
+						if ($rows[$i]['capping'] > 0 &&
+							isset($GLOBALS['phpAds_capAd'][$rows[$i]['bannerid']]) &&
+							$GLOBALS['phpAds_capAd'][$rows[$i]['bannerid']] >= $rows[$i]['capping'])
 						{
 							// Delete this row and adjust $prioritysum
 							$prioritysum -= $rows[$i]['priority'];
