@@ -5,6 +5,7 @@ v 2.0beta4		+ Updated GUI including a new logo  (Niels)
 			+ New layout for detailed stats page  (Niels)
 			+ Added banner selection by the width property  (Niels)
 			+ Added wildcard recognition for ignored hosts  (Matteo)
+			+ Added duplicate check for usernames (Niels)
 
 			+ Webserver stored banners
 			  - Bugfixes for CURL and fopen wrappers storage  (Niels)
@@ -62,6 +63,7 @@ v 2.0beta4		+ Updated GUI including a new logo  (Niels)
 			  - Source parameter works again with remote invocation  (Alain Fontaine)
 			  - {targeturl} was urlencoded  (Niels)
 			  - Context parameter works again  (Martin Klerx) 
+			  - Stats conversion should work again (Niels)
 
 
 
