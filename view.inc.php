@@ -1,4 +1,4 @@
-<?php // $Revision: 1.61 $
+<?php // $Revision: 1.62 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -489,7 +489,7 @@ function get_banner($what, $clientID, $context=0, $source='', $allowhtml=true)
 				}
 				else
 				{
-					return ($row[$i]);
+					return ($rows[$i]);
 				}
 			}
 		}
