@@ -141,7 +141,7 @@ function phpAds_PageHeader($ID, $extra="")
 		if (phpAds_isLoggedIn() && phpAds_isUser(phpAds_Admin))
 		{
 			$searchbar  = "<table cellpadding='0' cellspacing='0' border='0' bgcolor='#0066CC' height='24'>";
-			$searchbar .= "<form name='search' action='' target='_new'>";
+			$searchbar .= "<form name='search' action='admin-search.php' target='SearchWindow' onSubmit=\"search_window(document.search.keyword.value,'$phpAds_url_prefix/admin/admin-search.php'); return false;\">";
 			$searchbar .= "<tr height='24'>";
 			$searchbar .= "<td height='24'><img src='images/tab-sb.gif' height='24' width='10'></td>";
 			$searchbar .= "<td class='tab-u'>$strSearch:</td>";
