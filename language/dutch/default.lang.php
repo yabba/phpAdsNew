@@ -1,4 +1,4 @@
-<?php // $Revision: 1.26 $
+<?php // $Revision: 1.27 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -384,6 +384,11 @@ $GLOBALS['strZoneAppend']				= "Voeg de volgende popup<br> of interstitial code 
 $GLOBALS['strAppendSettings']				= "Invoeg instellingen";
 $GLOBALS['strZonePrependHTML']				= "Voeg de volgende HTML code altijd toe voor de HTML code die getoond wordt door deze zone";
 $GLOBALS['strZoneAppendHTML']				= "Voeg de volgende HTML code altijd toe na de HTML code die getoond wordt door deze zone";
+
+
+// Zone probability
+$GLOBALS['strZoneProbListChain']		= "De banners welke gekoppeld zijn aan deze zone zijn niet actief. De volgende ketting wordt daarom gebruikt:";
+$GLOBALS['strZoneProbNullPri']			= "De banners welke gekoppeld zijn aan deze zone zijn niet actief.";
 
 
 // Linked banners/campaigns
