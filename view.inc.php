@@ -1,4 +1,4 @@
-<?php // $Revision: 1.71 $
+<?php // $Revision: 1.72 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -257,7 +257,7 @@ function get_banner($what, $clientID, $context=0, $source='', $allowhtml=true)
 	{
 		// Get zone
 		$zoneid  = substr($what,5);
-		$zoneres = @db_query("SELECT * FROM $phpAds_tbl_zones WHERE zoneid='$zoneid' ");
+		$zoneres = @db_query("SELECT * FROM $phpAds_tbl_zones WHERE zoneid='$zoneid' OR zonename='$zoneid'");
 		
 		if (@mysql_num_rows($zoneres) > 0)
 		{
