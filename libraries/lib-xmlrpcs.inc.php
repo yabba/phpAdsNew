@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.1 $
 
 /************************************************************************/
 /* phpAdsNew                                                            */
@@ -47,7 +47,7 @@
 // OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-require ("lib-xmlrpc.inc.php");
+require ("libraries/lib-xmlrpc.inc.php");
 
 
 // listMethods: either a string, or nothing
