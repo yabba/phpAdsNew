@@ -48,17 +48,7 @@ CREATE TABLE phpads_adviews (
 );
 
 
-# --------------------------------------------------------
-#
-# Table structure for table 'phpads_banners'
-#
 
-CREATE TABLE phpads_banners (
-   imageid mediumint(9) NOT NULL auto_increment,
-   contenttype varchar(255),
-   image blob NOT NULL
-);
-   
 # --------------------------------------------------------
 #
 # Table structure for table 'phpads_banners'
