@@ -1,4 +1,4 @@
-<?php // $Revision: 1.23 $
+<?php // $Revision: 1.24 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -65,6 +65,34 @@ if ($bannerID != "DEFAULT")
 			db_log_click($bannerID, $host);
 			phpAds_expire ($clientID, phpAds_Clicks);
 		}
+	}
+	
+	
+	// Get vars
+	for (reset ($HTTP_GET_VARS); $key = key($HTTP_GET_VARS); next($HTTP_GET_VARS))
+	{
+		if ($key != 'bannerID' &&
+			$key != 'dest' &&
+			$key != 'ismap' &&
+			$key != 'cb')
+			$vars[] = $key.'='.$HTTP_GET_VARS[$key];
+	}
+	
+	for (reset ($HTTP_POST_VARS); $key = key($HTTP_POST_VARS); next($HTTP_POST_VARS))
+	{
+		if ($key != 'bannerID' &&
+			$key != 'dest' &&
+			$key != 'ismap' &&
+			$key != 'cb')
+			$vars[] = $key.'='.$HTTP_POST_VARS[$key];
+	}
+	
+	if (is_array($vars) && sizeof($vars) > 0)
+	{
+		if (strpos ($url, '?') > 0)
+			$url = $url.'&'.implode ('&', $vars);
+		else
+			$url = $url.'?'.implode ('&', $vars);
 	}
 	
 	
