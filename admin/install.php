@@ -1,4 +1,4 @@
-<?php // $Revision: 1.6 $
+<?php // $Revision: 1.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -237,6 +237,7 @@ if (phpAds_isUser(phpAds_Admin))
 				$installvars['tbl_zones'] 	 = $tbl_prefix.'zones';
 				$installvars['tbl_config'] 	 = $tbl_prefix.'config';
 				$installvars['tbl_affiliates'] 	 = $tbl_prefix.'affiliates';
+				$installvars['tbl_images'] 	 = $tbl_prefix.'images';
 				
 				// Go to next phase
 				$phase = 3;
