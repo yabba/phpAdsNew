@@ -1,11 +1,11 @@
-<?php // $Id: adlayer.php,v 1.5 2002/07/22 15:32:30 rakaz Exp $
+<?php // $Revision: 1.6 $
 
 /************************************************************************/
-/* phpPgAds                                                             */
-/* ========                                                             */
+/* phpAdsNew 2                                                          */
+/* ===========                                                          */
 /*                                                                      */
-/* Copyright (c) 2001-2002 by the phpPgAds developers                   */
-/* For more information visit: http://phppgads.sourceforge.net          */
+/* Copyright (c) 2000-2002 by the phpAdsNew developers                  */
+/* For more information visit: http://www.phpadsnew.com                 */
 /*                                                                      */
 /* This program is free software. You can redistribute it and/or modify */
 /* it under the terms of the GNU General Public License as published by */
