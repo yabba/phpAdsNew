@@ -1,4 +1,4 @@
-<?php // $Revision: 1.17 $
+<?php // $Revision: 1.18 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -356,7 +356,6 @@ if (count($tmp_order) > 0)
 			
 		$res_query = "
 			SELECT
-				banner,
 				bannerid,
 				width,
 				height,
