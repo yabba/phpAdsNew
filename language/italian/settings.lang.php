@@ -1,4 +1,4 @@
-<?php // $Revision: 1.26 $
+<?php // $Revision: 1.27 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -131,7 +131,8 @@ $GLOBALS['strAllowPopups']				= "Consenti Popup";
 
 $GLOBALS['strKeywordRetrieval']			= "Abilita l'uso di parole chiave";
 $GLOBALS['strUseAcl']					= "Utilizza le limitazioni di consegna";
-$GLOBALS['strGeotrackingLocation'] 		= "Percorso database<br>IP2Country geotracking";
+$GLOBALS['strGeotrackingType']			= "Tipo di database per il tracking geografico";
+$GLOBALS['strGeotrackingLocation'] 		= "Percorso database tracking geografico";
 
 $GLOBALS['strBannerRetrieval']			= "Metodo di scelta del banner";
 $GLOBALS['strRetrieveRandom']			= "Casuale (default)";
