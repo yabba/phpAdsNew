@@ -1,4 +1,4 @@
-<?php // $Revision: 1.46 $
+<?php // $Revision: 1.47 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -490,19 +490,21 @@ function view_raw($what, $clientID=0, $target="", $source="", $withtext=0, $cont
 				{
 					while (eregi("{targeturl:([^}]*)}", $html, $regs))
 					{
-						$html = str_replace ($regs[0], "$phpAds_url_prefix/adclick.php?bannerID=".$row['bannerID']."&dest=".urlencode($regs[1]), $html);
+						$html = str_replace ($regs[0], "$phpAds_url_prefix/adclick.php?bannerID=".$row['bannerID']."&dest=".urlencode($regs[1])."&ismap=", $html);
 					}
+					
+					$outputbuffer .= $html;
 				}
 				
-				if(!empty($row["url"])) 
+				elseif(!empty($row["url"])) 
 				{
 					if (strpos ($html, "{targeturl}") > 0)
 					{
-						$outputbuffer .= str_replace ("{targeturl}", "$phpAds_url_prefix/adclick.php?bannerID=".$row['bannerID'], $html);
+						$outputbuffer .= str_replace ("{targeturl}", "$phpAds_url_prefix/adclick.php?bannerID=".$row['bannerID']."&ismap=", $html);
 					}
 					else
 					{
-						$outputbuffer .= "<a href='$phpAds_url_prefix/adclick.php?bannerID=".$row['bannerID']."'".$target.">";
+						$outputbuffer .= "<a href='$phpAds_url_prefix/adclick.php?bannerID=".$row['bannerID']."&ismap='".$target.">";
 		                $outputbuffer .= $html;
 					}
 				} 
@@ -548,7 +550,7 @@ function view_raw($what, $clientID=0, $target="", $source="", $withtext=0, $cont
 							else
 								$quotepos  = 0;
 						}
-							
+						
 						if ($quotepos > 0)
 						{
 							$endquotepos = strpos($lowerbanner, $quotechar, $quotepos+1);
@@ -556,7 +558,8 @@ function view_raw($what, $clientID=0, $target="", $source="", $withtext=0, $cont
 										 substr($html, $prevhrefpos, $hrefpos - $prevhrefpos) . 
 										 $quotechar . "$phpAds_url_prefix/adclick.php?bannerID=" . 
 										 $row['bannerID'] . "&dest=" . 
-										 urlencode(substr($html, $quotepos+1, $endquotepos - $quotepos - 1));
+										 urlencode(substr($html, $quotepos+1, $endquotepos - $quotepos - 1)) .
+										 "&ismap=";
 							
 							$prevhrefpos = $hrefpos + ($endquotepos - $quotepos);
 						} 
@@ -574,7 +577,8 @@ function view_raw($what, $clientID=0, $target="", $source="", $withtext=0, $cont
 										 substr($html, $prevhrefpos, $hrefpos - $prevhrefpos) . 
 										 "\"" . "$phpAds_url_prefix/adclick.php?bannerID=" . 
 										 $row['bannerID'] . "&dest=" . 
-										 urlencode(substr($html, $hrefpos, $endpos - $hrefpos)) . "\"";
+										 urlencode(substr($html, $hrefpos, $endpos - $hrefpos)) .
+										 "&ismap=\"";
 							
 							$prevhrefpos = $hrefpos + ($endpos - $hrefpos);
 						}

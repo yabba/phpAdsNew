@@ -1,4 +1,4 @@
-<?php // $Revision: 1.21 $
+<?php // $Revision: 1.22 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -88,6 +88,12 @@ if ($bannerID != "DEFAULT")
 		}
 		
 		$url = str_replace ($matches[0], $cb, $url);
+	}
+	
+	// ISMAP click location
+	if (isset($ismap) && $ismap != '')
+	{
+		$url .= $ismap;
 	}
 }
 else
