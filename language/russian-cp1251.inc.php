@@ -1,4 +1,4 @@
-<?php // $Revision: 1.36 $
+<?php // $Revision: 1.37 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -283,6 +283,6 @@ $GLOBALS['strAND']						= "AND";  // logical operator
 $GLOBALS['strOR']						= "OR"; // logical operator
 $GLOBALS['strOnlyDisplayWhen']			= "Показывать этот баннер только когда:";
 
-$GLOBALS['strStatusText']				= "Status Text";
+$GLOBALS['strStatusText']				= "Описание статуса";
 
 ?>
