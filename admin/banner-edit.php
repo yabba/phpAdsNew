@@ -1,4 +1,4 @@
-<?php // $Revision: 2.10 $
+<?php // $Revision: 2.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -33,7 +33,9 @@ phpAds_registerGlobal (
 	,'autohtml'
 	,'banner'
 	,'bannertext'
+	,'campaignid'
 	,'checkswf'
+	,'clientid'
 	,'description'
 	,'height'
 	,'imageurl'
@@ -1295,59 +1297,62 @@ if ($storagetype == 'web')
 		echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>";
 	}
 	
-	if (isset($row['alt_filename']) && $row['alt_filename'] != '')
+	if ($row['contenttype'] == 'swf')
 	{
-		echo "<tr><td width='30'>&nbsp;</td>";
-		echo "<td width='200' valign='top'>".$strUploadOrKeepAlt."</td>";
-		echo "<td><table cellpadding='0' cellspacing='0' border='0'>";
-		echo "<tr valign='top'><td><input type='radio' name='replacealtimage' value='f' checked tabindex='".($tabindex++)."'></td><td>&nbsp;";
-		
-/*		switch ($row['contenttype'])
+		if (isset($row['alt_filename']) && $row['alt_filename'] != '')
 		{
-			case 'swf':  echo "<img src='images/icon-filetype-swf.gif' align='absmiddle'> ".$row['filename']; break;
-			case 'dcr':  echo "<img src='images/icon-filetype-swf.gif' align='absmiddle'> ".$row['filename']; break;
-			case 'jpeg': echo "<img src='images/icon-filetype-jpg.gif' align='absmiddle'> ".$row['filename']; break;
-			case 'gif':  echo "<img src='images/icon-filetype-gif.gif' align='absmiddle'> ".$row['filename']; break;
-			case 'png':  echo "<img src='images/icon-filetype-png.gif' align='absmiddle'> ".$row['filename']; break;
-			case 'rpm':  echo "<img src='images/icon-filetype-rpm.gif' align='absmiddle'> ".$row['filename']; break;
-			case 'mov':  echo "<img src='images/icon-filetype-mov.gif' align='absmiddle'> ".$row['filename']; break;
-			default:	 echo "<img src='images/icon-banner-stored.gif' align='absmiddle'> ".$row['filename']; break;
+			echo "<tr><td width='30'>&nbsp;</td>";
+			echo "<td width='200' valign='top'>".$strUploadOrKeepAlt."</td>";
+			echo "<td><table cellpadding='0' cellspacing='0' border='0'>";
+			echo "<tr valign='top'><td><input type='radio' name='replacealtimage' value='f' checked tabindex='".($tabindex++)."'></td><td>&nbsp;";
+			
+	/*		switch ($row['contenttype'])
+			{
+				case 'swf':  echo "<img src='images/icon-filetype-swf.gif' align='absmiddle'> ".$row['filename']; break;
+				case 'dcr':  echo "<img src='images/icon-filetype-swf.gif' align='absmiddle'> ".$row['filename']; break;
+				case 'jpeg': echo "<img src='images/icon-filetype-jpg.gif' align='absmiddle'> ".$row['filename']; break;
+				case 'gif':  echo "<img src='images/icon-filetype-gif.gif' align='absmiddle'> ".$row['filename']; break;
+				case 'png':  echo "<img src='images/icon-filetype-png.gif' align='absmiddle'> ".$row['filename']; break;
+				case 'rpm':  echo "<img src='images/icon-filetype-rpm.gif' align='absmiddle'> ".$row['filename']; break;
+				case 'mov':  echo "<img src='images/icon-filetype-mov.gif' align='absmiddle'> ".$row['filename']; break;
+				default:	 echo "<img src='images/icon-banner-stored.gif' align='absmiddle'> ".$row['filename']; break;
+			}
+	*/
+			echo "<img src='images/icon-filetype-gif.gif' align='absmiddle'> ".$row['alt_filename'];
+			
+			$size = phpAds_ImageSize($storagetype, $row['alt_filename']);
+			if (round($size / 1024) == 0)
+				echo " <i>(".$size." bytes)</i>";
+			else
+				echo " <i>(".round($size / 1024)." Kb)</i>";
+			
+			echo "</td></tr>";
+			echo "<tr valign='top'><td><input type='radio' name='replacealtimage' value='t' tabindex='".($tabindex++)."'></td>";
+			echo "<td>&nbsp;<input class='flat' size='26' type='file' name='altupload' style='width:250px;' tabindex='".($tabindex++)."'>";
+			
+	/*		echo "<div id='swflayer' style='display:none;'>";
+			echo "<input type='checkbox' name='checkswf' value='t' checked tabindex='".($tabindex++)."'>&nbsp;".$strCheckSWF;
+			echo "</div>";
+	*/		
+			echo "</td></tr></table><br><br></td></tr>";
+			echo "<tr><td height='1' colspan='3' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
+			echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>";
 		}
-*/
-		echo "<img src='images/icon-filetype-gif.gif' align='absmiddle'> ".$row['alt_filename'];
-		
-		$size = phpAds_ImageSize($storagetype, $row['alt_filename']);
-		if (round($size / 1024) == 0)
-			echo " <i>(".$size." bytes)</i>";
 		else
-			echo " <i>(".round($size / 1024)." Kb)</i>";
-		
-		echo "</td></tr>";
-		echo "<tr valign='top'><td><input type='radio' name='replacealtimage' value='t' tabindex='".($tabindex++)."'></td>";
-		echo "<td>&nbsp;<input class='flat' size='26' type='file' name='altupload' style='width:250px;' tabindex='".($tabindex++)."'>";
-		
-/*		echo "<div id='swflayer' style='display:none;'>";
-		echo "<input type='checkbox' name='checkswf' value='t' checked tabindex='".($tabindex++)."'>&nbsp;".$strCheckSWF;
-		echo "</div>";
-*/		
-		echo "</td></tr></table><br><br></td></tr>";
-		echo "<tr><td height='1' colspan='3' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
-		echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>";
-	}
-	else
-	{
-		echo "<input type='hidden' name='replacealtimage' value='t'>";
-		echo "<tr><td width='30'>&nbsp;</td>";
-		echo "<td width='200' valign='top'>".$strNewBannerFileAlt."</td>";
-		echo "<td><input class='flat' size='26' type='file' name='uploadalt' style='width:350px;' onChange='selectFile(this);' tabindex='".($tabindex++)."'>";
-		
-/*		echo "<div id='swflayer' style='display:none;'>";
-		echo "<input type='checkbox' name='checkswf' value='t' checked tabindex='".($tabindex++)."'>&nbsp;".$strCheckSWF;
-		echo "</div>";
-*/		
-		echo "<br><br></td></tr>";
-		echo "<tr><td height='1' colspan='3' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
-		echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>";
+		{
+			echo "<input type='hidden' name='replacealtimage' value='t'>";
+			echo "<tr><td width='30'>&nbsp;</td>";
+			echo "<td width='200' valign='top'>".$strNewBannerFileAlt."</td>";
+			echo "<td><input class='flat' size='26' type='file' name='uploadalt' style='width:350px;' onChange='selectFile(this);' tabindex='".($tabindex++)."'>";
+			
+	/*		echo "<div id='swflayer' style='display:none;'>";
+			echo "<input type='checkbox' name='checkswf' value='t' checked tabindex='".($tabindex++)."'>&nbsp;".$strCheckSWF;
+			echo "</div>";
+	*/		
+			echo "<br><br></td></tr>";
+			echo "<tr><td height='1' colspan='3' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
+			echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>";
+		}
 	}
 	
 	if (count($hardcoded_links) == 0)
