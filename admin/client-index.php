@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -131,210 +131,213 @@ phpAds_SessionDataStore();
 
 echo "<table border='0' width='100%' cellpadding='0' cellspacing='0'>";	
 
-echo "<tr height='25'>";
-echo "<td height='25'><b>&nbsp;&nbsp;".$GLOBALS['strName']."</b></td>";
-echo "<td height='25'><b>".$GLOBALS['strID']."</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>";
-echo "<td height='25'>&nbsp;</td>";
-echo "<td height='25'>&nbsp;</td>";
-echo "<td height='25'>&nbsp;</td>";
-echo "</tr>";
-
-echo "<tr height='1'><td colspan='5' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
-
-$i=0;
-for (reset($clients);$key=key($clients);next($clients))
+if (isset($clients) && is_array($clients) && count($clients) > 0)
 {
-	$client = & $clients[$key];
+	echo "<tr height='25'>";
+	echo "<td height='25'><b>&nbsp;&nbsp;".$GLOBALS['strName']."</b></td>";
+	echo "<td height='25'><b>".$GLOBALS['strID']."</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>";
+	echo "<td height='25'>&nbsp;</td>";
+	echo "<td height='25'>&nbsp;</td>";
+	echo "<td height='25'>&nbsp;</td>";
+	echo "</tr>";
 	
-	if ($client['parent'] == 0)
+	echo "<tr height='1'><td colspan='5' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
+	
+	$i=0;
+	for (reset($clients);$key=key($clients);next($clients))
 	{
-		echo "<tr height='25' ".($i%2==0?"bgcolor='#F6F6F6'":"").">";
+		$client = & $clients[$key];
 		
-		// Icon & name
-		echo "<td height='25'>";
-		if (isset($client['campaigns']))
+		if ($client['parent'] == 0)
 		{
-			if ($client['expand'] == '1')
-				echo "&nbsp;<a href='client-index.php?collapse=".$client['clientID']."'><img src='images/triangle-d.gif' align='absmiddle' border='0'></a>&nbsp;";
-			else
-				echo "&nbsp;<a href='client-index.php?expand=".$client['clientID']."'><img src='images/triangle-l.gif' align='absmiddle' border='0'></a>&nbsp;";
-		}
-		else
-			echo "&nbsp;<img src='images/spacer.gif' height='16' width='16'>&nbsp;";
+			echo "<tr height='25' ".($i%2==0?"bgcolor='#F6F6F6'":"").">";
 			
-		echo "<img src='images/icon-client.gif' align='absmiddle'>&nbsp;";
-		echo "<a href='client-edit.php?clientID=".$client['clientID']."'>".$client['clientname']."</a>";
-		echo "</td>";
-		
-		// ID
-		echo "<td height='25'>".$client['clientID']."</td>";
-		
-		// Button 2
-		echo "<td height='25'>";
-		if (($client['count'] == 0 && $client['expand'] == '1') || !isset($client['campaigns']))
-			echo "<a href='campaign-edit.php?clientID=".$client['clientID']."'><img src='images/icon-campaign.gif' border='0' align='absmiddle' alt='$strCreate'>&nbsp;$strCreate</a>&nbsp;&nbsp;&nbsp;&nbsp;";
-		echo "</td>";
-		
-		// Empty
-		echo "<td>&nbsp;</td>";
-		
-		// Button 1
-		echo "<td height='25'>";
-		echo "<a href='client-delete.php?clientID=".$client['clientID']."'><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;";
-		echo "</td></tr>";
-		
-		
-		
-		if (isset($client['campaigns']) && sizeof ($client['campaigns']) > 0 && $client['expand'] == '1')
-		{
-			$campaigns = $client['campaigns'];
-			
-			for (reset($campaigns);$ckey=key($campaigns);next($campaigns))
+			// Icon & name
+			echo "<td height='25'>";
+			if (isset($client['campaigns']))
 			{
-				// Divider
-				echo "<tr height='1'>";
-				echo "<td ".($i%2==0?"bgcolor='#F6F6F6'":"")."><img src='images/spacer.gif' width='1' height='1'></td>";
-				echo "<td colspan='5' bgcolor='#888888'><img src='images/break-l.gif' height='1' width='100%'></td>";
-				echo "</tr>";
-				
-				// Icon & name
-				echo "<tr height='25' ".($i%2==0?"bgcolor='#F6F6F6'":"")."><td height='25'>";
-				echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-				
-				if (isset($campaigns[$ckey]['banners']))
-				{
-					if ($campaigns[$ckey]['expand'] == '1')
-						echo "<a href='client-index.php?collapse=".$campaigns[$ckey]['clientID']."'><img src='images/triangle-d.gif' align='absmiddle' border='0'></a>&nbsp;";
-					else
-						echo "<a href='client-index.php?expand=".$campaigns[$ckey]['clientID']."'><img src='images/triangle-l.gif' align='absmiddle' border='0'></a>&nbsp;";
-				}
+				if ($client['expand'] == '1')
+					echo "&nbsp;<a href='client-index.php?collapse=".$client['clientID']."'><img src='images/triangle-d.gif' align='absmiddle' border='0'></a>&nbsp;";
 				else
-					echo "<img src='images/spacer.gif' height='16' width='16'>&nbsp;";
+					echo "&nbsp;<a href='client-index.php?expand=".$client['clientID']."'><img src='images/triangle-l.gif' align='absmiddle' border='0'></a>&nbsp;";
+			}
+			else
+				echo "&nbsp;<img src='images/spacer.gif' height='16' width='16'>&nbsp;";
 				
+			echo "<img src='images/icon-client.gif' align='absmiddle'>&nbsp;";
+			echo "<a href='client-edit.php?clientID=".$client['clientID']."'>".$client['clientname']."</a>";
+			echo "</td>";
+			
+			// ID
+			echo "<td height='25'>".$client['clientID']."</td>";
+			
+			// Button 2
+			echo "<td height='25'>";
+			if (($client['count'] == 0 && $client['expand'] == '1') || !isset($client['campaigns']))
+				echo "<a href='campaign-edit.php?clientID=".$client['clientID']."'><img src='images/icon-campaign.gif' border='0' align='absmiddle' alt='$strCreate'>&nbsp;$strCreate</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+			echo "</td>";
+			
+			// Empty
+			echo "<td>&nbsp;</td>";
+			
+			// Button 1
+			echo "<td height='25'>";
+			echo "<a href='client-delete.php?clientID=".$client['clientID']."'><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+			echo "</td></tr>";
+			
+			
+			
+			if (isset($client['campaigns']) && sizeof ($client['campaigns']) > 0 && $client['expand'] == '1')
+			{
+				$campaigns = $client['campaigns'];
 				
-				if ($campaigns[$ckey]['active'] == 'true')
-					echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;";
-				else
-					echo "<img src='images/icon-campaign-d.gif' align='absmiddle'>&nbsp;";
-				
-				echo "<a href='campaign-index.php?campaignID=".$campaigns[$ckey]['clientID']."'>".$campaigns[$ckey]['clientname']."</td>";
-				echo "</td>";
-				
-				// ID
-				echo "<td height='25'>".$campaigns[$ckey]['clientID']."</td>";
-				
-				// Button 1
-				echo "<td height='25'>";
-				if ($campaigns[$ckey]['expand'] == '1' || !isset($campaigns[$ckey]['banners']))
-					echo "<a href='banner-edit.php?campaignID=".$campaigns[$ckey]['clientID']."'><img src='images/icon-banner-stored.gif' border='0' align='absmiddle' alt='$strEdit'>&nbsp;$strCreate</a>&nbsp;&nbsp;&nbsp;&nbsp;";
-				echo "</td>";
-				
-				// Button 2
-				echo "<td height='25'>";
-				echo "<a href='campaign-edit.php?campaignID=".$campaigns[$ckey]['clientID']."'><img src='images/icon-edit.gif' border='0' align='absmiddle' alt='$strEdit'>&nbsp;$strEdit</a>&nbsp;&nbsp;";
-				echo "</td>";
-				
-				// Button 3
-				echo "<td height='25'>";
-				echo "<a href='campaign-delete.php?campaignID=".$campaigns[$ckey]['clientID']."'><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;";
-				echo "</td></tr>";
-				
-				
-				
-				if ($campaigns[$ckey]['expand'] == '1' && isset($campaigns[$ckey]['banners']))
+				for (reset($campaigns);$ckey=key($campaigns);next($campaigns))
 				{
-					$banners = $campaigns[$ckey]['banners'];
-					for (reset($banners);$bkey=key($banners);next($banners))
+					// Divider
+					echo "<tr height='1'>";
+					echo "<td ".($i%2==0?"bgcolor='#F6F6F6'":"")."><img src='images/spacer.gif' width='1' height='1'></td>";
+					echo "<td colspan='5' bgcolor='#888888'><img src='images/break-l.gif' height='1' width='100%'></td>";
+					echo "</tr>";
+					
+					// Icon & name
+					echo "<tr height='25' ".($i%2==0?"bgcolor='#F6F6F6'":"")."><td height='25'>";
+					echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+					
+					if (isset($campaigns[$ckey]['banners']))
 					{
-						$name = $strUntitled;
-						if (isset($banners[$bkey]['alt']) && $banners[$bkey]['alt'] != '') $name = $banners[$bkey]['alt'];
-						if (isset($banners[$bkey]['description']) && $banners[$bkey]['description'] != '') $name = $banners[$bkey]['description'];
-						
-						// Divider
-						echo "<tr height='1'>";
-						echo "<td ".($i%2==0?"bgcolor='#F6F6F6'":"")."><img src='images/spacer.gif' width='1' height='1'></td>";
-						echo "<td colspan='4' bgcolor='#888888'><img src='images/break-l.gif' height='1' width='100%'></td>";
-						echo "</tr>";
-						
-						// Icon & name
-						echo "<tr height='25' ".($i%2==0?"bgcolor='#F6F6F6'":"").">";
-						echo "<td height='25'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-						
-						if ($banners[$bkey]['active'] == 'true' && $campaigns[$ckey]['active'] == 'true')
+						if ($campaigns[$ckey]['expand'] == '1')
+							echo "<a href='client-index.php?collapse=".$campaigns[$ckey]['clientID']."'><img src='images/triangle-d.gif' align='absmiddle' border='0'></a>&nbsp;";
+						else
+							echo "<a href='client-index.php?expand=".$campaigns[$ckey]['clientID']."'><img src='images/triangle-l.gif' align='absmiddle' border='0'></a>&nbsp;";
+					}
+					else
+						echo "<img src='images/spacer.gif' height='16' width='16'>&nbsp;";
+					
+					
+					if ($campaigns[$ckey]['active'] == 'true')
+						echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;";
+					else
+						echo "<img src='images/icon-campaign-d.gif' align='absmiddle'>&nbsp;";
+					
+					echo "<a href='campaign-index.php?campaignID=".$campaigns[$ckey]['clientID']."'>".$campaigns[$ckey]['clientname']."</td>";
+					echo "</td>";
+					
+					// ID
+					echo "<td height='25'>".$campaigns[$ckey]['clientID']."</td>";
+					
+					// Button 1
+					echo "<td height='25'>";
+					if ($campaigns[$ckey]['expand'] == '1' || !isset($campaigns[$ckey]['banners']))
+						echo "<a href='banner-edit.php?campaignID=".$campaigns[$ckey]['clientID']."'><img src='images/icon-banner-stored.gif' border='0' align='absmiddle' alt='$strEdit'>&nbsp;$strCreate</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+					echo "</td>";
+					
+					// Button 2
+					echo "<td height='25'>";
+					echo "<a href='campaign-edit.php?campaignID=".$campaigns[$ckey]['clientID']."'><img src='images/icon-edit.gif' border='0' align='absmiddle' alt='$strEdit'>&nbsp;$strEdit</a>&nbsp;&nbsp;";
+					echo "</td>";
+					
+					// Button 3
+					echo "<td height='25'>";
+					echo "<a href='campaign-delete.php?campaignID=".$campaigns[$ckey]['clientID']."'><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+					echo "</td></tr>";
+					
+					
+					
+					if ($campaigns[$ckey]['expand'] == '1' && isset($campaigns[$ckey]['banners']))
+					{
+						$banners = $campaigns[$ckey]['banners'];
+						for (reset($banners);$bkey=key($banners);next($banners))
 						{
-							if ($banners[$bkey]['format'] == 'html')
+							$name = $strUntitled;
+							if (isset($banners[$bkey]['alt']) && $banners[$bkey]['alt'] != '') $name = $banners[$bkey]['alt'];
+							if (isset($banners[$bkey]['description']) && $banners[$bkey]['description'] != '') $name = $banners[$bkey]['description'];
+							
+							// Divider
+							echo "<tr height='1'>";
+							echo "<td ".($i%2==0?"bgcolor='#F6F6F6'":"")."><img src='images/spacer.gif' width='1' height='1'></td>";
+							echo "<td colspan='4' bgcolor='#888888'><img src='images/break-l.gif' height='1' width='100%'></td>";
+							echo "</tr>";
+							
+							// Icon & name
+							echo "<tr height='25' ".($i%2==0?"bgcolor='#F6F6F6'":"").">";
+							echo "<td height='25'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+							
+							if ($banners[$bkey]['active'] == 'true' && $campaigns[$ckey]['active'] == 'true')
 							{
-								echo "<img src='images/icon-banner-html.gif' align='absmiddle'>";
-							}
-							elseif ($banners[$bkey]['format'] == 'url')
-							{
-								echo "<img src='images/icon-banner-url.gif' align='absmiddle'>";
+								if ($banners[$bkey]['format'] == 'html')
+								{
+									echo "<img src='images/icon-banner-html.gif' align='absmiddle'>";
+								}
+								elseif ($banners[$bkey]['format'] == 'url')
+								{
+									echo "<img src='images/icon-banner-url.gif' align='absmiddle'>";
+								}
+								else
+								{
+									echo "<img src='images/icon-banner-stored.gif' align='absmiddle'>";
+								}
 							}
 							else
 							{
-								echo "<img src='images/icon-banner-stored.gif' align='absmiddle'>";
+								if ($banners[$bkey]['format'] == 'html')
+								{
+									echo "<img src='images/icon-banner-html-d.gif' align='absmiddle'>";
+								}
+								elseif ($banners[$bkey]['format'] == 'url')
+								{
+									echo "<img src='images/icon-banner-url-d.gif' align='absmiddle'>";
+								}
+								else
+								{
+									echo "<img src='images/icon-banner-stored-d.gif' align='absmiddle'>";
+								}
 							}
-						}
-						else
-						{
-							if ($banners[$bkey]['format'] == 'html')
-							{
-								echo "<img src='images/icon-banner-html-d.gif' align='absmiddle'>";
-							}
-							elseif ($banners[$bkey]['format'] == 'url')
-							{
-								echo "<img src='images/icon-banner-url-d.gif' align='absmiddle'>";
-							}
+							
+							echo "&nbsp;<a href='banner-edit.php?bannerID=".$banners[$bkey]['bannerID']."&campaignID=".$campaigns[$ckey]['clientID']."'>".$name."</a></td>";
+							
+							// ID
+							echo "<td height='25'>".$banners[$bkey]['bannerID']."</td>";
+							
+							// Empty
+							echo "<td>&nbsp;</td>";
+							
+							// Button 2
+							echo "<td height='25'>";
+							if ($phpAds_acl == '1')
+								echo "<a href='banner-acl.php?bannerID=".$banners[$bkey]['bannerID']."&campaignID=".$campaigns[$ckey]['clientID']."'><img src='images/icon-acl.gif' border='0' align='absmiddle' alt='$strACL'>&nbsp;$strACL</a>&nbsp;&nbsp;&nbsp;&nbsp;";
 							else
-							{
-								echo "<img src='images/icon-banner-stored-d.gif' align='absmiddle'>";
-							}
+								echo "&nbsp;";
+							echo "</td>";
+							
+							// Button 1
+							echo "<td height='25'>";
+							echo "<a href='banner-delete.php?bannerID=".$banners[$bkey]['bannerID']."&campaignID=".$campaigns[$ckey]['clientID']."'><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;";
+							echo "</td></tr>";
 						}
-						
-						echo "&nbsp;<a href='banner-edit.php?bannerID=".$banners[$bkey]['bannerID']."&campaignID=".$campaigns[$ckey]['clientID']."'>".$name."</a></td>";
-						
-						// ID
-						echo "<td height='25'>".$banners[$bkey]['bannerID']."</td>";
-						
-						// Empty
-						echo "<td>&nbsp;</td>";
-						
-						// Button 2
-						echo "<td height='25'>";
-						if ($phpAds_acl == '1')
-							echo "<a href='banner-acl.php?bannerID=".$banners[$bkey]['bannerID']."&campaignID=".$campaigns[$ckey]['clientID']."'><img src='images/icon-acl.gif' border='0' align='absmiddle' alt='$strACL'>&nbsp;$strACL</a>&nbsp;&nbsp;&nbsp;&nbsp;";
-						else
-							echo "&nbsp;";
-						echo "</td>";
-						
-						// Button 1
-						echo "<td height='25'>";
-						echo "<a href='banner-delete.php?bannerID=".$banners[$bkey]['bannerID']."&campaignID=".$campaigns[$ckey]['clientID']."'><img src='images/icon-recycle.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp$strDelete</a>&nbsp;&nbsp;&nbsp;&nbsp;";
-						echo "</td></tr>";
 					}
 				}
 			}
-		}
-		
-		if ($client['count'] > 0)
-		{
-			// Divider
-			echo "<tr height='1'><td colspan='1'></td><td colspan='4' bgcolor='#888888'><img src='images/break-l.gif' height='1' width='100%'></td></tr>";
 			
-			echo "<tr height='25' ".($i%2==0?"bgcolor='#F6F6F6'":"").">";
-			echo "<td height='25'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-			echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;";
-			echo "$strBannersWithoutCampaign</td>";
-			echo "<td height='25'>&nbsp;-&nbsp;</td>";
-			echo "<td height='25' colspan='3'>";
-			echo "<a href='campaign-edit.php?move=true&clientID=".$client['clientID']."'>";
-			echo "<img src='images/icon-update.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strMoveToNewCampaign</a>&nbsp;&nbsp;";
-			echo "</td>";
-			echo "</tr>";
+			if ($client['count'] > 0)
+			{
+				// Divider
+				echo "<tr height='1'><td colspan='1'></td><td colspan='4' bgcolor='#888888'><img src='images/break-l.gif' height='1' width='100%'></td></tr>";
+				
+				echo "<tr height='25' ".($i%2==0?"bgcolor='#F6F6F6'":"").">";
+				echo "<td height='25'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+				echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;";
+				echo "$strBannersWithoutCampaign</td>";
+				echo "<td height='25'>&nbsp;-&nbsp;</td>";
+				echo "<td height='25' colspan='3'>";
+				echo "<a href='campaign-edit.php?move=true&clientID=".$client['clientID']."'>";
+				echo "<img src='images/icon-update.gif' border='0' align='absmiddle' alt='$strDelete'>&nbsp;$strMoveToNewCampaign</a>&nbsp;&nbsp;";
+				echo "</td>";
+				echo "</tr>";
+			}
+			
+			echo "<tr height='1'><td colspan='5' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
+			$i++;
 		}
-		
-		echo "<tr height='1'><td colspan='5' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
-		$i++;
 	}
 }
 
