@@ -1,4 +1,4 @@
-<?php // $Revision: 1.63 $
+<?php // $Revision: 1.64 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -207,7 +207,7 @@ function phpAds_buildQuery ($part, $numberofparts, $precondition)
 					{
 					$mult_key_match = "($phpAds_tbl_banners.keyword LIKE '% $part_array[$k] %'".
 						" OR $phpAds_tbl_banners.keyword LIKE '$part_array[$k] %'".
-						" OR $phpAds_tbl_banners.keyword LIKE '% $part_array[$k]')".
+						" OR $phpAds_tbl_banners.keyword LIKE '% $part_array[$k]'".
 						" OR $phpAds_tbl_banners.keyword LIKE '$part_array[$k]')";
 					
 						if ($operator == 'OR')
