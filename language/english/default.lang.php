@@ -1,4 +1,4 @@
-<?php // $Revision: 2.19 $
+<?php // $Revision: 2.20 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -93,6 +93,8 @@ $GLOBALS['strAvg'] 				= "Avg.";
 $GLOBALS['strAverage']				= "Average";
 $GLOBALS['strOverall'] 				= "Overall";
 $GLOBALS['strTotal'] 				= "Total";
+$GLOBALS['strUnfilteredTotal']		= "Total (unfiltered)";
+$GLOBALS['strFilteredTotal']		= "Total (filtered)";
 $GLOBALS['strActive'] 				= "active";
 $GLOBALS['strFrom']				= "From";
 $GLOBALS['strTo']				= "to";
@@ -186,6 +188,7 @@ $GLOBALS['strThisMonth'] 			= "This month";
 $GLOBALS['strMonth'] 				= array("January","February","March","April","May","June","July", "August", "September", "October", "November", "December");
 $GLOBALS['strDayShortCuts'] 			= array("Su","Mo","Tu","We","Th","Fr","Sa");
 $GLOBALS['strHour']				= "Hour";
+$GLOBALS['strHourFilter']				= "Hour Filter";
 $GLOBALS['strSeconds']				= "seconds";
 $GLOBALS['strMinutes']				= "minutes";
 $GLOBALS['strHours']				= "hours";
@@ -301,6 +304,7 @@ $GLOBALS['strConversionViewWindow']		= "Count conversions which occur within thi
 // Banners (General)
 $GLOBALS['strBanner'] 				= "Banner";
 $GLOBALS['strBanners'] 				= "Banners";
+$GLOBALS['strBannerFilter']				= "Banner Filter";
 $GLOBALS['strAddBanner'] 			= "Add new banner";
 $GLOBALS['strAddBanner_Key'] 			= "Add <u>n</u>ew banner";
 $GLOBALS['strModifyBanner'] 			= "Modify banner";
@@ -396,6 +400,7 @@ $GLOBALS['strUserAgent'] 				= "Useragent";
 $GLOBALS['strDomain'] 					= "Domain";
 $GLOBALS['strClientIP'] 				= "Client IP";
 $GLOBALS['strSource'] 					= "Source";
+$GLOBALS['strSourceFilter']				= "Source Filter";
 $GLOBALS['strBrowser'] 					= "Browser";
 $GLOBALS['strOS'] 						= "OS";
 $GLOBALS['strCountry'] 					= "Country";
@@ -519,6 +524,7 @@ $GLOBALS['strOptimise']				= "Optimise";
 $GLOBALS['strResetStats'] 			= "Reset statistics";
 $GLOBALS['strSourceStats']			= "Source statistics";
 $GLOBALS['strSources']				= "Sources";
+$GLOBALS['strAvailableSources']		= "Available Sources";
 $GLOBALS['strSelectSource']			= "Select the source you want to view:";
 $GLOBALS['strSizeDistribution']		= "Distribution by size";
 $GLOBALS['strCountryDistribution']	= "Distribution by country";
