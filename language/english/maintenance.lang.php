@@ -1,4 +1,4 @@
-<?php // $Revision: 1.9 $
+<?php // $Revision: 1.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -99,6 +99,20 @@ $GLOBALS['strSecurityUpdate']			= "
 	of security fixes.</b> The version of ".$phpAds_productname." which you are currently using might 
 	be vulnerable to certain attacks and is probably not secure. For more information
 	about upgrading please read the documentation which is included in the files below.
+";
+
+$GLOBALS['strNotAbleToCheck']			= "
+	<b>Because the XML extention isn't available on your server, ".$phpAds_productname." is not
+    able to check if a newer version is available.</b>
+";
+
+$GLOBALS['strForUpdatesLookOnWebsite']	= "
+	You are currently running ".$phpAds_productname." ".$phpAds_version_readable.". 
+	If you want to know if there is a newer version available, please take a look at our website.
+";
+
+$GLOBALS['strClickToVisitWebsite']		= "
+	Click here to visit our website
 ";
 
 

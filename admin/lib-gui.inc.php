@@ -1,4 +1,4 @@
-<?php // $Revision: 1.57 $
+<?php // $Revision: 1.58 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -465,6 +465,7 @@ function phpAds_PageFooter()
 	
 	// Add Product Update redirector
 	if (phpAds_isUser(phpAds_Admin) &&
+		function_exists('xml_parser_create') &&
 		!isset($Session['update_check']) &&
 		!ereg("/(index|maintenance-updates|install|upgrade)\.php$", $HTTP_SERVER_VARS['PHP_SELF']))
 	{
