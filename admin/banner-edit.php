@@ -1,4 +1,4 @@
-<?php // $Revision: 1.80 $
+<?php // $Revision: 1.81 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -210,7 +210,7 @@ if (isset($submit))
 				
 				// Store the file
 				$final['filename'] = phpAds_ImageStore($storagetype, $final['filename'], $buffer);
-				$final['imageurl'] = $phpAds_config['url_prefix'].'/adimage.php?filename='.$final['filename']."&contenttype=".$final['contenttype'];
+				$final['imageurl'] = $phpAds_config['url_prefix'].'/adimage.php?filename='.$final['filename']."&amp;contenttype=".$final['contenttype'];
 				
 				// Cleanup existing image, if it exists
 				if (isset($current['filename']) && $current['filename'] != '' && $current['filename'] != $final['filename'])

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.7 $
+<?php // $Revision: 1.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -358,7 +358,7 @@ function phpAds_generateLayerCode ($parameters)
 	
 	$buffer = "<script language='JavaScript' type='text/javascript' src='".$phpAds_config['url_prefix']."/adlayer.php";
 	if (sizeof($parameters) > 0)
-		$buffer .= "?".implode ("&", $parameters);
+		$buffer .= "?".implode ("&amp;", $parameters);
 	$buffer .= "'></script>";
 	
 	return $buffer;
