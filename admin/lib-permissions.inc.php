@@ -1,4 +1,4 @@
-<?php // $Revision: 1.35 $
+<?php // $Revision: 1.36 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -369,7 +369,7 @@ function phpAds_LoginScreen($message='', $SessionID=0)
 				
 		login_focus();
 //-->
-		<?
+		<?php
 		echo "</script>";
 	}
 	else
