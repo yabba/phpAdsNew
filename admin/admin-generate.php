@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -163,7 +163,7 @@ function phpAds_GenerateInvocationCode()
 		$root = getenv('DOCUMENT_ROOT');
 		$pos  = strpos ($path, $root);
 		
-		if (is_int($pos))
+		if (is_int($pos) && $pos == 0)
 			$path = "getenv('DOCUMENT_ROOT').'".substr ($path, $pos + strlen ($root))."/phpadsnew.inc.php'";
 		else
 			$path = "'".$path."/phpadsnew.inc.php'";
