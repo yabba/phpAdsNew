@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -106,6 +106,7 @@ $GLOBALS['strEditConfigPossible']		= "It is possible to edit all settings becaus
 $GLOBALS['strDatabaseSettings']			= "Database Settings";
 $GLOBALS['strDatabaseServer']			= "Database server";
 $GLOBALS['strDbHost']				= "Database hostname";
+$GLOBALS['strDbPort']				= "Database port number";
 $GLOBALS['strDbUser']				= "Database username";
 $GLOBALS['strDbPassword']			= "Database password";
 $GLOBALS['strDbName']				= "Database name";
