@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -293,17 +293,6 @@ array (
 array (
 	'text' 	  => $strAutoCleanTables,
 	'items'	  => array (
-		array (
-			'type'    => 'checkbox',
-			'name'    => 'auto_clean_tables_vacuum',
-			'text'	  => $strAutoCleanVacuum,
-			'visible' => $phpAds_productname == 'phpPgAds'
-		),
-		array (
-			'type'    => 'break',
-			'size'	  => 'large',
-			'visible' => $phpAds_productname == 'phpPgAds'
-		),
 		array (
 			'type'    => 'checkbox',
 			'name'    => 'auto_clean_tables',
