@@ -1,4 +1,4 @@
-<?php // $Revision: 1.24 $
+<?php // $Revision: 1.25 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -307,6 +307,15 @@ if ($bannerID != '')
 		$type = "mysql";
 	else
 		$type = $row["format"];
+	
+	if (isset($row['alt']))
+		$row['alt'] 		= htmlentities(stripslashes($row['alt']));
+	
+	if (isset($row['bannertext']))
+		$row['bannertext'] 	= htmlentities(stripslashes($row['bannertext']));
+	
+	if (isset($row['description']))
+		$row['description'] = htmlentities(stripslashes($row['description']));
 }
 else
 {
