@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -169,7 +169,7 @@ if (!isset($context)) $context = '';
 
 // Remove referer, to be sure it doesn't cause problems with limitations
 if (isset($HTTP_SERVER_VARS['HTTP_REFERER'])) unset($HTTP_SERVER_VARS['HTTP_REFERER']);
-if (isset($HTTP_REFERER) unset($HTTP_REFERER);
+if (isset($HTTP_REFERER)) unset($HTTP_REFERER);
 
 if (!isset($layerstyle) || empty($layerstyle)) $layerstyle = 'geocities';
 
