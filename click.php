@@ -1,4 +1,4 @@
-<?php // $Revision: 1.16 $
+<?php // $Revision: 1.17 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -50,6 +50,8 @@ if ($bannerID != "DEFAULT")
 	
 	
 	// Log clicks
+	if ($phpAds_log_adclicks)
+	{
 		if ($host == phpads_ignore_host())
 		{
 			db_log_click($bannerID, $host);
