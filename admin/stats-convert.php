@@ -1,4 +1,4 @@
-<?php // $Revision: 1.17 $
+<?php // $Revision: 1.18 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -84,7 +84,7 @@ if ($command == 'start')
 		$verboseviews = $viewrow["cnt"];
 		
 		$clickresult = phpAds_dbQuery("SELECT COUNT(*) AS cnt FROM ".$phpAds_config['tbl_adclicks']);
-		$clickrow = phpAds_dbFetchArray($viewresult);
+		$clickrow = phpAds_dbFetchArray($clickresult);
 		$verboseclicks = $clickrow["cnt"];
 		
 		if ($verboseviews > 0 || $verboseclicks > 0)
