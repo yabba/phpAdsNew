@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -33,8 +33,8 @@ if (isset($ip))
 
 
 // Include required files
-require	(phpAds_path."/admin/resources/res-iso3166.inc.php"); 
-require	(phpAds_path."/admin/resources/res-continent.inc.php"); 
+require	(phpAds_path."/libraries/resources/res-iso3166.inc.php"); 
+require	(phpAds_path."/libraries/resources/res-continent.inc.php"); 
 
 
 /*********************************************************/

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -15,7 +15,7 @@
 
 
 // Include required files
-require ("resources/res-iab.inc.php");
+require (phpAds_path."/libraries/resources/res-iab.inc.php");
 
 
 
