@@ -1,4 +1,4 @@
-<?php // $Revision: 1.2 $
+<?php // $Revision: 1.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -16,7 +16,7 @@
 
 // Include required files
 require ("config.php");
-require ("lib-zones.inc.php");
+require ("../lib-priority.inc.php");
 
 
 // Security check
@@ -28,8 +28,11 @@ phpAds_checkAccess(phpAds_Admin);
 /* Main code                                             */
 /*********************************************************/
 
-phpAds_RebuildZoneCache ();
+$report = phpAds_PriorityCalculate();
 
-Header("Location: affiliate-index.php");
+if ($report != '' && $phpAds_config['userlog_priority'])
+	phpAds_userlogAdd (phpAds_actionPriorityCalculation, 0, $report);
+
+Header("Location: maintenance-priority.php");
 
 ?>

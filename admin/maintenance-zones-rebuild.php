@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -16,7 +16,7 @@
 
 // Include required files
 require ("config.php");
-require ("../lib-priority.inc.php");
+require ("lib-zones.inc.php");
 
 
 // Security check
@@ -28,11 +28,8 @@ phpAds_checkAccess(phpAds_Admin);
 /* Main code                                             */
 /*********************************************************/
 
-$report = phpAds_PriorityCalculate();
+phpAds_RebuildZoneCache ();
 
-if ($report != '' && $phpAds_config['userlog_priority'])
-	phpAds_userlogAdd (phpAds_actionPriorityCalculation, 0, $report);
-
-Header("Location: admin-priority.php");
+Header("Location: maintenance-zones.php");
 
 ?>

@@ -61,6 +61,6 @@ while ($current = phpAds_dbFetchArray($res))
 	");
 }
 
-Header("Location: client-index.php");
+Header("Location: maintenance-banners.php");
 
 ?>
