@@ -1,4 +1,4 @@
-// $Revision: 1.9 $
+// $Revision: 1.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -134,7 +134,10 @@ function phpAds_formUpdate(obj)
 		
 		if (obj.validateCheck == 'unique')
 		{
-			if (obj.validateUnique.indexOf('|'+obj.value+'|') > -1)
+			needle = obj.value.toLowerCase();
+			haystack = obj.validateUnique.toLowerCase();
+			
+			if (haystack.indexOf('|'+needle+'|') > -1)
 				err = true;
 		}
 	}
