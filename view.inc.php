@@ -1,4 +1,4 @@
-<?php // $Revision: 1.54 $
+<?php // $Revision: 1.55 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -446,13 +446,15 @@ function get_banner($what, $clientID, $context=0, $source='', $allowhtml=true)
 		'source'	=>	$source,
 		'time'		=>	$date['hours']);
 	
+	$maxindex = sizeof($rows);
+
     while ($weightsum && sizeof($rows))
     {
         $low = 0;
         $high = 0;
         $ranweight = ($weightsum > 1) ? mt_rand(0, $weightsum - 1) : 0;
 		
-        for ($i=0; $i<sizeof($rows); $i++)
+        for ($i=0; $i<$maxindex; $i++)
         {
             $low = $high;
             $high += ($rows[$i]['weight'] * $rows[$i]['clientweight']);
