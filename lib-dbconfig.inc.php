@@ -1,4 +1,4 @@
-<?php // $Revision: 1.34 $
+<?php // $Revision: 1.35 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -12,6 +12,9 @@
 /* the Free Software Foundation; either version 2 of the License.       */
 /************************************************************************/
 
+
+// Set define to prevent duplicate include
+define ('LIBDBCONFIG_INCLUDED', true);
 
 
 // Current phpAds version
