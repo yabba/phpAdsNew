@@ -1,4 +1,4 @@
-<?php // $Revision: 2.5 $
+<?php // $Revision: 2.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -45,6 +45,11 @@ phpAds_registerGlobal ('bannerid', 'clientid', 'zoneid', 'source',
 /* Main code                                             */
 /*********************************************************/
 
+// Determine the cookie ID
+$cookieid = phpAds_getCookieID();
+// Send the cookie ID
+phpAds_setCookie("phpAds_id", $cookieid, time()+365*24*60*60);
+
 if (isset($bannerid) && isset($clientid) && isset($zoneid))
 {
 	$source = phpAds_deriveSource($source);
@@ -57,7 +62,7 @@ if (isset($bannerid) && isset($clientid) && isset($zoneid))
 		if ($phpAds_config['log_beacon'] && $phpAds_config['log_adviews'])
 		{
 			phpAds_dbConnect();
-			phpAds_logImpression ($bannerid, $clientid, $zoneid, $source);
+			phpAds_logImpression ($cookieid, $bannerid, $clientid, $zoneid, $source);
 		}
 		
 		// Send block cookies

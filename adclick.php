@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -48,6 +48,11 @@ phpAds_registerGlobal ('bannerid', 'bannerID', 'n', 'log',
 /* Main code                                             */
 /*********************************************************/
 
+// Determine the cookie ID
+$cookieid = phpAds_getCookieID();
+// Send the cookie ID
+phpAds_setCookie("phpAds_id", $cookieid, time()+365*24*60*60);
+
 if (!isset($bannerid) && isset($bannerID)) $bannerid = $bannerID;
 if (!isset($n)) $n = 'default';
 
@@ -79,8 +84,6 @@ if (!isset($bannerid))
 	}
 	else
 		$bannerid = 'DEFAULT';
-		
-	$source = phpAds_deriveSource($source);
 }
 
 
@@ -111,7 +114,7 @@ if (phpAds_dbConnect())
 		
 		// If zoneid is not set, log it as a regular banner
 		if (!isset($zoneid)) $zoneid = 0;
-		if (!isset($source)) $source = '';
+		$source = phpAds_deriveSource($source);
 		
 		
 		// Log clicks
@@ -123,7 +126,7 @@ if (phpAds_dbConnect())
 			   $HTTP_COOKIE_VARS['phpAds_blockClick'][$bannerid] <= time())))
 			{
 				if ($phpAds_config['log_adclicks'])
-					phpAds_logClick($bannerid, $clientid, $zoneid, $source);
+					phpAds_logClick($cookieid, $bannerid, $clientid, $zoneid, $source);
 				
 				// Send block cookies
 				if ($phpAds_config['block_adclicks'] > 0)
