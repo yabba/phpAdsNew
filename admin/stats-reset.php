@@ -1,4 +1,4 @@
-<?php // $Revision: 1.5 $
+<?php // $Revision: 1.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -86,4 +86,15 @@ elseif (isset($clientID) && $clientID != '')
 	Header("Location: stats-client.php?clientID=$clientID");
 }
 
+
+// All
+elseif (isset($all) && $all == 'true')
+{
+    @db_query("DELETE FROM $phpAds_tbl_adviews") or mysql_die();
+    @db_query("DELETE FROM $phpAds_tbl_adclicks") or mysql_die();
+    @db_query("DELETE FROM $phpAds_tbl_adstats") or mysql_die();
+	
+	// Return to campaign statistics
+	Header("Location: stats-index.php");
+}
 ?>

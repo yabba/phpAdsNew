@@ -1,4 +1,4 @@
-<?php // $Revision: 1.9 $
+<?php // $Revision: 1.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -593,6 +593,10 @@ if (isset($clients) && is_array($clients) && count($clients) > 0)
       <td height='25'><?php echo $strClicks;?>: <b><?php echo $adclicks;?></b></td>
       <td height='25'><?php echo $strCTRShort;?>: <b><?php echo $ctr;?></b></td></tr>
   <tr height='1'><td colspan='4' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>
+
+  <tr height='25'><td colspan='4' height='25'>
+	<img src='images/icon-undo.gif' align='absmiddle'>&nbsp;<a href='stats-reset.php?all=true'><?php echo $strResetStats;?></a>&nbsp;&nbsp;&nbsp;&nbsp;
+  </td></tr>
   
 </table>   
 
