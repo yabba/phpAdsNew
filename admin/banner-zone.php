@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -154,7 +154,7 @@ $extra .= "</form>";
 
 
 
-$sections = array ("4.1.3.4.2", "4.1.3.4.3", "4.1.3.4.4");
+$sections = array ("4.1.3.4.2", "4.1.3.4.3", "4.1.3.4.6", "4.1.3.4.4");
 
 phpAds_PageHeader("4.1.3.4.4", $extra);
 	echo "<img src='images/icon-client.gif' align='absmiddle'>&nbsp;".phpAds_getParentName($campaignid);
@@ -257,13 +257,14 @@ if ($banner['contenttype'] == 'txt')
 		".phpAds_getZoneListOrder ($listorder, $orderdirection)."
 	") or phpAds_sqlDie();
 	
-	$zone_count += phpAds_dbNumRows($res);
 	while ($row = phpAds_dbFetchArray($res))
 	{
 		if (isset($affiliates[$row['affiliateid']]))
 		{
 			if (phpAds_IsCampaignInZone ($campaignid, $row['zoneid'], $row['what']))
 			{
+				$zone_count++;
+				
 				$row['linked'] = true;
 				$affiliates[$row['affiliateid']]['zones'][$row['zoneid']] = $row;
 				$affiliates[$row['affiliateid']]['ZoneCampaigns']++;
@@ -328,13 +329,14 @@ else
 		".phpAds_getZoneListOrder ($listorder, $orderdirection)."
 	") or phpAds_sqlDie();
 	
-	$zone_count += phpAds_dbNumRows($res);
 	while ($row = phpAds_dbFetchArray($res))
 	{
 		if (isset($affiliates[$row['affiliateid']]))
 		{
 			if (phpAds_IsCampaignInZone ($campaignid, $row['zoneid'], $row['what']))
 			{
+				$zone_count++;
+				
 				$row['linked'] = true;
 				$affiliates[$row['affiliateid']]['zones'][$row['zoneid']] = $row;
 				$affiliates[$row['affiliateid']]['ZoneCampaigns']++;
@@ -346,9 +348,7 @@ else
 $tabindex = 1;
 
 
-echo "<br><br>";
-
-echo "<table border='0' width='100%' cellpadding='0' cellspacing='0'>";
+echo "<br><table border='0' width='100%' cellpadding='0' cellspacing='0'>";
 echo "<form name='zones' action='banner-zone.php' method='post'>";
 echo "<input type='hidden' name='clientid' value='".$clientid."'>";
 echo "<input type='hidden' name='campaignid' value='".$campaignid."'>";

@@ -12,6 +12,17 @@
 
   ====================================================
 
+  02-13-2003 - default
+    [+] strWeightIsNull
+    [u] strZoneAppendZoneSelection
+    [u] strZoneProbListChain
+    [u] strZoneProbNullPri
+    [u] strZoneProbListChainLoop
+
+  02-12-2003 - default
+    [+] strAppendOthers
+    [+] strAppendTextAdNotPossible
+
   02-11-2003 - default
     [+] strContains
     [+] strNotContains

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -629,6 +629,9 @@ function phpAds_buildBannerCode ($bannerid, $fullpreview = false)
 				$buffer  = $htmlcode;
 				break;
 		}
+		
+		// Remove appended HTML for the preview
+		$buffer = str_replace ($row['append'], '', $buffer);
 		
 		
 		if ($row['active'] == "f")

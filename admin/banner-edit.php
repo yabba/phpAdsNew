@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -212,6 +212,9 @@ if (isset($submit))
 		");
 		
 		$current = phpAds_dbFetchArray($res);
+		
+		$final['appendtype'] = $current['appendtype'];
+		$final['append']	 = $current['append'];
 	}
 	
 	
@@ -614,6 +617,8 @@ if (isset($submit))
 	$final['clientid'] = $campaignid;
 	$final['bannerid'] = $bannerid;
 	
+	$final['appendtype'] = addslashes($final['appendtype']);
+	$final['append'] = addslashes($final['append']);
 	
 	
 	if (phpAds_isUser(phpAds_Admin)) 
@@ -727,6 +732,20 @@ if (isset($submit))
 
 if ($bannerid != '')
 {
+	// Fetch the data from the database
+	
+	$res = phpAds_dbQuery("
+		SELECT
+			*
+		FROM
+			".$phpAds_config['tbl_banners']."
+		WHERE
+			bannerid = '$bannerid'
+	") or phpAds_sqlDie();
+	$row = phpAds_dbFetchArray($res);
+	
+	
+	
 	if (isset($Session['prefs']['campaign-banners.php'][$campaignid]['listorder']))
 		$navorder = $Session['prefs']['campaign-banners.php'][$campaignid]['listorder'];
 	else
@@ -749,12 +768,12 @@ if ($bannerid != '')
 		".phpAds_getBannerListOrder($navorder, $navdirection)."
 	");
 	
-	while ($row = phpAds_dbFetchArray($res))
+	while ($others = phpAds_dbFetchArray($res))
 	{
 		phpAds_PageContext (
-			phpAds_buildBannerName ($row['bannerid'], $row['description'], $row['alt']),
-			"banner-edit.php?clientid=".$clientid."&campaignid=".$campaignid."&bannerid=".$row['bannerid'],
-			$bannerid == $row['bannerid']
+			phpAds_buildBannerName ($others['bannerid'], $others['description'], $others['alt']),
+			"banner-edit.php?clientid=".$clientid."&campaignid=".$campaignid."&bannerid=".$others['bannerid'],
+			$bannerid == $others['bannerid']
 		);
 	}
 	
@@ -782,17 +801,14 @@ if ($bannerid != '')
 		$extra .= "<select name='moveto' style='width: 110;'>";
 		
 		$res = phpAds_dbQuery("SELECT * FROM ".$phpAds_config['tbl_clients']." WHERE parent != 0 AND clientid != '".$campaignid."'") or phpAds_sqlDie();
-		while ($row = phpAds_dbFetchArray($res))
-			$extra .= "<option value='".$row['clientid']."'>".phpAds_buildClientName($row['clientid'], $row['clientname'])."</option>";
+		while ($others = phpAds_dbFetchArray($res))
+			$extra .= "<option value='".$others['clientid']."'>".phpAds_buildClientName($others['clientid'], $others['clientname'])."</option>";
 		
 		$extra .= "</select>&nbsp;<input type='image' name='moveto' src='images/".$phpAds_TextDirection."/go_blue.gif'><br>";
 		$extra .= "<img src='images/break.gif' height='1' width='160' vspace='4'><br>";
 		$extra .= "<img src='images/icon-recycle.gif' align='absmiddle'>&nbsp;<a href='banner-delete.php?clientid=".$clientid."&campaignid=".$campaignid."&bannerid=".$bannerid."&returnurl=campaign-banners.php'".phpAds_DelConfirm($strConfirmDeleteBanner).">$strDelete</a><br>";
 		$extra .= "</form>";
 		
-		
-		
-		$sections = array ("4.1.3.4.2", "4.1.3.4.3", "4.1.3.4.4");
 		
 		phpAds_PageHeader("4.1.3.4.2", $extra);
 			echo "<img src='images/icon-client.gif' align='absmiddle'>&nbsp;".phpAds_getParentName($campaignid);
@@ -801,7 +817,7 @@ if ($bannerid != '')
 			echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 			echo "<img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;<b>".phpAds_getBannerName($bannerid)."</b><br><br>";
 			echo phpAds_buildBannerCode($bannerid)."<br><br><br><br>";
-			phpAds_ShowSections($sections);
+			phpAds_ShowSections(array("4.1.3.4.2", "4.1.3.4.3", "4.1.3.4.6", "4.1.3.4.4"));
 	}
 	else
 	{
@@ -814,19 +830,8 @@ if ($bannerid != '')
 	}
 	
 	
-	// Fetch the data from the database
 	
-	$res = phpAds_dbQuery("
-		SELECT
-			*
-		FROM
-			".$phpAds_config['tbl_banners']."
-		WHERE
-			bannerid = '$bannerid'
-		") or phpAds_sqlDie();
-	$row = phpAds_dbFetchArray($res);
-	
-	
+	// Set basic values
 	$storagetype 	   = $row['storagetype'];
 	$hardcoded_links   = array();
 	$hardcoded_targets = array();
@@ -1034,8 +1039,7 @@ echo "<input type='hidden' name='storagetype' value='".$storagetype."'>";
 
 if ($storagetype == 'sql')
 {
-	echo "<br><br>";
-	echo "<table border='0' width='100%' cellpadding='0' cellspacing='0' bgcolor='#F6F6F6'>";
+	echo "<br><table border='0' width='100%' cellpadding='0' cellspacing='0' bgcolor='#F6F6F6'>";
 	echo "<tr><td height='25' colspan='3' bgcolor='#FFFFFF'><img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;<b>".$strMySQLBanner."</b></td></tr>";
 	echo "<tr><td height='1' colspan='3' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
 	echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>";
@@ -1191,8 +1195,7 @@ if ($storagetype == 'sql')
 
 if ($storagetype == 'web')
 {
-	echo "<br><br>";
-	echo "<table border='0' width='100%' cellpadding='0' cellspacing='0' bgcolor='#F6F6F6'>";
+	echo "<br><table border='0' width='100%' cellpadding='0' cellspacing='0' bgcolor='#F6F6F6'>";
 	echo "<tr><td height='25' colspan='3' bgcolor='#FFFFFF'><img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;<b>".$strWebBanner."</b></td></tr>";
 	echo "<tr><td height='1' colspan='3' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
 	echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>";
@@ -1344,8 +1347,7 @@ if ($storagetype == 'web')
 
 if ($storagetype == 'url')
 {
-	echo "<br><br>";
-	echo "<table border='0' width='100%' cellpadding='0' cellspacing='0' bgcolor='#F6F6F6'>";
+	echo "<br><table border='0' width='100%' cellpadding='0' cellspacing='0' bgcolor='#F6F6F6'>";
 	echo "<tr><td height='25' colspan='3' bgcolor='#FFFFFF'><img src='images/icon-banner-url.gif' align='absmiddle'>&nbsp;<b>".$strURLBanner."</b></td></tr>";
 	echo "<tr><td height='1' colspan='3' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
 	echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>";
@@ -1402,8 +1404,7 @@ if ($storagetype == 'url')
 
 if ($storagetype == 'html')
 {
-	echo "<br><br>";
-	echo "<table border='0' width='100%' cellpadding='0' cellspacing='0' bgcolor='#F6F6F6'>";
+	echo "<br><table border='0' width='100%' cellpadding='0' cellspacing='0' bgcolor='#F6F6F6'>";
 	echo "<tr><td height='25' colspan='3' bgcolor='#FFFFFF'><img src='images/icon-banner-html.gif' align='absmiddle'>&nbsp;<b>".$strHTMLBanner."</b></td></tr>";
 	echo "<tr><td height='1' colspan='3' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
 	echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>";
@@ -1442,8 +1443,7 @@ if ($storagetype == 'html')
 
 if ($storagetype == 'txt')
 {
-	echo "<br><br>";
-	echo "<table border='0' width='100%' cellpadding='0' cellspacing='0' bgcolor='#F6F6F6'>";
+	echo "<br><table border='0' width='100%' cellpadding='0' cellspacing='0' bgcolor='#F6F6F6'>";
 	echo "<tr><td height='25' colspan='3' bgcolor='#FFFFFF'><img src='images/icon-banner-text.gif' align='absmiddle'>&nbsp;<b>".$strTextBanner."</b></td></tr>";
 	echo "<tr><td height='1' colspan='3' bgcolor='#888888'><img src='images/break.gif' height='1' width='100%'></td></tr>";
 	echo "<tr><td height='10' colspan='3'>&nbsp;</td></tr>";

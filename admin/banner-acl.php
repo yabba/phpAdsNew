@@ -1,4 +1,4 @@
-<?php // $Revision: 2.6 $
+<?php // $Revision: 2.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -53,6 +53,7 @@ if ($phpAds_config['geotracking_type'] != 0)
 $type_list['browser']   = $strBrowser;
 $type_list['os']		= $strOS;
 $type_list['useragent']	= $strUserAgent;
+$type_list['referer']	= $strReferer;
 $type_list['source']	= $strSource;
 
 
@@ -286,7 +287,8 @@ elseif (isset($submit))
 	
 	phpAds_cacheDelete();
 	
-	Header ('Location: banner-zone.php?clientid='.$clientid.'&campaignid='.$campaignid.'&bannerid='.$bannerid);
+	Header ('Location: banner-append.php?clientid='.$clientid.'&campaignid='.$campaignid.'&bannerid='.$bannerid);
+	exit;
 }
 
 
@@ -376,7 +378,7 @@ phpAds_PageHeader("4.1.3.4.3", $extra);
 	echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 	echo "<img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;<b>".phpAds_getBannerName($bannerid)."</b><br><br>";
 	echo phpAds_buildBannerCode($bannerid)."<br><br><br><br>";
-	phpAds_ShowSections(array("4.1.3.4.2", "4.1.3.4.3", "4.1.3.4.4"));
+	phpAds_ShowSections(array("4.1.3.4.2", "4.1.3.4.3", "4.1.3.4.6", "4.1.3.4.4"));
 
 
 

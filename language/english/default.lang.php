@@ -1,4 +1,4 @@
-<?php // $Revision: 2.9 $
+<?php // $Revision: 2.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -277,6 +277,8 @@ $GLOBALS['strShowParentCampaigns']		= "Show parent campaigns";
 $GLOBALS['strHideParentCampaigns']		= "Hide parent campaigns";
 $GLOBALS['strHideInactiveBanners']		= "Hide inactive banners";
 $GLOBALS['strInactiveBannersHidden']		= "inactive banner(s) hidden";
+$GLOBALS['strAppendOthers']				= "Append others";
+$GLOBALS['strAppendTextAdNotPossible']	= "It is not possible to append other banners to text ads.";
 
 
 
@@ -416,14 +418,14 @@ $GLOBALS['strZonePrependHTML']			= "Always prepend the HTML code to text ads dis
 $GLOBALS['strZoneAppendHTML']			= "Always append the HTML code to text ads displayed by this zone";
 $GLOBALS['strZoneAppendType']			= "Append type";
 $GLOBALS['strZoneAppendHTMLCode']		= "HTML code";
-$GLOBALS['strZoneAppendZoneSelection']	= "Popup or intersitial";
+$GLOBALS['strZoneAppendZoneSelection']	= "Popup or interstitial";
 $GLOBALS['strZoneAppendSelectZone']		= "Always append the following popup or intersitial to banners displayed by this zone";
 
 
 // Zone probability
-$GLOBALS['strZoneProbListChain']		= "All the banners linked to the selected zone have null priority. This is the zone chain that will be followed:";
-$GLOBALS['strZoneProbNullPri']			= "All banners linked to this zone have null priority";
-$GLOBALS['strZoneProbListChainLoop']	= "Following the zone chain would cause a circular loop. Delivery for this zone is halted";
+$GLOBALS['strZoneProbListChain']		= "All the banners linked to the selected zone are currently not active. <br>This is the zone chain that will be followed:";
+$GLOBALS['strZoneProbNullPri']			= "All banners linked to this zone are currently not active.";
+$GLOBALS['strZoneProbListChainLoop']	= "Following the zone chain would cause a circular loop. Delivery for this zone is halted.";
 
 
 // Linked banners/campaigns
@@ -549,6 +551,7 @@ $GLOBALS['strBeforeActivate']			= "the activation date has not yet been reached"
 $GLOBALS['strAfterExpire']			= "the expiration date has been reached";
 $GLOBALS['strNoMoreClicks']			= "there are no AdClicks remaining";
 $GLOBALS['strNoMoreViews']			= "there are no AdViews remaining";
+$GLOBALS['strWeightIsNull']			= "its weight is set to zero";
 $GLOBALS['strWarnClientTxt']			= "The AdClicks or AdViews left for your banners are getting below {limit}. \nYour banners will be disabled when there are no AdClicks or AdViews left. ";
 $GLOBALS['strViewsClicksLow']			= "AdViews/AdClicks are low";
 $GLOBALS['strNoViewLoggedInInterval']   	= "No AdViews were logged during the span of this report";

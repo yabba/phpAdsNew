@@ -1,4 +1,4 @@
-<?php // $Revision: 2.0 $
+<?php // $Revision: 2.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -149,7 +149,7 @@ function phpAds_getlayerShowVar ()
 {
 	return array (
 		'what' => true,
-		'clientid' => true,
+		'acid' => true,
 		'target' => true,
 		'source' => true,
 		'layerstyle' => true,
