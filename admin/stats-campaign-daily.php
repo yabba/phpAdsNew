@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.1 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -30,24 +30,10 @@ phpAds_checkAccess(phpAds_Admin+phpAds_Client);
 
 if (phpAds_isUser(phpAds_Client))
 {
-	$result = phpAds_dbQuery("
-		SELECT
-			clientid
-		FROM
-			".$phpAds_config['tbl_banners']."
-		WHERE
-			bannerid = $bannerid
-		") or phpAds_sqlDie();
-	$row = phpAds_dbFetchArray($result);
-	
-	if ($row["clientid"] == '' || phpAds_getUserID() != phpAds_getParentID ($row["clientid"]))
+	if (phpAds_getUserID() != phpAds_getParentID ($campaignid))
 	{
 		phpAds_PageHeader("1");
 		phpAds_Die ($strAccessDenied, $strNotAdmin);
-	}
-	else
-	{
-		$campaignid = $row["clientid"];
 	}
 }
 
@@ -56,6 +42,23 @@ if (phpAds_isUser(phpAds_Client))
 /*********************************************************/
 /* HTML framework                                        */
 /*********************************************************/
+
+$bannerids = array();
+
+$idresult = phpAds_dbQuery ("
+	SELECT
+		bannerid
+	FROM
+		".$phpAds_config['tbl_banners']."
+	WHERE
+		clientid = $campaignid
+");
+
+while ($row = phpAds_dbFetchArray($idresult))
+{
+	$bannerids[] = "bannerid = ".$row['bannerid'];
+}
+
 
 if ($phpAds_config['compact_stats']) 
 {
@@ -66,7 +69,7 @@ if ($phpAds_config['compact_stats'])
 		FROM
 			".$phpAds_config['tbl_adstats']."
 		WHERE
-			bannerid = $bannerid
+			(".implode(' OR ', $bannerids).")
 		GROUP BY
 			day
 		ORDER BY
@@ -83,7 +86,7 @@ else
 		 FROM
 			".$phpAds_config['tbl_adviews']."
 		 WHERE
-			bannerid = $bannerid
+			(".implode(' OR ', $bannerids).")
 		 GROUP BY
 			date
 		 ORDER BY
@@ -96,7 +99,7 @@ while ($row = phpAds_dbFetchArray($res))
 {
 	phpAds_PageContext (
 		$row['date_formatted'],
-		"stats-banner-daily.php?day=".$row['date']."&clientid=".$clientid."campaignid=".$campaignid."&bannerid=".$bannerid,
+		"stats-campaign-daily.php?day=".$row['date']."&clientid=".$clientid."&campaignid=".$campaignid,
 		$day == $row['date']
 	);
 }
@@ -105,39 +108,28 @@ if (phpAds_isUser(phpAds_Admin))
 {
 	phpAds_PageShortcut($strClientProperties, 'client-edit.php?clientid='.$clientid, 'images/icon-client.gif');
 	phpAds_PageShortcut($strCampaignProperties, 'campaign-edit.php?clientid='.$clientid.'&campaignid='.$campaignid, 'images/icon-campaign.gif');
-	phpAds_PageShortcut($strBannerProperties, 'banner-edit.php?clientid='.$clientid.'&campaignid='.$campaignid.'&bannerid='.$bannerid, 'images/icon-banner-stored.gif');
 	
-	if ($phpAds_config['acl'])
-		phpAds_PageShortcut($strModifyBannerAcl, 'banner-acl.php?clientid='.$clientid.'&campaignid='.$campaignid.'&bannerid='.$bannerid, 'images/icon-acl.gif');
-	
-	
-	phpAds_PageHeader("2.1.2.2.1.1");
-		echo "<img src='images/icon-client.gif' align='absmiddle'>&nbsp;".phpAds_getParentName($campaignid);
+	phpAds_PageHeader("2.1.2.1.1");
+		echo "<img src='images/icon-client.gif' align='absmiddle'>&nbsp;".phpAds_getClientName($clientid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;".phpAds_getClientName($campaignid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
-		echo "<img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;".phpAds_getBannerName($bannerid);
-		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
-		echo "<img src='images/icon-time.gif' align='absmiddle'>&nbsp;<b>".date(str_replace('%', '', $date_format), mktime(0, 0, 0, substr($day, 4, 2), substr($day, 6, 2), substr($day, 0, 4)))."</b><br><br>";
-		echo phpAds_buildBannerCode($bannerid)."<br><br><br><br>";
+		echo "<img src='images/icon-time.gif' align='absmiddle'>&nbsp;<b>".date(str_replace('%', '', $date_format), mktime(0, 0, 0, substr($day, 4, 2), substr($day, 6, 2), substr($day, 0, 4)))."</b><br><br><br>";
 		
-		$sections[] = "2.1.2.2.1.1";
-		if (!$phpAds_config['compact_stats']) $sections[] = "2.1.2.2.1.2";
+		$sections[] = "2.1.2.1.1";
+		if (!$phpAds_config['compact_stats']) $sections[] = "2.1.2.1.2";
 		phpAds_ShowSections($sections);
 }
 
 if (phpAds_isUser(phpAds_Client))
 {
-	phpAds_PageHeader("1.2.2.1.1");
+	phpAds_PageHeader("1.2.1.1");
 		echo "<img src='images/icon-campaign.gif' align='absmiddle'>&nbsp;".phpAds_getClientName($campaignid);
 		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
-		echo "<img src='images/icon-banner-stored.gif' align='absmiddle'>&nbsp;".phpAds_getBannerName($bannerid);
-		echo "&nbsp;<img src='images/".$phpAds_TextDirection."/caret-rs.gif'>&nbsp;";
 		echo "<img src='images/icon-time.gif' align='absmiddle'>&nbsp;<b>".date(str_replace('%', '', $date_format), mktime(0, 0, 0, substr($day, 4, 2), substr($day, 6, 2), substr($day, 0, 4)))."</b><br><br>";
-		echo phpAds_buildBannerCode($bannerid)."<br><br><br><br>";
 		
-		$sections[] = "1.2.2.1.1";
-		if (!$phpAds_config['compact_stats']) $sections[] = "1.2.2.1.2";
+		$sections[] = "1.2.1.1";
+		if (!$phpAds_config['compact_stats']) $sections[] = "1.2.1.2";
 		phpAds_ShowSections($sections);
 }
 
@@ -147,7 +139,7 @@ if (phpAds_isUser(phpAds_Client))
 /* Main code                                             */
 /*********************************************************/
 
-$lib_hourly_where     = "bannerid = ".$bannerid;
+$lib_hourly_where = "(".implode(' OR ', $bannerids).")";
 
 include ("lib-hourly.inc.php");
 
