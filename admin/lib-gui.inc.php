@@ -167,7 +167,7 @@ function phpAds_PageHeader($ID, $extra="")
 	
 	
 	// Send header with charset info
-	header ("Content-Type: text/html".($phpAds_CharSet != "" ? "; charset=".$phpAds_CharSet : ""));
+	header ("Content-Type: text/html".(isset($phpAds_CharSet) && $phpAds_CharSet != "" ? "; charset=".$phpAds_CharSet : ""));
 	
 	// Begin HTML
 	?>

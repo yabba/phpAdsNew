@@ -1,4 +1,4 @@
-<?php // $Revision: 1.10 $
+<?php // $Revision: 1.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -151,9 +151,11 @@ function phpAds_getParentName ($clientID)
 /* Build the banner name from ID, Description and Alt    */
 /*********************************************************/
 
-function phpAds_buildBannerName ($bannerID, $description, $alt, $limit = 30)
+function phpAds_buildBannerName ($bannerID, $description = '', $alt = '', $limit = 30)
 {
 	global $strUntitled;
+	
+	$name = '';
 	
 	if ($description != "")
 		$name .= $description;
