@@ -1,4 +1,4 @@
-<?php // $Revision: 1.7 $
+<?php // $Revision: 1.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -501,7 +501,6 @@ function phpAds_upgradeSplitBanners ()
 		{
 			// Requote fields
 			$banners[$i]['alt'] 		= phpAds_htmlQuotes(stripslashes($banners[$i]['alt']));
-			$banners[$i]['status'] 		= phpAds_htmlQuotes(stripslashes($banners[$i]['status']));
 			$banners[$i]['bannertext'] 	= phpAds_htmlQuotes(stripslashes($banners[$i]['bannertext']));
 			
 			// Resplit keywords
