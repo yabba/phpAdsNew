@@ -1,4 +1,4 @@
-<?php // $Revision: 1.19 $
+<?php // $Revision: 1.20 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -15,8 +15,8 @@
 
 // Set translation strings
 $GLOBALS['strHome'] = "Home";
-$GLOBALS['date_format'] = "DD/MM/YYYY";
-$GLOBALS['time_format'] = "HH:MI:SS";
+$GLOBALS['date_format'] = "%d/%m/%Y";
+$GLOBALS['time_format'] = "%H:%i:%S";
 $GLOBALS['strMySQLError'] = "Errore MySQL:";
 $GLOBALS['strAdminstration'] = "Amministrazione";
 $GLOBALS['strAddClient'] = "Aggiungi nuovo utente";
