@@ -1,4 +1,4 @@
-<?php // $Revision: 1.7 $
+<?php // $Revision: 1.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -55,7 +55,7 @@ if (phpAds_isUser(phpAds_Client))
 		}
 	}
 	
-	if (phpAds_clientID() != phpAds_getParentID ($clientID))
+	if (phpAds_clientID() != phpAds_getParentID ($campaignID))
 	{
 		phpAds_PageHeader('1');
 		php_die ($strAccessDenied, $strNotAdmin);
