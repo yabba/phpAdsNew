@@ -14,8 +14,9 @@ v 2.0beta4		+ Updated GUI including a new logo  (Niels)
 			  - Webserver stored banners are now deleted when
 			    the banner, campaign or client is deleted  (Niels)
 
-			+ Reports
+			+ Reports Plugins
 			  - Added campaign overview report plugin  (Niels)
+			  - Added campaign history report plugin  (Niels)
 			  - Added support for report plugins  (Niels)
 
 			+ Banner invocation
@@ -27,7 +28,7 @@ v 2.0beta4		+ Updated GUI including a new logo  (Niels)
 			  - Merged click.php and htmlclick.php in one file  (Niels)
 			  - Merged viewbanner.php and phpads.php in one file  (Niels)
 
-			+ Automatic maintenance
+			+ Automatic maintenance / mailed reports
 			  - Replaced mail.php with maintenance.php  (Niels)
 			  - Changed formatting of mailed reports  (Niels)
 			  - Mailed reports can be turned on/off through the admin interface  (Niels)
@@ -47,6 +48,7 @@ v 2.0beta4		+ Updated GUI including a new logo  (Niels)
 			+ Language files
 			  - Updated Italian language files  (Matteo)
 			  - Added Romanian language files  (Tudor Barbarosie)
+			  - Updated German language files  (René Friedrich)
 			
 			+ Misc bugfixes
 			  - Expiration calculation rewritten  (Niels)

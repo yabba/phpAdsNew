@@ -46,6 +46,12 @@ phpAdsNew - Readme
   Requirements: 
     PHP3 3.0.12+ (100% PHP4-ready !)
     MySQL
+
+    If you want to run phpAdsNew on a PostgreSQL server you should
+    take a look at phpPgAds, which is a port of phpAdsNew to PostgreSQL,
+    made by Matteo Beccati. phpPgAds requires PHP4.
+    The phpPgAds project can be found at: 
+    http://www.greatbridge.org/project/phppgads
        
          
   Summary:
@@ -80,7 +86,7 @@ phpAdsNew - Readme
     Ben Schumacher <bs@cyalchemy.com>, Leonid Igolnik - LiM <lim@israel.net>,
     Philip Gabbert <pgabbert@exactis.com>, Ralf Eggert <ralf@in-greece.de>,
     Niels Schoot <nschoot@users.sourceforge.net>, Martin Braun <martin@braun.cc>,
-    Vivian Girel, and many more.
+    Vivian Girel, René Friedrich <rene.friedrich@web.de> and many more.
 
     Occasional bugfixes and support: 
     Manuel Lemos, Boaz Yahav, Roy Nasser, Mark Maggalet, Ben Schumacher.
