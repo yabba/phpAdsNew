@@ -1,4 +1,4 @@
-<?php // $Revision: 1.27 $
+<?php // $Revision: 1.28 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -255,7 +255,7 @@ $GLOBALS['strUniqueidentifier']			= "Unique identifier";
 $GLOBALS['strFrameSize']				= "Frame size";
 $GLOBALS['strBannercode']				= "Codice";
 
-$GLOBALS['strSearch']					= "Search";
-$GLOBALS['strNoMatchesFound']			= "No matches were found";
+$GLOBALS['strSearch']					= "Ricerca";
+$GLOBALS['strNoMatchesFound']			= "Nessun elemento trovato per la tua ricerca";
 
 ?>
