@@ -1,4 +1,4 @@
-<?php // $Revision: 1.11 $
+<?php // $Revision: 1.12 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -284,9 +284,9 @@ function phpAds_countConversions($begin_timestamp, $end_timestamp, $day, $hour)
 					",host".
 					",source".
 					",country".
-					" FROM ".$phpAds_config['tbl_adclicks'].
+					" FROM ".$phpAds_config['tbl_adviews'].
 					" WHERE userid='".$userid."'".
-					" AND t_stamp>= DATE_SUB(".$t_stamp.", INTERVAL ".$campaign_row['clickwindow']." SECOND)".
+					" AND t_stamp>= DATE_SUB(".$t_stamp.", INTERVAL ".$campaign_row['viewwindow']." SECOND)".
 					" AND t_stamp<".$t_stamp.
 					" ORDER BY t_stamp DESC".
 					" LIMIT 1"
