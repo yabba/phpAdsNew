@@ -1,4 +1,4 @@
-<?php // $Revision: 1.12 $
+<?php // $Revision: 1.13 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -413,7 +413,7 @@ if (count($order_array) > 0)
 			FROM
 				".$phpAds_config['tbl_banners']."
 			WHERE
-				bannerid = $bannerid
+				bannerid = '$bannerid'
 			";
 		
 		$res_banners = phpAds_dbQuery($res_query) or phpAds_sqlDie();

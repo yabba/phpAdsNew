@@ -1,4 +1,4 @@
-<?php // $Revision: 1.1 $
+<?php // $Revision: 1.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -36,7 +36,7 @@ if (phpAds_isUser(phpAds_Affiliate))
 		FROM
 			".$phpAds_config['tbl_zones']."
 		WHERE
-			zoneid = $zoneid
+			zoneid = '$zoneid'
 		") or phpAds_sqlDie();
 	$row = phpAds_dbFetchArray($result);
 	
@@ -62,7 +62,7 @@ if ($phpAds_config['compact_stats'])
 		FROM
 			".$phpAds_config['tbl_adstats']."
 		WHERE
-			zoneid = $zoneid
+			zoneid = '$zoneid'
 		GROUP BY
 			day
 		ORDER BY
@@ -79,7 +79,7 @@ else
 		 FROM
 			".$phpAds_config['tbl_adviews']."
 		 WHERE
-			zoneid = $zoneid
+			zoneid = '$zoneid'
 		 GROUP BY
 			date
 		 ORDER BY

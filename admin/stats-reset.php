@@ -1,4 +1,4 @@
-<?php // $Revision: 1.14 $
+<?php // $Revision: 1.15 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -52,7 +52,7 @@ elseif (isset($campaignid) && $campaignid != '')
 							  FROM
 							  	".$phpAds_config['tbl_banners']."
 							  WHERE
-								clientid = $campaignid
+								clientid = '$campaignid'
 		  				 ");
 	
 	// Loop to all banners for this client

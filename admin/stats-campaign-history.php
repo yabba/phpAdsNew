@@ -1,4 +1,4 @@
-<?php // $Revision: 1.21 $
+<?php // $Revision: 1.22 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -121,7 +121,7 @@ $idresult = phpAds_dbQuery ("
 	FROM
 		".$phpAds_config['tbl_banners']."
 	WHERE
-		clientid = $campaignid
+		clientid = '$campaignid'
 ");
 
 if (phpAds_dbNumRows($idresult) > 0)

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.7 $
+<?php // $Revision: 1.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -53,7 +53,7 @@ if (isset($zoneid) && $zoneid != '')
 			FROM
 				".$phpAds_config['tbl_zones']."
 			WHERE
-				zoneid = ".$zoneid."
+				zoneid = '".$zoneid."'
 		") or phpAds_sqlDie();
 		
 		

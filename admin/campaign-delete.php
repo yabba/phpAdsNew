@@ -1,4 +1,4 @@
-<?php // $Revision: 1.15 $
+<?php // $Revision: 1.16 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -44,7 +44,7 @@ function phpAds_DeleteCampaign($campaignid)
 		DELETE FROM
 			".$phpAds_config['tbl_clients']."
 		WHERE
-			clientid = $campaignid
+			clientid = '$campaignid'
 	") or phpAds_sqlDie();
 	
 	
@@ -57,7 +57,7 @@ function phpAds_DeleteCampaign($campaignid)
 		FROM
 			".$phpAds_config['tbl_banners']."
 		WHERE
-			clientid = $campaignid
+			clientid = '$campaignid'
 	") or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res_banners))
@@ -86,7 +86,7 @@ function phpAds_DeleteCampaign($campaignid)
 		DELETE FROM
 			".$phpAds_config['tbl_banners']."
 		WHERE
-			clientid = $campaignid
+			clientid = '$campaignid'
 	") or phpAds_sqlDie();
 }
 

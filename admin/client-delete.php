@@ -1,4 +1,4 @@
-<?php // $Revision: 1.17 $
+<?php // $Revision: 1.18 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -42,7 +42,7 @@ if (isset($clientid) && $clientid != '')
 		DELETE FROM
 			".$phpAds_config['tbl_clients']."
 		WHERE
-			clientid = $clientid
+			clientid = '$clientid'
 		") or phpAds_sqlDie();
 	
 	

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.46 $
+<?php // $Revision: 1.47 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -294,7 +294,7 @@ if ($clientid != "")
 		FROM
 			".$phpAds_config['tbl_clients']."
 		WHERE
-			clientid = $clientid
+			clientid = '$clientid'
 		") or phpAds_sqlDie();
 	$row = phpAds_dbFetchArray($res);
 	

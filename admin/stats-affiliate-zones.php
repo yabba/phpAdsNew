@@ -1,4 +1,4 @@
-<?php // $Revision: 1.16 $
+<?php // $Revision: 1.17 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -127,7 +127,7 @@ $res_zones = phpAds_dbQuery("
 	FROM 
 		".$phpAds_config['tbl_zones']."
 	WHERE
-		affiliateid = ".$affiliateid."
+		affiliateid = '".$affiliateid."'
 		".phpAds_getZoneListOrder ($listorder, $orderdirection)."
 	") or phpAds_sqlDie();
 

@@ -1,4 +1,4 @@
-<?php // $Revision: 1.3 $
+<?php // $Revision: 1.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -45,7 +45,7 @@ $res = phpAds_dbQuery("
 	FROM 
 		".$phpAds_config['tbl_userlog']."
 	WHERE
-		userlogid = ".$userlogid."
+		userlogid = '".$userlogid."'
 ");
 
 

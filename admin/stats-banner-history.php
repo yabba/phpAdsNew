@@ -1,4 +1,4 @@
-<?php // $Revision: 1.8 $
+<?php // $Revision: 1.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -40,7 +40,7 @@ if (phpAds_isUser(phpAds_Client))
 		FROM
 			".$phpAds_config['tbl_banners']."
 		WHERE
-			bannerid = $bannerid
+			bannerid = '$bannerid'
 		") or phpAds_sqlDie();
 	$row = phpAds_dbFetchArray($result);
 	
@@ -78,7 +78,7 @@ $res = phpAds_dbQuery("
 	FROM
 		".$phpAds_config['tbl_banners']."
 	WHERE
-		clientid = $campaignid
+		clientid = '$campaignid'
 	".phpAds_getBannerListOrder($navorder, $navdirection)."
 ") or phpAds_sqlDie();
 

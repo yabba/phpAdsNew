@@ -1,4 +1,4 @@
-<?php // $Revision: 1.10 $
+<?php // $Revision: 1.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -78,7 +78,7 @@ if (phpAds_isUser(phpAds_Admin))
 		FROM
 			".$phpAds_config['tbl_zones']."
 		WHERE
-			affiliateid = ".$affiliateid."
+			affiliateid = '".$affiliateid."'
 	") or phpAds_sqlDie();
 	
 	while ($row = phpAds_dbFetchArray($res))

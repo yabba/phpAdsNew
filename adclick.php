@@ -1,4 +1,4 @@
-<?php // $Revision: 1.25 $
+<?php // $Revision: 1.26 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -94,7 +94,7 @@ if (phpAds_dbConnect())
 			FROM
 				".$phpAds_config['tbl_banners']."
 			WHERE
-				bannerid = $bannerid
+				bannerid = '$bannerid'
 		") or die();
 		
 		$url 	  = phpAds_dbResult($res, 0, 0);

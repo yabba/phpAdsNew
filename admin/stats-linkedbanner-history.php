@@ -1,4 +1,4 @@
-<?php // $Revision: 1.7 $
+<?php // $Revision: 1.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -80,7 +80,7 @@ if (phpAds_isUser(phpAds_Admin))
 			FROM
 				".$phpAds_config['tbl_adstats']."
 			WHERE
-				zoneid = ".$zoneid."
+				zoneid = '".$zoneid."'
 		") or phpAds_sqlDie();
 	}
 	else
@@ -91,7 +91,7 @@ if (phpAds_isUser(phpAds_Admin))
 			FROM
 				".$phpAds_config['tbl_adviews']."
 			WHERE
-				zoneid = ".$zoneid."
+				zoneid = '".$zoneid."'
 		") or phpAds_sqlDie();
 	}
 	
