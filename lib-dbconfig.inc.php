@@ -1,4 +1,4 @@
-<?php // $Revision: 1.27 $
+<?php // $Revision: 1.28 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -16,7 +16,8 @@
 
 // Current phpAds version
 $phpAds_version = 200.087;
-$phpAds_version_readable = "2 dev 28032002";
+$phpAds_version_readable = "2 dev 10042002";
+$phpAds_productname = "phpAdsNew";
 
 $GLOBALS['phpAds_settings_information'] = array(
 	'dbhost' => 					array ('type' => 'string', 	'sql' => false),
