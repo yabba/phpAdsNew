@@ -1,4 +1,4 @@
-<?php // $Revision: 1.5 $
+<?php // $Revision: 1.6 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -41,6 +41,4 @@ require	("$phpAds_path/config.inc.php");
 require	("$phpAds_path/view.inc.php"); 
 require	("$phpAds_path/acl.inc.php"); 
 
-?>    
-
-
+?>

@@ -15,6 +15,7 @@ v 2.0beta5		+ Added override setting for automatic GD detection  (Niels)
 			  - HTML banner preview popup fixed if banner is disabled  (Niels)
 			  - Function call-time pass-by-reference removed, 
 			    will be deprecated in future versions of PHP  (Niels)
+			  - Removed spaces after ?> in phpadsnew.inc.php (Thanks to Anonymous :-)
 
 
 v 2.0beta4		+ Updated GUI including a new logo  (Niels)
