@@ -1,4 +1,4 @@
-<?php // $Revision: 1.30 $
+<?php // $Revision: 1.31 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -103,10 +103,6 @@ if (isset($zoneid) && $zoneid != '')
 				phpAds_ToggleCampaignInZone ($campaignid, $zoneid);
 			}
 		}
-		
-		
-		// Rebuild Cache
-		phpAds_RebuildZoneCache ($zoneid);
 		
 		header ("Location: zone-include.php?affiliateid=".$affiliateid."&zoneid=".$zoneid."&clientid=".$clientid."&campaignid=".$campaignid);
 		exit;
