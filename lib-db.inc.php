@@ -1,4 +1,4 @@
-<?php // $Revision: 1.10 $
+<?php // $Revision: 1.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -33,6 +33,16 @@ if ($phpAds_config['compatibility_mode'])
 	$phpAds_config['tbl_affiliates']= $phpAds_config['dbname'].".".$phpAds_config['tbl_affiliates'];
 	$phpAds_config['tbl_images'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_images'];
 	$phpAds_config['tbl_userlog'] 	= $phpAds_config['dbname'].".".$phpAds_config['tbl_userlog'];
+}
+
+
+/*********************************************************/
+/* Check if the extension is available                   */
+/*********************************************************/
+
+function phpAds_dbAvailable()
+{
+	return (function_exists('mysql_connect'));
 }
 
 

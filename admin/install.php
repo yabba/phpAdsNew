@@ -1,4 +1,4 @@
-<?php // $Revision: 1.26 $
+<?php // $Revision: 1.27 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -165,6 +165,10 @@ if (phpAds_isUser(phpAds_Admin))
 			// Check PHP version
 			if ($phpversion < 4000)
 				$fatal[] = str_replace ('{php_version}', phpversion(), $strWarningPHPversion);
+			
+			// Check database extention
+			if (!phpAds_dbAvailable())
+				$fatal[] = $strWarningDBavailable;
 			
 			// Config variables can only be checked with php 4
 			if ($phpversion >= 4000)
