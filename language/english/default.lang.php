@@ -1,4 +1,4 @@
-<?php // $Revision: 2.18 $
+<?php // $Revision: 2.19 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -338,10 +338,12 @@ $GLOBALS['strWebBanner'] 			= "Local banner (Webserver)";
 $GLOBALS['strURLBanner'] 			= "External banner";
 $GLOBALS['strHTMLBanner'] 			= "HTML banner";
 $GLOBALS['strTextBanner'] 			= "Text ad";
-$GLOBALS['strAutoChangeHTML']			= "Alter HTML to enable tracking of AdClicks";
+$GLOBALS['strAutoChangeHTML']		= "Alter HTML to enable tracking of AdClicks";
 $GLOBALS['strUploadOrKeep']			= "Do you wish to keep your <br>existing image, or do you <br>want to upload another?";
-$GLOBALS['strNewBannerFile'] 			= "Select the image you want <br>to use for this banner<br><br>";
-$GLOBALS['strNewBannerURL'] 			= "Image URL (incl. http://)";
+$GLOBALS['strUploadOrKeepAlt']		= "Do you wish to keep your <br>existing backup image, or do you <br>want to upload another?";
+$GLOBALS['strNewBannerFile'] 		= "Select the image you want <br>to use for this banner<br><br>";
+$GLOBALS['strNewBannerFileAlt'] 	= "Select a backup image you <br>want to use in case browsers<br>don't support rich media<br><br>";
+$GLOBALS['strNewBannerURL'] 		= "Image URL (incl. http://)";
 $GLOBALS['strURL'] 				= "Destination URL (incl. http://)";
 $GLOBALS['strHTML'] 				= "HTML";
 $GLOBALS['strTextBelow'] 			= "Text below image";
@@ -513,8 +515,10 @@ $GLOBALS['strTotalThisPeriod']			= "Total this period";
 $GLOBALS['strAverageThisPeriod']		= "Average this period";
 $GLOBALS['strDistribution']			= "Distribution";
 $GLOBALS['strDistributionBy']		= "Distribution by";
+$GLOBALS['strOptimise']				= "Optimise";
 $GLOBALS['strResetStats'] 			= "Reset statistics";
 $GLOBALS['strSourceStats']			= "Source statistics";
+$GLOBALS['strSources']				= "Sources";
 $GLOBALS['strSelectSource']			= "Select the source you want to view:";
 $GLOBALS['strSizeDistribution']		= "Distribution by size";
 $GLOBALS['strCountryDistribution']	= "Distribution by country";
