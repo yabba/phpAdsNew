@@ -1,4 +1,4 @@
-<?php // $Revision: 1.59 $
+<?php // $Revision: 1.60 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -328,7 +328,8 @@ function get_banner($what, $clientID, $context=0, $source='', $allowhtml=true)
 				{
 					if ($tmprow['format'] == 'gif' ||
 						$tmprow['format'] == 'jpeg' ||
-						$tmprow['format'] == 'png')
+						$tmprow['format'] == 'png' ||
+						$tmprow['format'] == 'swf')
 					{
 						$tmprow['banner'] = '';
 					}
