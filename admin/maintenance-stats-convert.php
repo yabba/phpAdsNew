@@ -1,4 +1,4 @@
-<?php // $Revision: 1.4 $
+<?php // $Revision: 1.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -27,6 +27,11 @@ phpAds_checkAccess(phpAds_Admin);
 /*********************************************************/
 /* Main code                                             */
 /*********************************************************/
+
+function phpAds_makeTimestamp ($start, $offset)
+{
+	return $start + $offset + ((date('I', $start + $offset) - date('I', $start)) * 60);
+}
 
 function phpAds_startResult ()
 {
