@@ -1,4 +1,4 @@
-<?php // $Revision: 1.6 $
+<?php // $Revision: 1.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -140,7 +140,7 @@ function phpAds_getClientInformation()
 	// Lookup host name if needed
 	if ($host == '' && $phpAds_config['reverse_lookup'])
 		$host = @gethostbyaddr ($addr);
-	else
+	elseif ($host == '')
 		$host = $addr;
 	
 	if ($phpAds_config['proxy_lookup'])
