@@ -1,4 +1,4 @@
-<?php // $Revision: 1.17 $
+<?php // $Revision: 1.18 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -39,6 +39,10 @@ if (isset($installvars) && is_array($installvars))
 	for (reset($installvars); $key=key($installvars); next($installvars))
 		$phpAds_config[$key] = $installvars[$key];
 
+
+// Overwrite language if not set
+if (!isset($installvars['language']) && isset($language))
+	$phpAds_config['language'] = $language;
 
 
 // Load language strings
