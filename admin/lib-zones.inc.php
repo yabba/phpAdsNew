@@ -1,4 +1,4 @@
-<?php // $Revision: 1.11 $
+<?php // $Revision: 1.12 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -15,7 +15,7 @@
 
 
 // Include required files
-include (phpAds_path."/view.inc.php");
+include (phpAds_path."/lib-view-query.inc.php");
 
 
 // Define zonetypes
