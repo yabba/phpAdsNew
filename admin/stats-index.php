@@ -1,4 +1,4 @@
-<?php // $Revision: 1.24 $
+<?php // $Revision: 1.25 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -267,7 +267,8 @@ else
 if (isset($expand) && $expand != '')
 	$node_array[] = $expand;
 
-for ($i=0; $i < sizeof($node_array);$i++)
+$node_array_size = sizeof($node_array);
+for ($i=0; $i < $node_array_size;$i++)
 {
 	if (isset($collapse) && $collapse == $node_array[$i])
 		unset ($node_array[$i]);
