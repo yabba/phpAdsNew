@@ -1,4 +1,4 @@
-<?php // $Revision: 2.7 $
+<?php // $Revision: 2.8 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -180,7 +180,7 @@ array (
 			'name'    => 'geotracking_stats',
 			'text'	  => $strGeoLogStats,
 			'visible' => $phpAds_config['geotracking_type'] != '',
-			'depends' => 'log_adclicks==true || log_adviews==true'
+			'depends' => '(log_adclicks==true || log_adviews==true) && compact_stats==0'
 		),
 		array (
 			'type'    => 'checkbox',
@@ -216,7 +216,7 @@ array (
 	)
 ),
 array (
-	'text' 	  => 'Prevent logging',
+	'text' 	  => $strPreventLogging,
 	'items'	  => array (
 		array (
 			'type' 	  => 'textarea', 

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -64,18 +64,18 @@ if (!isset($bannerid))
 		$cookie = unserialize (stripslashes($HTTP_COOKIE_VARS['phpAds_banner'][$n]));
 		
 		if (isset($cookie['bannerid'])) 
-			$bannerid = $cookie['bannerid'];
+			$bannerid = addslashes($cookie['bannerid']);
 		else
 			$bannerid = 'DEFAULT';
 		
 		if (isset($cookie['zoneid']))
-			$zoneid = $cookie['zoneid'];
+			$zoneid = addslashes($cookie['zoneid']);
 		
 		if (isset($cookie['source']))
-			$source = $cookie['source'];
+			$source = addslashes($cookie['source']);
 		
 		if (isset($cookie['dest']))
-			$dest = $cookie['dest'];
+			$dest =addslashes($cookie['dest']);
 	}
 	else
 		$bannerid = 'DEFAULT';

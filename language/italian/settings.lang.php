@@ -1,4 +1,4 @@
-<?php // $Revision: 2.10 $
+<?php // $Revision: 2.11 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -234,10 +234,11 @@ $GLOBALS['strLogIPOnly']					= "Registra solo l'indirizzo IP anche se &egrave; n
 $GLOBALS['strLogIP']						= "Registra l'indirizzo IP del visitatore";
 $GLOBALS['strLogBeacon']					= "Utilizza una piccola immgine <i>beacon</i> per registrare le Visualizzazioni, per assicurarsi di registrare solo i banner effettivamente consegnati";
 
+$GLOBALS['strPreventLogging']				= "Eccezioni della memorizzazione";
 $GLOBALS['strRemoteHosts']					= "Host remoti";
 $GLOBALS['strIgnoreHosts']					= "Non memorizzare statistiche dei visitatori che utilizzano uno dei seguenti indirizzi IP o nomi di host";
 $GLOBALS['strBlockAdviews']					= "Non registrare una Visualizzazione se il visitatore ha gi&agrave; visto lo stesso banner entro il numero di secondi specificato";
-$GLOBALS['strBlockAdclicks']				= "Non registrare una Visualizzazione se il visitatore ha gi&agrave; clissato sullo stesso banner entro il numero di secondi specificato";
+$GLOBALS['strBlockAdclicks']				= "Non registrare un Click se il visitatore ha gi&agrave; cliccato sullo stesso banner entro il numero di secondi specificato";
 
 
 $GLOBALS['strEmailWarnings']				= "Avvertimenti E-mail";

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.0 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -15,20 +15,21 @@
 
 // Set translation strings
 
-$GLOBALS['strDeliveryEngine']			= 'Moteur de distribution';
-$GLOBALS['strMaintenance']			= 'Maintenance';
-$GLOBALS['strAdministrator']			= 'Administrateur';
+$GLOBALS['strDeliveryEngine']				= "µo°e¤ÞÀº";
+$GLOBALS['strMaintenance']				= "ºûÅ@";
+$GLOBALS['strAdministrator']				= "ºÞ²z­û";
 
 
 $GLOBALS['strUserlog'] = array (
-	phpAds_actionAdvertiserReportMailed	=> 'Rapport pour l\'annonceur {id} envoyé par e-mail',
-	phpAds_actionPublisherReportMailed 	=> 'Rapport pour l\'éditeur {id} envoyé par e-mail',
-	phpAds_actionWarningMailed		=> 'Avertissement de désactivation pour la campagne {id} envoyé par e-mail',
-	phpAds_actionDeactivationMailed		=> 'Notification de désactivation pour la campagne {id} envoyé par e-mail',
-	phpAds_actionPriorityCalculation	=> 'Priorités recalculées',
-	phpAds_actionPriorityAutoTargeting	=> 'Objectifs de campagnes recalculés',
-	phpAds_actionDeactiveCampaign		=> 'Campagne {id} désactivée',
-	phpAds_actionActiveCampaign		=> 'Campagne {id} activée'
+	phpAds_actionAdvertiserReportMailed 		=> "³q¹L¹q¤l¶l¥óµo°e³ø§iµ¹«È¤á{id}",
+	phpAds_actionPublisherReportMailed 		=> "³q¹L¹q¤l¶l¥óµo°e³ø§iµ¹µo§G¤H{id}",
+	phpAds_actionWarningMailed			=> "³q¹L¹q¤l¶l¥óµo°e¶µ¥Ø{id}°±¥ÎÄµ§i",
+	phpAds_actionDeactivationMailed			=> "³q¹L¹q¤l¶l¥óµo°e¶µ¥Ø{id}°±¥Î³qª¾",
+	phpAds_actionPriorityCalculation		=> "­«·s­pºâÀu¥ýÅv",
+	phpAds_actionPriorityAutoTargeting		=> "­«·s­pºâ¶µ¥Ø¥Ø¼Ð",
+	phpAds_actionDeactiveCampaign			=> "¶µ¥Ø{id}¤w¸g°±¥Î",
+	phpAds_actionActiveCampaign			=> "¶µ¥Ø{id}¤w¸g±Ò¥Î",
+	phpAds_actionAutoClean				=> "¸ê®Æ®w¦Û°Ê²M²z"
 );
 
 ?>

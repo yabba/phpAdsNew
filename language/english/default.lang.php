@@ -1,4 +1,4 @@
-<?php // $Revision: 2.11 $
+<?php // $Revision: 2.12 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -110,6 +110,10 @@ $GLOBALS['strFieldFixBeforeContinue1']		= "Before you can continue you need";
 $GLOBALS['strFieldFixBeforeContinue2']		= "to correct these errors.";
 $GLOBALS['strDelimiter']			= "Delimiter";
 $GLOBALS['strMiscellaneous']		= "Miscellaneous";
+$GLOBALS['strCollectedAll']			= "All collected statistics";
+$GLOBALS['strCollectedToday']		= "Statistics for today only";
+$GLOBALS['strCollected7Days']		= "Statistics for the last 7 days only";
+$GLOBALS['strCollectedMonth']		= "Statistics for this month only";
 
 
 
@@ -349,6 +353,7 @@ $GLOBALS['strBrowser'] 					= "Browser";
 $GLOBALS['strOS'] 						= "OS";
 $GLOBALS['strCountry'] 					= "Country";
 $GLOBALS['strContinent'] 				= "Continent";
+$GLOBALS['strUSState']					= "US State";
 $GLOBALS['strReferer'] 					= "Referring page";
 $GLOBALS['strDeliveryLimitations']		= "Delivery limitations";
 $GLOBALS['strDeliveryCapping']			= "Delivery capping";

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.0 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -15,10 +15,10 @@
 /************************************************************************/
 
 
-$GLOBALS['strPluginAffiliate'] 		= 'Génère un aperçu de l\'historique de l\'éditeur sélectionné. Le rapport est exporté au format CSV, afin qu\'il puisse être importé dans un tableur.';
-$GLOBALS['strPluginCampaign'] 		= 'Génère un aperçu de l\'historique de la campagne sélectionnée. Le rapport est exporté au format CSV, afin qu\'il puisse être importé dans un tableur.';
-$GLOBALS['strPluginClient'] 		= 'Génère un aperçu de l\'historique de l\'annonceur sélectionné. Le rapport est exporté au format CSV, afin qu\'il puisse être importé dans un tableur.';
-$GLOBALS['strPluginGlobal'] 		= 'Génère un aperçu de l\'historique global. Le rapport est exporté au format CSV, afin qu\'il puisse être importé dans un tableur.';
-$GLOBALS['strPluginZone'] 		= 'Génère un aperçu de l\'historique de la zone sélectionnée. Le rapport est exporté au format CSV, afin qu\'il puisse être importé dans un tableur.';
+$GLOBALS['strPluginAffiliate'] 		= "²£¥Í©Ò¿ï¼s§iµo§G¤Hªº¾ú¥vÁ`Äý.¦¹³øªí¿é¥X®æ¦¡¬°¥i¥H¦b»sªí³n¥ó¤¤¨Ï¥ÎªºCSV.";
+$GLOBALS['strPluginCampaign'] 		= "²£¥Í©Ò¿ï¶µ¥Øªº¾ú¥vÁ`Äý.¦¹³øªí¿é¥X®æ¦¡¬°¥i¥H¦b»sªí³n¥ó¤¤¨Ï¥ÎªºCSV.";
+$GLOBALS['strPluginClient'] 		= "²£¥Í©Ò¿ï¼s§i«È¤áªº¾ú¥vÁ`Äý.¦¹³øªí¿é¥X®æ¦¡¬°¥i¥H¦b»sªí³n¥ó¤¤¨Ï¥ÎªºCSV.";
+$GLOBALS['strPluginGlobal'] 		= "²£¥Í¥þ§½ªº¾ú¥vÁ`Äý.¦¹³øªí¿é¥X®æ¦¡¬°¥i¥H¦b»sªí³n¥ó¤¤¨Ï¥ÎªºCSV.";
+$GLOBALS['strPluginZone'] 		= "²£¥Í©Ò¿ïª©¦ìªº¾ú¥vÁ`Äý.¦¹³øªí¿é¥X®æ¦¡¬°¥i¥H¦b»sªí³n¥ó¤¤¨Ï¥ÎªºCSV.";
 
 ?>

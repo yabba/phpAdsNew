@@ -1,4 +1,9 @@
 
+=================================================================
+               phpAdsNew Banner Management System
+=================================================================
+
+
   This file contains a list of the all the changes
   made to the reference (english) translation files.
   If you want to update your own language file, this
@@ -11,6 +16,18 @@
   [U] = updated, [+] = added, [-] = removed
 
   ====================================================
+
+  04-03-2003 - default
+    [+] strCollectedAll
+    [+] strCollectedToday
+    [+] strCollected7Days
+    [+] strCollectedMonth
+
+  04-03-2003 - settings
+    [+] strPreventLogging
+
+  04-02-2003 - default
+    [+] strUSState
 
   04-01-2003 - setting-help
     [u] phpAds_hlp_dbhost
