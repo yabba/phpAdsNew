@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -208,6 +208,7 @@ $GLOBALS['strProxyLookup']				= "Probeer het echte IP adres van de bezoeker te a
 $GLOBALS['strGeotargeting']				= "Geotargeting";
 $GLOBALS['strGeotrackingType']			= "Type Geotargeting database";
 $GLOBALS['strGeotrackingLocation'] 		= "Geotargeting database locatie";
+$GLOBALS['strGeotrackingLocationError'] = "De opgegeven locatie van de geotargeting database is niet correct";
 $GLOBALS['strGeoStoreCookie']			= "Sla het resultaat op in een cookie voor hergebruik";
 
 
@@ -232,10 +233,10 @@ $GLOBALS['strBlockAdclicks']			= "Sla geen AdClicks op als de gebruiker al eerde
 
 $GLOBALS['strEmailWarnings']			= "Waarschuwingen per email";
 $GLOBALS['strAdminEmailHeaders']		= "Headers voor gebruik in te verzenden email";
-$GLOBALS['strWarnLimit']			= "Waarschuwings limiet";
+$GLOBALS['strWarnLimit']			= "Stuur een waarschuwing als de resterende impressies minder zijn dan hier gespecificeerd";
 $GLOBALS['strWarnLimitErr']			= "Waarschuwings limiet moet een positief nummer zijn";
-$GLOBALS['strWarnAdmin']			= "Waarschuw de beheerder";
-$GLOBALS['strWarnClient']			= "Waarschuw de klant";
+$GLOBALS['strWarnAdmin']			= "Waarschuw de beheerder wanneer er voor een campagne bijna geen impressies meer over zijn";
+$GLOBALS['strWarnClient']			= "Waarschuw de adverteerder wanneer er voor een campagne bijna geen impressies meer over zijn";
 $GLOBALS['strQmailPatch']			= "Pas headers aan voor qmail";
 
 
@@ -281,8 +282,10 @@ $GLOBALS['strGuiSettings']			= "Gebruikersinterface instellingen";
 
 $GLOBALS['strGeneralSettings']			= "Algemene instellingen";
 $GLOBALS['strAppName']				= "Applicatienaam";
-$GLOBALS['strMyHeader']				= "Voetnoot";
-$GLOBALS['strMyFooter']				= "Eindnoot";
+$GLOBALS['strMyHeader']				= "Voetnoot bestand";
+$GLOBALS['strMyHeaderError']		= "De opgegeven locatie van het voetnoot bestand is niet correct";
+$GLOBALS['strMyFooter']				= "Eindnoot bestand";
+$GLOBALS['strMyFooterError']		= "De opgegeven locatie van het eindnoot bestand is niet correct";
 $GLOBALS['strGzipContentCompression']		= "Gebruik GZIP content compression";
 
 $GLOBALS['strClientInterface']			= "Adverteerder interface";

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -36,8 +36,18 @@ if (isset($HTTP_POST_VARS) && count($HTTP_POST_VARS))
 	phpAds_SettingsWriteAdd('proxy_lookup', isset($proxy_lookup));
 	
 	if (isset($geotracking_type)) phpAds_SettingsWriteAdd('geotracking_type', $geotracking_type);
-	if (isset($geotracking_location)) phpAds_SettingsWriteAdd('geotracking_location', $geotracking_location);	
 	phpAds_SettingsWriteAdd('geotracking_cookie', isset($geotracking_cookie));
+	
+	
+	if (isset($geotracking_location))
+	{
+		if (file_exists($geotracking_location) || $geotracking_location == '')
+			phpAds_SettingsWriteAdd('geotracking_location', $geotracking_location);
+		else
+			$errormessage[1][] = $strGeotrackingLocationError;
+	}
+	
+	
 	
 	if (!count($errormessage))
 	{
@@ -112,7 +122,8 @@ array (
 		array (
 			'type'    => 'checkbox',
 			'name'    => 'geotracking_cookie',
-			'text'	  => $strGeoStoreCookie
+			'text'	  => $strGeoStoreCookie,
+			'depends' => 'geotracking_type>0'
 		)
 	)
 ));

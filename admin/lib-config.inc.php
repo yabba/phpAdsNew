@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -74,7 +74,7 @@ function phpAds_SettingsWriteFlush()
 		else
 		{
 			if ($k_type == 'boolean')
-				$v = $v == 't';
+				$v = $v ? true : false;
 			elseif ($k_type != 'array')
 				$v = stripslashes($v);
 			

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.6 $
+<?php // $Revision: 2.7 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -210,6 +210,7 @@ $GLOBALS['strProxyLookup']				= "Try to determine the real IP address of the vis
 $GLOBALS['strGeotargeting']				= "Geotargeting";
 $GLOBALS['strGeotrackingType']			= "Type of geotargeting database";
 $GLOBALS['strGeotrackingLocation'] 		= "Geotargeting database location";
+$GLOBALS['strGeotrackingLocationError'] = "The geotargeting database does not exist in the location you specified";
 $GLOBALS['strGeoStoreCookie']			= "Store the result in a cookie for future reference";
 
 
@@ -235,11 +236,11 @@ $GLOBALS['strBlockAdclicks']			= "Don't log AdClicks if the visitor already clic
 
 
 $GLOBALS['strEmailWarnings']			= "E-mail warnings";
-$GLOBALS['strAdminEmailHeaders']		= "Mail Headers for the reflection of the sender of the daily ad reports";
-$GLOBALS['strWarnLimit']				= "Warn Limit";
-$GLOBALS['strWarnLimitErr']				= "Warn Limit should be a positive integer";
-$GLOBALS['strWarnAdmin']				= "Warn Admin";
-$GLOBALS['strWarnClient']				= "Warn Advertiser";
+$GLOBALS['strAdminEmailHeaders']		= "Add the following headers to each e-mail message sent by ".$phpAds_productname;
+$GLOBALS['strWarnLimit']				= "Send a warning when the number of impressions left are less than specified here";
+$GLOBALS['strWarnLimitErr']				= "Warn Limit should be a positive number";
+$GLOBALS['strWarnAdmin']				= "Send a warning to the administrator every time a campaign is almost expired";
+$GLOBALS['strWarnClient']				= "Send a warning to the advertiser every time a campaign is almost expired";
 $GLOBALS['strQmailPatch']				= "Enable qmail patch";
 
 $GLOBALS['strAutoCleanTables']			= "Database pruning";
@@ -284,8 +285,10 @@ $GLOBALS['strGuiSettings']			= "User Interface Configuration";
 
 $GLOBALS['strGeneralSettings']			= "General settings";
 $GLOBALS['strAppName']				= "Application Name";
-$GLOBALS['strMyHeader']				= "My Header";
-$GLOBALS['strMyFooter']				= "My Footer";
+$GLOBALS['strMyHeader']				= "Header file location";
+$GLOBALS['strMyHeaderError']		= "The header file does not exist in the location you specified";
+$GLOBALS['strMyFooter']				= "Footer file location";
+$GLOBALS['strMyFooterError']		= "The footer file does not exist in the location you specified";
 $GLOBALS['strGzipContentCompression']		= "Use GZIP content compression";
 
 $GLOBALS['strClientInterface']			= "Advertiser interface";

@@ -1,4 +1,4 @@
-<?php // $Revision: 2.1 $
+<?php // $Revision: 2.2 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -57,6 +57,9 @@ $GLOBALS['strDeliveryCacheSharedMem']		= "
 ";
 $GLOBALS['strDeliveryCacheDatabase']		= "
 	Momenteel wordt de cache opgeslagen in de database.
+";
+$GLOBALS['strDeliveryCacheFiles']		= "
+	Momenteel wordt de cache opgeslagen in bestanden op de server.
 ";
 
 
