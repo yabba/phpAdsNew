@@ -1,4 +1,4 @@
-<?php // $Revision: 1.43 $
+<?php // $Revision: 1.44 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -374,9 +374,23 @@ if ($campaignid != "" || (isset($move) && $move == 't'))
 }
 else
 {
-	// New
+	// New campaign
+	$res = phpAds_dbQuery("
+		SELECT
+			*
+		FROM
+			".$phpAds_config['tbl_clients']."
+		WHERE
+			clientid = '".$clientid."'
+	");
 	
-	$row["clientname"]	= $strDefault;
+	if ($client = phpAds_dbFetchArray($res))
+		$row["clientname"] = $client['clientname'].' - ';
+	else
+		$row["clientname"] = '';
+	
+	
+	$row["clientname"] .= $strDefault;
 	$row["views"] 		= '';
 	$row["clicks"] 		= '';
 	$row["active"] 		= '';
