@@ -1,4 +1,4 @@
-<?php // $Revision: 1.9 $
+<?php // $Revision: 1.10 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -18,6 +18,7 @@
 require ("config.php");
 require ("lib-storage.inc.php");
 require ("lib-zones.inc.php");
+require ("lib-statistics.inc.php");
 require ("../lib-priority.inc.php");
 
 
