@@ -1,4 +1,4 @@
-<?php // $Revision: 1.93 $
+<?php // $Revision: 1.94 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -36,6 +36,9 @@ function phpAds_buildQuery ($part, $numberofparts, $precondition)
 				".$phpAds_config['tbl_clients'].".weight as clientweight,
 				".$phpAds_config['tbl_banners'].".contenttype as contenttype,
 				".$phpAds_config['tbl_banners'].".storagetype as storagetype,
+				".$phpAds_config['tbl_banners'].".filename as filename,
+				".$phpAds_config['tbl_banners'].".imageurl as imageurl,
+				".$phpAds_config['tbl_banners'].".url as url,
 				".$phpAds_config['tbl_banners'].".htmlcache as htmlcache,
 				".$phpAds_config['tbl_banners'].".width as width,
 				".$phpAds_config['tbl_banners'].".height as height,
