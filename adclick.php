@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -79,6 +79,8 @@ if (!isset($bannerid))
 	}
 	else
 		$bannerid = 'DEFAULT';
+		
+	$source = phpAds_deriveSource($source);
 }
 
 

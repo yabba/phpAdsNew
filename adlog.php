@@ -1,4 +1,4 @@
-<?php // $Revision: 2.4 $
+<?php // $Revision: 2.5 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -47,7 +47,7 @@ phpAds_registerGlobal ('bannerid', 'clientid', 'zoneid', 'source',
 
 if (isset($bannerid) && isset($clientid) && isset($zoneid))
 {
-	if (!isset($source)) $source = '';
+	$source = phpAds_deriveSource($source);
 	
 	if ($phpAds_config['block_adviews'] == 0 ||
 	   ($phpAds_config['block_adviews'] > 0 && 

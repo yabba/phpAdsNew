@@ -1,4 +1,4 @@
-<?php // $Revision: 2.2 $
+<?php // $Revision: 2.3 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -93,9 +93,10 @@ if (isset($withText) && !isset($withtext))  $withtext = $withText;
 if (!isset($what)) 		$what = '';
 if (!isset($clientid)) 	$clientid = 0;
 if (!isset($target)) 	$target = '';
-if (!isset($source)) 	$source = '';
 if (!isset($withtext)) 	$withtext = '';
 if (!isset($context)) 	$context = '';
+
+$source = phpAds_deriveSource($source);
 
 if (isset($exclude) && $exclude != '')
 {

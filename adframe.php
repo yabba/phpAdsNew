@@ -1,4 +1,4 @@
-<?php // $Revision: 2.3 $
+<?php // $Revision: 2.4 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -63,10 +63,11 @@ if (isset($withText) && !isset($withtext))  $withtext = $withText;
 if (!isset($what)) 		$what = '';
 if (!isset($clientid)) 	$clientid = 0;
 if (!isset($target)) 	$target = '_blank';
-if (!isset($source)) 	$source = '';
 if (!isset($withtext)) 	$withtext = '';
 if (!isset($context)) 	$context = '';
 if (!isset($rewrite))	$rewrite = 1;
+
+$source = phpAds_deriveSource($source);
 
 // Remove referer, to be sure it doesn't cause problems with limitations
 if (isset($HTTP_SERVER_VARS['HTTP_REFERER'])) unset($HTTP_SERVER_VARS['HTTP_REFERER']);

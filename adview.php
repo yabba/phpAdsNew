@@ -1,4 +1,4 @@
-<?php // $Revision: 2.8 $
+<?php // $Revision: 2.9 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -61,8 +61,9 @@ $url = parse_url($phpAds_config['url_prefix']);
 if (isset($clientID) && !isset($clientid)) $clientid = $clientID;
 if (!isset($clientid)) $clientid = 0;
 if (!isset($what)) $what = '';
-if (!isset($source)) $source = '';
 if (!isset($n)) $n = 'default';
+
+$source = phpAds_deriveSource($source);
 
 // Remove referer, to be sure it doesn't cause problems with limitations
 if (isset($HTTP_SERVER_VARS['HTTP_REFERER'])) unset($HTTP_SERVER_VARS['HTTP_REFERER']);
