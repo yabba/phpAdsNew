@@ -1,4 +1,4 @@
-<?php // $Revision: 1.30 $
+<?php // $Revision: 1.31 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -110,12 +110,20 @@ if (isset($submit))
 			}
 			
 			$tmp_file .= '/' . basename($uploaded['tmp_name']);
-		    $upload_valid = (ereg_replace('/+', '/', $tmp_file) == $uploaded['tmp_name']);
+			$tmp_file = str_replace('\\', '/', $tmp_file);
+			$tmp_file  = ereg_replace('/+', '/', $tmp_file);
+			
+			$up_file = str_replace('\\', '/', $uploaded['tmp_name']);
+			$up_file = ereg_replace('/+', '/', $up_file);
+			
+			$upload_valid = ($tmp_file == $up_file);
 		}
 		
 		// Don't use file in case of exploit
 		if (!$upload_valid)
+		{
 			unset ($uploaded);
+		}
 	}
 	
 	// Clean up old webserver stored banner
@@ -176,7 +184,7 @@ if (isset($submit))
 				$final['width'] = $size[0];
 				$final['height'] = $size[1];
 				
-				// upload $web_banner file to location
+				// upload image to location
 				// set banner to web location
 				$final['banner'] = phpAds_Store($uploaded['tmp_name'], basename($uploaded['name']));
 				
@@ -295,11 +303,11 @@ if (isset($submit))
 	
 	if (phpAds_isUser(phpAds_Client))
 	{
-		Header("Location: stats-campaign.php?campaignID=$campaignID&message=".urlencode($message));
+		//Header("Location: stats-campaign.php?campaignID=$campaignID&message=".urlencode($message));
 	}
 	else
 	{
-		Header("Location: campaign-index.php?campaignID=$campaignID&message=".urlencode($message));
+		//Header("Location: campaign-index.php?campaignID=$campaignID&message=".urlencode($message));
 	}
 	
 	exit;
