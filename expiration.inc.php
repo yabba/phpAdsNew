@@ -1,5 +1,5 @@
 <?
-/* $Id: expiration.inc.php,v 1.9 2001/03/01 23:00:30 phord Exp $ */
+/* $Id: expiration.inc.php,v 1.10 2001/03/02 21:47:48 phord Exp $ */
 
 /* estimated end of clients adviews */
 /* -------------------------------- */
@@ -82,8 +82,8 @@ function days_left($clientID)
                     $view_query="
                         SELECT
                             SUM(views) as total_views,
-                            MAX(TO_DAYS(when))-TO_DAYS(NOW()) as days_since_last_view,
-                            TO_DAYS(NOW())-MIN(TO_DAYS(when)) as days_since_start
+                            MAX(TO_DAYS(day))-TO_DAYS(NOW()) as days_since_last_view,
+                            TO_DAYS(NOW())-MIN(TO_DAYS(day)) as days_since_start
                         FROM
                             $phpAds_tbl_adstats AS v
                                 LEFT JOIN $phpAds_tbl_banners AS b USING (bannerID)
@@ -122,8 +122,8 @@ function days_left($clientID)
                             $view_query="
                                 SELECT
                                     SUM(clicks) as total_clicks,
-                                    MAX(TO_DAYS(when))-TO_DAYS(NOW()) as days_since_last_click,
-                                    TO_DAYS(NOW())-MIN(TO_DAYS(when)) as days_since_start
+                                    MAX(TO_DAYS(day))-TO_DAYS(NOW()) as days_since_last_click,
+                                    TO_DAYS(NOW())-MIN(TO_DAYS(day)) as days_since_start
                                 FROM
                                     $phpAds_tbl_adstats
                                         LEFT JOIN $phpAds_tbl_banners USING (bannerID)
