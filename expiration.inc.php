@@ -1,5 +1,5 @@
 <?
-/* $Id: expiration.inc.php,v 1.8 2001/02/23 21:17:42 phord Exp $ */
+/* $Id: expiration.inc.php,v 1.9 2001/03/01 23:00:30 phord Exp $ */
 
 /* estimated end of clients adviews */
 /* -------------------------------- */
@@ -160,7 +160,7 @@ function days_left($clientID)
 	// build return value
 	$ret_val = array();
 	$days_left = $days_left>0?$days_left:0;
-	if (substr_count($rawexpire,"0")==8)
+	if (my_substr_count($rawexpire,"0")==8)
 	{
 		$ret_val[] = $strExpiration.": No expiration date set";
 	} else
@@ -179,4 +179,9 @@ function days_left($clientID)
 	return $ret_val;
 }
 
-
+// for php3 compatibility
+function my_substr_count($string,$search) 
+{ 
+    $temp = str_replace($search,$search."a",$string); 
+    return strlen($temp)-strlen($string); 
+} 
