@@ -1,4 +1,4 @@
-<?php // $Revision: 1.20 $
+<?php // $Revision: 1.21 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -118,6 +118,7 @@ if (isset($submit))
 				(
 				affiliateid,
 				zonename,
+				zonetype,
 				description,
 				width,
 				height
@@ -125,6 +126,7 @@ if (isset($submit))
 			 VALUES (
 			 	'".$affiliateid."',
 				'".$zonename."',
+				'".phpAds_ZoneCampaign."',
 				'".$description."',
 				'".$width."',
 				'".$height."'
