@@ -1,4 +1,4 @@
-<?php // $Revision: 1.31 $
+<?php // $Revision: 1.32 $
 
 /************************************************************************/
 /* phpAdsNew 2                                                          */
@@ -238,7 +238,7 @@ $GLOBALS['strBanner']						= "Banner";
 $GLOBALS['strBanners']						= "Banner";
 $GLOBALS['strAddBanner']					= "Aggiungi nuovo banner";
 $GLOBALS['strModifyBanner']					= "Modifica banner";
-$GLOBALS['strActiveBanners']				= "Banner attici";
+$GLOBALS['strActiveBanners']				= "Banner attivi";
 $GLOBALS['strTotalBanners']					= "Banner totali";
 $GLOBALS['strShowBanner']					= "Mostra banner";
 $GLOBALS['strShowAllBanners']				= "Mostra tutti i banner";
